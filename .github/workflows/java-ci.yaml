@@ -1,0 +1,72 @@
+# This workflow builds, tests, and releases the modules.
+name: Java CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  # build library
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # always run all tests to avoid having different amounts of tests.
+      fail-fast: false
+      matrix:
+        java_version: ['11']
+        os: ['ubuntu-latest', 'windows-latest']
+
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0 # fetch commit log so that Sonar is able to assign committers to issues
+
+      - name: Set up JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v2.5.0
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java_version }}
+          cache: 'gradle'
+
+      - name: Test with Gradle
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 30
+          max_attempts: 5
+          retry_wait_seconds: 10
+          warning_on_retry: false
+          command: ./gradlew --parallel --continue check -x spotlessCheck
+
+      - name: Generate Test Report
+        if: always()
+        run: ./gradlew -x test testReport codeCoverageReport
+
+      - uses: actions/upload-artifact@v2.3.1
+        if: always()
+        with:
+          name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
+          path: |
+            build/reports/
+            */build/test-results/**/*.xml
+          retention-days: 7
+
+  publish-test-results:
+    name: "Publish Unit Tests Results"
+    timeout-minutes: 60
+    needs: build
+    runs-on: ubuntu-latest
+    # Don't run for forks and dependabot because of missing secrets
+    if: (success() || failure()) && !(github.event.pull_request && github.event.pull_request.head.repo.fork) && github.actor != 'dependabot[bot]'
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@d0787a9f068cd772424d68efbaad91e6171da8c6
+        with:
+          files: artifacts/**/build/test-results/**/*.xml
