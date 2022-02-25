@@ -40,33 +40,33 @@ jobs:
           warning_on_retry: false
           command: ./gradlew --parallel --continue check -x spotlessCheck
 
-      - name: Generate Test Report
-        if: always()
-        run: ./gradlew -x test testReport codeCoverageReport
-
-      - uses: actions/upload-artifact@v2.3.1
-        if: always()
-        with:
-          name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
-          path: |
-            build/reports/
-            */build/test-results/**/*.xml
-          retention-days: 7
-
-  publish-test-results:
-    name: "Publish Unit Tests Results"
-    timeout-minutes: 60
-    needs: build
-    runs-on: ubuntu-latest
-    # Don't run for forks and dependabot because of missing secrets
-    if: (success() || failure()) && !(github.event.pull_request && github.event.pull_request.head.repo.fork) && github.actor != 'dependabot[bot]'
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          path: artifacts
-
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@d0787a9f068cd772424d68efbaad91e6171da8c6
-        with:
-          files: artifacts/**/build/test-results/**/*.xml
+#      - name: Generate Test Report
+#        if: always()
+#        run: ./gradlew -x test testReport codeCoverageReport
+#
+#      - uses: actions/upload-artifact@v2.3.1
+#        if: always()
+#        with:
+#          name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
+#          path: |
+#            build/reports/
+#            */build/test-results/**/*.xml
+#          retention-days: 7
+#
+#  publish-test-results:
+#    name: "Publish Unit Tests Results"
+#    timeout-minutes: 60
+#    needs: build
+#    runs-on: ubuntu-latest
+#    # Don't run for forks and dependabot because of missing secrets
+#    if: (success() || failure()) && !(github.event.pull_request && github.event.pull_request.head.repo.fork) && github.actor != 'dependabot[bot]'
+#    steps:
+#      - name: Download Artifacts
+#        uses: actions/download-artifact@v2
+#        with:
+#          path: artifacts
+#
+#      - name: Publish Unit Test Results
+#        uses: EnricoMi/publish-unit-test-result-action@d0787a9f068cd772424d68efbaad91e6171da8c6
+#        with:
+#          files: artifacts/**/build/test-results/**/*.xml
