@@ -1,0 +1,102 @@
+plugins {
+  id "jacoco"
+  id "idea"
+  id "java"
+  id "com.diffplug.spotless" version "6.3.0"
+  id "com.google.cloud.tools.jib" version "3.2.0"
+  id 'org.springframework.boot' version '2.5.6'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+
+}
+
+repositories {
+  mavenCentral()
+}
+
+group "org.sdase.commons.spring"
+
+idea.module.inheritOutputDirs = true
+
+// configure the spotless to use the Google Java Format
+spotless {
+  java {
+    googleJavaFormat('1.14.0')
+    enforceCheck = false
+    licenseHeaderFile 'licenseHeaderFile'
+  }
+}
+wrapper { gradleVersion = '6.5' }
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+// the version of the generated jars is based on the SEMANTIC_VERSION environment variable
+version = System.getenv('SEMANTIC_VERSION')
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+configurations.all {
+  resolutionStrategy {
+    // fail eagerly on version conflict (includes transitive dependencies)
+    // e.g. multiple different versions of the same dependency (group and name are equal)
+    failOnVersionConflict()
+    // Conflicts with 'org.springframework.kafka:spring-kafka-test'
+    force 'org.scala-lang:scala-reflect:2.13.3'
+    force 'org.scala-lang:scala-library:2.13.4'
+  }
+}
+
+test {
+  useJUnitPlatform()
+}
+
+ext {
+  springCloudVersion = "2020.0.5"
+}
+
+dependencies {
+
+  implementation enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+// Moving forward compatibility with the now OpenTelemetry standard (OTEL) is desirable.
+// Sleuth does not currently integrate this as it’s extremely new, but as with most standards,
+// the Spring team are actively working on it (https://github.com/spring-cloud-incubator/spring-cloud-sleuth-otel ).
+  implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+  implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+// Until recently Sleuth only supported the Zipkin B3 propagation type,
+// but now has support for the W3C format which is preferable moving forward.
+// By adding the brave-opentracing library, Sleuth will also automatically register an OpenTracing
+// Tracer bean allowing us to use the standardised interfaces
+  implementation 'io.opentracing.brave:brave-opentracing'
+//
+
+  implementation 'org.springframework.kafka:spring-kafka'
+  implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+  implementation 'org.bouncycastle:bcpkix-jdk15on'
+  implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+  implementation 'io.github.openfeign:feign-jaxrs2:11.8'
+  implementation "io.micrometer:micrometer-registry-prometheus:1.8.3"
+  implementation 'io.github.openfeign:feign-micrometer:11.8'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
+  testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+  testImplementation 'org.springframework.kafka:spring-kafka-test'
+  testImplementation 'org.awaitility:awaitility:4.1.1'
+}
+
+// output XML reports for SonarCloud
+jacocoTestReport {
+  reports {
+    xml.required = true
+  }
+}
