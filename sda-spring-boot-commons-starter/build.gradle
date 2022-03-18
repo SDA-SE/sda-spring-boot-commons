@@ -1,0 +1,34 @@
+
+dependencies {
+
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+// Moving forward compatibility with the now OpenTelemetry standard (OTEL) is desirable.
+// Sleuth does not currently integrate this as it’s extremely new, but as with most standards,
+// the Spring team are actively working on it (https://github.com/spring-cloud-incubator/spring-cloud-sleuth-otel ).
+  implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+  implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+// Until recently Sleuth only supported the Zipkin B3 propagation type,
+// but now has support for the W3C format which is preferable moving forward.
+// By adding the brave-opentracing library, Sleuth will also automatically register an OpenTracing
+// Tracer bean allowing us to use the standardised interfaces
+  implementation 'io.opentracing.brave:brave-opentracing'
+//
+  implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+  implementation 'org.bouncycastle:bcpkix-jdk15on'
+  implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+  implementation 'io.github.openfeign:feign-jaxrs2:11.8'
+  implementation "io.micrometer:micrometer-registry-prometheus:1.8.3"
+  implementation 'io.github.openfeign:feign-micrometer:11.8'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
+  testImplementation 'org.awaitility:awaitility:4.1.1'
+
+}

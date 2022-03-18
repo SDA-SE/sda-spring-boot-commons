@@ -1,1 +1,5 @@
 rootProject.name = 'sda-spring-boot-commons'
+include 'sda-spring-boot-commons-starter'
+include 'sda-spring-boot-commons-kafka-starter'
+include 'sda-spring-boot-commons-mongodb-starter'
+
