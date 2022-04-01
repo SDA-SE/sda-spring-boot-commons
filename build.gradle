@@ -1,34 +1,55 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+
+buildscript {
+  repositories {
+    maven { url "https://plugins.gradle.org/m2/" }
+  }
+}
+
 plugins {
   id "jacoco"
   id "idea"
   id "java"
+  id 'maven-publish'
   id "com.diffplug.spotless" version "6.3.0"
-  id 'org.springframework.boot' version '2.5.6'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'org.springframework.boot' version '2.6.4' apply false
+//  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 ext {
-  springCloudVersion = "2020.0.5"
+  springCloudVersion = "2021.0.1"
+  springBootVersion = "2.6.6"
 }
+
+repositories {
+  mavenCentral()
+}
+
+group "org.sdase.commons.spring.boot"
+
 
 subprojects {
   apply plugin: 'jacoco'
   apply plugin: 'idea'
   apply plugin: 'java'
+  apply plugin: 'java-library'
+  apply plugin: 'maven-publish'
   apply plugin: "com.diffplug.spotless"
   apply plugin: 'org.springframework.boot'
-  apply plugin: 'io.spring.dependency-management'
 
   repositories {
     mavenCentral()
   }
 
-  dependencies {
-    implementation enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
-    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+  group "org.sdase.commons.spring.boot"
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.awaitility:awaitility:4.1.1'
+  // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
+  version = '0.0.3-SNAPSHOT'
+
+  dependencies {
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+    implementation platform(SpringBootPlugin.BOM_COORDINATES)
   }
 
   test {
@@ -44,26 +65,102 @@ subprojects {
     }
   }
 
+  sourceSets {
+    main {
+      output.resourcesDir = output.classesDirs.singleFile
+    }
+    test {
+      output.resourcesDir = output.classesDirs.singleFile
+    }
+  }
+
   configurations.all {
     resolutionStrategy {
-      // fail eagerly on version conflict (includes transitive dependencies)
-      // e.g. multiple different versions of the same dependency (group and name are equal)
-      failOnVersionConflict()
+      // Current version matrix boot 2.6.4 with spring data resolves to 3.0.0
+      // which does not fix the URL problem for newer versions
+      force "de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.3"
     }
-    idea.module.inheritOutputDirs = true
+  }
+
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allJava
+  }
+
+  javadoc {
+    options.addStringOption('encoding', 'UTF-8')
+  }
+
+//  artifacts {
+//    archives jar
+//    archives sourcesJar
+//  }
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        from components.java
+//        artifact(sourcesJar) {
+//          classifier = 'sources'
+//        }
+
+        pom {
+          name = project.group + ":" + project.name
+          description = 'A libraries to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
+          url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
+
+
+          organization {
+            name = 'SDA SE Open Industry Solutions'
+            url = 'https://sda.se'
+          }
+
+          issueManagement {
+            system = 'GitHub'
+            url = 'https://github.com/SDA-SE/sda-spring-boot-commons/issues'
+          }
+
+          scm {
+            connection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+            developerConnection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+            url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
+          }
+        }
+      }
+    }
+
+    repositories {
+//      maven {
+//        name = "sdaIntern"
+//        def releasesRepoUrl = "https://nexus.sda-se.io/repository/sda-se-releases/"
+//        def snapshotsRepoUrl = "https://nexus.sda-se.io/repository/sda-se-snapshots/"
+//        url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+//
+//        credentials {
+//          username System.getenv('SDA_NEXUS_USER')
+//          password System.getenv('SDA_NEXUS_PASSWORD')
+//        }
+//      }
+
+      maven {
+        name = "project"
+        url = uri("${buildDir}/publishing-repository")
+      }
+    }
+  }
+
+  jar {
+    into("META-INF/maven/$project.group/$project.name") {
+      from { generatePomFileForMavenPublication }
+      rename ".*", "pom.xml"
+    }
   }
 
 }
 
-
-group "org.sdase.commons.spring"
-
-wrapper { gradleVersion = '6.5' }
+wrapper { gradleVersion = '7.4.2' }
 
 sourceCompatibility = JavaVersion.VERSION_11
-
-// the version of the generated jars is based on the SEMANTIC_VERSION environment variable
-version = System.getenv('SEMANTIC_VERSION')
 
 // output XML reports for SonarCloud
 jacocoTestReport {

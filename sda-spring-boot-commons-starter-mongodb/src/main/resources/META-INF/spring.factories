@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.sdase.commons.spring.boot.mongodb.SdaMongoDbConfiguration, \
+  org.sdase.commons.spring.boot.mongodb.converter.SdaMongoCustomConverterConfiguration
+ø

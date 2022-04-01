@@ -1,0 +1,15 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.sdase.commons.spring.boot.web.SdaSpringConfiguration,\
+  org.sdase.commons.spring.boot.web.async.SdaAsyncConfiguration,\
+  org.sdase.commons.spring.boot.web.auth.SdaSecurityConfiguration, \
+  org.sdase.commons.spring.boot.web.auth.SdaMonitoringSecurityConfiguration, \
+  org.sdase.commons.spring.boot.web.auth.opa.OpaRestTemplateConfiguration, \
+  org.sdase.commons.spring.boot.web.client.SdaClientConfiguration, \
+  org.sdase.commons.spring.boot.web.async.SdaAsyncConfiguration, \
+  org.sdase.commons.spring.boot.web.client.OidcClientRequestConfiguration, \
+  org.sdase.commons.spring.boot.web.client.SdaOidcClientConfiguration, \
+  org.sdase.commons.spring.boot.web.docs.SdaOpenApiCustomizerConfiguration, \
+  org.sdase.commons.spring.boot.web.jackson.SdaObjectMapperConfiguration, \
+  org.sdase.commons.spring.boot.web.monitoring.SdaMonitoringConfiguration, \
+  org.sdase.commons.spring.boot.web.monitoring.SdaTracingConfiguration, \
+  org.sdase.commons.spring.boot.web.security.ssl.SslContextConfiguration
