@@ -25,5 +25,5 @@ jobs:
       - name: Build and Publish Snapshot
         run: ./gradlew publishMavenPublicationToSdaInternRepository
         env:
-          SDA_NEXUS_USER: ${{ secrets.NEXUS_LOGIN_USER }}
+          SDA_NEXUS_USER: ${{ secrets.NEXUS_LOGIN_USER }} # Update gh secrets to TU
           SDA_NEXUS_PASSWORD: ${{ secrets.NEXUS_LOGIN_PASSWORD }}

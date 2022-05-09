@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         java_version: [ '11' ]
-        os: [ 'ubuntu-latest', 'windows-latest' ]
+        os: [ 'ubuntu-latest' ] #  'windows-latest' later
 
     timeout-minutes: 60
     steps:
@@ -70,4 +70,4 @@ jobs:
       - name: Release and Publish
         run: semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.NEXUS_LOGIN_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
