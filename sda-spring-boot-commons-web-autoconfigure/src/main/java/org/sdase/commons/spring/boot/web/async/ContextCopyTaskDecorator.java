@@ -1,8 +1,8 @@
 /*
- * Copyright (c). SDA SE Open Industry Solutions (https://www.sda.se).
- *
- * All rights reserved.
- */
+* Copyright (c). SDA SE Open Industry Solutions (https://www.sda.se).
+*
+* All rights reserved.
+*/
 package org.sdase.commons.spring.boot.web.async;
 
 import org.slf4j.Logger;

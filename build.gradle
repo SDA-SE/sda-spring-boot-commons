@@ -1,6 +1,5 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
-
 buildscript {
   repositories {
     maven { url "https://plugins.gradle.org/m2/" }
@@ -12,14 +11,13 @@ plugins {
   id "idea"
   id "java"
   id 'maven-publish'
-  id "com.diffplug.spotless" version "6.3.0"
-  id 'org.springframework.boot' version '2.6.4' apply false
-//  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id "com.diffplug.spotless" version "6.5.2"
+  id 'org.springframework.boot' version '2.6.7' apply false
 }
 
 ext {
-  springCloudVersion = "2021.0.1"
-  springBootVersion = "2.6.6"
+  springCloudVersion = "2021.0.2"
+  springBootVersion = "2.6.7"
 }
 
 repositories {
@@ -45,7 +43,7 @@ subprojects {
   group "org.sdase.commons.spring.boot"
 
   // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
-  version = '0.0.3-SNAPSHOT'
+  version = System.getenv("SEMANTIC_VERSION")
 
   dependencies {
     implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
@@ -59,20 +57,12 @@ subprojects {
   // configure the spotless to use the Google Java Format
   spotless {
     java {
-      googleJavaFormat('1.14.0')
+      googleJavaFormat('1.15.0')
       enforceCheck = false
       licenseHeaderFile '../licenseHeaderFile'
     }
   }
 
-  sourceSets {
-    main {
-      output.resourcesDir = output.classesDirs.singleFile
-    }
-    test {
-      output.resourcesDir = output.classesDirs.singleFile
-    }
-  }
 
   configurations.all {
     resolutionStrategy {
@@ -81,79 +71,58 @@ subprojects {
       force "de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.3"
     }
   }
+}
 
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allJava
-  }
-
-  javadoc {
-    options.addStringOption('encoding', 'UTF-8')
-  }
-
-//  artifacts {
-//    archives jar
-//    archives sourcesJar
-//  }
-
-  publishing {
-    publications {
-      maven(MavenPublication) {
-        from components.java
-//        artifact(sourcesJar) {
-//          classifier = 'sources'
-//        }
-
-        pom {
-          name = project.group + ":" + project.name
-          description = 'A libraries to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
-          url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
-
-
-          organization {
-            name = 'SDA SE Open Industry Solutions'
-            url = 'https://sda.se'
-          }
-
-          issueManagement {
-            system = 'GitHub'
-            url = 'https://github.com/SDA-SE/sda-spring-boot-commons/issues'
-          }
-
-          scm {
-            connection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
-            developerConnection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+subprojects {
+  if ( !it.name.endsWith("-example")) {
+    publishing {
+      publications {
+        maven(MavenPublication) {
+          from components.java
+          pom {
+            name = project.group + ":" + project.name
+            description = 'A libraries to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
             url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
+
+            organization {
+              name = 'SDA SE Open Industry Solutions'
+              url = 'https://sda.se'
+            }
+
+            issueManagement {
+              system = 'GitHub'
+              url = 'https://github.com/SDA-SE/sda-spring-boot-commons/issues'
+            }
+
+            scm {
+              connection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+              developerConnection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+              url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
+            }
           }
+        }
+      }
+
+      repositories {
+        maven {
+          name = "sdaIntern"
+          def releasesRepoUrl = "https://nexus.sda-se.io/repository/sda-se-releases/"
+          def snapshotsRepoUrl = "https://nexus.sda-se.io/repository/sda-se-snapshots/"
+          url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+          credentials {
+            username System.getenv('SDA_NEXUS_USER')
+            password System.getenv('SDA_NEXUS_PASSWORD')
+          }
+        }
+
+        maven {
+          name = "project"
+          url = uri("${buildDir}/publishing-repository")
         }
       }
     }
 
-    repositories {
-//      maven {
-//        name = "sdaIntern"
-//        def releasesRepoUrl = "https://nexus.sda-se.io/repository/sda-se-releases/"
-//        def snapshotsRepoUrl = "https://nexus.sda-se.io/repository/sda-se-snapshots/"
-//        url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-//
-//        credentials {
-//          username System.getenv('SDA_NEXUS_USER')
-//          password System.getenv('SDA_NEXUS_PASSWORD')
-//        }
-//      }
-
-      maven {
-        name = "project"
-        url = uri("${buildDir}/publishing-repository")
-      }
-    }
-  }
-
-  jar {
-    into("META-INF/maven/$project.group/$project.name") {
-      from { generatePomFileForMavenPublication }
-      rename ".*", "pom.xml"
-    }
   }
 
 }
