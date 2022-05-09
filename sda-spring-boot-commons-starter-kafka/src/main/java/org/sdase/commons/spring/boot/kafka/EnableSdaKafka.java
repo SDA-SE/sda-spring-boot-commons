@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter;
+package org.sdase.commons.spring.boot.kafka;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

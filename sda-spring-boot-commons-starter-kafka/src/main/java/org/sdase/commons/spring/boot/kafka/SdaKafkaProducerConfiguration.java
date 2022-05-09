@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter;
+package org.sdase.commons.spring.boot.kafka;
 
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 @Configuration
-@PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/starter/producer.properties")
+@PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/producer.properties")
 public class SdaKafkaProducerConfiguration {
 
   private final KafkaProperties kafkaProperties;

@@ -3,9 +3,9 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter.test;
+package org.sdase.commons.spring.boot.kafka.test;
 
-import org.sdase.commons.spring.boot.kafka.starter.EnableSdaKafka;
+import org.sdase.commons.spring.boot.kafka.EnableSdaKafka;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication

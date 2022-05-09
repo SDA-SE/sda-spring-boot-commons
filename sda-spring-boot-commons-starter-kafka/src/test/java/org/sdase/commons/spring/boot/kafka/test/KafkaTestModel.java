@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter.test;
+package org.sdase.commons.spring.boot.kafka.test;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

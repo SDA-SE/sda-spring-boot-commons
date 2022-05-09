@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter;
+package org.sdase.commons.spring.boot.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -22,7 +22,7 @@ import org.springframework.kafka.support.converter.ByteArrayJsonMessageConverter
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/starter/consumer.properties")
+@PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/consumer.properties")
 public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
 
   private final KafkaProperties kafkaProperties;

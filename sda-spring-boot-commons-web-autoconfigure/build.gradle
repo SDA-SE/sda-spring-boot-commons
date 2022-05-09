@@ -1,4 +1,10 @@
 
+
+ext {
+  logbackContribVersion = "0.1.5"
+}
+
+
 dependencies {
 
   compileOnly "org.springframework.boot:spring-boot-autoconfigure-processor"
@@ -10,6 +16,8 @@ dependencies {
   api 'org.springframework.boot:spring-boot-starter-actuator'
   api 'org.springframework.cloud:spring-cloud-starter-openfeign'
   api 'org.springframework.boot:spring-boot-starter-validation'
+  api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
+  api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
 
 // Moving forward compatibility with the now OpenTelemetry standard (OTEL) is desirable.
 // Sleuth does not currently integrate this as it’s extremely new, but as with most standards,

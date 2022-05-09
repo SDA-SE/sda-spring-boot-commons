@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter;
+package org.sdase.commons.spring.boot.kafka;
 
 import org.springframework.kafka.listener.ConsumerRecordRecoverer;
 

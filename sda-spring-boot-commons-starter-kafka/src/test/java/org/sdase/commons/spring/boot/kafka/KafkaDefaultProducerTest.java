@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter;
+package org.sdase.commons.spring.boot.kafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -17,9 +17,9 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sdase.commons.spring.boot.kafka.starter.test.KafkaTestApp;
-import org.sdase.commons.spring.boot.kafka.starter.test.KafkaTestModel;
-import org.sdase.commons.spring.boot.kafka.starter.test.KafkaTestProducer;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;

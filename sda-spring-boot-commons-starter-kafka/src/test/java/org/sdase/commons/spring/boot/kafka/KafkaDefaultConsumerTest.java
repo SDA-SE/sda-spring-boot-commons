@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.kafka.starter;
+package org.sdase.commons.spring.boot.kafka;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
@@ -16,9 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.verification.Timeout;
-import org.sdase.commons.spring.boot.kafka.starter.test.KafkaTestApp;
-import org.sdase.commons.spring.boot.kafka.starter.test.KafkaTestListener.ListenerCheck;
-import org.sdase.commons.spring.boot.kafka.starter.test.KafkaTestModel;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestListener.ListenerCheck;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
