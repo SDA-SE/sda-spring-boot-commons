@@ -5,14 +5,14 @@
 */
 package org.sdase.commons.spring.boot.web.client.oidc;
 
-import org.sdase.commons.spring.boot.web.EnableSdaPlatform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@EnableSdaPlatform
 @SpringBootApplication
+@EnableFeignClients
 @RestController
 public class ClientCredentialsTestApp {
 

@@ -8,13 +8,11 @@ package org.sdase.commons.spring.boot.web.jackson.test;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import org.sdase.commons.spring.boot.web.EnableSdaPlatform;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@EnableSdaPlatform
 @RestController
 public class JacksonTestApp {
 

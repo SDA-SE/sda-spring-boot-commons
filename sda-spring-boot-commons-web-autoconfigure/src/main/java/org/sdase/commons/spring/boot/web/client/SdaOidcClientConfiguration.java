@@ -15,7 +15,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2Clien
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
@@ -26,7 +25,6 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 
 @Configuration
 @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
-@PropertySource("classpath:/org/sdase/commons/spring/boot/web/client/default.properties")
 public class SdaOidcClientConfiguration {
 
   /**
