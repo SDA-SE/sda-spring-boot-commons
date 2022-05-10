@@ -129,7 +129,7 @@ subprojects {
 
 wrapper { gradleVersion = '7.4.2' }
 
-sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
 
 // output XML reports for SonarCloud
 jacocoTestReport {
