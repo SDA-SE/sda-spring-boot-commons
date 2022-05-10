@@ -9,6 +9,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import javax.ws.rs.core.HttpHeaders;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
 public class OidcClientRequestConfiguration {
@@ -20,7 +21,7 @@ public class OidcClientRequestConfiguration {
   }
 
   @Bean
-  //  @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
+  @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
   public RequestInterceptor getOidcRequestInterceptor() {
     return new OidcClientRequestInterceptor(oAuth2TokenProvider);
   }

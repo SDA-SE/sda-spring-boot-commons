@@ -49,7 +49,7 @@ class ClientCredentialsFlowIT {
   @LocalServerPort int port;
 
   @Test
-  void shouldUseAccessToken() {
+  void shouldUseAccessTokenFromOidcProvider() {
     stubFor(
         get("/pong")
             .withHeader(AUTHORIZATION, equalTo("Bearer " + authMock.providedAccessToken()))
