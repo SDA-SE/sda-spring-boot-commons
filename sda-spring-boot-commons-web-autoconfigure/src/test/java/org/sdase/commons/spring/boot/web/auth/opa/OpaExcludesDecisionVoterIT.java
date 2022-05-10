@@ -10,9 +10,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.auth.test.AuthTestApp;
-import org.sdase.commons.spring.boot.web.auth.testing.AuthMock;
-import org.sdase.commons.spring.boot.web.auth.testing.EnableSdaAuthMockInitializer;
+import org.sdase.commons.spring.boot.web.auth.AuthTestApp;
+import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
+import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;

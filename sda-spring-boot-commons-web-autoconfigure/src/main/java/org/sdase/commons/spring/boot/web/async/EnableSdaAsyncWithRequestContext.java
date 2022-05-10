@@ -26,4 +26,5 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Target(ElementType.TYPE)
 @EnableAsync
 @Import(SdaAsyncConfiguration.class)
+// TODO We may use this instead of the auto configuration
 public @interface EnableSdaAsyncWithRequestContext {}

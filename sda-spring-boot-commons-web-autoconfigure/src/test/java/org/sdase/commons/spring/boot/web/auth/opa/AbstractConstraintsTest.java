@@ -9,9 +9,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.auth.test.AuthTestApp;
-import org.sdase.commons.spring.boot.web.auth.test.MyConstraints;
-import org.sdase.commons.spring.boot.web.auth.testing.DisableSdaAuthInitializer;
+import org.sdase.commons.spring.boot.web.auth.AuthTestApp;
+import org.sdase.commons.spring.boot.web.auth.MyConstraints;
+import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;

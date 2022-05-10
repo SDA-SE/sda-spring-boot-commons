@@ -16,10 +16,10 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.auth.testing.AuthMock;
 import org.sdase.commons.spring.boot.web.client.oidc.ClientCredentialsFlowFeignClient;
 import org.sdase.commons.spring.boot.web.client.oidc.ClientCredentialsTestApp;
-import org.sdase.commons.spring.boot.web.client.oidc.EnableSdaOidcClientMockInitializer;
+import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
+import org.sdase.commons.spring.boot.web.testing.client.EnableSdaOidcClientMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;

@@ -37,8 +37,7 @@ dependencies {
   api "io.micrometer:micrometer-registry-prometheus:1.8.4"
   api 'io.github.openfeign:feign-micrometer:11.8'
 
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
-  testImplementation 'org.awaitility:awaitility:4.2.0'
+  testImplementation project(':sda-spring-boot-commons-web-testing')
+
 
 }

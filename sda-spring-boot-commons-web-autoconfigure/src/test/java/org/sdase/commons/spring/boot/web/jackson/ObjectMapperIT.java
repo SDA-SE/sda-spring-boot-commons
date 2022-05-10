@@ -8,8 +8,8 @@ package org.sdase.commons.spring.boot.web.jackson;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.auth.testing.DisableSdaAuthInitializer;
 import org.sdase.commons.spring.boot.web.jackson.test.JacksonTestApp;
+import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;

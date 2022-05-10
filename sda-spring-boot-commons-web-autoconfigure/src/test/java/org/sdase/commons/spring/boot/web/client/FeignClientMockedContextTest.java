@@ -10,11 +10,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.auth.testing.DisableSdaAuthInitializer;
 import org.sdase.commons.spring.boot.web.client.test.ClientTestApp;
 import org.sdase.commons.spring.boot.web.client.test.ClientTestConstraints;
 import org.sdase.commons.spring.boot.web.client.test.OtherServiceAuthenticatedClient;
 import org.sdase.commons.spring.boot.web.client.test.OtherServiceClient;
+import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;

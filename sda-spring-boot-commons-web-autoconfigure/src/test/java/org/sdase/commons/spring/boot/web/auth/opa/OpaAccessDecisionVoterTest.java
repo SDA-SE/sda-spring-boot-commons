@@ -14,9 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.auth.test.AuthTestApp;
-import org.sdase.commons.spring.boot.web.auth.testing.AuthMock;
-import org.sdase.commons.spring.boot.web.auth.testing.EnableSdaAuthMockInitializer;
+import org.sdase.commons.spring.boot.web.auth.AuthTestApp;
+import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
+import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,7 +86,7 @@ class OpaAccessDecisionVoterTest {
     assertThat(decisionVoter)
         .extracting("opaRequestUrl")
         .asString()
-        .isEqualTo(opaBaseUrl + "/v1/data/org/sdase/commons/spring/boot/web/auth/test");
+        .isEqualTo(opaBaseUrl + "/v1/data/org/sdase/commons/spring/boot/web/auth");
   }
 
   @Test

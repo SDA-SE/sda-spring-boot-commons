@@ -12,10 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.mongodb.test.TestEntity;
 import org.sdase.commons.spring.boot.mongodb.test.TestEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.dao.DuplicateKeyException;
 
-@DataMongoTest
+@SpringBootTest(classes = MongoTestApp.class, webEnvironment = WebEnvironment.NONE)
 class MongoDbConfigurationTest {
 
   @Autowired TestEntityRepository testEntityRepository;

@@ -9,7 +9,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@EnableSdaMongoDb
 public class MongoTestApp {
   public static void main(String[] args) {
     SpringApplication.run(MongoTestApp.class, args);
