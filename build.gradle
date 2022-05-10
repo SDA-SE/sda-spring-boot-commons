@@ -9,7 +9,6 @@ buildscript {
 plugins {
   id "jacoco"
   id "idea"
-  id "java"
   id 'maven-publish'
   id "com.diffplug.spotless" version "6.5.2"
   id 'org.springframework.boot' version '2.6.7' apply false
@@ -42,6 +41,8 @@ subprojects {
 
   group "org.sdase.commons.spring.boot"
 
+  sourceCompatibility = JavaVersion.VERSION_17
+
   // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
   version = System.getenv("SEMANTIC_VERSION")
 
@@ -71,10 +72,8 @@ subprojects {
       force "de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.3"
     }
   }
-}
 
-subprojects {
-  if ( !it.name.endsWith("-example")) {
+  if (!it.name.endsWith("-example")) {
     publishing {
       publications {
         maven(MavenPublication) {
@@ -124,16 +123,13 @@ subprojects {
     }
 
   }
+  // output XML reports for SonarCloud
+  jacocoTestReport {
+    reports {
+      xml.required = true
+    }
+  }
 
 }
 
 wrapper { gradleVersion = '7.4.2' }
-
-sourceCompatibility = JavaVersion.VERSION_17
-
-// output XML reports for SonarCloud
-jacocoTestReport {
-  reports {
-    xml.required = true
-  }
-}

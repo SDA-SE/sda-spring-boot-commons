@@ -31,7 +31,7 @@ dependencies {
   api 'io.opentracing.brave:brave-opentracing'
 //
   api 'org.springdoc:springdoc-openapi-ui:1.6.6'
-  api 'org.bouncycastle:bcpkix-jdk15on'
+  api 'org.bouncycastle:bcpkix-jdk15on:1.70'
   api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
   api 'io.github.openfeign:feign-jaxrs2:11.8'
   api "io.micrometer:micrometer-registry-prometheus:1.8.4"
