@@ -9,11 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,10 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
@@ -35,8 +30,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
     classes = KafkaTestApp.class,
     webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = {
-      "app.kafka.producer.test-topic=test-topic-producer",
-      "app.kafka.consumer.test-topic=test-topic-consumer",
       "management.server.port=0",
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"
     })
@@ -64,21 +57,10 @@ class KafkaDefaultProducerTest {
         .untilAsserted(
             () ->
                 assertThat(
-                        KafkaTestUtils.getSingleRecord(
-                                createTestConsumer(topic, embeddedKafkaBroker), topic)
+                        KafkaTestUtil.getNextRecord(
+                                topic, KafkaTestUtil.createTestConsumer(topic, embeddedKafkaBroker))
                             .value())
                     .usingRecursiveComparison()
                     .isEqualTo(expectedMessage));
-  }
-
-  private KafkaConsumer<String, KafkaTestModel> createTestConsumer(
-      String topic, EmbeddedKafkaBroker embeddedKafkaBroker) {
-    KafkaConsumer<String, KafkaTestModel> consumer =
-        new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps("test-group", "true", embeddedKafkaBroker),
-            new StringDeserializer(),
-            new JsonDeserializer<KafkaTestModel>().trustedPackages("*"));
-    consumer.subscribe(List.of(topic));
-    return consumer;
   }
 }
