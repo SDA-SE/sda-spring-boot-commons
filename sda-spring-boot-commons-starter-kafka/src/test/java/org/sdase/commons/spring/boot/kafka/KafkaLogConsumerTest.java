@@ -31,18 +31,14 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @SpringBootTest(
     classes = KafkaTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {
-      "app.kafka.consumer.test-topic=test-topic-consumer",
-      "app.kafka.producer.test-topic=test-topic-producer",
-      "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"
-    })
+    properties = {"spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"})
 @EmbeddedKafka(
     partitions = 1,
     brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-class KafkaDefaultConsumerTest {
+class KafkaLogConsumerTest {
 
   @Autowired KafkaTemplate<String, KafkaTestModel> kafkaTemplate;
 
@@ -50,20 +46,37 @@ class KafkaDefaultConsumerTest {
 
   @MockBean ListenerCheck listenerCheck;
 
-  @Value("${app.kafka.consumer.test-topic}")
+  @Value("${app.kafka.consumer.log-on-failure.topic}")
   private String topic;
 
   @Test
   void shouldReceiveAndDeserializeToJson() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
-
     verify(listenerCheck, timeout(3000)).check("CHECK");
   }
 
   @Test
   void shouldNotReceiveInvalidModel() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(null));
-
     verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
+  }
+
+  @Test
+  void shouldNeverRetryWithNotRetryableException() throws Exception {
+    kafkaTemplate.send(
+        topic,
+        new KafkaTestModel()
+            .setCheckString("CHECK")
+            .setCheckInt(1)
+            .setThrowNotRetryableException(true));
+    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
+  }
+
+  @Test
+  void shouldNeverRetryForRuntimeException() {
+    kafkaTemplate.send(
+        topic,
+        new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true));
+    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
   }
 }

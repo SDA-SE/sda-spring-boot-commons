@@ -7,6 +7,7 @@ package org.sdase.commons.spring.boot.kafka.test;
 
 import javax.validation.Valid;
 import org.sdase.commons.spring.boot.kafka.NotRetryableKafkaException;
+import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,26 +25,43 @@ public class KafkaTestListener {
   }
 
   @KafkaListener(
-      topics = "${app.kafka.consumer.test-topic}",
-      containerFactory = "retryAndLogKafkaListenerContainerFactory")
-  public void receive(@Payload @Valid KafkaTestModel kafkaTestModel) {
+      topics = "${app.kafka.consumer.retry-and-log.topic}",
+      containerFactory = SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
+  public void retryAndLog(@Payload @Valid KafkaTestModel kafkaTestModel) {
     listenerCheck.check(kafkaTestModel.getCheckString());
+    throwExceptionIfDesired(kafkaTestModel);
   }
 
   @KafkaListener(
-      topics = "${app.kafka.consumer.dld-topic}",
-      containerFactory = "retryAndDldKafkaListenerContainerFactory")
-  public void receiveForDld(@Payload @Valid KafkaTestModel kafkaTestModel) {
-    if (kafkaTestModel.isThrowNotRetryableException()) {
-      throw new NotRetryableKafkaException();
-    }
+      topics = "${app.kafka.consumer.retry-and-dlt.topic}",
+      containerFactory = SdaKafkaListenerContainerFactory.RETRY_AND_DLT)
+  public void retryAndDlt(@Payload @Valid KafkaTestModel kafkaTestModel) {
     listenerCheck.check(kafkaTestModel.getCheckString());
+    throwExceptionIfDesired(kafkaTestModel);
+  }
+
+  @KafkaListener(
+      topics = "${app.kafka.consumer.log-on-failure.topic}",
+      containerFactory = SdaKafkaListenerContainerFactory.LOG_ON_FAILURE)
+  public void logOnFailure(@Payload @Valid KafkaTestModel kafkaTestModel) {
+    listenerCheck.check(kafkaTestModel.getCheckString());
+    throwExceptionIfDesired(kafkaTestModel);
   }
 
   @Component
   public static class ListenerCheck {
+
     public void check(String checkString) {
       // DO NOTING
+    }
+  }
+
+  private void throwExceptionIfDesired(KafkaTestModel kafkaTestModel) {
+    if (kafkaTestModel.isThrowNotRetryableException()) {
+      throw new NotRetryableKafkaException();
+    }
+    if (kafkaTestModel.isThrowRuntimeException()) {
+      throw new RuntimeException();
     }
   }
 }

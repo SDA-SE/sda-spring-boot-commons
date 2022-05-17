@@ -33,6 +33,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
@@ -46,7 +47,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-class KafkaDldConsumerTest {
+class KafkaRetryAndDltConsumerTest {
 
   @Autowired KafkaTemplate<String, KafkaTestModel> kafkaTemplate;
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
@@ -55,7 +56,7 @@ class KafkaDldConsumerTest {
 
   @MockBean ListenerCheck listenerCheck;
 
-  @Value("${app.kafka.consumer.dld-topic}")
+  @Value("${app.kafka.consumer.retry-and-dlt.topic}")
   private String topic;
 
   @Test
@@ -90,16 +91,21 @@ class KafkaDldConsumerTest {
                             .contains(
                                 tuple(
                                     "kafka_dlt-exception-cause-fqcn",
-                                    "org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException"));
+                                    MethodArgumentNotValidException.class.getName()));
                       }));
     }
   }
 
   @Test
-  void shouldModelButProduceToDLT() throws Exception {
-    KafkaTestModel expectedMessage = new KafkaTestModel().setCheckString("CHECK").setCheckInt(null);
+  void shouldProduceToDLTForNotRetryableKafkaException() throws Exception {
+    KafkaTestModel expectedMessage =
+        new KafkaTestModel()
+            .setCheckString("CHECK")
+            .setCheckInt(1)
+            .setThrowNotRetryableException(true);
     kafkaTemplate.send(topic, expectedMessage);
-    verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
+
+    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
 
     try (KafkaConsumer<String, Object> testConsumer =
         KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
@@ -121,7 +127,40 @@ class KafkaDldConsumerTest {
                             .contains(
                                 tuple(
                                     "kafka_dlt-exception-cause-fqcn",
-                                    "org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException"));
+                                    NotRetryableKafkaException.class.getName()));
+                      }));
+    }
+  }
+
+  @Test
+  void shouldProduceToDLTForRuntimeException() throws Exception {
+    KafkaTestModel expectedMessage =
+        new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true);
+    kafkaTemplate.send(topic, expectedMessage);
+
+    verify(listenerCheck, timeout(2000).times(2)).check("CHECK");
+
+    try (KafkaConsumer<String, Object> testConsumer =
+        KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
+      await()
+          .atMost(Duration.ofSeconds(5))
+          .pollDelay(Duration.ofMillis(1000))
+          .pollInterval(Duration.ofMillis(100))
+          .untilAsserted(
+              () ->
+                  assertSoftly(
+                      s -> {
+                        ConsumerRecord<String, Object> nextRecord =
+                            KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
+                        s.assertThat(nextRecord.value())
+                            .usingRecursiveComparison()
+                            .isEqualTo(expectedMessage);
+                        s.assertThat(nextRecord.headers())
+                            .extracting(Header::key, header -> new String(header.value()))
+                            .contains(
+                                tuple(
+                                    "kafka_dlt-exception-cause-fqcn",
+                                    RuntimeException.class.getName()));
                       }));
     }
   }

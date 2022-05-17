@@ -43,7 +43,7 @@ class KafkaDefaultProducerTest {
   @Autowired private KafkaTestProducer testee;
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
 
-  @Value("${app.kafka.producer.test-topic}")
+  @Value("${app.kafka.producer.topic}")
   private String topic;
 
   @Test
