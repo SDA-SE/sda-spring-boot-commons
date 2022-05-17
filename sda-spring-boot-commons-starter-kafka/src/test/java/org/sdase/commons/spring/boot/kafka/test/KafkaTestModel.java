@@ -15,6 +15,7 @@ public class KafkaTestModel {
   @NotNull private Integer checkInt;
 
   private boolean throwNotRetryableException;
+  private boolean throwRuntimeException;
 
   public String getCheckString() {
     return checkString;
@@ -40,6 +41,15 @@ public class KafkaTestModel {
 
   public KafkaTestModel setThrowNotRetryableException(boolean throwNotRetryableException) {
     this.throwNotRetryableException = throwNotRetryableException;
+    return this;
+  }
+
+  public boolean isThrowRuntimeException() {
+    return throwRuntimeException;
+  }
+
+  public KafkaTestModel setThrowRuntimeException(boolean throwRuntimeException) {
+    this.throwRuntimeException = throwRuntimeException;
     return this;
   }
 }

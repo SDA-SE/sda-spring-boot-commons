@@ -20,7 +20,7 @@ public class KafkaTestProducer {
   private final KafkaTemplate<String, KafkaTestModel> kafkaTemplate;
 
   public KafkaTestProducer(
-      @Value("${app.kafka.producer.test-topic}") String topicName,
+      @Value("${app.kafka.producer.topic}") String topicName,
       KafkaTemplate<String, KafkaTestModel> kafkaTemplate) {
     this.topicName = topicName;
     this.kafkaTemplate = kafkaTemplate;

@@ -7,6 +7,7 @@ package org.sdase.commons.spring.boot.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.sdase.commons.spring.boot.kafka.config.KafkaConsumerConfig;
+import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -18,7 +19,9 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistrar;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.CommonContainerStoppingErrorHandler;
 import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.CommonLoggingErrorHandler;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -50,17 +53,31 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     this.consumerConfig = consumerConfig;
   }
 
-  @Bean
+  @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
   public ConcurrentKafkaListenerContainerFactory<String, Object>
       retryAndLogKafkaListenerContainerFactory(
           @Qualifier("retryErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
-  @Bean
+  @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_DLT)
   public ConcurrentKafkaListenerContainerFactory<String, Object>
-      retryAndDldKafkaListenerContainerFactory(
+      retryAndDltKafkaListenerContainerFactory(
           @Qualifier("retryDeadLetterErrorHandler") CommonErrorHandler errorHandler) {
+    return createDefaultListenerContainerFactory(errorHandler);
+  }
+
+  //  @Bean(SdaKafkaListenerContainerFactory.STOP_CONTAINER_ON_FAILURE)
+  //  public ConcurrentKafkaListenerContainerFactory<String, Object>
+  //  stopOnFailureKafkaListenerContainerFactory(
+  //      @Qualifier("containerStoppingErrorHandler") CommonErrorHandler errorHandler) {
+  //    return createDefaultListenerContainerFactory(errorHandler);
+  //  }
+
+  @Bean(SdaKafkaListenerContainerFactory.LOG_ON_FAILURE)
+  public ConcurrentKafkaListenerContainerFactory<String, Object>
+      logOnFailureKafkaListenerContainerFactory(
+          @Qualifier("loggingErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
@@ -76,6 +93,16 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     DefaultErrorHandler handler = new DefaultErrorHandler(backOff);
     handler.addNotRetryableExceptions(NotRetryableKafkaException.class);
     return handler;
+  }
+
+  @Bean("loggingErrorHandler")
+  public CommonErrorHandler loggingErrorHandler() {
+    return new CommonLoggingErrorHandler();
+  }
+
+  @Bean("containerStoppingErrorHandler")
+  public CommonErrorHandler containerStoppingErrorHandler() {
+    return new CommonContainerStoppingErrorHandler();
   }
 
   /**
