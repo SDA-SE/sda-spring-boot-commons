@@ -35,8 +35,9 @@ import org.springframework.test.context.ContextConfiguration;
  *      {@literal @}Autowired private AuthMock authMock;
  *      {@literal @}LocalServerPort private int port;
  *
- *      {@literal @}Test
- *      void shouldProceedWhenAuthorized() {
+ *      {@literal @}BeforeEach
+ *      void setupTestData() {
+ *        // OPA authorization
  *        authMock.authorizeAnyRequest().allow();
  *        // …
  *      }
