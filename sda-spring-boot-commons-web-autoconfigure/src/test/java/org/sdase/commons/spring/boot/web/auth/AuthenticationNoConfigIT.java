@@ -60,7 +60,7 @@ class AuthenticationNoConfigIT {
   }
 
   @Test
-  void shouldAllowMetricskWithoutAuthenticationOnManagementPort() {
+  void shouldAllowMetricsWithoutAuthenticationOnManagementPort() {
     var responseEntity =
         client.getForEntity(
             String.format("http://localhost:%d/metrics", managementPort), Object.class);
