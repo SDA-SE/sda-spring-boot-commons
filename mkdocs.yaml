@@ -1,0 +1,19 @@
+# Name of the site, displayed in the navigation
+
+site_name: sda-spring-boot-commons
+
+# To display a page inside the navigation you must include them here
+
+# These files are relative to the /docs repository
+
+# Learn more on <https://www.mkdocs.org/user-guide/writing-your-docs/>
+
+nav:
+  - Overview: index.md
+  - Error Handling: web/error-handling.md
+
+# Always include the techdocs-core plugin, otherwise it's not possible to
+# display the documentation in Backstage. We don't support other plugins
+
+plugins:
+  - techdocs-core
