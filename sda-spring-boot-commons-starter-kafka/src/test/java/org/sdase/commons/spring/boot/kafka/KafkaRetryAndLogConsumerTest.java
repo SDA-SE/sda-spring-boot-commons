@@ -69,7 +69,7 @@ class KafkaRetryAndLogConsumerTest {
             .setCheckString("CHECK")
             .setCheckInt(1)
             .setThrowNotRetryableException(true));
-    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(4000).times(1)).check("CHECK");
   }
 
   @Test

@@ -17,19 +17,19 @@ public class KafkaTestUtil {
 
   private KafkaTestUtil() {}
 
-  public static ConsumerRecord<String, Object> getNextRecord(
-      String topic, KafkaConsumer<String, Object> consumer) {
+  public static ConsumerRecord<String, ?> getNextRecord(
+      String topic, KafkaConsumer<String, ?> consumer) {
     return KafkaTestUtils.getSingleRecord(consumer, topic);
   }
 
-  public static KafkaConsumer<String, Object> createTestConsumer(
+  public static KafkaConsumer<String, ?> createTestConsumer(
       String topic, EmbeddedKafkaBroker embeddedKafkaBroker) {
 
-    KafkaConsumer<String, Object> consumer =
+    KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
             KafkaTestUtils.consumerProps("test-group", "true", embeddedKafkaBroker),
             new StringDeserializer(),
-            new JsonDeserializer<Object>().trustedPackages("*"));
+            new JsonDeserializer<>().trustedPackages("*"));
     consumer.subscribe(List.of(topic));
     return consumer;
   }
