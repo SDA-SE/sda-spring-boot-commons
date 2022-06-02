@@ -71,7 +71,7 @@ class KafkaRetryAndDltConsumerTest {
     kafkaTemplate.send(topic, expectedMessage);
     verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
 
-    try (KafkaConsumer<String, Object> testConsumer =
+    try (KafkaConsumer<String, ?> testConsumer =
         KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
       await()
           .atMost(Duration.ofSeconds(5))
@@ -81,7 +81,7 @@ class KafkaRetryAndDltConsumerTest {
               () ->
                   assertSoftly(
                       s -> {
-                        ConsumerRecord<String, Object> nextRecord =
+                        ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
                         s.assertThat(nextRecord.value())
                             .usingRecursiveComparison()
@@ -107,7 +107,7 @@ class KafkaRetryAndDltConsumerTest {
 
     verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
 
-    try (KafkaConsumer<String, Object> testConsumer =
+    try (KafkaConsumer<String, ?> testConsumer =
         KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
       await()
           .atMost(Duration.ofSeconds(5))
@@ -117,7 +117,7 @@ class KafkaRetryAndDltConsumerTest {
               () ->
                   assertSoftly(
                       s -> {
-                        ConsumerRecord<String, Object> nextRecord =
+                        ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
                         s.assertThat(nextRecord.value())
                             .usingRecursiveComparison()
@@ -140,7 +140,7 @@ class KafkaRetryAndDltConsumerTest {
 
     verify(listenerCheck, timeout(2000).times(2)).check("CHECK");
 
-    try (KafkaConsumer<String, Object> testConsumer =
+    try (KafkaConsumer<String, ?> testConsumer =
         KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
       await()
           .atMost(Duration.ofSeconds(5))
@@ -150,7 +150,7 @@ class KafkaRetryAndDltConsumerTest {
               () ->
                   assertSoftly(
                       s -> {
-                        ConsumerRecord<String, Object> nextRecord =
+                        ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
                         s.assertThat(nextRecord.value())
                             .usingRecursiveComparison()

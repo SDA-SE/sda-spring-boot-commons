@@ -35,47 +35,40 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
 
   private final KafkaProperties kafkaProperties;
-  private final KafkaTemplate<Object, Object> retryTemplate;
+  private final KafkaTemplate<String, ?> recoverTemplate;
   private final LocalValidatorFactoryBean validator;
   private final ObjectMapper objectMapper;
   private final KafkaConsumerConfig consumerConfig;
 
   public SdaKafkaConsumerConfiguration(
       KafkaProperties kafkaProperties,
-      KafkaTemplate<Object, Object> retryTemplate,
+      KafkaTemplate<String, ?> recoverTemplate,
       LocalValidatorFactoryBean validator,
       ObjectMapper objectMapper,
       KafkaConsumerConfig consumerConfig) {
     this.kafkaProperties = kafkaProperties;
-    this.retryTemplate = retryTemplate;
+    this.recoverTemplate = recoverTemplate;
     this.validator = validator;
     this.objectMapper = objectMapper;
     this.consumerConfig = consumerConfig;
   }
 
   @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
-  public ConcurrentKafkaListenerContainerFactory<String, Object>
+  public ConcurrentKafkaListenerContainerFactory<String, ?>
       retryAndLogKafkaListenerContainerFactory(
           @Qualifier("retryErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
   @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_DLT)
-  public ConcurrentKafkaListenerContainerFactory<String, Object>
+  public ConcurrentKafkaListenerContainerFactory<String, ?>
       retryAndDltKafkaListenerContainerFactory(
           @Qualifier("retryDeadLetterErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
-  //  @Bean(SdaKafkaListenerContainerFactory.STOP_CONTAINER_ON_FAILURE)
-  //  public ConcurrentKafkaListenerContainerFactory<String, Object>
-  //  stopOnFailureKafkaListenerContainerFactory(
-  //      @Qualifier("containerStoppingErrorHandler") CommonErrorHandler errorHandler) {
-  //    return createDefaultListenerContainerFactory(errorHandler);
-  //  }
-
   @Bean(SdaKafkaListenerContainerFactory.LOG_ON_FAILURE)
-  public ConcurrentKafkaListenerContainerFactory<String, Object>
+  public ConcurrentKafkaListenerContainerFactory<String, ?>
       logOnFailureKafkaListenerContainerFactory(
           @Qualifier("loggingErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
@@ -115,7 +108,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   public DefaultErrorHandler retryDeadLetterErrorHandler() {
     // Will result into 1s, 2s, 4s, 4s retry backoff
     ExponentialBackOffWithMaxRetries backOff = createDefaultRetryBackOff();
-    DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(retryTemplate);
+    DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(recoverTemplate);
     DefaultErrorHandler handler = new DefaultErrorHandler(recoverer, backOff);
     handler.addNotRetryableExceptions(NotRetryableKafkaException.class);
     return handler;
@@ -130,9 +123,9 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     return backOff;
   }
 
-  private ConcurrentKafkaListenerContainerFactory<String, Object>
-      createDefaultListenerContainerFactory(CommonErrorHandler errorHandler) {
-    ConcurrentKafkaListenerContainerFactory<String, Object> factory =
+  private ConcurrentKafkaListenerContainerFactory<String, ?> createDefaultListenerContainerFactory(
+      CommonErrorHandler errorHandler) {
+    ConcurrentKafkaListenerContainerFactory<String, ?> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(
         new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties()));
