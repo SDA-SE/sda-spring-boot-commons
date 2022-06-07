@@ -35,14 +35,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
 
   private final KafkaProperties kafkaProperties;
-  private final KafkaTemplate<String, ?> recoverTemplate;
+  private final KafkaTemplate<Object, Object> recoverTemplate;
   private final LocalValidatorFactoryBean validator;
   private final ObjectMapper objectMapper;
   private final KafkaConsumerConfig consumerConfig;
 
   public SdaKafkaConsumerConfiguration(
       KafkaProperties kafkaProperties,
-      KafkaTemplate<String, ?> recoverTemplate,
+      KafkaTemplate<Object, Object> recoverTemplate,
       LocalValidatorFactoryBean validator,
       ObjectMapper objectMapper,
       KafkaConsumerConfig consumerConfig) {
