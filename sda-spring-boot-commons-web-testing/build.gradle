@@ -1,7 +1,7 @@
 
 ext {
   awaitalityVersion = '4.2.0'
-  joseJwtVersion = '9.22'
+  joseJwtVersion = '9.23'
 }
 
 dependencies {
