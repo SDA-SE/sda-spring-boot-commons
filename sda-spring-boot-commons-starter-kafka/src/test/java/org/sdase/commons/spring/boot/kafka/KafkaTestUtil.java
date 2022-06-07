@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
@@ -29,7 +28,7 @@ public class KafkaTestUtil {
         new KafkaConsumer<>(
             KafkaTestUtils.consumerProps("test-group", "true", embeddedKafkaBroker),
             new StringDeserializer(),
-            new JsonDeserializer<>().trustedPackages("*"));
+            new StringDeserializer());
     consumer.subscribe(List.of(topic));
     return consumer;
   }

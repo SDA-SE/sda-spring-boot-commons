@@ -12,6 +12,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -83,9 +84,8 @@ class KafkaRetryAndDltConsumerTest {
                       s -> {
                         ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
-                        s.assertThat(nextRecord.value())
-                            .usingRecursiveComparison()
-                            .isEqualTo(expectedMessage);
+                        var actual = readValue(nextRecord);
+                        s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
                         s.assertThat(nextRecord.headers())
                             .extracting(Header::key, header -> new String(header.value()))
                             .contains(
@@ -93,6 +93,14 @@ class KafkaRetryAndDltConsumerTest {
                                     "kafka_dlt-exception-cause-fqcn",
                                     MethodArgumentNotValidException.class.getName()));
                       }));
+    }
+  }
+
+  private KafkaTestModel readValue(ConsumerRecord<String, ?> nextRecord) {
+    try {
+      return objectMapper.readValue((String) nextRecord.value(), KafkaTestModel.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -119,9 +127,8 @@ class KafkaRetryAndDltConsumerTest {
                       s -> {
                         ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
-                        s.assertThat(nextRecord.value())
-                            .usingRecursiveComparison()
-                            .isEqualTo(expectedMessage);
+                        var actual = readValue(nextRecord);
+                        s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
                         s.assertThat(nextRecord.headers())
                             .extracting(Header::key, header -> new String(header.value()))
                             .contains(
@@ -152,9 +159,8 @@ class KafkaRetryAndDltConsumerTest {
                       s -> {
                         ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
-                        s.assertThat(nextRecord.value())
-                            .usingRecursiveComparison()
-                            .isEqualTo(expectedMessage);
+                        var actual = readValue(nextRecord);
+                        s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
                         s.assertThat(nextRecord.headers())
                             .extracting(Header::key, header -> new String(header.value()))
                             .contains(
