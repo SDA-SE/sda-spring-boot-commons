@@ -18,6 +18,7 @@ import java.time.Duration;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -73,7 +74,8 @@ class KafkaRetryAndDltConsumerTest {
     verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
 
     try (KafkaConsumer<String, ?> testConsumer =
-        KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
+        KafkaTestUtil.createTestConsumer(
+            topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
       await()
           .atMost(Duration.ofSeconds(5))
           .pollDelay(Duration.ofMillis(1000))
@@ -116,7 +118,8 @@ class KafkaRetryAndDltConsumerTest {
     verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
 
     try (KafkaConsumer<String, ?> testConsumer =
-        KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
+        KafkaTestUtil.createTestConsumer(
+            topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
       await()
           .atMost(Duration.ofSeconds(5))
           .pollDelay(Duration.ofMillis(1000))
@@ -148,7 +151,8 @@ class KafkaRetryAndDltConsumerTest {
     verify(listenerCheck, timeout(2000).times(2)).check("CHECK");
 
     try (KafkaConsumer<String, ?> testConsumer =
-        KafkaTestUtil.createTestConsumer(topic + ".DLT", embeddedKafkaBroker)) {
+        KafkaTestUtil.createTestConsumer(
+            topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
       await()
           .atMost(Duration.ofSeconds(5))
           .pollDelay(Duration.ofMillis(1000))

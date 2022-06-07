@@ -8,6 +8,7 @@ package org.sdase.commons.spring.boot.kafka;
 import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
@@ -22,13 +23,13 @@ public class KafkaTestUtil {
   }
 
   public static KafkaConsumer<String, ?> createTestConsumer(
-      String topic, EmbeddedKafkaBroker embeddedKafkaBroker) {
+      String topic, EmbeddedKafkaBroker embeddedKafkaBroker, Deserializer<?> deserializer) {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
             KafkaTestUtils.consumerProps("test-group", "true", embeddedKafkaBroker),
             new StringDeserializer(),
-            new StringDeserializer());
+            deserializer);
     consumer.subscribe(List.of(topic));
     return consumer;
   }
