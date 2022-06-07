@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
@@ -58,7 +59,11 @@ class KafkaDefaultProducerTest {
             () ->
                 assertThat(
                         KafkaTestUtil.getNextRecord(
-                                topic, KafkaTestUtil.createTestConsumer(topic, embeddedKafkaBroker))
+                                topic,
+                                KafkaTestUtil.createTestConsumer(
+                                    topic,
+                                    embeddedKafkaBroker,
+                                    new JsonDeserializer<>().trustedPackages("*")))
                             .value())
                     .usingRecursiveComparison()
                     .isEqualTo(expectedMessage));

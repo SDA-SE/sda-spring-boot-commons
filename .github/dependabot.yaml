@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 15
+    target-branch: master
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
+    labels:
+      - 'dependencies'
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 15
+    target-branch: master
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+      include: scope
+    labels:
+      - 'dependencies'
