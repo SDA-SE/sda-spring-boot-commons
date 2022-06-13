@@ -10,7 +10,7 @@ plugins {
   id "jacoco"
   id "idea"
   id 'maven-publish'
-  id "com.diffplug.spotless" version "6.5.2"
+  id "com.diffplug.spotless" version "6.7.2"
   id 'org.springframework.boot' version '2.6.7' apply false
 }
 
