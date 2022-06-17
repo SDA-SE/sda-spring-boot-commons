@@ -30,8 +30,8 @@ public class AuthHeaderClientInterceptor implements RequestInterceptor {
               .getAttribute(
                   AuthorizationStoreRequestInterceptor.ATTRIBUTE_NAME,
                   AuthorizationStoreRequestInterceptor.SCOPE);
-      if (attribute instanceof String) {
-        return Optional.of((String) attribute);
+      if (attribute instanceof String strAttribute) {
+        return Optional.of(strAttribute);
       } else {
         return Optional.empty();
       }

@@ -64,15 +64,6 @@ subprojects {
     }
   }
 
-
-  configurations.all {
-//    resolutionStrategy {
-//      // Current version matrix boot 2.6.4 with spring data resolves to 3.0.0
-//      // which does not fix the URL problem for newer versions
-//      force "de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.3"
-//    }
-  }
-
   if (!it.name.endsWith("-example")) {
     publishing {
       publications {

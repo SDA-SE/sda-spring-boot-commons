@@ -70,8 +70,8 @@ public class OpaRequestBuilder {
 
   private String extractJwtIfAuthenticated(HttpServletRequest request) {
     var principal = request.getUserPrincipal();
-    if (principal instanceof JwtAuthenticationToken) {
-      return ((JwtAuthenticationToken) principal).getToken().getTokenValue();
+    if (principal instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+      return jwtAuthenticationToken.getToken().getTokenValue();
     }
     return null;
   }

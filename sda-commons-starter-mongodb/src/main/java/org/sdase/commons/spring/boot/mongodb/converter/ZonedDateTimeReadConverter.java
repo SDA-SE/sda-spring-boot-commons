@@ -18,12 +18,12 @@ public enum ZonedDateTimeReadConverter implements Converter<Object, ZonedDateTim
 
   @Override
   public ZonedDateTime convert(Object fromDBObject) {
-    if (fromDBObject instanceof Date) {
-      return ZonedDateTime.ofInstant(((Date) fromDBObject).toInstant(), UTC);
+    if (fromDBObject instanceof Date date) {
+      return ZonedDateTime.ofInstant(date.toInstant(), UTC);
     }
 
-    if (fromDBObject instanceof String) {
-      return ZonedDateTime.ofInstant(ZonedDateTime.parse((String) fromDBObject).toInstant(), UTC);
+    if (fromDBObject instanceof String stringDate) {
+      return ZonedDateTime.ofInstant(ZonedDateTime.parse(stringDate).toInstant(), UTC);
     }
 
     throw new IllegalArgumentException("Can't convert to ZonedDateTime from " + fromDBObject);
