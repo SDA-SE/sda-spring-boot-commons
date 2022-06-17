@@ -1,0 +1,20 @@
+plugins {
+  id 'java'
+}
+
+group 'org.sdase.commons.spring'
+
+repositories {
+  mavenCentral()
+}
+
+
+dependencies {
+
+  implementation project(':sda-commons-starter-web')
+  implementation project(':sda-commons-starter-mongodb')
+}
+
+test {
+  useJUnitPlatform()
+}
