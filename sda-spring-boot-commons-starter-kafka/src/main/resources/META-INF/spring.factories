@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.sdase.commons.spring.boot.kafka.SdaKafkaConsumerConfiguration, \
-  org.sdase.commons.spring.boot.kafka.SdaKafkaProducerConfiguration
