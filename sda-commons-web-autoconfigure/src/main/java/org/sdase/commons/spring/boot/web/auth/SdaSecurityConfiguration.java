@@ -6,7 +6,6 @@
 package org.sdase.commons.spring.boot.web.auth;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -106,9 +105,6 @@ public class SdaSecurityConfiguration {
   }
 
   private List<String> commaSeparatedStringToList(String issuers) {
-    return Stream.of(issuers.split(","))
-        .filter(StringUtils::hasText)
-        .map(String::trim)
-        .collect(Collectors.toList());
+    return Stream.of(issuers.split(",")).filter(StringUtils::hasText).map(String::trim).toList();
   }
 }

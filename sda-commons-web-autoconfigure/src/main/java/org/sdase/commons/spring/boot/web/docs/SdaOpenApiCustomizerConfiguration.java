@@ -59,6 +59,6 @@ public class SdaOpenApiCustomizerConfiguration {
             pathItem.getPatch(),
             pathItem.getTrace())
         .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+        .toList();
   }
 }
