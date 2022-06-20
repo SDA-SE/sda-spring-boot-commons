@@ -15,7 +15,6 @@ import org.springframework.data.convert.ReadingConverter;
 @ReadingConverter
 public enum ZonedDateTimeReadConverter implements Converter<Object, ZonedDateTime> {
   INSTANCE;
-
   @Override
   public ZonedDateTime convert(Object fromDBObject) {
     if (fromDBObject instanceof Date) {

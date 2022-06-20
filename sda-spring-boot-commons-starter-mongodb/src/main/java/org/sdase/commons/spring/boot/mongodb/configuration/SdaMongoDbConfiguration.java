@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.mongodb;
+package org.sdase.commons.spring.boot.mongodb.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * </ul>
  */
 @Configuration
-@PropertySource("classpath:/org/sdase/commons/spring/boot/mongodb/defaults.properties")
+@PropertySource("classpath:/org/sdase/commons/spring/boot/mongodb/config.properties")
 public class SdaMongoDbConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(SdaMongoDbConfiguration.class);

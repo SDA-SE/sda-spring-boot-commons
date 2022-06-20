@@ -49,6 +49,15 @@ subprojects {
   dependencies {
     implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     implementation platform(SpringBootPlugin.BOM_COORDINATES)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.0'
+    implementation 'dev.morphia.morphia:morphia-core:2.2.7'
+    implementation 'dev.morphia.morphia:validation:1.6.1'
+
+
+
+    api 'dev.morphia.morphia:morphia-core: 2.1.7'
+    api 'dev.morphia.morphia:validation'
+
   }
 
   test {
