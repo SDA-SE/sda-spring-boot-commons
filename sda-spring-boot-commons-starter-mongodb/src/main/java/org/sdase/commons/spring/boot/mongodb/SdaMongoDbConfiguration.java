@@ -3,7 +3,7 @@
 *
 * All rights reserved.
 */
-package org.sdase.commons.spring.boot.mongodb.configuration;
+package org.sdase.commons.spring.boot.mongodb;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

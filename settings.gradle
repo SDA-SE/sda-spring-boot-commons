@@ -5,4 +5,5 @@ include 'sda-spring-boot-commons-starter-web'
 include 'sda-spring-boot-commons-starter-kafka'
 include 'sda-spring-boot-commons-starter-mongodb'
 include 'sda-spring-boot-commons-app-example'
+include 'sda-spring-boot-commons-shared-certificate'
 
