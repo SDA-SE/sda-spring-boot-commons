@@ -10,12 +10,12 @@ plugins {
   id "jacoco"
   id "idea"
   id 'maven-publish'
-  id "com.diffplug.spotless" version "6.5.2"
-  id 'org.springframework.boot' version '2.6.7' apply false
+  id "com.diffplug.spotless" version "6.7.2"
+  id 'org.springframework.boot' version '2.7.0' apply false
 }
 
 ext {
-  springCloudVersion = "2021.0.2"
+  springCloudVersion = "2021.0.3"
   springBootVersion = "2.6.7"
 }
 
@@ -78,15 +78,6 @@ subprojects {
       googleJavaFormat('1.15.0')
       enforceCheck = false
       licenseHeaderFile '../licenseHeaderFile'
-    }
-  }
-
-
-  configurations.all {
-    resolutionStrategy {
-      // Current version matrix boot 2.6.4 with spring data resolves to 3.0.0
-      // which does not fix the URL problem for newer versions
-      force "de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.3"
     }
   }
 

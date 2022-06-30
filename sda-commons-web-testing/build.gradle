@@ -1,0 +1,17 @@
+
+ext {
+  awaitalityVersion = '4.2.0'
+  joseJwtVersion = '9.23'
+}
+
+dependencies {
+  api 'org.springframework.boot:spring-boot-starter-test'
+  api 'org.springframework.cloud:spring-cloud-contract-wiremock'
+  api "org.awaitility:awaitility:${awaitalityVersion}"
+  implementation 'com.fasterxml.jackson.core:jackson-databind'
+  implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+  implementation "com.nimbusds:nimbus-jose-jwt:${joseJwtVersion}"
+
+  testImplementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
+
+}
