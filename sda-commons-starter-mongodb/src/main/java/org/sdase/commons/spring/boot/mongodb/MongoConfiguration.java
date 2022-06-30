@@ -1,5 +1,6 @@
 package org.sdase.commons.spring.boot.mongodb;
 
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import javax.validation.constraints.NotEmpty;
 
 public class MongoConfiguration {
@@ -20,6 +21,8 @@ public class MongoConfiguration {
    */
   @NotEmpty
   private String hosts;
+  private MongoProperties properties;
+
 
   /**
    * The name of the mongo database to access.
@@ -126,5 +129,4 @@ public class MongoConfiguration {
    *     org.sdase.commons.shared.certificates.ca.CaCertificateConfiguration} the directory can be
    *     configured.
    */
-
 }
