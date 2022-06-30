@@ -1,79 +1,14 @@
-buildscript {
-  repositories {
-    maven {
-      url "https://nexus.sda-se.io/repository/sda-se-public/"
-      credentials {
-        username sdaNexusUser
-        password sdaNexusPassword
-      }
-    }
-  }
-}
-
-plugins {
-  id "jacoco"
-  id "idea"
-  id "java"
-  id "com.diffplug.spotless" version "6.7.2"
-  id "com.google.cloud.tools.jib" version "3.2.1"
-  id 'org.springframework.boot' version '2.7.0'
-//  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id "org.sonarqube" version "3.4.0.2513"
-}
-
-repositories {
-  mavenCentral()
-  maven {
-    url "https://nexus.sda-se.io/repository/sda-se-releases/"
-    credentials {
-      username sdaNexusUser
-      password sdaNexusPassword
-    }
-  }
-}
-
-
-test {
-  useJUnitPlatform()
-}
-
-project.ext {
-  springCloudVersion = '2021.0.2'
-  logbackContribVersion = '0.1.5'
-  sdaSpringCommons = '0.7.0'
-}
 
 dependencies {
 
-  //define platform dependencies for simplified dependency management
-  implementation enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
-  implementation "org.sdase.commons.spring.boot:sda-commons-starter-web:$sdaSpringCommons"
+  implementation 'org.springframework.boot:spring-boot-starter-web:2.7.1'
   implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.837')
   implementation 'com.amazonaws:aws-java-sdk-s3'
   implementation 'com.google.api:api-common:2.2.1'
+  implementation 'io.prometheus:simpleclient:0.16.0'
+  implementation 'commons-io:commons-io:2.11.0'
+  implementation 'org.apache.commons:commons-lang3:3.12.0'
 
 
-
-  testImplementation "org.sdase.commons.spring.boot:sda-commons-web-testing:$sdaSpringCommons"
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'org.springframework.security:spring-security-test'
-
-
-  testImplementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo') {
-    // Current version matrix boot 2.6.7 with spring data resolves to 3.0.0
-    // which does not fix the URL problem for newer versions
-    version {
-      strictly '3.4.3'
-    }
-  }
-
-  testImplementation 'org.springframework.kafka:spring-kafka-test'
-  testImplementation 'org.awaitility:awaitility:4.2.0'
-}
-
-// output XML reports for SonarCloud
-jacocoTestReport {
-  reports {
-    xml.required = true
-  }
 }
