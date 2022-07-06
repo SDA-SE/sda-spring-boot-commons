@@ -1,4 +1,4 @@
-package org.sdase.commons.spring.boot.s3.Service;
+package org.sdase.commons.spring.boot.s3.config;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
@@ -12,15 +12,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FileServiceTest {
-
+class S3BucketOperationsTest {
   @InjectMocks
-  FileService subject;
+  S3BucketOperations subject = new S3Configuration();
 
   @Mock
   AmazonS3 amazonS3;
