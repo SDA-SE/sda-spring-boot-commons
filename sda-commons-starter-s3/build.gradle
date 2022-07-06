@@ -1,14 +1,10 @@
-
 dependencies {
 
-  implementation 'org.springframework.boot:spring-boot-starter-web:2.7.1'
-  implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.837')
-  implementation 'com.amazonaws:aws-java-sdk-s3'
-  implementation 'com.google.api:api-common:2.2.1'
-  implementation 'io.prometheus:simpleclient:0.16.0'
-  implementation 'commons-io:commons-io:2.11.0'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.cloud:spring-cloud-aws-core:2.2.6.RELEASE'
   implementation 'org.apache.commons:commons-lang3:3.12.0'
-
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+

@@ -68,7 +68,13 @@ public class FileService {
     for (S3ObjectSummary summary : summaries) {
       result.add(summary.getKey());
     }
-
     return result;
+  }
+
+  public void deleteFile(final String keyName) {
+    LOG.info("Deleting file with name= " + keyName);
+    final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucketName, keyName);
+    amazonS3.deleteObject(deleteObjectRequest);
+    LOG.info("File deleted successfully.");
   }
 }
