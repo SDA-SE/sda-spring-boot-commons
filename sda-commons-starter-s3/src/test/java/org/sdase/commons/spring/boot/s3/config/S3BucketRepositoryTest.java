@@ -19,9 +19,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class S3BucketOperationsTest {
+class S3BucketRepositoryTest {
   @InjectMocks
-  S3BucketOperations subject = new S3Configuration();
+  S3BucketRepository subject = new S3BucketRepository();
 
   @Mock
   AmazonS3 amazonS3;
