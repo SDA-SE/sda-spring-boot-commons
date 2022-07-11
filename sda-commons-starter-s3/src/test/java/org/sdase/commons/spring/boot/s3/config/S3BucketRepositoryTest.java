@@ -19,12 +19,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class S3BucketOperationsTest {
-  @InjectMocks
-  S3BucketOperations subject = new S3Configuration();
-
+class S3BucketRepositoryTest {
   @Mock
   AmazonS3 amazonS3;
+
+  @InjectMocks
+  S3BucketRepository subject = new S3BucketRepository(amazonS3, "bucketName");
 
   @BeforeEach
   void setup() throws IllegalAccessException {
