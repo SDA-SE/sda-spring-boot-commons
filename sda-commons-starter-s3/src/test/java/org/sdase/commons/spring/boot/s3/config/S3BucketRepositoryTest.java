@@ -1,8 +1,19 @@
+/*
+* Copyright (c). SDA SE Open Industry Solutions (https://www.sda.se).
+*
+* All rights reserved.
+*/
 package org.sdase.commons.spring.boot.s3.config;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,21 +21,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class S3BucketRepositoryTest {
-  @Mock
-  AmazonS3 amazonS3;
+  @Mock AmazonS3 amazonS3;
 
-  @InjectMocks
-  S3BucketRepository subject = new S3BucketRepository(amazonS3, "bucketName");
+  @InjectMocks S3BucketRepository subject = new S3BucketRepository(amazonS3, "bucketName");
 
   @BeforeEach
   void setup() throws IllegalAccessException {
@@ -43,5 +45,12 @@ class S3BucketRepositoryTest {
     byte[] response = subject.findByName("testFileName");
     assertNotEquals(0, response.length);
     assertArrayEquals(expected.getBytes(), response);
+  }
+
+  @Test
+  void shouldDeleteObject() {
+    doNothing().when(amazonS3).deleteObject("bucketName", "keyName");
+    amazonS3.deleteObject("bucketName", "keyName");
+    verify(amazonS3, times(1)).deleteObject("bucketName", "keyName");
   }
 }

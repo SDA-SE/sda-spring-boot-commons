@@ -1,3 +1,8 @@
+/*
+* Copyright (c). SDA SE Open Industry Solutions (https://www.sda.se).
+*
+* All rights reserved.
+*/
 package org.sdase.commons.spring.boot.s3;
 
 import org.springframework.boot.SpringApplication;

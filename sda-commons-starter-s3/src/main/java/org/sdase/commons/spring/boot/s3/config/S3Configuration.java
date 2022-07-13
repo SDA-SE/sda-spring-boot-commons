@@ -1,5 +1,9 @@
+/*
+* Copyright (c). SDA SE Open Industry Solutions (https://www.sda.se).
+*
+* All rights reserved.
+*/
 package org.sdase.commons.spring.boot.s3.config;
-
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -8,13 +12,11 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-
-@Configuration
-public class S3Configuration  {
-
+@AutoConfiguration
+public class S3Configuration {
 
   @Value("${s3.accessKey}")
   private String accessKeyId;
@@ -29,8 +31,7 @@ public class S3Configuration  {
   private String region;
 
   @Value("${s3.bucketName}")
-  String bucketName;
-
+  private String bucketName;
 
   @Bean
   public AmazonS3 getAmazonS3Client() {
@@ -42,7 +43,6 @@ public class S3Configuration  {
         .withCredentials(new AWSStaticCredentialsProvider(credentials))
         .build();
   }
-
 
   @Bean
   public S3BucketRepository s3BucketRepository(AmazonS3 getAmazonS3Client) {
