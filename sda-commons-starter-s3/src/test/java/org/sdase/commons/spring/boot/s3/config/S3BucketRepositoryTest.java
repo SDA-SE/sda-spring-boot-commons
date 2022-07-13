@@ -13,6 +13,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class S3BucketRepositoryTest {
   @Mock AmazonS3 amazonS3;
 
-  @InjectMocks S3BucketRepository subject = new S3BucketRepository(amazonS3, "bucketName");
+  @InjectMocks S3BucketRepository subject;
 
   @BeforeEach
   void setup() throws IllegalAccessException {
@@ -34,7 +35,7 @@ class S3BucketRepositoryTest {
   }
 
   @Test
-  void shouldFindByName() {
+  void shouldFindByName() throws IOException {
     String expected = "Test Object Content";
     InputStream inputStream = new ByteArrayInputStream(expected.getBytes());
     S3ObjectInputStream s3Input = new S3ObjectInputStream(inputStream, null);
