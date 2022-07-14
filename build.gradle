@@ -1,4 +1,3 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 buildscript {
   repositories {
@@ -10,13 +9,13 @@ plugins {
   id "jacoco"
   id "idea"
   id 'maven-publish'
-  id "com.diffplug.spotless" version "6.8.0"
-  id 'org.springframework.boot' version '2.7.0' apply false
+  id "com.diffplug.spotless" version "6.7.2"
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 ext {
   springCloudVersion = "2021.0.3"
-  springBootVersion = "2.6.7"
+  springBootVersion = "2.7.1"
 }
 
 repositories {
@@ -33,7 +32,7 @@ subprojects {
   apply plugin: 'java-library'
   apply plugin: 'maven-publish'
   apply plugin: "com.diffplug.spotless"
-  apply plugin: 'org.springframework.boot'
+  apply plugin: 'io.spring.dependency-management'
 
   repositories {
     mavenCentral()
@@ -46,9 +45,11 @@ subprojects {
   // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
   version = System.getenv("SEMANTIC_VERSION")
 
-  dependencies {
-    implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
-    implementation platform(SpringBootPlugin.BOM_COORDINATES)
+  dependencyManagement {
+    imports {
+      mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+    }
   }
 
   test {
@@ -104,11 +105,6 @@ subprojects {
             username System.getenv('SDA_NEXUS_USER')
             password System.getenv('SDA_NEXUS_PASSWORD')
           }
-        }
-
-        maven {
-          name = "project"
-          url = uri("${buildDir}/publishing-repository")
         }
       }
     }
