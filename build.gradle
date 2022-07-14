@@ -11,7 +11,7 @@ plugins {
   id "idea"
   id 'maven-publish'
   id "com.diffplug.spotless" version "6.7.2"
-  id 'org.springframework.boot' version '2.7.0' apply false
+  id 'org.springframework.boot' version '2.7.1' apply false
 }
 
 ext {
