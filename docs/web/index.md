@@ -12,6 +12,19 @@ Features:
   - [Monitoring](#monitoring)
   - [Tracing](#tracing)
   - [Health Checks](#health-checks)
+  - [Testing](#testing)
+  - [Logging](#logging)
+
+Based on:
+  - `org.springframework.boot:spring-boot-starter-web`
+  - `org.springframework.boot:spring-boot-starter-oauth2-resource-server`
+  - `org.springframework.boot:spring-boot-starter-oauth2-client`
+  - `org.springframework.boot:spring-boot-starter-validation`
+  - `org.springframework.boot:spring-boot-starter-actuator`
+  - `org.springframework.cloud:spring-cloud-starter-openfeign`
+  - `org.springframework.boot:spring-boot-starter-validation`
+  - `org.springframework.cloud:spring-cloud-starter-sleuth`
+  - `org.springframework.cloud:spring-cloud-sleuth-zipkin`
 
 ###  Configuration
 | **Property**                             | **Description**                                                                | **Default**                                                          | **Example**                              | **Env**                         |
@@ -25,9 +38,10 @@ Features:
 | `opa.client.connection.timeout` _string_ | The connection timeout of the client that calls the Open Policy Agent server.  | `500ms`                                                              | `2s`                                     | `OPA_CLIENT_CONNECTION_TIMEOUT` |
 | `opa.client.timeout` _string_            | The read timeout of the client that calls the Open Policy Agent server.        | `500ms`                                                              | `2s`                                     | `OPA_CLIENT_TIMEOUT`            |
 
+For further information have a look at the [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
 ## Web
 
-The list of web configuration: 
+The list of web configurations: 
 
 - The`server.servlet.context-path` defaults to `/api`
 - The`server.port` defaults to `8080`
@@ -35,6 +49,9 @@ The list of web configuration:
 - The `openapi.yaml` is available under `/api/openapi.yaml`
 - To enable [JSON logging](../../sda-commons-web-autoconfigure/src/main/resources/org/sdase/commons/spring/boot/web/logging/logback-json.xml)
   you need to set the property `logging.config`to `classpath:org/sdase/commons/spring/logging/logback-json.xml`
+  If not set, default console Spring logging is active.
+
+**Please make sure to configure `spring.application.name` for every service**
 
 ## Authentication
 
@@ -208,6 +225,28 @@ with a list of string values.
 
 ## Http Client
 
+### Configuration properties
+
+* `oidc.client.enabled` _string_
+  * Enables OIDC Authentication (Client Credentials Flow) for the configured clients.
+    If enabled, provide a client id, secret and an issuer url.
+  * Example: `true`
+  * Default: `false`
+
+* `oidc.client.id` _string_
+  * Client ID for the registration
+  * Example: `oidcClient`
+  * Default: ``
+* `oid.client.secret` _string_
+  * Client secret of the registration.
+  * Example: `s3cret`
+  * Default: ``
+* `oidc.client.issuer.uri` _string_
+  * URI that can either be an OpenID Connect discovery endpoint
+    or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414.
+  * Example: `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm`
+  * Default: ``
+
 ## Error Handling
 
 The `sda-commons-web-starter` provides a shared `ApiError` model, to provide a common
@@ -291,6 +330,43 @@ be serialized with milliseconds, it must be annotated with
 
 ## Monitoring
 
+Prometheus Metrics: `http://{serviceURL}:{adminPort}/metrics/prometheus`
+
 ## Tracing
 
+* `SPRING_ZIPKIN_BASE_URL` _string_
+  * Base url to Zipkin or Zipkin Collector of Jaeger instance.
+    In case of Jaeger, the Zipkin collector
+    must be enabled manually.
+  * Example: `http://jeager:9411`
+  * Default: `http://localhost:9411`
+* `SPRING_ZIPKIN_ENABLED` _boolean_
+  * For testing purposes it's may required to disable tracing.
+  * Example: `false`
+  * Default: `true`
+
 ## Health Checks
+
+Admin endpoint at port `8081`.
+
+The following endpoints are provided at the admin endpoint:
+
+  - Liveness: `http://{serviceURL}:{adminPort}/healthcheck/liveness`
+  - Readiness: `http://{serviceURL}:{adminPort}/healthcheck/readiness`
+
+## Logging
+
+The Spring Boot default is enabled. 
+
+### Configuration properties
+
+* `logging.config` _string_
+  * Path to the logback configuration on classpath. If not set, default console Spring logging is
+    active.
+    Available custom configurations on classpath:
+    * `classpath:org/sdase/commons/spring/logging/logback-json.xml` for Json Logging
+  * Example: `classpath:org/sdase/commons/spring/logging/logback-json.xml`
+  * Default: `org/springframework/boot/logging/logback/defaults.xml`
+
+
+## Testing

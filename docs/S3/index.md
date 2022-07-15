@@ -2,6 +2,9 @@
 
 This library provides methods for dealing with the Amazon S3 file storage.
 
+Based on:
+  - `io.awspring.cloud:spring-cloud-aws-core`
+
 The configuration class contains two beans, namely:
 
 - `AmazonS3Client`: Providing an interface for accessing the S3 object storage.

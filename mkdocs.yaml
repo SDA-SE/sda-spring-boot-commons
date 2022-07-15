@@ -10,7 +10,10 @@ site_name: sda-spring-boot-commons
 
 nav:
   - Overview: index.md
-  - Error Handling: web/error-handling.md
+  - Web: web/index.md
+  - S3: s3/index.md
+  - MongoDB: mongodb/index.md
+  - Kafka: kafka/index.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins

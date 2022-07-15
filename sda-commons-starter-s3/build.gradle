@@ -6,9 +6,7 @@ ext {
 
 dependencies {
 
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-
-
+  implementation 'org.springframework.boot:spring-boot-starter-web'  // TODO Replace with only required libraries.
   implementation "io.awspring.cloud:spring-cloud-aws-core:${springCloudAwsCoreVersion}"
   implementation "org.apache.commons:commons-lang3:${commonsLang3}"
 

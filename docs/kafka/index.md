@@ -1,8 +1,11 @@
 # sda-commons-kafka-starter
 
+The `sda-commons-kafka-starter` provides autoconfigured Kafka producer and consumer configuration.
 
-The `sda-commons-kafka-starter` provides several features to provide autoconfigured Kafka producer
-and consumer configuration
+Based on:
+- `org.springframework.boot:spring-boot-starter`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springframework.kafka:spring-kafka`
 
 ##  Configuration
 
@@ -12,7 +15,9 @@ and consumer configuration
 | `sda.kafka.consumer.retry.maxBackOffInterval` _int_     | Comma separated string of open id discovery key sources with required issuers. |             | `https://iam-int.dev.de/auth/realms/123` | `AUTH_ISSUERS` |
 | `sda.kafka.consumer.retry.backOffMultiplier` _int_      | Comma separated string of open id discovery key sources with required issuers. |             | `https://iam-int.dev.de/auth/realms/123` | `AUTH_ISSUERS` |
 | `sda.kafka.consumer.retry.maxRetries` _int_             | Comma separated string of open id discovery key sources with required issuers. |             | `https://iam-int.dev.de/auth/realms/123` | `AUTH_ISSUERS` |
+| `sda.kafka.consumer.retry.maxRetries` _string_          | Comma separated string of open id discovery key sources with required issuers. |             | `https://iam-int.dev.de/auth/realms/123` | `AUTH_ISSUERS` |
 
+For further information have a look to the Spring Kafka [reference documentation](https://docs.spring.io/spring-kafka/reference/html/).
 
 ## Consumer configuration
 
@@ -65,6 +70,9 @@ spring.kafka.consumer.properties.spring.deserializer.value.delegate.class=org.ap
 spring.kafka.consumer.properties.spring.json.trusted.packages=*
 ```
 
+**Make sure to overwrite `spring.kafka.consumer.group-id` in your `application.properties` otherwise you could have conflicts
+with other services using `default`.**
+
 ## Producer configuration
 
 The autoconfigured producer configuration provides a preconfigured  `KafkaTemplate` for producing 
@@ -79,4 +87,38 @@ spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.Strin
 spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
 ```
 
+## Configuration properties
 
+* `spring.kafka.bootstrap.servers` _string_
+  * Comma-delimited list of `host:port` pairs to use for establishing the initial connections to the
+    Kafka cluster
+  * Example:  `kafka-broker:9092"`
+  * Default: `localhost:9092`
+* `spring.kafka.security.protocol` _string_
+  * The security protocol used by Kafka. Please note that SASL mechanism requires some manual
+    configuration.
+  * Example: `PLAINTEXT` or `SSL`
+  * Default: `PLAINTEXT`
+* `spring.kafka.ssl.key-store-location` _string_
+  * Location of the SSL keystore file
+  * Example: `file:/kafka/kafka.client.keystore.jks`
+  * Default: ``
+* `spring.kafka.ssl.key-store-password` _string_
+  * Password for the SSL keystore file
+  * Example: `s3cret`
+  * Default: ``
+* `spring.kafka.ssl.trust-store-location´` _string_
+  * Location of the SSL truststore file
+  * Example: `file:/kafka-certs/kafka.client.keystore.jks`
+  * Default: ``
+* `Sspring.kafka.ssl.trust-store-password` _string_
+  * Password for the SSL truststore file
+  * Example: `s3cret`
+  * Default: ``
+
+#### Consumers
+
+* `spring.kafka.consuner.group-id` _string_
+  * Consumer group name of Kafka Consumer
+  * Example: `myConsumer`
+  * Default: `default`
