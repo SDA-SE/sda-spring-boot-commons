@@ -2,7 +2,7 @@
 
 This library provides methods for dealing with the Amazon S3 file storage.
 
-The configuration class contains two beans, namely
+The configuration class contains two beans, namely:
 
 - `AmazonS3Client`: Providing an interface for accessing the S3 object storage.
 - `S3BucketRepository`: Providing an abstraction for s3 client with simple repository methods.

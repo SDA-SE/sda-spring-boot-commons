@@ -95,7 +95,7 @@ public class S3BucketRepository {
   public void deleteFile(String key) {
     LOG.info("Deleting file with key='{}' ...", key);
     amazonS3.deleteObject(bucketName, key);
-    LOG.info("File with key='{}' deleted successfully!", key);
+    LOG.info("Done! File with key='{}' deleted successfully!", key);
   }
 
   /**
