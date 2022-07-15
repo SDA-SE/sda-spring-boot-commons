@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+/**
+ * The TaskDecorator is annotated with {@code @Component} because it's then auto-applied by
+ * {@linkplain org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration}
+ */
 @Component
 public class ContextCopyTaskDecorator implements TaskDecorator {
   private static final Logger LOG = LoggerFactory.getLogger(ContextCopyTaskDecorator.class);
