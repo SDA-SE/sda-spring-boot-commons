@@ -1,6 +1,6 @@
 
 ext {
-  springCloudAwsCoreVersion = "2.3.1"
+  springCloudAwsCoreVersion = "2.4.1"
   commonsLang3 = "3.12.0"
 }
 
