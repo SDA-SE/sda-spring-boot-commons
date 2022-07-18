@@ -117,9 +117,9 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   private ExponentialBackOffWithMaxRetries createDefaultRetryBackOff() {
     ExponentialBackOffWithMaxRetries backOff =
         new ExponentialBackOffWithMaxRetries(consumerConfig.retry().maxRetries());
-    backOff.setInitialInterval(consumerConfig.retry().initialBackOffInterval());
-    backOff.setMultiplier(consumerConfig.retry().backOffMultiplier());
-    backOff.setMaxInterval(consumerConfig.retry().maxBackOffInterval());
+    backOff.setInitialInterval(consumerConfig.retry().initialBackoffInterval());
+    backOff.setMultiplier(consumerConfig.retry().backoffMultiplier());
+    backOff.setMaxInterval(consumerConfig.retry().maxBackoffInterval());
     return backOff;
   }
 
