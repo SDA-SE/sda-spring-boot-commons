@@ -27,18 +27,23 @@ Based on:
   - `org.springframework.cloud:spring-cloud-sleuth-zipkin`
 
 ###  Configuration
-| **Property**                             | **Description**                                                                | **Default**                                                          | **Example**                              | **Env**                         |
-|------------------------------------------|--------------------------------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|---------------------------------|
-| `auth.issuers` _string_                  | Comma separated string of open id discovery key sources with required issuers. |                                                                      | `https://iam-int.dev.de/auth/realms/123` | `AUTH_ISSUERS`                  |
-| `auth.disable` _boolean_                 | Disables authorization checks completely.                                      | `false`                                                              | `true`                                   | `AUTH_DISABLE`                  |
-| `opa.disable` _boolean_                  | Disables authorization checks with Open Policy Agent completely.               | `false`                                                              | `true`                                   | `OPA_DISABLE`                   |
-| `opa.base.url` _string_                  | The baseUrl of OPA.                                                            | `http://localhost:8181`                                              | `http://opa-service:8181`                | `OPA_BASE_URL`                  |
-| `opa.policy.package` _string_            | The policy package to check for authorization.                                 | Defaults to package name of `@SpringBootApplication` annotated class | `com.custom.package.name`                | `OPA_POLICY_PACKAGE`            |
-| `opa.exclude.patterns` _string_          | Custom excluded paths can be configured as comma separated list of regex.      | `openapi.json` and `openapi.yaml `                                   | `/customPathOne,/customPathTwo`          | `OPA_EXCLUDE_PATTERNS`          |
-| `opa.client.connection.timeout` _string_ | The connection timeout of the client that calls the Open Policy Agent server.  | `500ms`                                                              | `2s`                                     | `OPA_CLIENT_CONNECTION_TIMEOUT` |
-| `opa.client.timeout` _string_            | The read timeout of the client that calls the Open Policy Agent server.        | `500ms`                                                              | `2s`                                     | `OPA_CLIENT_TIMEOUT`            |
+| **Property**                             | **Description**                                                                                                                         | **Default**                                                          | **Example**                                                  | **Env**                         |
+|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------|---------------------------------|
+| `auth.issuers` _string_                  | Comma separated string of open id discovery key sources with required issuers.                                                          |                                                                      | `https://iam-int.dev.de/auth/realms/123`                     | `AUTH_ISSUERS`                  |
+| `auth.disable` _boolean_                 | Disables authorization checks completely.                                                                                               | `false`                                                              | `true`                                                       | `AUTH_DISABLE`                  |
+| `opa.disable` _boolean_                  | Disables authorization checks with Open Policy Agent completely.                                                                        | `false`                                                              | `true`                                                       | `OPA_DISABLE`                   |
+| `opa.base.url` _string_                  | The baseUrl of OPA.                                                                                                                     | `http://localhost:8181`                                              | `http://opa-service:8181`                                    | `OPA_BASE_URL`                  |
+| `opa.policy.package` _string_            | The policy package to check for authorization.                                                                                          | Defaults to package name of `@SpringBootApplication` annotated class | `com.custom.package.name`                                    | `OPA_POLICY_PACKAGE`            |
+| `opa.exclude.patterns` _string_          | Custom excluded paths can be configured as comma separated list of regex.                                                               | `openapi.json` and `openapi.yaml `                                   | `/customPathOne,/customPathTwo`                              | `OPA_EXCLUDE_PATTERNS`          |
+| `opa.client.connection.timeout` _string_ | The connection timeout of the client that calls the Open Policy Agent server.                                                           | `500ms`                                                              | `2s`                                                         | `OPA_CLIENT_CONNECTION_TIMEOUT` |
+| `opa.client.timeout` _string_            | The read timeout of the client that calls the Open Policy Agent server.                                                                 | `500ms`                                                              | `2s`                                                         | `OPA_CLIENT_TIMEOUT`            |
+| `oidc.client.enabled` _boolean_          | Enables OIDC Authentication (Client Credentials Flow) for the configured clients.                                                       | `false`                                                              | `true`                                                       | `OIDC_CLIENT_ENABLED`           |
+| `oidc.client.id` _string_                | The client ID for the registration.                                                                                                     | ``                                                                   | `exampleClient`                                              | `OPA_CLIENT_ID`                 |
+| `oid.client.secret` _string_             | The Client secret of the registration.                                                                                                  | ``                                                                   | `s3cret`                                                     | `OIDC_CLIENT_SECRET`            |
+| `oidc.client.issuer.uri` _string_        | URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414. | ``                                                                   | `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm` | `OIDC_CLIENT_ISSUER_URI`        |
 
 For further information have a look at the [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
+
 ## Web
 
 The list of web configurations: 
@@ -225,14 +230,85 @@ with a list of string values.
 
 ## Http Client
 
+Enables support for `org.springframework.cloud.openfeign.FeignClients` that support SDA Platform
+features like:
+
+  - passing the Authorization header to downstream services.
+  - OIDC client authentication
+
+A feign client can be created as interface like this:
+```java
+@FeignClient(name = "partnerOds", url = "${partnerOds.baseUrl}")
+public interface OtherServiceClient {
+  @GetMapping("/partners")
+  List<Partner> getPartners();
+}
+```
+
+The Partner ODS base url must be configured as `http://partner-ods:8080/api` in the Spring
+environment property `partnerOds.baseUrl`. Detailed configuration like timeouts can be configured
+with default feign properties in the `application.yaml` or `derived environment` properties based on
+the name attribute of the `org.springframework.cloud.openfeign.FeignClient `annotation.
+
+The client is then available as bean in the Spring context.
+
+### Authentication forwarding
+The client can be used within the SDA Platform to path through the received authentication header by
+adding a configuration:
+```java
+@FeignClient(
+  name = "partnerOds",
+  url = "${partnerOds.baseUrl}",
+  configuration = {AuthenticationPassThroughClientConfiguration.class}
+)
+public interface OtherServiceClient {
+@GetMapping("/partners")
+  List<Partner> getPartners();
+}
+```
+
+`AuthenticationPassThroughClientConfiguration` will take the Authorization header from the current
+request context of the servlet and adds its value to the client request.
+
+### OIDC Client
+
+If the request context is not always existing, e.g. in cases where a technical user for
+service-to-service communication is required, the `OidcClientRequestConfiguration` will request the
+required OIDC authentication token with the client credentials flow.
+
+If the current request context contains the Authorization header, the authentication pass-through
+will be applied instead.
+
+### JAX-RS Mapping
+
+If you would like to use JAX-RS based web annotations, you just need to apply
+the `feign.jaxrs2.JAXRS2Contract.class` to configurations.
+
+```java
+@Path("customers")
+@FeignClient(
+    value = "customerService",
+    url = "${customer.api.base.url}",
+    configuration = {OidcClientRequestConfiguration.class, feign.jaxrs2.JAXRS2Contract.class})
+public interface CustomerServiceApi {
+
+  @POST
+  @Path("/{customerId}/contracts")
+  @Consumes(APPLICATION_JSON)
+  void addContract(
+      @PathParam("customerId") @NotBlank String customerId,
+      Contract contract);
+}
+
+```
+
 ### Configuration properties
 
-* `oidc.client.enabled` _string_
+* `oidc.client.enabled` _boolean_
   * Enables OIDC Authentication (Client Credentials Flow) for the configured clients.
     If enabled, provide a client id, secret and an issuer url.
   * Example: `true`
   * Default: `false`
-
 * `oidc.client.id` _string_
   * Client ID for the registration
   * Example: `oidcClient`
@@ -330,29 +406,122 @@ be serialized with milliseconds, it must be annotated with
 
 ## Monitoring
 
+TODO PROMETHEUS
+
 Prometheus Metrics: `http://{serviceURL}:{adminPort}/metrics/prometheus`
+
+### Default properties
+
+```properties
+# Metrics
+management.endpoints.web.path-mapping.prometheus=metrics/prometheus
+management.metrics.web.server.request.autotime.enabled=true
+management.endpoint.prometheus.enabled=true
+management.endpoint.metrics.enabled=true
+```
 
 ## Tracing
 
-* `SPRING_ZIPKIN_BASE_URL` _string_
+Currently, tracing is leveraged by Sleuth in the Spring context. Spring Cloud Sleuth provides Spring
+Boot autoconfiguration for distributed tracing. Sleuth was built around Zipkin traces and so only
+supports forwarding them to Zipkin (Thrift via Brave) format for now. But since Jaeger supports
+Zipkin traces and the OpenTracing Jaeger Spring support is not heavily maintained, there is a need
+to stick with Sleuth. However, Spring Sleuth is compatible with OpenTracing, so we can use the
+standardized interfaces, hence the OpenTracing {@linkplain io.opentracing.Tracer} is on classpath.
+
+Even if Jaeger supports the Zipkin B3 propagation format, Sleuth is forced to just use per default
+the [W3C context propagation](https://www.w3.org/TR/trace-context)
+
+Default features are:
+
+* Adds trace and span ids to the Slf4J MDC, so you can extract all the logs from a given trace or
+  span in a log aggregator.
+* Instruments common ingress and egress points from Spring applications (servlet filter, rest
+  template, scheduled actions, message channels, feign client).
+* The service name is derived from {@code spring.application.name}
+* Generate and report Jaeger-compatible traces via HTTP. By default it sends them to a Zipkin
+  collector on localhost (port 9411). Configure the location of the service using {@code
+  spring.zipkin.base-url}
+
+
+* `spring.zipkin.base.url` _string_
   * Base url to Zipkin or Zipkin Collector of Jaeger instance.
     In case of Jaeger, the Zipkin collector
     must be enabled manually.
   * Example: `http://jeager:9411`
   * Default: `http://localhost:9411`
-* `SPRING_ZIPKIN_ENABLED` _boolean_
+* `spring.zipkin.enabled` _boolean_
   * For testing purposes it's may required to disable tracing.
   * Example: `false`
   * Default: `true`
 
-## Health Checks
+### Default properties
 
-Admin endpoint at port `8081`.
+```properties
+spring.sleuth.propagation.type=W3C, B3
+spring.sleuth.opentracing.enabled=true
+```
 
-The following endpoints are provided at the admin endpoint:
+## Health Checks / Actuator
 
-  - Liveness: `http://{serviceURL}:{adminPort}/healthcheck/liveness`
-  - Readiness: `http://{serviceURL}:{adminPort}/healthcheck/readiness`
+Enables features that make a Spring Boot service compliant with
+the [SDA SE Health Checks](https://sda.dev/developer-guide/deployment/health-checks/).
+
+Configures the Spring Boot Actuator to be accessible on root path `/` at default management
+port `8081`.
+
+The following endpoints are provided at the admin management endpoint:
+
+- Liveness: `http://{serviceURL}:{adminPort}/healthcheck/liveness`
+- Readiness: `http://{serviceURL}:{adminPort}/healthcheck/readiness`
+
+The readiness group contains the following indicators:
+
+*   `ReadinessStateHealthIndicator`
+*   `MongoHealthIndicator`, if auto-configured.
+
+To overwrite the defaults `HealthIndicator` of the readiness group, you can overwrite the property
+source:
+
+```properties
+management.endpoint.health.group.readiness.include=readinessState, customCheck
+```
+
+Custom health indicators can be easily added to the application context:
+
+```java
+@Component
+public class CustomHealthIndicator implements HealthIndicator {
+  @Override
+  public Health health() {
+    return new Health.Builder().up().build();
+  }
+}
+```
+
+The custom health indicator will be available under `/healthcheck/custom` which is resolved by the
+prefix of the HealthIndicator implementing component.
+
+### Default properties
+
+```properties
+# Actuator
+management.server.port=8081
+management.server.servlet.context-path=/
+management.endpoints.web.base-path=/
+management.endpoints.web.exposure.include=*
+management.endpoints.enabled-by-default=false
+# Healthcheck
+management.endpoint.health.enabled=true
+management.endpoints.web.path-mapping.health=healthcheck
+management.endpoint.health.probes.enabled=true
+# Add the required auto configured health indicators which are supported in org.sdase.commons.spring
+# See https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.health.auto-configured-health-indicators
+# to see the available indicators. If an included HealthIndicator is not autoconfigured, it will be automatically ignored
+management.endpoint.health.group.readiness.include=readinessState, mongo
+management.endpoint.health.show-details=always
+management.endpoint.health.show-components=always
+```
 
 ## Logging
 

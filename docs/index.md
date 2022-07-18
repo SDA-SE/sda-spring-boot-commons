@@ -10,7 +10,7 @@ specifications promoted by the SDA SE.
 | [sda-commons-starter-web](web/index.md)         | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTracing and Prometheus metrics. |
 | [sda-commons-starter-mongodb](mongodb/index.md) | Provides default configuration based on the `org.springframework.boot:spring-boot-starter-data-mongodb`                                                               |
 | [sda-commons-starter-kafka](kafka/index.md)     | Provides default producer und consumer configuration based on `org.springframework.kafka:spring-kafka`                                                                |
-| [sda-commons-starter-s3](s3/index.md)           |                                                                                                                                                                       |
+| [sda-commons-starter-s3](s3/index.md)           | Provides features for dealing with the Amazon S3 file storage                                                                                                         |
 
 The provided documentation aims to provide SDA-specific information.
 All other information are referenced in the Spring and [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
@@ -53,5 +53,5 @@ Cloud version with our library.
 |-----------------|-----------------|-----------------------------------------------|
 | < 0.7.0         | 2.7.1           | 2021.0.x aka Jubilee (starting with 2021.0.3) |
 
-The Spring Boot / Spring Cloud compatiblity matrix is
+The Spring Boot / Spring Cloud compatibility matrix is
 provided [here](https://spring.io/projects/spring-cloud)
