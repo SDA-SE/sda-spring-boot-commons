@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 public record KafkaConsumerConfig(@NotNull RetryConfig retry) {
   public record RetryConfig(
       @NotNull Integer maxRetries,
-      @NotNull Long initialBackOffInterval,
-      @NotNull Long maxBackOffInterval,
-      @NotNull Long backOffMultiplier) {}
+      @NotNull Long initialBackoffInterval,
+      @NotNull Long maxBackoffInterval,
+      @NotNull Long backoffMultiplier) {}
 }

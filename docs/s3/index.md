@@ -1,6 +1,9 @@
 # sda-commons-s3-starter
 
-This library provides methods for dealing with the Amazon S3 file storage.
+This library provides features for dealing with the Amazon S3 file storage.
+
+Based on:
+  - `io.awspring.cloud:spring-cloud-aws-core`
 
 The configuration class contains two beans, namely:
 
