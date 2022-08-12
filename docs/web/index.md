@@ -448,7 +448,7 @@ Default features are:
   * Base url to Zipkin or Zipkin Collector of Jaeger instance.
     In case of Jaeger, the Zipkin collector
     must be enabled manually.
-  * Example: `http://jeager:9411`
+  * Example: `http://jaeger:9411`
   * Default: `http://localhost:9411`
 * `spring.zipkin.enabled` _boolean_
   * For testing purposes it's may required to disable tracing.
