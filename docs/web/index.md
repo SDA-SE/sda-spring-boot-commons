@@ -244,6 +244,14 @@ public interface OtherServiceClient {
   List<Partner> getPartners();
 }
 ```
+Then the spring boot application needs to be annotated with `@EnableFeignClients` in order for the component 
+scanning to pick up the `@FeignClient` annotated interfaces like so
+```java 
+@EnableFeignClients
+@SpringBootApplication
+public class ExampleApplication { (...)
+}
+```
 
 The Partner ODS base url must be configured as `http://partner-ods:8080/api` in the Spring
 environment property `partnerOds.baseUrl`. Detailed configuration like timeouts can be configured
@@ -427,7 +435,7 @@ Boot autoconfiguration for distributed tracing. Sleuth was built around Zipkin t
 supports forwarding them to Zipkin (Thrift via Brave) format for now. But since Jaeger supports
 Zipkin traces and the OpenTracing Jaeger Spring support is not heavily maintained, there is a need
 to stick with Sleuth. However, Spring Sleuth is compatible with OpenTracing, so we can use the
-standardized interfaces, hence the OpenTracing {@linkplain io.opentracing.Tracer} is on classpath.
+standardized interfaces, hence the OpenTracing `io.opentracing.Tracer` is on classpath.
 
 Even if Jaeger supports the Zipkin B3 propagation format, Sleuth is forced to just use per default
 the [W3C context propagation](https://www.w3.org/TR/trace-context)
@@ -438,10 +446,9 @@ Default features are:
   span in a log aggregator.
 * Instruments common ingress and egress points from Spring applications (servlet filter, rest
   template, scheduled actions, message channels, feign client).
-* The service name is derived from {@code spring.application.name}
+* The service name is derived from `spring.application.name`
 * Generate and report Jaeger-compatible traces via HTTP. By default it sends them to a Zipkin
-  collector on localhost (port 9411). Configure the location of the service using {@code
-  spring.zipkin.base-url}
+  collector on localhost (port 9411). Configure the location of the service using `spring.zipkin.base-url`
 
 
 * `spring.zipkin.base.url` _string_
