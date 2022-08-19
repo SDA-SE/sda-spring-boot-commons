@@ -15,7 +15,7 @@ plugins {
 
 ext {
   springCloudVersion = "2021.0.3"
-  springBootVersion = "2.7.1"
+  springBootVersion = "2.7.3"
 }
 
 repositories {
