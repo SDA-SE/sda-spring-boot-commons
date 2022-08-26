@@ -25,7 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
  *
  * <p>When enabled, a {@link AuthMock} is registered in the application context. The {@code
  * AuthMock} can be {@link org.springframework.beans.factory.annotation.Autowired} in the test class
- * to generate accepted JSON Web Tokens. The application is configured accordingly when using {@link
+ * to generate accepted JSON Web Tokens. The application is configured accordingly when using {@code
  * org.sdase.commons.spring.boot.web.auth.EnableSdaSecurity}.
  *
  * <p>Example:
