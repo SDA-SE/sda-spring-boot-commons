@@ -101,10 +101,10 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   }
 
   /**
-   * By default, the dead-letter record is sent to a topic named <originalTopic>.DLT (the original
-   * topic name suffixed with .DLT) and to the same partition as the original record. Therefore,
-   * when you use the default resolver, the dead-letter topic must have at least as many partitions
-   * as the original topic.
+   * By default, the dead-letter record is sent to a topic named &lt;originalTopic&gt;.DLT (the
+   * original topic name suffixed with .DLT) and to the same partition as the original record.
+   * Therefore, when you use the default resolver, the dead-letter topic must have at least as many
+   * partitions as the original topic.
    */
   @Bean("retryDeadLetterErrorHandler")
   public DefaultErrorHandler retryDeadLetterErrorHandler() {

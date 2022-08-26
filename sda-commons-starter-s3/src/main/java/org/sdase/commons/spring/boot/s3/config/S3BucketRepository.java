@@ -53,7 +53,6 @@ public class S3BucketRepository {
    *
    * @param key The key under which to store the specified file
    * @param file The file containing the data to be uploaded to Amazon S3.
-   * @return
    * @throws SdkClientException If any errors are encountered in the s3 client while making the
    *     request or handling the response.
    * @throws AmazonServiceException If any errors occurred in Amazon S3 while processing the
@@ -69,7 +68,7 @@ public class S3BucketRepository {
       throw new IOException(String.format("The path '%s' is not a file)", file.getAbsolutePath()));
     }
     LOG.info("Uploading file with name {}...", file.getName());
-    PutObjectResult putObjectResult = amazonS3.putObject(bucketName, key, file);
+    amazonS3.putObject(bucketName, key, file);
     LOG.info("Done! File with name '{}' has been uploaded to the '{}'", file.getName(), bucketName);
   }
 
