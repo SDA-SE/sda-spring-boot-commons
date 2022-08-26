@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         java_version: [ '17' ]
-        os: [ 'ubuntu-latest' ] #  'windows-latest' later
+        os: [ 'ubuntu-latest', 'windows-latest' ]
 
     timeout-minutes: 60
     steps:
