@@ -20,8 +20,7 @@ import org.sdase.commons.spring.boot.web.monitoring.EnableSdaMonitoring;
 import org.springframework.context.annotation.Import;
 
 /**
- * Enables features that make a Spring Boot service compliant with the <a
- * href="https://sda.dev/core-concepts/">SDA SE Core Concepts</a>.
+ * Enables features that make a Spring Boot service compliant with the SDA SE Core Concepts.
  *
  * <p>So far this includes
  *
