@@ -75,6 +75,13 @@ subprojects {
             description = 'A libraries to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
             url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
 
+            licenses {
+              license {
+                name = 'MIT License'
+                url = 'https://raw.githubusercontent.com/SDA-SE/sda-spring-boot-commons/master/LICENSE'
+              }
+            }
+
             organization {
               name = 'SDA SE Open Industry Solutions'
               url = 'https://sda.se'
