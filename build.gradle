@@ -70,6 +70,14 @@ subprojects {
       publications {
         maven(MavenPublication) {
           from components.java
+          versionMapping {
+            usage('java-api') {
+              fromResolutionOf('runtimeClasspath')
+            }
+            usage('java-runtime') {
+              fromResolutionResult()
+            }
+          }
           pom {
             name = project.group + ":" + project.name
             description = 'A libraries to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
