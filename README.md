@@ -21,7 +21,7 @@ specifications promoted by the SDA SE.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-See our [changelog](https://github.com/SDA-SE/sda-dropwizard-commons/releases/) for more information about the latest features.
+See our [changelog](https://github.com/SDA-SE/sda-spring-boot-commons/releases/) for more information about the latest features.
 
 ## Getting Started
 
