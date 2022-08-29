@@ -23,4 +23,4 @@ jobs:
         env:
           SEMANTIC_VERSION: PR-${{ github.event.number }}-SNAPSHOT
           SDA_NEXUS_USER: ${{ secrets.NEXUS_LOGIN_USER }}
-          SDA_NEXUS_PASSWORD: ${{ secrets.GH_PUBLISH_TOKEN }}
+          SDA_NEXUS_PASSWORD: ${{ secrets.NEXUS_LOGIN_PASSWORD }}
