@@ -9,6 +9,7 @@ plugins {
   id "jacoco"
   id "idea"
   id 'maven-publish'
+  id 'signing'
   id "com.diffplug.spotless" version "6.9.1"
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
@@ -31,6 +32,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'java-library'
   apply plugin: 'maven-publish'
+  apply plugin: 'signing'
   apply plugin: "com.diffplug.spotless"
   apply plugin: 'io.spring.dependency-management'
 
@@ -44,6 +46,11 @@ subprojects {
 
   // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
   version = System.getenv("SEMANTIC_VERSION")
+
+  // Disable publication of Gradle Module Metadata
+  tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+  }
 
   dependencyManagement {
     imports {
@@ -66,6 +73,19 @@ subprojects {
   }
 
   if (!it.name.endsWith("-example")) {
+
+    signing {
+      def signingKey = findProperty("signingKey")
+      def signingPassword = findProperty("signingPassword")
+      useInMemoryPgpKeys(signingKey, signingPassword)
+      sign publishing.publications
+    }
+
+    tasks.withType(Sign) {
+      // skip signing a publication to maven local
+      onlyIf { !gradle.taskGraph.hasTask(publishMavenPublicationToMavenLocal) }
+    }
+
     publishing {
       publications {
         maven(MavenPublication) {
