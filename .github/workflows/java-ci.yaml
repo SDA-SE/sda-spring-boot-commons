@@ -67,7 +67,14 @@ jobs:
             @semantic-release/release-notes-generator@10.0.2 \
             @semantic-release/github@8.0.0
 
+      - name: sda-spring-boot-commons-app token
+        id: app-token
+        uses: getsentry/action-github-app-token@v1.0.6
+        with:
+          app_id: ${{ secrets.GH_PUBLISH_APP_ID }}
+          private_key: ${{ secrets.GH_PUBLISH_APP_PRIVATE_KEY }}
+
       - name: Release and Publish
         run: semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
