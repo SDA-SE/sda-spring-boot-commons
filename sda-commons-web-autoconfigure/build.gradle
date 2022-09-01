@@ -2,7 +2,6 @@
 
 ext {
   logbackContribVersion = "0.1.5"
-  feignVersion = "11.9.1"
 }
 
 
