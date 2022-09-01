@@ -40,6 +40,19 @@ jobs:
           warning_on_retry: false
           command: ./gradlew --parallel --continue check -x spotlessCheck
 
+      - name: Generate Test Report
+        if: always()
+        run: ./gradlew -x test testReport codeCoverageReport
+
+      - uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
+        if: always()
+        with:
+          name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
+          path: |
+            build/reports/
+            */build/test-results/**/*.xml
+          retention-days: 7
+
   semantic-release:
     runs-on: ubuntu-latest
     timeout-minutes: 60
