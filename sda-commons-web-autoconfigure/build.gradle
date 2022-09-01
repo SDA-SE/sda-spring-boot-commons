@@ -2,6 +2,7 @@
 
 ext {
   logbackContribVersion = "0.1.5"
+  feignVersion = "11.9.1"
 }
 
 
@@ -33,9 +34,9 @@ dependencies {
   api 'org.springdoc:springdoc-openapi-ui:1.6.11'
   api 'org.bouncycastle:bcpkix-jdk15on:1.70'
   api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-  api 'io.github.openfeign:feign-jaxrs2:11.9.1'
+  api 'io.github.openfeign:feign-jaxrs2'
+  api 'io.github.openfeign:feign-micrometer'
   api "io.micrometer:micrometer-registry-prometheus:1.9.3"
-  api 'io.github.openfeign:feign-micrometer:11.8'
 
   testImplementation project(':sda-commons-web-testing')
 
