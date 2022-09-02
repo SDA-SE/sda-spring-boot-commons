@@ -14,6 +14,7 @@ plugins {
   id 'io.spring.dependency-management' version '1.0.13.RELEASE'
   id 'org.sonarqube' version '3.4.0.2513'
   id 'project-report'
+  id 'io.codearte.nexus-staging' version '0.30.0'
 }
 
 ext {
@@ -103,7 +104,7 @@ subprojects {
           }
           pom {
             name = project.group + ":" + project.name
-            description = 'A libraries to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
+            description = 'A library to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
             url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
 
             licenses {
@@ -121,6 +122,14 @@ subprojects {
             issueManagement {
               system = 'GitHub'
               url = 'https://github.com/SDA-SE/sda-spring-boot-commons/issues'
+            }
+
+            developers {
+              developer {
+                id = 'maintainer'
+                name = 'SDA SE Open Industry Solutions Maintainer'
+                email = 'sda-dropwizard-commons@sda.se' // FIXME need a better matching address here
+              }
             }
 
             scm {
@@ -144,6 +153,20 @@ subprojects {
             password System.getenv('SDA_NEXUS_PASSWORD')
           }
         }
+        maven {
+          name 'mavenCentral'
+          def releasesRepoUrl =
+              System.getenv('SONATYPE_STAGING_REPOSITORY_ID')
+                  ? "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${System.getenv('SONATYPE_STAGING_REPOSITORY_ID')}"
+                  : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+          def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+          url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+          credentials {
+            username System.getenv('SDA_SONATYPE_USER')
+            password System.getenv('SDA_SONATYPE_PASSWORD')
+          }
+        }
       }
     }
 
@@ -164,6 +187,16 @@ subprojects {
 }
 
 wrapper { gradleVersion = '7.4.2' }
+
+// Automatically close and release the staging repository that gets created
+// during the upload to maven central.
+nexusStaging {
+  username System.getenv('SDA_SONATYPE_USER')
+  password System.getenv('SDA_SONATYPE_PASSWORD')
+  packageGroup "org.sdase.commons.spring.boot"
+  // Read the stagingRepositoryId from the environment
+  stagingRepositoryId.set(System.getenv('SONATYPE_STAGING_REPOSITORY_ID'))
+}
 
 // Reconfigure the testReport task to display the results of all modules into a single report
 task testReport(type: TestReport) {

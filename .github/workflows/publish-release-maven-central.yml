@@ -1,0 +1,70 @@
+# This workflow uploads the releases to the Maven Central Repository
+name: Publish Release to Maven Central
+
+on:
+  release:
+    types:
+      - released
+      - prereleased
+
+env:
+  SEMANTIC_VERSION: ${{ github.event.release.tag_name }}
+  SONATYPE_PROFILE_ID: 33839da457341f
+
+jobs:
+  upload-maven-central:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@2c7a4878f5d120bd643426d54ae1209b29cc01a3 # tag=v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Build and Sign packages
+        run: ./gradlew --parallel signMavenPublication
+        env:
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PRIVATE_KEY_SECRET }}
+
+      - name: Create Staging Repository
+        id: create-staging-repo
+        run: |
+          ID=`echo "<promoteRequest><data><description>Created from GitHub Action for version $SEMANTIC_VERSION</description></data></promoteRequest>" \
+              | curl -X POST \
+                  -d @- \
+                  -u $SDA_SONATYPE_USER:$SDA_SONATYPE_PASSWORD \
+                  -H "Content-Type:application/xml" \
+                  https://oss.sonatype.org/service/local/staging/profiles/$SONATYPE_PROFILE_ID/start \
+              | sed -n 's:.*<stagedRepositoryId>\(.*\)</stagedRepositoryId>.*:\1:p'`
+          echo "::set-output name=STAGING_PROFILE_ID::$ID"
+        env:
+          SDA_SONATYPE_USER: ${{ secrets.SDA_SONATYPE_USER }}
+          SDA_SONATYPE_PASSWORD: ${{ secrets.SDA_SONATYPE_PASSWORD }}
+
+      - name: Upload to Maven Central
+        run: ./gradlew -x signMavenPublication publishMavenPublicationToMavenCentralRepository # FIXME DO NOT RELEASE yet, include the next task later: closeAndReleaseRepository
+        env:
+          SDA_SONATYPE_USER: ${{ secrets.SDA_SONATYPE_USER }}
+          SDA_SONATYPE_PASSWORD: ${{ secrets.SDA_SONATYPE_PASSWORD }}
+          SONATYPE_STAGING_REPOSITORY_ID: ${{ steps.create-staging-repo.outputs.STAGING_PROFILE_ID }}
+
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              username: 'Maven Central Upload',
+              icon_emoji: ':coffin-dance:',
+              attachments: [{
+                color: 'danger',
+                text: `Maven Central Upload of ${{ github.event.release.tag_name }} failed!\n\nWorkflow ${process.env.AS_WORKFLOW}`,
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: failure()
