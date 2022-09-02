@@ -197,8 +197,11 @@ sonarqube {
     property 'sonar.pullrequest.provider', 'GitHub'
     property 'sonar.pullrequest.github.repository', System.getenv('GITHUB_REPOSITORY')
 
-    if (System.getenv('GITHUB_PR') != null) {
+    if (System.getenv('GITHUB_PR') != null && System.getenv('GITHUB_PR') != "") {
       property 'sonar.pullrequest.key', System.getenv('GITHUB_PR')
+      if (System.getenv('GITHUB_BRANCH') != null) {
+        property 'sonar.pullrequest.branch', System.getenv('GITHUB_BRANCH')
+      }
     }
 
     if (System.getenv('SONAR_SCM_REVISION') != null) {
