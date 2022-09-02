@@ -1,0 +1,51 @@
+plugins {
+  id 'java-platform'
+}
+
+javaPlatform {
+  allowDependencies() // enable importing other BOMs
+}
+
+ext {
+  awaitalityVersion = '4.2.0'
+  logbackContribVersion = '0.1.5'
+  springBootVersion = '2.7.3'
+  springCloudVersion = '2021.0.3'
+  scalaVersion = '2.13.6'
+}
+
+dependencies {
+  api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+  constraints {
+    api 'org.apache.commons:commons-lang3:3.12.0'
+
+    // overall testing dependencies
+    api 'org.awaitility:awaitility:4.2.0'
+
+    // sda-commons-web-autoconfigure
+    api 'org.bouncycastle:bcpkix-jdk15on:1.68', {
+      because 'This version is used in org.springframework.security:spring-security-rsa:1.0.10.RELEASE'
+    }
+    api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
+    api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
+    api 'org.springdoc:springdoc-openapi-ui:1.6.11'
+    api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+    api 'io.micrometer:micrometer-registry-prometheus:1.9.3'
+
+    // sda-commons-web-testing
+    api 'com.nimbusds:nimbus-jose-jwt:9.24.3'
+
+    // sda-commons-starter-kafka
+    api "org.scala-lang:scala-reflect:${scalaVersion}", {
+      because 'conflict between org.apache.kafka:kafka_2.13:3.1.1 and com.typesafe.scala-logging:scala-logging_2.13:3.9.3'
+    }
+    api "org.scala-lang:scala-library:${scalaVersion}", {
+      because 'conflict between com.fasterxml.jackson.module:jackson-module-scala_2.13:2.13.3, com.typesafe.scala-logging:scala-logging_2.13:3.9.3 and org.scala-lang.modules:scala-collection-compat_2.13:2.4.4'
+    }
+
+    // sda-commons-starter-s3
+    api "io.awspring.cloud:spring-cloud-aws-core:2.4.2"
+  }
+}

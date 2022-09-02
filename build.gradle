@@ -1,43 +1,54 @@
 
 buildscript {
   repositories {
-    maven { url "https://plugins.gradle.org/m2/" }
+    maven { url 'https://plugins.gradle.org/m2/' }
   }
 }
 
 plugins {
-  id "jacoco"
-  id "idea"
+  id 'jacoco'
+  id 'idea'
   id 'maven-publish'
   id 'signing'
-  id "com.diffplug.spotless" version "6.10.0"
-  id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+  id 'com.diffplug.spotless' version '6.10.0'
   id 'org.sonarqube' version '3.4.0.2513'
   id 'project-report'
   id 'io.codearte.nexus-staging' version '0.30.0'
-}
-
-ext {
-  springCloudVersion = "2021.0.3"
-  springBootVersion = "2.7.3"
 }
 
 repositories {
   mavenCentral()
 }
 
-group "org.sdase.commons.spring.boot"
+group 'org.sdase.commons.spring.boot'
 
+allprojects {
+  apply plugin: 'idea'
+}
+
+/**
+ * Some modules must use the 'java-platform'. Since you can't apply plugins 'java' and 'java-platform'
+ * at the same time, they are excluded in some steps.
+ */
+List<String> javaPlatformModules = Arrays.asList('sda-commons-dependencies', 'sda-commons-bom')
+
+/**
+ * There are some additional modules that are excluded from publishing
+ */
+List<String> unpublishedModules = javaPlatformModules // + Arrays.asList("sda-commons-dependency-check")
+project.ext.unpublishedModules = unpublishedModules
+
+spotless {
+  groovyGradle {
+    greclipse()
+    indentWithSpaces(2)
+  }
+}
 
 subprojects {
-  apply plugin: 'jacoco'
-  apply plugin: 'idea'
-  apply plugin: 'java'
-  apply plugin: 'java-library'
   apply plugin: 'maven-publish'
   apply plugin: 'signing'
-  apply plugin: "com.diffplug.spotless"
-  apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'com.diffplug.spotless'
   apply plugin: 'project-report'
 
   repositories {
@@ -45,8 +56,6 @@ subprojects {
   }
 
   group "org.sdase.commons.spring.boot"
-
-  sourceCompatibility = JavaVersion.VERSION_17
 
   // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
   version = System.getenv("SEMANTIC_VERSION")
@@ -56,23 +65,18 @@ subprojects {
     enabled = false
   }
 
-  dependencyManagement {
-    imports {
-      mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
-    }
-  }
-
-  test {
-    useJUnitPlatform()
-  }
-
   // configure the spotless to use the Google Java Format
   spotless {
-    java {
-      googleJavaFormat('1.15.0')
-      enforceCheck = false
-      licenseHeaderFile '../licenseHeaderFile'
+    if (!javaPlatformModules.contains(project.name)) {
+      java {
+        googleJavaFormat('1.15.0')
+        enforceCheck = false
+        licenseHeaderFile '../licenseHeaderFile'
+      }
+      groovyGradle {
+        greclipse()
+        indentWithSpaces(2)
+      }
     }
   }
 
@@ -93,7 +97,6 @@ subprojects {
     publishing {
       publications {
         maven(MavenPublication) {
-          from components.java
           versionMapping {
             usage('java-api') {
               fromResolutionOf('runtimeClasspath')
@@ -171,12 +174,25 @@ subprojects {
     }
 
   }
+}
+
+configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
+  apply plugin: 'jacoco'
+  apply plugin: 'java-library'
+
+  sourceCompatibility = JavaVersion.VERSION_17
+
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+  }
+
   // output XML reports for SonarCloud
   jacocoTestReport {
     reports {
       xml.required = true
     }
   }
+
   // Configure sonar to use the aggregated global report file
   sonarqube {
     properties {
@@ -184,9 +200,92 @@ subprojects {
     }
   }
 
+  test {
+    useJUnitPlatform()
+  }
+
+  configurations.all {
+    resolutionStrategy {
+      // fail eagerly on version conflict (includes transitive dependencies)
+      // e.g. multiple different versions of the same dependency (group and name are equal)
+      failOnVersionConflict()
+    }
+  }
+
+  dependencies {
+    api enforcedPlatform(project(':sda-commons-dependencies'))
+  }
+
 }
 
-wrapper { gradleVersion = '7.4.2' }
+/**
+ * Add publishing configuration for Java modules.
+ *
+ * More Infos:
+ * - sda-commons-bom and sda-commons-dependencies uses own publishing because it's just a BOM
+ * - example modules and dependency-check should not be published at all
+ */
+configure(subprojects.findAll {
+  !unpublishedModules.contains(it.name) && !it.name.endsWith("-example")
+}) {
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allJava
+  }
+
+  javadoc {
+    options.addStringOption('encoding', 'UTF-8')
+  }
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+  }
+
+  artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+  }
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        from components.java
+
+        artifact(sourcesJar) {
+          classifier = 'sources'
+        }
+
+        artifact(javadocJar) {
+          classifier = 'javadoc'
+        }
+      }
+    }
+  }
+
+  jar {
+    into("META-INF/maven/$project.group/$project.name") {
+      from { generatePomFileForMavenPublication }
+      rename ".*", "pom.xml"
+    }
+  }
+}
+
+/**
+ * Add publishing configuration for Java platforms.
+ */
+configure(subprojects.findAll { javaPlatformModules.contains(it.name) }) {
+  apply plugin: 'java-platform'
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        from components.javaPlatform
+      }
+    }
+  }
+}
 
 // Automatically close and release the staging repository that gets created
 // during the upload to maven central.
@@ -202,14 +301,14 @@ nexusStaging {
 task testReport(type: TestReport) {
   destinationDir = file("$buildDir/reports/allTests")
   // Include the results from the `test` task in all subprojects
-  reportOn subprojects.findAll { /*!javaPlatformModules.contains(it.name)*/ true }*.test
+  reportOn subprojects.findAll { !javaPlatformModules.contains(it.name) }*.test
 }
 
 // Create a combined XML report of all modules in the root project
 task codeCoverageReport(type: JacocoReport) {
   executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
-  subprojects.findAll { /*!unpublishedModules.contains(it.name)*/ true }.each {
+  subprojects.findAll { !unpublishedModules.contains(it.name) }.each {
     // noinspection GroovyAssignabilityCheck
     sourceSets it.sourceSets.main
   }
@@ -240,6 +339,5 @@ sonarqube {
     if (System.getenv('SONAR_SCM_REVISION') != null) {
       property 'sonar.scm.revision', System.getenv('SONAR_SCM_REVISION')
     }
-
   }
 }

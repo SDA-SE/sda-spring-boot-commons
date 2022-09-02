@@ -1,7 +1,3 @@
-plugins {
-  id 'java-library'
-}
-
 dependencies {
-  api(project(":sda-commons-web-autoconfigure"))
+  api project(':sda-commons-web-autoconfigure')
 }
