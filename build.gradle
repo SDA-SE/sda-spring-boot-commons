@@ -160,8 +160,8 @@ subprojects {
           name 'mavenCentral'
           def releasesRepoUrl =
               System.getenv('SONATYPE_STAGING_REPOSITORY_ID')
-                  ? "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${System.getenv('SONATYPE_STAGING_REPOSITORY_ID')}"
-                  : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+              ? "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${System.getenv('SONATYPE_STAGING_REPOSITORY_ID')}"
+              : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
           def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
           url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
