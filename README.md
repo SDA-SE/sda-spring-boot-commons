@@ -7,6 +7,13 @@
 A set of libraries to bootstrap spring boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
+> ⚠️ **BETA** ⚠️
+> 
+> This library is still in BETA. APIs, provided modules and patterns may change until version 1.x.x is released.
+> 
+> [Feedback](https://github.com/SDA-SE/sda-spring-boot-commons/issues/new) is welcome.
+
+
 ## Features
 
 | **Starter**                                          | **Description**                                                                                                                                                       |
