@@ -46,7 +46,7 @@ jobs:
           SDA_SONATYPE_PASSWORD: ${{ secrets.SDA_SONATYPE_PASSWORD }}
 
       - name: Upload to Maven Central
-        run: ./gradlew -x signMavenPublication publishMavenPublicationToMavenCentralRepository # FIXME DO NOT RELEASE yet, include the next task later: closeAndReleaseRepository
+        run: ./gradlew -x signMavenPublication publishMavenPublicationToMavenCentralRepository closeAndReleaseRepository
         env:
           SDA_SONATYPE_USER: ${{ secrets.SDA_SONATYPE_USER }}
           SDA_SONATYPE_PASSWORD: ${{ secrets.SDA_SONATYPE_PASSWORD }}
