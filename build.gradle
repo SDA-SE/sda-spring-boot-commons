@@ -131,7 +131,7 @@ subprojects {
               developer {
                 id = 'maintainer'
                 name = 'SDA SE Open Industry Solutions Maintainer'
-                email = 'sda-dropwizard-commons@sda.se' // FIXME need a better matching address here
+                email = 'oss@sda-se.com'
               }
             }
 
