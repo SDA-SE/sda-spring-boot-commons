@@ -292,7 +292,7 @@ configure(subprojects.findAll { javaPlatformModules.contains(it.name) }) {
 nexusStaging {
   username System.getenv('SDA_SONATYPE_USER')
   password System.getenv('SDA_SONATYPE_PASSWORD')
-  packageGroup "org.sdase.commons.spring.boot"
+  packageGroup "org.sdase.commons" // matches the OSSRH profile
   // Read the stagingRepositoryId from the environment
   stagingRepositoryId.set(System.getenv('SONATYPE_STAGING_REPOSITORY_ID'))
 }
