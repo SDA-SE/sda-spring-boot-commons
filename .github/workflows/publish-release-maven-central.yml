@@ -6,10 +6,9 @@ on:
     types:
       - released
       - prereleased
-  pull_request: # FIXME do not run for PRs
 
 env:
-  SEMANTIC_VERSION: 0.0.0.TEST # FIXME ${{ github.event.release.tag_name }}
+  SEMANTIC_VERSION: ${{ github.event.release.tag_name }}
   SONATYPE_PROFILE_ID: 33839da457341f
 
 jobs:
@@ -47,7 +46,7 @@ jobs:
           SDA_SONATYPE_PASSWORD: ${{ secrets.SDA_SONATYPE_PASSWORD }}
 
       - name: Upload to Maven Central
-        run: ./gradlew -x signMavenPublication publishMavenPublicationToMavenCentralRepository --info # FIXME closeAndReleaseRepository
+        run: ./gradlew -x signMavenPublication publishMavenPublicationToMavenCentralRepository closeAndReleaseRepository --info
         env:
           SDA_SONATYPE_USER: ${{ secrets.SDA_SONATYPE_USER }}
           SDA_SONATYPE_PASSWORD: ${{ secrets.SDA_SONATYPE_PASSWORD }}
