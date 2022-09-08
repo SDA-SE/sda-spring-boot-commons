@@ -1,6 +1,6 @@
 # SDA Spring Boot Commons
 
-A set of libraries to bootstrap spring boot services easily that follow the patterns and
+A set of libraries to bootstrap Spring Boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
 ## Features
@@ -21,37 +21,24 @@ Each starter is provided as an isolated library and relies on
 the Spring Boot and Spring Cloud dependency management. Most of the starters themselves include some
 starters provided by Spring or the community.
 
-Since the library just want to provide SDA conventions and SDA specific implementations as bundled
-starters, the Spring Boot dependency management is still used for providing the dependency versions.
-So we will just provide a matrix of supported Spring Boot and Spring Cloud versions. But this may
-change in the future.
-
-When using any sda-spring-boot-commons starter make sure to enable the Spring dependency management
-for e.g. `build.gradle` as following:
+When using any sda-spring-boot-commons starter make sure to include the provided dependency
+management.
+The provided dependency management is based on the Spring Boot and Spring Cloud dependency
+management to align transitive dependencies with the provided Spring versions.
 
 ```groovy
-plugins {
-  id 'org.springframework.boot' version '2.7.1'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE.RELEASE'
+project.ext {
+  sdaSpringCommonsVersions = '0.11.0'
 }
-
 dependencies {
-  implementation platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.2")
-  implementation "org.sdase.commons.spring.boot:sda-commons-starter-web:0.7.0"
+  implementation enforcedPlatform("org.sdase.commons.spring.boot:sda-commons-dependencies:$sdaSpringCommonsVersions")
+  implementation enforcedPlatform("org.sdase.commons.spring.boot:sda-commons-bom:$sdaSpringCommonsVersions")
+
+  implementation 'org.sdase.commons.spring.boot:sda-commons-starter-web'
+
+  testImplementation "org.sdase.commons.spring.boot:sda-commons-web-testing"
 }
 ```
 
-**NOTE:** Currently the libraries are only available
-via `https://nexus.sda-se.io/repository/sda-se-releases/`
-
-## Supported Versions - Matrix
-
-TODO We need to think about, if we really want to rely on that matrix or if we force a Spring Boot /
-Cloud version with our library.
-
-| **SDA Commons** | **Spring Boot** | **Spring Cloud**                              |
-|-----------------|-----------------|-----------------------------------------------|
-| < 0.7.0         | 2.7.1           | 2021.0.x aka Jubilee (starting with 2021.0.3) |
-
-The Spring Boot / Spring Cloud compatibility matrix is
-provided [here](https://spring.io/projects/spring-cloud)
+Artifacts of SDA Spring Boot Commons are available [at Maven Central](https://search.maven.org/search?q=g:org.sdase.commons.spring.boot)
+since release [0.11.2](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/0.11.2).
