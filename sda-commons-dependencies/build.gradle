@@ -35,7 +35,7 @@ dependencies {
     api 'io.micrometer:micrometer-registry-prometheus:1.9.3'
 
     // sda-commons-web-testing
-    api 'com.nimbusds:nimbus-jose-jwt:9.24.3'
+    api 'com.nimbusds:nimbus-jose-jwt:9.25'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
