@@ -25,7 +25,7 @@ dependencies {
     api 'org.awaitility:awaitility:4.2.0'
 
     // sda-commons-web-autoconfigure
-    api 'org.bouncycastle:bcpkix-jdk15on:1.68', {
+    api 'org.bouncycastle:bcpkix-jdk15on:1.70', {
       because 'This version is used in org.springframework.security:spring-security-rsa:1.0.10.RELEASE'
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
