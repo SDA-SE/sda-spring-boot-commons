@@ -101,7 +101,7 @@ jobs:
       - name: sda-spring-boot-commons-app token
         if: "!(github.event.pull_request && github.event.pull_request.head.repo.fork) && github.actor != 'dependabot[bot]'"
         id: app-token
-        uses: getsentry/action-github-app-token@38a3ce582e170ddfe8789f509597c6944f2292a9 # tag=v1.0.6
+        uses: getsentry/action-github-app-token@97c9e23528286821f97fba885c1b1123284b29cc # tag=v2.0.0
         with:
           app_id: ${{ secrets.GH_PUBLISH_APP_ID }}
           private_key: ${{ secrets.GH_PUBLISH_APP_PRIVATE_KEY }}
