@@ -32,7 +32,7 @@ dependencies {
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
     api 'org.springdoc:springdoc-openapi-ui:1.6.12'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'io.micrometer:micrometer-registry-prometheus:1.9.5'
+    api 'io.micrometer:micrometer-registry-prometheus:1.10.0'
 
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:9.25.6'
