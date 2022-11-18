@@ -1,4 +1,5 @@
 dependencies {
+  api project(':sda-commons-cacertificates')
   api 'org.springframework.boot:spring-boot-starter-data-mongodb'
   testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
