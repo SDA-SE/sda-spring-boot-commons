@@ -12,6 +12,7 @@ import org.sdase.commons.cacertificates.ssl.CertificateReader;
 import org.sdase.commons.cacertificates.ssl.SslUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
@@ -25,6 +26,7 @@ public class CaCertificatesConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean
   public SSLContext mongoSSlContext() {
     return certificateReader
         .readCertificates() // pem content as strings
