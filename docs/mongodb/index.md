@@ -34,3 +34,9 @@ For further documentation please have a look at the Spring Data MongoDB [referen
     * For further information take a look on
       [Connection String documentation](https://docs.mongodb.com/manual/reference/connection-string)
 
+### SSL support
+
+The mongodb starter can be configured to use ssl when the option `?ssl=true` is used. Certificates in PEM format can be mounted
+in the directory `/var/trust/certificates` they will be used by the mongodb client. All certificates found in sub-directories will also be loaded.
+
+Note that this directory is also configurable through the property `sda.caCertificates.certificatesDir`.
