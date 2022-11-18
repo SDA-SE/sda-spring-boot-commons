@@ -9,3 +9,5 @@ include 'sda-commons-starter-kafka'
 include 'sda-commons-starter-mongodb'
 include 'sda-commons-app-example'
 include 'sda-commons-starter-s3'
+include 'sda-commons-cacertificates'
+

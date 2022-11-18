@@ -1,2 +1,3 @@
 org.sdase.commons.spring.boot.mongodb.SdaMongoDbConfiguration
+org.sdase.commons.spring.boot.mongodb.MongoDbCaCertificatesConfiguration
 org.sdase.commons.spring.boot.mongodb.converter.SdaMongoCustomConverterConfiguration
