@@ -27,7 +27,7 @@ public class CaCertificatesConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  public SSLContext mongoSSlContext() {
+  public SSLContext sslContext() {
     return certificateReader
         .readCertificates() // pem content as strings
         .map(SslUtil::createTruststoreFromPemKey) // a keystore instance that have certs loaded
