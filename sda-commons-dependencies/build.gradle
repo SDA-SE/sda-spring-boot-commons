@@ -9,7 +9,7 @@ javaPlatform {
 ext {
   awaitalityVersion = '4.2.0'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '2.7.6'
+  springBootVersion = '3.0.0'
   springCloudVersion = '2021.0.5'
   scalaVersion = '2.13.10'
 }
