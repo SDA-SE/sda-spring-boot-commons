@@ -38,7 +38,7 @@ dependencies {
     }
 
     // sda-commons-web-testing
-    api 'com.nimbusds:nimbus-jose-jwt:9.25.6'
+    api 'com.nimbusds:nimbus-jose-jwt:9.26'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
