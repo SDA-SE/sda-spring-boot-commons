@@ -36,9 +36,9 @@ class ApiExceptionHandlerIT {
 
   @LocalServerPort private int port;
 
-  @ParameterizedTest()
+  @ParameterizedTest(name = "{0}")
   @ArgumentsSource(CustomArgumentProvider.class)
-  void shouldThrowApiExceptionWithApiErrorBody(ApiError apiError) {
+  void shouldThrowApiExceptionWithApiErrorBody(String testName, ApiError apiError) {
 
     var responseCode = HttpStatus.resolve(Integer.parseInt(apiError.getTitle()));
 
@@ -51,16 +51,19 @@ class ApiExceptionHandlerIT {
 
   static class CustomArgumentProvider implements ArgumentsProvider {
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
           Arguments.of(
+              "422 with details",
               new ApiError(
                   "422", List.of(new ApiInvalidParam("FIELD_1", "INVALID", "INVALID_FIELD")))),
           Arguments.of(
+              "500 with details",
               new ApiError("500", List.of(new ApiInvalidParam("FIELD_1", "WRONG_INPUT", "INPUT")))),
           Arguments.of(
+              "404 with details",
               new ApiError("404", List.of(new ApiInvalidParam("ID", "NOT_FOUND", "NOT_FOUND")))),
-          Arguments.of(new ApiError("404")));
+          Arguments.of("404 no details", new ApiError("404")));
     }
   }
 }
