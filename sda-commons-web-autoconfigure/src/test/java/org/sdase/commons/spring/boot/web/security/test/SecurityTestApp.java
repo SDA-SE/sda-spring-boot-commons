@@ -7,6 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import org.sdase.commons.spring.boot.web.error.ApiException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @SpringBootApplication
 @RestController
@@ -53,5 +56,15 @@ public class SecurityTestApp {
   @GetMapping(value = "/resource")
   public TestResource resource() {
     return new TestResource().setValue("This will not be altered.");
+  }
+
+  @GetMapping(value = "caller", produces = "text/plain")
+  public String identifyCaller(@Context HttpServletRequest request) {
+    return request.getRemoteAddr();
+  }
+
+  @GetMapping(value = "link", produces = "text/plain")
+  public String identifyLink(@Context HttpServletRequest request) {
+    return ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
   }
 }
