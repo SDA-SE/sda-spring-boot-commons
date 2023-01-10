@@ -15,6 +15,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
@@ -36,6 +37,7 @@ public class S3Configuration {
   private String bucketName;
 
   @Bean
+  @ConditionalOnMissingBean
   public AmazonS3 getAmazonS3Client() {
     final AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
 
@@ -47,7 +49,28 @@ public class S3Configuration {
   }
 
   @Bean
+  @ConditionalOnMissingBean
   public S3BucketRepository s3BucketRepository(AmazonS3 getAmazonS3Client) {
     return new S3BucketRepository(getAmazonS3Client, bucketName);
+  }
+
+  String getAccessKeyId() {
+    return accessKeyId;
+  }
+
+  String getSecretKey() {
+    return secretKey;
+  }
+
+  String getEndpoint() {
+    return endpoint;
+  }
+
+  String getRegion() {
+    return region;
+  }
+
+  String getBucketName() {
+    return bucketName;
   }
 }
