@@ -12,9 +12,7 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +68,28 @@ public class S3BucketRepository {
     LOG.info("Uploading file with name {}...", file.getName());
     amazonS3.putObject(bucketName, key, file);
     LOG.info("Done! File with name '{}' has been uploaded to the '{}'", file.getName(), bucketName);
+  }
+
+  /**
+   * Uploads data as string to s3 bucket to the configured bucket name. By passing the content and
+   * the key in which the file is to be uploaded to.
+   *
+   * @param key The key under which to store the specified content
+   * @param content The data to be uploaded to Amazon S3. Will be saved as UTF-8.
+   * @throws IOException If the content is null
+   * @throws SdkClientException If any errors are encountered in the s3 client while making the
+   *     request or handling the response.
+   * @throws AmazonServiceException If any errors occurred in Amazon S3 while processing the
+   *     request.
+   */
+  public void save(String key, String content) throws IOException {
+    if (content == null) {
+      throw new IOException(String.format("Content to be saved by key %s must not be null!", key));
+    }
+
+    LOG.info("Uploading data with key {}...", key);
+    amazonS3.putObject(bucketName, key, content);
+    LOG.info("Done! Data with key '{}' has been uploaded to the '{}'", key, bucketName);
   }
 
   /**

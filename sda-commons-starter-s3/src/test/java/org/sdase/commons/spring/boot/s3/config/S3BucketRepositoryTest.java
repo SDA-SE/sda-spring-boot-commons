@@ -27,13 +27,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class S3BucketRepositoryTest {
 
+  public static final String BUCKET_NAME = "test-bucket";
   @Mock private AmazonS3 amazonS3;
 
   @InjectMocks S3BucketRepository subject;
 
   @BeforeEach
   void setup() throws IllegalAccessException {
-    FieldUtils.writeField(subject, "bucketName", "test-bucket", true);
+    FieldUtils.writeField(subject, "bucketName", BUCKET_NAME, true);
   }
 
   @Test
@@ -78,10 +79,31 @@ class S3BucketRepositoryTest {
   }
 
   @Test
+  void shouldThrowIOExceptionIfContentIsNull() {
+    String key = "some-key";
+    IOException exception = assertThrows(IOException.class, () -> subject.save(key, null));
+
+    String expectedMessage = String.format("Content to be saved by key %s must not be null!", key);
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void shouldSaveContentAsString() throws IOException {
+    String key = "some-key";
+    String content = "this is the content to be saved";
+
+    subject.save(key, content);
+
+    verify(amazonS3, times(1)).putObject(BUCKET_NAME, key, content);
+  }
+
+  @Test
   void shouldDeleteObject() {
     doNothing().when(amazonS3).deleteObject(anyString(), anyString());
-    amazonS3.deleteObject("test-bucket", "test-Key");
-    verify(amazonS3, times(1)).deleteObject("test-bucket", "test-Key");
+    amazonS3.deleteObject(BUCKET_NAME, "test-Key");
+    verify(amazonS3, times(1)).deleteObject(BUCKET_NAME, "test-Key");
   }
 
   @Test
