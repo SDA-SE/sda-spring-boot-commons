@@ -42,3 +42,14 @@ dependencies {
 
 Artifacts of SDA Spring Boot Commons are available [at Maven Central](https://search.maven.org/search?q=g:org.sdase.commons.spring.boot)
 since release [0.11.2](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/0.11.2).
+
+### Static directories
+Since Spring Boot runs in an embedded Tomcat server, it needs some tmp directories to support the container run in a readonly file system.
+Therefore, your application need to set a folder called `static` and a folder structure `tmp/tomcat` in the root directory of your container.
+In order to do so, create a folder `static` and `tmp/tomcat` on `src/main/jib`.
+When the container's image is generated with `gradlew jibDockerBuild`, these folders will be copied to the container.
+In case you need the tmp folder to be writable, you can mount a volume in your container. The default path is `/tmp/tomcat`, but you can overwrite it setting the environment variable pointing to your folder:
+
+```
+SERVER_TOMCAT_BASEDIR=/path-to-your-folder
+```

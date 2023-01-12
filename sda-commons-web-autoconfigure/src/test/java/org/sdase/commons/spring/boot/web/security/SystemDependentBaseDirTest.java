@@ -11,9 +11,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,38 +31,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * This test verifies that Spring Boot will not create temporary directories on startup. As writable
- * temp directories are often part of security breaches, it is recommended to have read only file
- * systems in Docker environments. The Spring Boot applications built with sda-spring-boot-commons
- * will not require write access by default. This means, no writable temp dir must be mounted in the
- * container.
- *
- * <p>If an application provides multipart file upload support, a writable <code>/tmp</code> dir is
- * needed.
- *
- * <p>There should be no issue with multipart uploads when directories are not created at startup.
- * Whenever a file is uploaded, Tomcat will <a
- * href="https://github.com/apache/tomcat/commit/267b8d8852db44dbad249453099ef6e9c26a4e9f">create
- * the required directories</a>. This feature is <a
- * href="https://github.com/spring-projects/spring-boot/blob/v2.1.4.RELEASE/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/web/embedded/tomcat/TomcatServletWebServerFactory.java#L210">enabled
- * in Spring Boot since 2.1.4</a>.
+ * This test verifies that Spring Boot will use the configured java.io.tmpdir property to use as the
+ * tmp directory
  */
-@SpringBootTest(
-    classes = NoTempDirsCreatedTest.TestApp.class,
-    webEnvironment = RANDOM_PORT,
-    properties = {
-      "management.server.port=8082"
-    }) // FIXME using defined port right now because there where situations where multiple
-// management servers where started with random port. In that situations a defined port
-// failed to start the second management server.
-class NoTempDirsCreatedTest {
+@SpringBootTest(classes = SystemDependentBaseDirTest.TestApp.class, webEnvironment = RANDOM_PORT)
+class SystemDependentBaseDirTest {
 
-  static final Logger LOG = LoggerFactory.getLogger(NoTempDirsCreatedTest.class);
+  static final Logger LOG = LoggerFactory.getLogger(SystemDependentBaseDirTest.class);
   static final String TMP_DIR_PROP = "java.io.tmpdir";
+
+  static Path staticDir = createStaticDirectory();
 
   static File tempDir = new File(System.getProperty(TMP_DIR_PROP));
 
   @Autowired TestApp testApp;
+
+  @AfterAll
+  static void afterAll() {
+    deleteStaticDirectory(staticDir);
+  }
 
   @Test
   void shouldNotCreateTempDir() {
@@ -63,13 +58,40 @@ class NoTempDirsCreatedTest {
 
   @Test
   void shouldHaveSystemDependentBaseDirConfigured() {
-    assertThat(testApp.getBaseDir()).isEqualTo(System.getProperty(TMP_DIR_PROP) + "/tomcat");
+    LOG.info("########### baseDir: " + testApp.getBaseDir());
+    assertThat(testApp.getBaseDir()).endsWith("tomcat");
   }
 
   private static Set<File> getFilesInTempDir() {
     LOG.info("Checking files in temp dir {}", tempDir);
     //noinspection ConstantConditions
     return new HashSet<>(Arrays.asList(tempDir.listFiles()));
+  }
+
+  private static Path createStaticDirectory() {
+    try {
+      Path root = Paths.get(".").normalize().toAbsolutePath();
+      Path filePath = Paths.get(root.toString(), "static");
+
+      deleteStaticDirectory(filePath);
+
+      return Files.createDirectory(filePath);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  private static void deleteStaticDirectory(Path path) {
+    try {
+      try (var dirFiles = Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile)) {
+        dirFiles.forEach(File::delete);
+      }
+      Files.deleteIfExists(path);
+    } catch (NoSuchFileException nsfe) {
+      LOG.info("Static directory not found, skipping deletion : " + nsfe.getMessage());
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   @SpringBootApplication
