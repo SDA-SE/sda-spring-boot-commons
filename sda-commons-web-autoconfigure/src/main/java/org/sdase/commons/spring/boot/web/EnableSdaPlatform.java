@@ -17,6 +17,7 @@ import org.sdase.commons.spring.boot.web.client.EnableSdaClients;
 import org.sdase.commons.spring.boot.web.docs.EnableSdaDocs;
 import org.sdase.commons.spring.boot.web.jackson.EnableSdaRestGuide;
 import org.sdase.commons.spring.boot.web.monitoring.EnableSdaMonitoring;
+import org.sdase.commons.spring.boot.web.security.EnableSdaWebSecurity;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -38,8 +39,9 @@ import org.springframework.context.annotation.Import;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@EnableSdaDocs
 @EnableSdaRestGuide
+@EnableSdaWebSecurity
+@EnableSdaDocs
 @EnableSdaSecurity
 @EnableSdaClients
 @EnableSdaAsyncWithRequestContext
