@@ -19,8 +19,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -63,8 +64,9 @@ class SystemDependentBaseDirTest {
 
   private static Set<File> getFilesInTempDir() {
     LOG.info("Checking files in temp dir {}", tempDir);
-    //noinspection ConstantConditions
-    return new HashSet<>(Arrays.asList(tempDir.listFiles()));
+    return Arrays.stream(Objects.requireNonNull(tempDir.listFiles()))
+        .filter(it -> it.getName().contains("tomcat"))
+        .collect(Collectors.toSet());
   }
 
   private static Path createStaticDirectory() {
@@ -82,10 +84,11 @@ class SystemDependentBaseDirTest {
 
   private static void deleteStaticDirectory(Path path) {
     try {
-      try (var dirFiles = Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile)) {
-        dirFiles.forEach(File::delete);
+      try (var dirFiles = Files.walk(path)) {
+        if (dirFiles.sorted(Comparator.reverseOrder()).map(Path::toFile).allMatch(File::delete)) {
+          Files.deleteIfExists(path);
+        }
       }
-      Files.deleteIfExists(path);
     } catch (NoSuchFileException nsfe) {
       LOG.info("Static directory not found, skipping deletion : " + nsfe.getMessage());
     } catch (IOException e) {
