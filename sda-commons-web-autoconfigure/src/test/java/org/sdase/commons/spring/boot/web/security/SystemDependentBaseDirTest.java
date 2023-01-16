@@ -58,7 +58,6 @@ class SystemDependentBaseDirTest {
 
   @Test
   void shouldHaveSystemDependentBaseDirConfigured() {
-    LOG.info("########### baseDir: " + testApp.getBaseDir());
     assertThat(testApp.getBaseDir()).endsWith("tomcat");
   }
 
