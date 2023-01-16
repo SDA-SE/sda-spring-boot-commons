@@ -32,7 +32,7 @@ dependencies {
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
     api 'org.springdoc:springdoc-openapi-ui:1.6.14'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'io.micrometer:micrometer-registry-prometheus:1.10.2'
+    api 'io.micrometer:micrometer-registry-prometheus:1.10.3'
     api 'org.yaml:snakeyaml:1.33', {
       because 'Temporary: this version is used to solve CVE-2022-25857'
     }
