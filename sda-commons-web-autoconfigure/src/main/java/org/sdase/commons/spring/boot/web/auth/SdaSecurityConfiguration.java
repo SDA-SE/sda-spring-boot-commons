@@ -18,8 +18,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
@@ -64,6 +66,12 @@ public class SdaSecurityConfiguration {
       oidcAuthentication(http);
     }
     return http.build();
+  }
+
+  @Bean
+  // Avoid generating a user with basic credentials
+  AuthenticationManager authenticationManager(AuthenticationManagerBuilder auth) {
+    return auth.getOrBuild();
   }
 
   private void oidcAuthentication(HttpSecurity http) throws Exception {
