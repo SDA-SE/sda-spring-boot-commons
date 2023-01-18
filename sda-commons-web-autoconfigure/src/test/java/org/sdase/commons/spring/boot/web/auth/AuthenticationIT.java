@@ -27,17 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 
-@SpringBootTest(
-    classes = AuthTestApp.class,
-    webEnvironment = RANDOM_PORT,
-    properties = {"management.server.port=0"})
+@SpringBootTest(classes = AuthTestApp.class, webEnvironment = RANDOM_PORT)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
 class AuthenticationIT {
 

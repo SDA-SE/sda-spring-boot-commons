@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
     classes = AuthTestApp.class,
     webEnvironment = RANDOM_PORT,
     // verify authentication in this test, not authorization
-    properties = {"opa.disable=true", "management.server.port=0"})
+    properties = {"opa.disable=true"})
 class AuthenticationNoConfigIT {
 
   @LocalServerPort private int port;
