@@ -27,8 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(
     classes = SecurityTestApp.class,
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {"management.server.port=0"})
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 class RequestHeadersTest {
 

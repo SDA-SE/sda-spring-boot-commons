@@ -7,6 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.security;
 
+import org.sdase.commons.spring.boot.web.security.headers.RestfulApiSecurityConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,7 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @EnableWebSecurity
 @ComponentScan
 @AutoConfiguration
-@Import({SdaCorsConfigurer.class})
+@Import({RestfulApiSecurityConfiguration.class, SdaCorsConfigurer.class})
 public class SdaWebSecurityConfiguration {
   @Bean
   public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
