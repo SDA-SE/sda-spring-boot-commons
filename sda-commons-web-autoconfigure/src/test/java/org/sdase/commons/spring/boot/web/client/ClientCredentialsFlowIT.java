@@ -25,8 +25,8 @@ import org.sdase.commons.spring.boot.web.testing.client.EnableSdaOidcClientMockI
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -35,8 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "feign.test.api.base.url=http://localhost:${wiremock.server.port}",
-      "oidc.client.enabled=true",
-      "management.server.port=0"
+      "oidc.client.enabled=true"
     })
 @ContextConfiguration(initializers = EnableSdaOidcClientMockInitializer.class)
 @AutoConfigureWireMock

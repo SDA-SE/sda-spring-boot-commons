@@ -18,14 +18,11 @@ import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 
-@SpringBootTest(
-    classes = AuthTestApp.class,
-    webEnvironment = RANDOM_PORT,
-    properties = {"management.server.port=0"})
+@SpringBootTest(classes = AuthTestApp.class, webEnvironment = RANDOM_PORT)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
 class OidcDiscoveryTest {
 
