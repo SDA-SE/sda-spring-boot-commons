@@ -179,6 +179,7 @@ class AuthenticationIT {
 
   @Test
   void shouldNotCreateSession() {
+    authMock.authorizeRequest().withHttpMethod("GET").withPath("/ping").allow();
     var response =
         authMock
             .authentication()
