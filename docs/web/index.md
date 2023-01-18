@@ -11,8 +11,7 @@ Features:
   - [Jackson Object Mapping](#jackson)
   - [Monitoring](#monitoring)
   - [Tracing](#tracing)
-  - [Health Checks](#health-checks)
-  - [Testing](#testing)
+  - [Health Checks](#health-checks--actuator)
   - [Logging](#logging)
 
 Based on:
@@ -41,6 +40,7 @@ Based on:
 | `oidc.client.id` _string_                | The client ID for the registration.                                                                                                     | ``                                                                   | `exampleClient`                                              | `OPA_CLIENT_ID`                 |
 | `oid.client.secret` _string_             | The Client secret of the registration.                                                                                                  | ``                                                                   | `s3cret`                                                     | `OIDC_CLIENT_SECRET`            |
 | `oidc.client.issuer.uri` _string_        | URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414. | ``                                                                   | `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm` | `OIDC_CLIENT_ISSUER_URI`        |
+| `cors.allowed-origin-patterns` _string_  | Comma separated list of URL patterns for which CORS requests are allowed.                                                               | _none allowed_                                                       | `https://*.all-subdomains.com, https://static-domain.com`    | `CORS_ALLOWEDORIGINPATTERNS`    |
 
 For further information have a look at the [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
 
@@ -111,9 +111,10 @@ public class MyConstraints extends AbstractConstraints {
 ```java
 @RestController
 public class AuthTestApp {
-
-  @Autowired private MyConstraints myConstraints;
-  ...
+    @Autowired
+    private MyConstraints myConstraints;
+    // ...
+}
 ```
 
 ### Testing
@@ -176,7 +177,7 @@ allow {
 # set some example constraints 
 constraint1 := true                # always true
 constraint2 := [ "v2.1", "v2.2" ]  # always an array of "v2.1" and "v2.2"
-constraint3[token.payload.sub].    # always a set that contains the 'sub' claim from the token
+constraint3[token.payload.sub]     # always a set that contains the 'sub' claim from the token
                                    # or is empty if no token is present
 
 ```
@@ -543,6 +544,3 @@ The Spring Boot default is enabled.
     * `classpath:org/sdase/commons/spring/logging/logback-json.xml` for Json Logging
   * Example: `classpath:org/sdase/commons/spring/logging/logback-json.xml`
   * Default: `org/springframework/boot/logging/logback/defaults.xml`
-
-
-## Testing
