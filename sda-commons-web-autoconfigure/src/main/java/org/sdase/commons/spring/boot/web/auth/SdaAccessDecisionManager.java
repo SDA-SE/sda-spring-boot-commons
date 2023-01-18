@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.web.auth;
 
 import java.util.List;
+import org.sdase.commons.spring.boot.web.auth.management.ManagementAccessDecisionVoter;
 import org.sdase.commons.spring.boot.web.auth.opa.OpaAccessDecisionVoter;
 import org.sdase.commons.spring.boot.web.auth.opa.OpaExcludesDecisionVoter;
 import org.springframework.security.access.vote.UnanimousBased;
@@ -17,8 +18,9 @@ import org.springframework.stereotype.Component;
 public class SdaAccessDecisionManager extends UnanimousBased {
 
   public SdaAccessDecisionManager(
+      ManagementAccessDecisionVoter managementAccessDecisionVoter,
       OpaExcludesDecisionVoter opaExcludesDecisionVoter,
       OpaAccessDecisionVoter opaAccessDecisionVoter) {
-    super(List.of(opaExcludesDecisionVoter, opaAccessDecisionVoter));
+    super(List.of(managementAccessDecisionVoter, opaExcludesDecisionVoter, opaAccessDecisionVoter));
   }
 }
