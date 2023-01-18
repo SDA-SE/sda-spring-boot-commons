@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import org.sdase.commons.spring.boot.web.error.ApiException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,7 +30,7 @@ public class SecurityTestApp {
     return "This should not be allowed";
   }
 
-  @GetMapping(value = "/error")
+  @GetMapping(value = "/forcedError")
   public Object throwError() {
     throw new RuntimeException("This should not be allowed");
   }
@@ -50,12 +52,26 @@ public class SecurityTestApp {
   @GetMapping(value = "/response")
   public ResponseEntity<?> responseEntity() {
     return new ResponseEntity<>(
-        new TestResource().setValue("This will not be altered."), HttpStatus.CREATED);
+        new TestResource().setValue("This will not be altered."), HttpStatus.OK);
   }
 
   @GetMapping(value = "/resource")
   public TestResource resource() {
     return new TestResource().setValue("This will not be altered.");
+  }
+
+  @GetMapping(value = "/header")
+  public ResponseEntity<TestResource> header(
+      @RequestParam("headerName") String headerName,
+      @RequestParam("headerValue") String headerValue) {
+    var headers = new HttpHeaders();
+    headers.add(headerName, headerValue);
+    return new ResponseEntity<>(new TestResource(), headers, HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/voidError")
+  public ResponseEntity<Void> voidError() {
+    return ResponseEntity.notFound().build();
   }
 
   @GetMapping(value = "caller", produces = "text/plain")
