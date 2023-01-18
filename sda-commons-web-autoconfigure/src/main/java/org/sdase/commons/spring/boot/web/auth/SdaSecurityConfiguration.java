@@ -8,8 +8,10 @@
 package org.sdase.commons.spring.boot.web.auth;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
+import org.sdase.commons.spring.boot.web.security.headers.SdaSecurityHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.util.StringUtils;
 
 @EnableWebSecurity
@@ -41,6 +44,8 @@ public class SdaSecurityConfiguration {
 
   private final SdaAccessDecisionManager sdaAccessDecisionManager;
 
+  private final SdaSecurityHeaders sdaSecurityHeaders;
+
   /**
    * @param issuers Comma separated string of open id discovery key sources with required issuers.
    * @param disableAuthentication Disables all authentication
@@ -50,10 +55,12 @@ public class SdaSecurityConfiguration {
   public SdaSecurityConfiguration(
       @Value("${auth.issuers:}") String issuers,
       @Value("${auth.disable:false}") boolean disableAuthentication,
-      SdaAccessDecisionManager sdaAccessDecisionManager) {
+      SdaAccessDecisionManager sdaAccessDecisionManager,
+      Optional<SdaSecurityHeaders> sdaSecurityHeaders) {
     this.issuers = issuers;
     this.disableAuthentication = disableAuthentication;
     this.sdaAccessDecisionManager = sdaAccessDecisionManager;
+    this.sdaSecurityHeaders = sdaSecurityHeaders.orElse(List::of);
   }
 
   @Bean
@@ -82,7 +89,11 @@ public class SdaSecurityConfiguration {
             authorize ->
                 authorize.anyRequest().permitAll().accessDecisionManager(sdaAccessDecisionManager))
         .oauth2ResourceServer(
-            oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver));
+            oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver))
+        .headers(
+            configurer ->
+                configurer.addHeaderWriter(
+                    new StaticHeadersWriter(sdaSecurityHeaders.getSecurityHeaders())));
   }
 
   private AuthenticationManagerResolver<HttpServletRequest> createAuthenticationManagerResolver() {
@@ -111,7 +122,11 @@ public class SdaSecurityConfiguration {
         .disable() // NOSONAR
         .authorizeRequests(
             authorize ->
-                authorize.anyRequest().permitAll().accessDecisionManager(sdaAccessDecisionManager));
+                authorize.anyRequest().permitAll().accessDecisionManager(sdaAccessDecisionManager))
+        .headers(
+            configurer ->
+                configurer.addHeaderWriter(
+                    new StaticHeadersWriter(sdaSecurityHeaders.getSecurityHeaders())));
   }
 
   private List<String> commaSeparatedStringToList(String issuers) {
