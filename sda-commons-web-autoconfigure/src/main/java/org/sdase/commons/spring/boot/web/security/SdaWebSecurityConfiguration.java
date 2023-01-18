@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.filter.ForwardedHeaderFilter;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @EnableWebSecurity
 @ComponentScan
 @AutoConfiguration
+@Import({SdaCorsConfigurer.class})
 public class SdaWebSecurityConfiguration {
   @Bean
   public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
