@@ -7,10 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import org.sdase.commons.spring.boot.web.error.ApiException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,36 +20,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SecurityTestApp {
 
-  @GetMapping("/fixedTime")
-  public Object getFixedTime() {
-    return new Object() {
-      private final ZonedDateTime time =
-          // the configured ObjectMapper should truncate the nanos to seconds
-          ZonedDateTime.of(LocalDateTime.of(2018, 11, 21, 13, 16, 47, 965_000_300), ZoneOffset.UTC);
-
-      @SuppressWarnings("unused")
-      public ZonedDateTime getTime() {
-        return time;
-      }
-    };
-  }
-
   @RequestMapping(value = "/traced", method = RequestMethod.TRACE)
   public String serveTrace() {
     return "This should not be allowed";
   }
 
   @GetMapping(value = "/error")
-  public Object throwError() throws IOException {
-    throw new IOException("This should not be allowed");
+  public Object throwError() {
+    throw new RuntimeException("This should not be allowed");
+  }
+
+  @GetMapping(value = "/apiError")
+  public void throwApiError() {
+    throw ApiException.builder()
+        .httpCode(HttpStatus.NOT_IMPLEMENTED.value())
+        .title("This method is not implemented yet.")
+        .build();
   }
 
   @GetMapping(value = "/errorEntity")
   public ResponseEntity<?> responseError() {
-    var body =
-        ResponseEntity.internalServerError()
-            .body(new TestResource().setValue("This should not be leaked."));
-    return body;
+    return ResponseEntity.internalServerError()
+        .body(new TestResource().setValue("This should not be leaked."));
   }
 
   @GetMapping(value = "/response")
