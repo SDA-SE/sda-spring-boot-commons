@@ -16,12 +16,19 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import java.time.ZonedDateTime;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 @AutoConfiguration
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SdaObjectMapperConfiguration {
-  @Bean
-  Jackson2ObjectMapperBuilder objectMapperBuilder() {
+  public static final String OBJECT_MAPPER_BUILDER_BEAN_NAME = "sdaObjectMapperBuilder";
+
+  @Bean(name = OBJECT_MAPPER_BUILDER_BEAN_NAME)
+  @Primary
+  public Jackson2ObjectMapperBuilder sdaObjectMapperBuilder() {
     return new Jackson2ObjectMapperBuilder()
         .featuresToDisable(
             SerializationFeature.FAIL_ON_EMPTY_BEANS,
