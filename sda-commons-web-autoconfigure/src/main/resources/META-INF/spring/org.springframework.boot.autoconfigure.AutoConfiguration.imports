@@ -1,7 +1,6 @@
 org.sdase.commons.spring.boot.web.SdaSpringConfiguration
 org.sdase.commons.spring.boot.web.async.SdaAsyncConfiguration
 org.sdase.commons.spring.boot.web.auth.SdaSecurityConfiguration
-org.sdase.commons.spring.boot.web.auth.SdaMonitoringSecurityConfiguration
 org.sdase.commons.spring.boot.web.auth.opa.OpaRestTemplateConfiguration
 org.sdase.commons.spring.boot.web.client.SdaClientConfiguration
 org.sdase.commons.spring.boot.web.client.SdaOidcClientConfiguration
