@@ -41,6 +41,7 @@ Based on:
 | `oid.client.secret` _string_             | The Client secret of the registration.                                                                                                  | ``                                                                   | `s3cret`                                                     | `OIDC_CLIENT_SECRET`            |
 | `oidc.client.issuer.uri` _string_        | URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414. | ``                                                                   | `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm` | `OIDC_CLIENT_ISSUER_URI`        |
 | `cors.allowed-origin-patterns` _string_  | Comma separated list of URL patterns for which CORS requests are allowed.                                                               | _none allowed_                                                       | `https://*.all-subdomains.com, https://static-domain.com`    | `CORS_ALLOWEDORIGINPATTERNS`    |
+| `request.body.max.size` _size_           | The maximum size allowed for request body data sent by a client.                                                                        | _1 MB_                                                               | `100 KB`, `10MB`                                             | `REQUEST_BODY_MAX_SIZE`         |
 
 For further information have a look at the [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
 
