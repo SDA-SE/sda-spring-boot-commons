@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * tmp directory
  */
 @SpringBootTest(classes = SystemDependentBaseDirTest.TestApp.class, webEnvironment = RANDOM_PORT)
+@Isolated
 class SystemDependentBaseDirTest {
 
   static final Logger LOG = LoggerFactory.getLogger(SystemDependentBaseDirTest.class);
