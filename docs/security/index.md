@@ -32,7 +32,7 @@ The HTTP method `TRACE` is disabled by default to mitigate [Cross Site Tracing](
 
 ## Risk: Loss of source IP address
 
-We expect, the services built with sda-spring-boot-commons are deployed behind a proxy, e.g. an
+We expect, that services built with sda-spring-boot-commons are deployed behind a proxy, e.g. an
 Ingress in Kubernetes.
 
 This library is configured by default to consider `X-Forwarded-*` headers to identify the original
