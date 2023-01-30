@@ -49,6 +49,6 @@ dependencies {
     }
 
     // sda-commons-starter-s3
-    api "io.awspring.cloud:spring-cloud-aws-core:2.4.2"
+    api "io.awspring.cloud:spring-cloud-aws-core:2.4.3"
   }
 }
