@@ -42,6 +42,7 @@ Based on:
 | `oidc.client.issuer.uri` _string_        | URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414. | ``                                                                   | `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm` | `OIDC_CLIENT_ISSUER_URI`        |
 | `cors.allowed-origin-patterns` _string_  | Comma separated list of URL patterns for which CORS requests are allowed.                                                               | _none allowed_                                                       | `https://*.all-subdomains.com, https://static-domain.com`    | `CORS_ALLOWEDORIGINPATTERNS`    |
 | `request.body.max.size` _size_           | The maximum size allowed for request body data sent by a client.                                                                        | _1 MB_                                                               | `100 KB`, `10MB`                                             | `REQUEST_BODY_MAX_SIZE`         |
+| `enable.json.logging` _boolean_          | If logs should be printed as JSON. _Note: This config param is not available for application.properties or application.yaml_            | _false_                                                              | `true`                                                       | `ENABLE_JSON_LOGGING`           |
 
 For further information have a look at the [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
 
@@ -53,9 +54,6 @@ The list of web configurations:
 - The`server.port` defaults to `8080`
 - The`managment.server.port` defaults to `8081`
 - The `openapi.yaml` is available under `/api/openapi.yaml`
-- To enable [JSON logging](../../sda-commons-web-autoconfigure/src/main/resources/org/sdase/commons/spring/boot/web/logging/logback-json.xml)
-  you need to set the property `logging.config`to `classpath:org/sdase/commons/spring/logging/logback-json.xml`
-  If not set, default console Spring logging is active.
 
 **Please make sure to configure `spring.application.name` for every service**
 
@@ -371,7 +369,7 @@ code and the nested `ApiError`.
       .build();
 ```
 
-In this example the controler would return with http status `422` and body:
+In this example the controller would return with http status `422` and body:
 
 ```json
 {
@@ -534,14 +532,9 @@ management.endpoint.health.show-components=always
 
 ## Logging
 
-The Spring Boot default is enabled. 
-
-### Configuration properties
-
-* `logging.config` _string_
-  * Path to the logback configuration on classpath. If not set, default console Spring logging is
-    active.
-    Available custom configurations on classpath:
-    * `classpath:org/sdase/commons/spring/logging/logback-json.xml` for Json Logging
-  * Example: `classpath:org/sdase/commons/spring/logging/logback-json.xml`
-  * Default: `org/springframework/boot/logging/logback/defaults.xml`
+The Spring Boot default logging is enabled.
+Logs are printed to standard out.
+`ENABLE_JSON_LOGGING=true` as environment variable or `-Denable.json.logging=true` as JVM parameter
+enables output as JSON for structured logs used in log aggregation tools.
+To enable JSON logging in `application.(properties/yaml)`,
+`logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used. 
