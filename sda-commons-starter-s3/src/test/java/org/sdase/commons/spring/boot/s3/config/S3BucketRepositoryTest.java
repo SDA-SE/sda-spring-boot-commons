@@ -104,7 +104,7 @@ class S3BucketRepositoryTest {
   @Test
   void shouldDeleteObject() {
     doNothing().when(amazonS3).deleteObject(anyString(), anyString());
-    amazonS3.deleteObject(BUCKET_NAME, "test-Key");
+    subject.deleteFile("test-Key");
     verify(amazonS3, times(1)).deleteObject(BUCKET_NAME, "test-Key");
   }
 
