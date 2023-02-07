@@ -14,10 +14,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.ClearSystemProperty;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.web.EnableSdaPlatform;
 import org.sdase.commons.spring.boot.web.security.test.ContextUtils;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,15 +27,8 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.context.ContextConfiguration;
 
 @ExtendWith(OutputCaptureExtension.class)
+@ClearSystemProperty(key = "logging.config") // defined by app under test to enable json logging
 class JsonLoggingTest {
-
-  private static final String ENABLE_JSON_LOGGING_PROPERTY = "enable.json.logging";
-
-  @BeforeEach
-  @AfterEach
-  void reset() {
-    System.clearProperty("logging.config");
-  }
 
   @Test
   void shouldLogRegular(CapturedOutput output) {
@@ -49,18 +42,9 @@ class JsonLoggingTest {
   }
 
   @Test
+  @SetSystemProperty(key = "enable.json.logging", value = "true")
   void shouldLogJson(CapturedOutput output) throws JsonProcessingException {
-    var previous = System.getProperty(ENABLE_JSON_LOGGING_PROPERTY);
-    try {
-      System.setProperty(ENABLE_JSON_LOGGING_PROPERTY, "true");
-      assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
-    } finally {
-      if (previous != null) {
-        System.setProperty(ENABLE_JSON_LOGGING_PROPERTY, previous);
-      } else {
-        System.clearProperty(ENABLE_JSON_LOGGING_PROPERTY);
-      }
-    }
+    assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
     assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
     for (String json : jsonLines(output)) {
       assertThat(new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {}))

@@ -31,4 +31,7 @@ dependencies {
   api 'io.micrometer:micrometer-registry-prometheus'
 
   testImplementation project(':sda-commons-web-testing')
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
+    exclude group: 'org.junit'
+  }
 }
