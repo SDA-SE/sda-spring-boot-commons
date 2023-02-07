@@ -8,19 +8,28 @@
 package org.sdase.commons.spring.boot.s3.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
-import java.io.*;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -30,11 +39,11 @@ class S3BucketRepositoryTest {
   public static final String BUCKET_NAME = "test-bucket";
   @Mock private AmazonS3 amazonS3;
 
-  @InjectMocks S3BucketRepository subject;
+  S3BucketRepository subject;
 
   @BeforeEach
-  void setup() throws IllegalAccessException {
-    FieldUtils.writeField(subject, "bucketName", BUCKET_NAME, true);
+  void setup() {
+    subject = new S3BucketRepository(amazonS3, BUCKET_NAME);
   }
 
   @Test
@@ -47,8 +56,7 @@ class S3BucketRepositoryTest {
     when(s3Object.getObjectContent()).thenReturn(s3Input);
 
     byte[] response = subject.findByName("testFileName");
-    assertNotEquals(0, response.length);
-    assertArrayEquals(expected.getBytes(), response);
+    assertThat(response).isNotEmpty().isEqualTo(expected.getBytes());
   }
 
   @Test
@@ -61,32 +69,26 @@ class S3BucketRepositoryTest {
     when(amazonS3.listObjects(anyString())).thenReturn(objectListing);
 
     List<String> result = subject.listings();
-    assertEquals(1, result.size());
-    assertThat(result).contains("test-Key");
+    assertThat(result).hasSize(1).contains("test-Key");
   }
 
   @Test
   void shouldThrowFileNotFoundException() {
     File file = mock(File.class);
 
-    FileNotFoundException exception =
-        assertThrows(FileNotFoundException.class, () -> subject.saveFile("key", file));
-
-    String expectedMessage = String.format("No file exists in the provided path %s ", file);
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
+    assertThatExceptionOfType(FileNotFoundException.class)
+        .isThrownBy(() -> subject.saveFile("key", file))
+        .withMessageContaining(String.format("No file exists in the provided path %s ", file));
   }
 
   @Test
   void shouldThrowIOExceptionIfContentIsNull() {
     String key = "some-key";
-    IOException exception = assertThrows(IOException.class, () -> subject.save(key, null));
 
-    String expectedMessage = String.format("Content to be saved by key %s must not be null!", key);
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
+    assertThatExceptionOfType(IOException.class)
+        .isThrownBy(() -> subject.save(key, null))
+        .withMessageContaining(
+            String.format("Content to be saved by key %s must not be null!", key));
   }
 
   @Test
@@ -110,13 +112,13 @@ class S3BucketRepositoryTest {
   void objectShouldExistInS3Bucket() {
     S3BucketRepository repository = mock(S3BucketRepository.class);
     when(repository.doesObjectExist(anyString())).thenReturn(true);
-    assertTrue(repository.doesObjectExist("key"));
+    assertThat(repository.doesObjectExist("key")).isTrue();
   }
 
   @Test
   void ObjectShouldNotExistInS3Bucket() {
     S3BucketRepository repository = mock(S3BucketRepository.class);
     when(repository.doesObjectExist(anyString())).thenReturn(false);
-    assertFalse(repository.doesObjectExist("some key"));
+    assertThat(repository.doesObjectExist("some key")).isFalse();
   }
 }
