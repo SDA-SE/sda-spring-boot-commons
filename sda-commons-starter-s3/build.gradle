@@ -1,7 +1,6 @@
 dependencies {
-  implementation 'org.springframework.boot:spring-boot-starter-web'  // TODO Replace with only required libraries.
+  implementation "org.springframework.boot:spring-boot-autoconfigure"
   implementation "io.awspring.cloud:spring-cloud-aws-core"
-  implementation "org.apache.commons:commons-lang3"
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

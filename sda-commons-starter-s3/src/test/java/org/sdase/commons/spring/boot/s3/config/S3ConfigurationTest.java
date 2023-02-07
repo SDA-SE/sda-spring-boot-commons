@@ -7,8 +7,7 @@
  */
 package org.sdase.commons.spring.boot.s3.config;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.s3.S3TestApp;
@@ -16,26 +15,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = S3TestApp.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class S3ConfigurationTest {
+class S3ConfigurationTest {
 
   @Autowired private S3Configuration s3Configuration;
 
   @Autowired private S3BucketRepository s3BucketRepository;
 
   @Test
-  public void test_configurationAutowiredCorrectly() {
-    assertNotNull(s3Configuration, "Configuration expected to be not null!");
-
-    assertEquals("sdase", s3Configuration.getAccessKeyId(), "AccessKeyId does not match");
-    assertEquals("test1234", s3Configuration.getSecretKey(), "SecretKey does not match");
-    assertEquals("eu-west3", s3Configuration.getRegion(), "Region does not match");
-    assertEquals(
-        "http://localhost:37012", s3Configuration.getEndpoint(), "Endpoint does not match");
-    assertEquals("test-bucket", s3Configuration.getBucketName(), "BucketName does not match");
+  void test_configurationAutowiredCorrectly() {
+    assertThat(s3Configuration)
+        .isNotNull()
+        .extracting(
+            S3Configuration::getAccessKeyId,
+            S3Configuration::getSecretKey,
+            S3Configuration::getRegion,
+            S3Configuration::getEndpoint,
+            S3Configuration::getBucketName)
+        .contains("sdase", "test1234", "eu-west3", "http://localhost:37012", "test-bucket");
   }
 
   @Test
-  public void test_s3BucketRepositoryAutowiredCorrectly() {
-    assertNotNull(s3BucketRepository, "BucketRepository expected to be not null!");
+  void test_s3BucketRepositoryAutowiredCorrectly() {
+    assertThat(s3BucketRepository).isNotNull();
   }
 }
