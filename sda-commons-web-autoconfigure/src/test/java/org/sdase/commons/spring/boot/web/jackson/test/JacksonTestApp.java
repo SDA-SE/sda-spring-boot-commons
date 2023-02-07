@@ -10,6 +10,8 @@ package org.sdase.commons.spring.boot.web.jackson.test;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JacksonTestApp {
 
+  private static final Logger LOG = LoggerFactory.getLogger(JacksonTestApp.class);
+
   @GetMapping("/fixedTime")
   public Object getFixedTime() {
+    LOG.info("fixed time called");
     return new Object() {
       private final ZonedDateTime time =
           // the configured ObjectMapper should truncate the nanos to seconds
