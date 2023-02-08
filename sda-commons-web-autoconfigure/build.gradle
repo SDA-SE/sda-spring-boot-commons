@@ -15,13 +15,17 @@ dependencies {
   // Moving forward compatibility with the now OpenTelemetry standard (OTEL) is desirable.
   // Sleuth does not currently integrate this as it’s extremely new, but as with most standards,
   // the Spring team are actively working on it (https://github.com/spring-cloud-incubator/spring-cloud-sleuth-otel ).
-  api 'org.springframework.cloud:spring-cloud-starter-sleuth'
-  api 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+
+  // TODO migrate to open telemetry
+  //api 'org.springframework.cloud:spring-cloud-starter-sleuth'
+  //api 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+
   // Until recently Sleuth only supported the Zipkin B3 propagation type,
   // but now has support for the W3C format which is preferable moving forward.
   // By adding the brave-opentracing library, Sleuth will also automatically register an OpenTracing
   // Tracer bean allowing us to use the standardised interfaces
-  api 'io.opentracing.brave:brave-opentracing'
+  // TODO migrate to open telemetry
+  //  api 'io.opentracing.brave:brave-opentracing'
   //
   api 'org.springdoc:springdoc-openapi-webmvc-core'
   api 'org.bouncycastle:bcpkix-jdk15on'
@@ -29,9 +33,7 @@ dependencies {
   api 'io.github.openfeign:feign-jaxrs2'
   api 'io.github.openfeign:feign-micrometer'
   api 'io.micrometer:micrometer-registry-prometheus'
-  api 'org.glassfish.jersey.core:jersey-common', {
-    exclude group: 'jakarta.ws.rs', module: 'jakarta.ws.rs-api'
-  }
+  api 'org.glassfish.jersey.core:jersey-common'
 
   api project(':sda-commons-metadata-context')
   api project(':sda-commons-error')
