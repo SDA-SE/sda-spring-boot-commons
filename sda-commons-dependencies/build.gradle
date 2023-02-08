@@ -9,8 +9,8 @@ javaPlatform {
 ext {
   awaitalityVersion = '4.2.0'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '2.7.14'
-  springCloudVersion = '2021.0.8'
+  springBootVersion = '3.1.2'
+  springCloudVersion = '2022.0.4'
   scalaVersion = '2.13.12'
 }
 
@@ -23,13 +23,13 @@ dependencies {
   }
 
   constraints {
-    api 'org.apache.commons:commons-lang3:3.13.0'
-
-    // forcing upgrade due to CVE-2023-24998
-    api 'commons-fileupload:commons-fileupload:1.5'
-
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.2.0'
+
+    // spring cloud
+    api 'org.apache.httpcomponents:httpclient:4.5.13', {
+      because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
+    }
 
     // sda-commons-web-autoconfigure
     api 'org.bouncycastle:bcpkix-jdk15on:1.70', {
@@ -37,22 +37,22 @@ dependencies {
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
-    api 'org.springdoc:springdoc-openapi-webmvc-core:1.7.0'
+    api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
     // should align with transitive dependency of org.springdoc:springdoc-openapi-webmvc-core:
     api 'io.swagger.core.v3:swagger-annotations:2.2.9'
     api 'io.github.classgraph:classgraph:4.8.162'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'io.micrometer:micrometer-registry-prometheus:1.11.4'
     api 'org.yaml:snakeyaml:1.33', {
       because 'Temporary: this version is used to solve CVE-2022-25857'
     }
 
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:9.31'
-    api 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+    api 'com.github.tomakehurst:wiremock-jre8-standalone:2.35.0'
     api 'net.minidev:json-smart:2.5.0', {
       because 'Temporary: this version is used to solve CVE-2023-1370'
     }
+    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.7.0'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
@@ -61,9 +61,12 @@ dependencies {
     api "org.scala-lang:scala-library:${scalaVersion}", {
       because 'conflict between com.fasterxml.jackson.module:jackson-module-scala_2.13:2.13.3, com.typesafe.scala-logging:scala-logging_2.13:3.9.3 and org.scala-lang.modules:scala-collection-compat_2.13:2.4.4'
     }
+    api "org.apache.zookeeper:zookeeper:3.6.4", {
+      because 'version conflict in transitive managed depedencies'
+    }
 
     // sda-commons-starter-s3
-    api "io.awspring.cloud:spring-cloud-aws-core:2.4.4"
+    api "io.awspring.cloud:spring-cloud-aws-s3:3.0.1"
 
     // sda-commons-shared-asyncapi
     api "com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39"
