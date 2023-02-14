@@ -58,7 +58,12 @@ class JsonLoggingTest {
   }
 
   private List<String> nonTestLogLines(CapturedOutput capturedOutput) {
-    return capturedOutput.toString().lines().filter(l -> !l.contains(".test.context.")).toList();
+    return capturedOutput
+        .toString()
+        .lines()
+        .filter(l -> !l.contains(".test.context."))
+        .filter(l -> !l.contains("Test worker"))
+        .toList();
   }
 
   private List<String> jsonLines(CapturedOutput capturedOutput) {
