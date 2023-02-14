@@ -24,10 +24,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @ExtendWith(OutputCaptureExtension.class)
 @ClearSystemProperty(key = "logging.config") // defined by app under test to enable json logging
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class JsonLoggingTest {
 
   @Test

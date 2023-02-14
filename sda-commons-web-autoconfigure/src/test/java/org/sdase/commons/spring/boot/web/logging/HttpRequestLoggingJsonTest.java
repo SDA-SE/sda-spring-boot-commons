@@ -28,6 +28,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @SetSystemProperty(key = "enable.json.logging", value = "true")
@@ -36,6 +37,7 @@ import org.springframework.test.context.ContextConfiguration;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class HttpRequestLoggingJsonTest {
 
   @LocalServerPort private int port;
@@ -50,7 +52,11 @@ class HttpRequestLoggingJsonTest {
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     // logs should be in json format
-    for (String json : jsonLines(output)) {
+
+    List<String> jsonLogs = jsonLines(output);
+    assertThat(jsonLogs).isNotEmpty();
+
+    for (String json : jsonLogs) {
       assertThat(new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {}))
           .containsKeys("level", "logger", "timestamp", "message");
     }
