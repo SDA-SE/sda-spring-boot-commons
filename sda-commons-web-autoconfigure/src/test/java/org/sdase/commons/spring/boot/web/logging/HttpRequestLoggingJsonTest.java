@@ -15,22 +15,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.Disabled;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.web.jackson.test.JacksonTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -41,76 +39,65 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-class JsonLoggingMdcTest {
+class HttpRequestLoggingJsonTest {
 
-  @LocalServerPort int port;
-  @Autowired TestRestTemplate client;
+  @LocalServerPort private int port;
+  @Autowired private TestRestTemplate client;
   @Autowired ObjectMapper objectMapper;
   static final TypeReference<Map<String, Object>> MAP_REF = new TypeReference<>() {};
 
   @Test
-  void shouldLogJsonWithMdc(CapturedOutput capturedOutput) {
-    Logger log = LoggerFactory.getLogger(JsonLoggingMdcTest.class);
-    try (var ignored = MDC.putCloseable("test-key", "test-value")) {
-      log.info("Hello from the test.");
-      var actual =
-          toStructuredLogs(capturedOutput).stream()
-              .filter(l -> getClass().getName().equals(l.get("logger")))
-              .findFirst();
+  void shouldLogAsJsonWhenEnabled(CapturedOutput output) throws JsonProcessingException {
+    ResponseEntity<String> responseEntity = executeRequest("/api/fixedTime", port);
 
-      assertThat(actual)
-          .isPresent()
-          .get()
-          .extracting("mdc")
-          .extracting("test-key")
-          .isEqualTo("test-value");
+    // then
+    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    // logs should be in json format
+
+    List<String> jsonLogs = jsonLines(output);
+    assertThat(jsonLogs).isNotEmpty();
+
+    for (String json : jsonLogs) {
+      assertThat(new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {}))
+          .containsKeys("level", "logger", "timestamp", "message");
     }
+
+    // log for request should still be found
+    var expectedLogLine = findLogLine(output);
+    assertThat(expectedLogLine).isPresent();
+
+    var actualLogLine = expectedLogLine.get();
+    assertThat(actualLogLine).contains("GET /api/fixedTime");
+
+    // Metadata should be present in MDC
+    Map<String, String> mdc = (Map<String, String>) toObject(actualLogLine).get("mdc");
+
+    assertThat(mdc)
+        .containsKeys(
+            "protocol",
+            "method",
+            "contentLength",
+            "userAgent",
+            "uri",
+            "remoteAddress",
+            "status",
+            "requestHeaderTraceToken",
+            "responseHeaderTraceToken");
   }
 
-  @Test
-  void shouldLogJsonWithMdcInRequestContext(CapturedOutput capturedOutput) {
-    doRequest();
-
-    var actual = toStructuredLogs(capturedOutput);
-
-    assertThat(actual)
-        .anySatisfy(
-            log ->
-                assertThat(log)
-                    .extracting("mdc")
-                    .asInstanceOf(InstanceOfAssertFactories.MAP)
-                    .isNotNull()
-                    .isNotEmpty());
+  private Optional<String> findLogLine(CapturedOutput output) {
+    return output.toString().lines().toList().stream()
+        .filter(line -> line.contains("HttpRequestLoggingInterceptor"))
+        .findFirst();
   }
 
-  @Test
-  @Disabled("No trace token support implemented yet: PLP-655")
-  void shouldLogJsonWithTraceTokenInMdc(CapturedOutput capturedOutput) {
-    doRequest();
-
-    var actual = toStructuredLogs(capturedOutput);
-
-    assertThat(actual)
-        .anySatisfy(
-            log ->
-                assertThat(log)
-                    .extracting("mdc")
-                    .extracting("Trace-Token")
-                    .asString()
-                    .isNotBlank());
+  private List<String> jsonLines(CapturedOutput capturedOutput) {
+    return capturedOutput.toString().lines().filter(l -> l.startsWith("{")).toList();
   }
 
-  private List<Map<String, Object>> toStructuredLogs(CapturedOutput capturedOutput) {
-    return capturedOutput
-        .toString()
-        .lines()
-        .filter(l -> l.startsWith("{"))
-        .map(this::toObject)
-        .toList();
-  }
-
-  private void doRequest() {
-    client.getForObject("http://localhost:" + port + "/api/fixedTime", Object.class);
+  private ResponseEntity<String> executeRequest(String path, int port) {
+    return client.getForEntity(String.format("http://localhost:%d%s", port, path), String.class);
   }
 
   private Map<String, Object> toObject(String json) {

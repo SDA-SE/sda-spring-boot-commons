@@ -4,6 +4,7 @@ org.sdase.commons.spring.boot.web.auth.SdaSecurityConfiguration
 org.sdase.commons.spring.boot.web.auth.opa.OpaRestTemplateConfiguration
 org.sdase.commons.spring.boot.web.client.SdaClientConfiguration
 org.sdase.commons.spring.boot.web.client.SdaOidcClientConfiguration
+org.sdase.commons.spring.boot.web.logging.HttpRequestLoggingConfiguration
 org.sdase.commons.spring.boot.web.docs.SdaOpenApiCustomizerConfiguration
 org.sdase.commons.spring.boot.web.jackson.SdaObjectMapperConfiguration
 org.sdase.commons.spring.boot.web.monitoring.SdaMonitoringConfiguration

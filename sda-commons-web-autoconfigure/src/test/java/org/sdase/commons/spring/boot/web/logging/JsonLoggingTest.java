@@ -24,10 +24,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @ExtendWith(OutputCaptureExtension.class)
 @ClearSystemProperty(key = "logging.config") // defined by app under test to enable json logging
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class JsonLoggingTest {
 
   @Test
@@ -58,7 +60,12 @@ class JsonLoggingTest {
   }
 
   private List<String> nonTestLogLines(CapturedOutput capturedOutput) {
-    return capturedOutput.toString().lines().filter(l -> !l.contains(".test.context.")).toList();
+    return capturedOutput
+        .toString()
+        .lines()
+        .filter(l -> !l.contains(".test.context."))
+        .filter(l -> !l.contains("Test worker"))
+        .toList();
   }
 
   private List<String> jsonLines(CapturedOutput capturedOutput) {
