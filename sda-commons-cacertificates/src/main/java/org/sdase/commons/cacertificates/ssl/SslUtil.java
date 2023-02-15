@@ -25,6 +25,7 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.X509TrustedCertificateBlock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 
 public class SslUtil {
 
@@ -34,7 +35,7 @@ public class SslUtil {
 
   private SslUtil() {}
 
-  public static SSLContext createSslContext(KeyStore keystore) {
+  public static SSLContext createSslContext(@Nullable KeyStore keystore) {
     try {
       var trustManagers = new TrustManager[] {createCompositeTrustManager(keystore)};
 
@@ -47,7 +48,10 @@ public class SslUtil {
     }
   }
 
-  public static KeyStore createTruststoreFromPemKey(String certificateAsString) {
+  public static KeyStore createTruststoreFromPemKey(@Nullable String certificateAsString) {
+    if (certificateAsString == null) {
+      return null;
+    }
     try (var parser = new PEMParser(new StringReader(certificateAsString))) {
       var keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
       keyStore.load(null, null);
