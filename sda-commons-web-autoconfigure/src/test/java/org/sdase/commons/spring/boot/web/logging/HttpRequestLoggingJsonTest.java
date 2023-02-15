@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,8 +42,9 @@ import org.springframework.test.context.ContextConfiguration;
 class HttpRequestLoggingJsonTest {
 
   @LocalServerPort private int port;
-
   @Autowired private TestRestTemplate client;
+  @Autowired ObjectMapper objectMapper;
+  static final TypeReference<Map<String, Object>> MAP_REF = new TypeReference<>() {};
 
   @Test
   void shouldLogAsJsonWhenEnabled(CapturedOutput output) throws JsonProcessingException {
@@ -64,7 +66,24 @@ class HttpRequestLoggingJsonTest {
     // log for request should still be found
     var expectedLogLine = findLogLine(output);
     assertThat(expectedLogLine).isPresent();
-    assertThat(expectedLogLine.get()).contains("GET /api/fixedTime");
+
+    var actualLogLine = expectedLogLine.get();
+    assertThat(actualLogLine).contains("GET /api/fixedTime");
+
+    // Metadata should be present in MDC
+    Map<String, String> mdc = (Map<String, String>) toObject(actualLogLine).get("mdc");
+
+    assertThat(mdc)
+        .containsKeys(
+            "protocol",
+            "method",
+            "contentLength",
+            "userAgent",
+            "uri",
+            "remoteAddress",
+            "status",
+            "requestHeaderTraceToken",
+            "responseHeaderTraceToken");
   }
 
   private Optional<String> findLogLine(CapturedOutput output) {
@@ -79,5 +98,13 @@ class HttpRequestLoggingJsonTest {
 
   private ResponseEntity<String> executeRequest(String path, int port) {
     return client.getForEntity(String.format("http://localhost:%d%s", port, path), String.class);
+  }
+
+  private Map<String, Object> toObject(String json) {
+    try {
+      return objectMapper.readValue(json, MAP_REF);
+    } catch (JsonProcessingException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -28,12 +29,27 @@ public class HttpRequestLoggingInterceptor implements HandlerInterceptor {
   @Override
   public void afterCompletion(
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-    logger.info(
-        "{} {}{} {} - {}",
-        request.getMethod(),
-        request.getContextPath(),
-        request.getServletPath(),
-        response.getStatus(),
-        request.getHeader("user-agent"));
+
+    try (var protocolIgnored = MDC.putCloseable("protocol", request.getProtocol());
+        var methodIgnored = MDC.putCloseable("method", request.getMethod());
+        var contentLengthIgnored =
+            MDC.putCloseable("contentLength", String.valueOf(request.getContentLength()));
+        var userAgentIgnored = MDC.putCloseable("userAgent", request.getHeader("user-agent"));
+        var uriIgnored =
+            MDC.putCloseable("uri", request.getContextPath() + request.getServletPath());
+        var remoteAddressIgnored = MDC.putCloseable("remoteAddress", request.getRemoteAddr());
+        var statusIgnored = MDC.putCloseable("status", String.valueOf(response.getStatus()));
+        var requestTraceTokenIgnored =
+            MDC.putCloseable("requestHeaderTraceToken", request.getHeader("trace-token"));
+        var responseTraceTokenIgnored =
+            MDC.putCloseable("responseHeaderTraceToken", response.getHeader("Trace-Token")); ) {
+      logger.info(
+          "{} {}{} {} - {}",
+          request.getMethod(),
+          request.getContextPath(),
+          request.getServletPath(),
+          response.getStatus(),
+          request.getHeader("user-agent"));
+    }
   }
 }
