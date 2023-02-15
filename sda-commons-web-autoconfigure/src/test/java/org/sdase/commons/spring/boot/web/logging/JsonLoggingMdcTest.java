@@ -37,7 +37,8 @@ import org.springframework.test.context.ContextConfiguration;
 @SetSystemProperty(key = "enable.json.logging", value = "true")
 @SpringBootTest(
     classes = JacksonTestApp.class,
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = {"opa.disable=true"})
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)

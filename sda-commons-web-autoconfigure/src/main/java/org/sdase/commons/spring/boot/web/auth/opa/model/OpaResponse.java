@@ -26,7 +26,7 @@ public class OpaResponse {
 
   @JsonIgnore()
   public boolean isAllow() {
-    if (result.has(ALLOW) && result.get(ALLOW).isBoolean()) {
+    if (result != null && result.has(ALLOW) && result.get(ALLOW).isBoolean()) {
       return result.get(ALLOW).asBoolean();
     }
     return false;

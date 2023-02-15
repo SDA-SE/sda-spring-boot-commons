@@ -486,6 +486,7 @@ The readiness group contains the following indicators:
 
 *   `ReadinessStateHealthIndicator`
 *   `MongoHealthIndicator`, if auto-configured.
+*   `OpenPolicyAgentHealthIndicator` if [OPA](#opa) is enabled for authentication
 
 To overwrite the defaults `HealthIndicator` of the readiness group, you can overwrite the property
 source:

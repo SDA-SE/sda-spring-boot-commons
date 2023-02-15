@@ -43,7 +43,8 @@ import org.springframework.web.client.RestTemplate;
     webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = {
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
-      "spring.zipkin.base-url=http://localhost:${wiremock.server.port}/zipkin"
+      "spring.zipkin.base-url=http://localhost:${wiremock.server.port}/zipkin",
+      "opa.disable=true"
     })
 @AutoConfigureWireMock(port = 0)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)

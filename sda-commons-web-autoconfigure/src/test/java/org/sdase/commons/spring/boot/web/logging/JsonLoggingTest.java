@@ -29,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ExtendWith(OutputCaptureExtension.class)
 @ClearSystemProperty(key = "logging.config") // defined by app under test to enable json logging
+@SetSystemProperty(key = "opa.disable", value = "true")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class JsonLoggingTest {
 

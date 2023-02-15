@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.sdase.commons.spring.boot.web.auth.opa.OpenPolicyAgentHealthIndicator;
 import org.sdase.commons.spring.boot.web.monitoring.testing.HealthyHealthIndicator;
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import org.springframework.boot.test.web.server.LocalManagementPort;
     classes = MonitoringTestApp.class,
     webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = {
-      "management.endpoint.health.group.readiness.include=readinessState, unhealthy",
+      "management.endpoint.health.group.readiness.include=readinessState, unhealthy, openPolicyAgent",
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "management.server.port=8087" // We need to set a fixed port here, hence the random port to
       // exclude the management requests are not set probably at
@@ -36,6 +37,8 @@ class HealthCheckGroupIT {
   @Autowired TestRestTemplate client;
 
   @Autowired HealthyHealthIndicator healthyHealthIndicator;
+
+  @Autowired OpenPolicyAgentHealthIndicator openPolicyAgentHealthIndicator;
 
   @Test
   @SuppressWarnings("unchecked")
