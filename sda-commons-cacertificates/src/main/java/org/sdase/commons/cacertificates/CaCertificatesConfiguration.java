@@ -28,10 +28,9 @@ public class CaCertificatesConfiguration {
   @Bean
   @ConditionalOnMissingBean
   public SSLContext sslContext() {
-    return certificateReader
-        .readCertificates() // pem content as strings
-        .map(SslUtil::createTruststoreFromPemKey) // a keystore instance that have certs loaded
-        .map(SslUtil::createSslContext) // the sslContext created with the previous keystore
-        .orElse(null);
+    var certificatesAsString =
+        certificateReader.readCertificates().orElse(null); // pem content as strings
+    var keyStoreOrNull = SslUtil.createTruststoreFromPemKey(certificatesAsString);
+    return SslUtil.createSslContext(keyStoreOrNull);
   }
 }

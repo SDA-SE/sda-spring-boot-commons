@@ -48,6 +48,14 @@ class CaCertificatesBundleHttpsIT {
   }
 
   @Test
+  void shouldHttpsOK200WithDefaultTrustStore() throws Exception {
+    // The default context should be created with an empty certificate bundle
+    SSLContext sslContext = SslUtil.createSslContext(SslUtil.createTruststoreFromPemKey(null));
+    assertThat(callSecureEndpointWithSSLContext(sslContext).getStatusLine().getStatusCode())
+        .isEqualTo(200);
+  }
+
+  @Test
   void shouldMakeHttpsOK200withCustomTrustStore() throws Exception {
 
     var certificateReader = new CertificateReader(Paths.get("src", "test", "resources").toString());

@@ -14,10 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(
-    classes = TestApp.class,
-    properties = {"sda.caCertificates.certificatesDir=src/test/resources"})
-class CaCertificatesConfigurationTest {
+@SpringBootTest(classes = TestApp.class)
+class DefaultSSLContextTest {
 
   @Autowired SSLContext sslContext;
 
