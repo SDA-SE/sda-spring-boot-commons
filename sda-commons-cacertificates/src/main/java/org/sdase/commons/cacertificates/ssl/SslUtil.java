@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -118,10 +119,16 @@ public class SslUtil {
     return null;
   }
 
-  private static TrustManager createCompositeTrustManager(KeyStore keystore) {
+  private static TrustManager createCompositeTrustManager(@Nullable KeyStore keystore) {
     String defaultTrustManagerAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-    X509TrustManager defaultTrustManager = getTrustManager(defaultTrustManagerAlgorithm, null);
-    X509TrustManager customTrustManager = getTrustManager(defaultTrustManagerAlgorithm, keystore);
-    return new CompositeX509TrustManager(Arrays.asList(defaultTrustManager, customTrustManager));
+    var trustManagersList = new ArrayList<X509TrustManager>();
+    trustManagersList.add(getTrustManager(defaultTrustManagerAlgorithm, null));
+
+    // using a null key store will create another defaultTrustManager with same settings
+    if (keystore != null) {
+      // add a trust manager created from the given keystore
+      trustManagersList.add(getTrustManager(defaultTrustManagerAlgorithm, keystore));
+    }
+    return new CompositeX509TrustManager(trustManagersList);
   }
 }
