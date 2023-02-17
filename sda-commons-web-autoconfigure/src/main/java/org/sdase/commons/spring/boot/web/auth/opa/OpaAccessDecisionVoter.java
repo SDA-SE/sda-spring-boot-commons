@@ -152,6 +152,10 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
     }
   }
 
+  OpaResponse getOpaForObject() {
+    return opaRestTemplate.getForObject(opaRequestUrl, OpaResponse.class);
+  }
+
   private int handleOpaDisabled(HttpServletRequest httpRequest) {
     if (httpRequest.getUserPrincipal() == null) {
       LOG.warn("OPA is disabled. Access is granted for anonymous user without constraints.");
