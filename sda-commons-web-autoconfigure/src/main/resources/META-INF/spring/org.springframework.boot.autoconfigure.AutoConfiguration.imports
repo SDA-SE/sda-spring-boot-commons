@@ -9,4 +9,5 @@ org.sdase.commons.spring.boot.web.docs.SdaOpenApiCustomizerConfiguration
 org.sdase.commons.spring.boot.web.jackson.SdaObjectMapperConfiguration
 org.sdase.commons.spring.boot.web.monitoring.SdaMonitoringConfiguration
 org.sdase.commons.spring.boot.web.monitoring.SdaTracingConfiguration
+org.sdase.commons.spring.boot.web.tracing.TraceTokenConfiguration
 org.sdase.commons.spring.boot.web.security.SdaWebSecurityConfiguration

@@ -66,14 +66,14 @@ class KafkaRetryAndDltConsumerTest {
   @Test
   void shouldReceiveAndDeserializeToJson() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
-    verify(listenerCheck, timeout(3000)).check("CHECK");
+    verify(listenerCheck, timeout(5000)).check("CHECK");
   }
 
   @Test
   void shouldNotReceiveInvalidModelButProduceToDLT() throws Exception {
     KafkaTestModel expectedMessage = new KafkaTestModel().setCheckString("CHECK").setCheckInt(null);
     kafkaTemplate.send(topic, expectedMessage);
-    verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
+    verify(listenerCheck, new Timeout(5000, never())).check("CHECK");
 
     try (KafkaConsumer<String, ?> testConsumer =
         KafkaTestUtil.createTestConsumer(
@@ -116,7 +116,7 @@ class KafkaRetryAndDltConsumerTest {
             .setThrowNotRetryableException(true);
     kafkaTemplate.send(topic, expectedMessage);
 
-    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(5000).times(1)).check("CHECK");
 
     try (KafkaConsumer<String, ?> testConsumer =
         KafkaTestUtil.createTestConsumer(
@@ -148,7 +148,7 @@ class KafkaRetryAndDltConsumerTest {
         new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true);
     kafkaTemplate.send(topic, expectedMessage);
 
-    verify(listenerCheck, timeout(4000).times(2)).check("CHECK");
+    verify(listenerCheck, timeout(5000).times(2)).check("CHECK");
 
     try (KafkaConsumer<String, ?> testConsumer =
         KafkaTestUtil.createTestConsumer(

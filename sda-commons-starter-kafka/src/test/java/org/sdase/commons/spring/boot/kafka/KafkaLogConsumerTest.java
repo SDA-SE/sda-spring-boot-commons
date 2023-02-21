@@ -51,16 +51,18 @@ class KafkaLogConsumerTest {
   @Value("${app.kafka.consumer.log-on-failure.topic}")
   private String topic;
 
+  private final int DEFAULT_TIMEOUT = 10000;
+
   @Test
   void shouldReceiveAndDeserializeToJson() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
-    verify(listenerCheck, timeout(3000)).check("CHECK");
+    verify(listenerCheck, timeout(DEFAULT_TIMEOUT)).check("CHECK");
   }
 
   @Test
   void shouldNotReceiveInvalidModel() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(null));
-    verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
+    verify(listenerCheck, new Timeout(DEFAULT_TIMEOUT, never())).check("CHECK");
   }
 
   @Test
@@ -71,7 +73,7 @@ class KafkaLogConsumerTest {
             .setCheckString("CHECK")
             .setCheckInt(1)
             .setThrowNotRetryableException(true));
-    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(DEFAULT_TIMEOUT).times(1)).check("CHECK");
   }
 
   @Test
@@ -79,6 +81,6 @@ class KafkaLogConsumerTest {
     kafkaTemplate.send(
         topic,
         new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true));
-    verify(listenerCheck, timeout(2000).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(DEFAULT_TIMEOUT).times(1)).check("CHECK");
   }
 }

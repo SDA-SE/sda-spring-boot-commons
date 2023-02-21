@@ -151,7 +151,8 @@ abstract class AbstractSecurityHeadersTest {
                         "Date",
                         "Keep-Alive",
                         "Connection",
-                        "Vary"),
+                        "Vary",
+                        "Trace-Token"),
                     predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
                 .collect(Collectors.toList()));
   }
@@ -179,7 +180,8 @@ abstract class AbstractSecurityHeadersTest {
                         "Date",
                         "Keep-Alive",
                         "Connection",
-                        "Vary"),
+                        "Vary",
+                        "Trace-Token"),
                     predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
                 .collect(Collectors.toList()));
   }

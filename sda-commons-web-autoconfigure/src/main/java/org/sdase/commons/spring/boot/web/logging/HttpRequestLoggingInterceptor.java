@@ -7,6 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.logging;
 
+import static org.sdase.commons.spring.boot.web.tracing.TraceTokenRequestInterceptor.TRACE_TOKEN_HEADER_NAME;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -21,15 +23,8 @@ public class HttpRequestLoggingInterceptor implements HandlerInterceptor {
   private static final Logger logger = LoggerFactory.getLogger(HttpRequestLoggingInterceptor.class);
 
   @Override
-  public boolean preHandle(
-      HttpServletRequest request, HttpServletResponse response, Object handler) {
-    return true;
-  }
-
-  @Override
   public void afterCompletion(
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-
     try (var protocolIgnored = MDC.putCloseable("protocol", request.getProtocol());
         var methodIgnored = MDC.putCloseable("method", request.getMethod());
         var contentLengthIgnored =
@@ -40,9 +35,11 @@ public class HttpRequestLoggingInterceptor implements HandlerInterceptor {
         var remoteAddressIgnored = MDC.putCloseable("remoteAddress", request.getRemoteAddr());
         var statusIgnored = MDC.putCloseable("status", String.valueOf(response.getStatus()));
         var requestTraceTokenIgnored =
-            MDC.putCloseable("requestHeaderTraceToken", request.getHeader("trace-token"));
+            MDC.putCloseable(
+                "requestHeaderTraceToken", request.getHeader(TRACE_TOKEN_HEADER_NAME));
         var responseTraceTokenIgnored =
-            MDC.putCloseable("responseHeaderTraceToken", response.getHeader("Trace-Token")); ) {
+            MDC.putCloseable(
+                "responseHeaderTraceToken", response.getHeader(TRACE_TOKEN_HEADER_NAME))) {
       logger.info(
           "{} {}{} {} - {}",
           request.getMethod(),

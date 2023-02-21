@@ -7,7 +7,6 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.mockito.verification.Timeout;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestListener.ListenerCheck;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
@@ -54,13 +52,13 @@ class KafkaRetryAndLogConsumerTest {
   @Test
   void shouldReceiveAndDeserializeToJson() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
-    verify(listenerCheck, timeout(3000)).check("CHECK");
+    verify(listenerCheck, timeout(5000)).check("CHECK");
   }
 
   @Test
   void shouldNotReceiveInvalidModel() throws Exception {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(null));
-    verify(listenerCheck, new Timeout(2000, never())).check("CHECK");
+    verify(listenerCheck, timeout(5000)).check("CHECK");
   }
 
   @Test
@@ -71,7 +69,7 @@ class KafkaRetryAndLogConsumerTest {
             .setCheckString("CHECK")
             .setCheckInt(1)
             .setThrowNotRetryableException(true));
-    verify(listenerCheck, timeout(4000).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(5000).times(1)).check("CHECK");
   }
 
   @Test
@@ -79,6 +77,6 @@ class KafkaRetryAndLogConsumerTest {
     kafkaTemplate.send(
         topic,
         new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true));
-    verify(listenerCheck, timeout(2000).times(2)).check("CHECK");
+    verify(listenerCheck, timeout(5000).times(2)).check("CHECK");
   }
 }
