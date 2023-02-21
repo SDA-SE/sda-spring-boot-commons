@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.web.logging;
+package org.sdase.commons.spring.boot.web.tracing;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -13,15 +13,15 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfiguration
-public class HttpRequestLoggingConfiguration implements WebMvcConfigurer {
+public class TraceTokenConfiguration implements WebMvcConfigurer {
 
   @Bean
-  public HttpRequestLoggingInterceptor requestLoggingInterceptor() {
-    return new HttpRequestLoggingInterceptor();
+  public TraceTokenRequestInterceptor traceTokenInterceptor() {
+    return new TraceTokenRequestInterceptor();
   }
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(requestLoggingInterceptor());
+    registry.addInterceptor(traceTokenInterceptor());
   }
 }

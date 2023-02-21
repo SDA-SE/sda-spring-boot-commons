@@ -16,7 +16,6 @@ import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetSystemProperty;
@@ -82,23 +81,6 @@ class JsonLoggingMdcTest {
                     .asInstanceOf(InstanceOfAssertFactories.MAP)
                     .isNotNull()
                     .isNotEmpty());
-  }
-
-  @Test
-  @Disabled("No trace token support implemented yet: PLP-655")
-  void shouldLogJsonWithTraceTokenInMdc(CapturedOutput capturedOutput) {
-    doRequest();
-
-    var actual = toStructuredLogs(capturedOutput);
-
-    assertThat(actual)
-        .anySatisfy(
-            log ->
-                assertThat(log)
-                    .extracting("mdc")
-                    .extracting("Trace-Token")
-                    .asString()
-                    .isNotBlank());
   }
 
   private List<Map<String, Object>> toStructuredLogs(CapturedOutput capturedOutput) {

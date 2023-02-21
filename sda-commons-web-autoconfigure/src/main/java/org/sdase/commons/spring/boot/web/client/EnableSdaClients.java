@@ -11,6 +11,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.sdase.commons.spring.boot.web.tracing.SdaTraceTokenClientConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Import;
  *
  * <ul>
  *   <li>passing the Authorization header to downstream services.
+ *   <li>passing the Trace-Token header to downstream services.
  *   <li>OIDC client authentication.
  * </ul>
  *
@@ -54,7 +56,7 @@ import org.springframework.context.annotation.Import;
  *       configuration = {AuthenticationPassThroughClientConfiguration.class})
  *    public interface OtherServiceClient {
  *      {@literal @}GetMapping("/partners")
- *      List&lt;Partner&gt; getPartners();
+ *     List&lt;Partner&gt; getPartners();
  *    }
  *   </code>
  * </pre>
@@ -68,9 +70,35 @@ import org.springframework.context.annotation.Import;
  * configured {@code "oidc.client.issuer.uri"}, {@code "oidc.client.id"} and {@code
  * "oidc.client.secret"}. If the current request context contains the {@code Authorization} header,
  * the authentication pass-through will be applied instead.
+ *
+ * <p>The client can be used within the SDA Platform to path through the received Trace-Token header
+ * by adding a configuration:
+ *
+ * <pre>
+ *   <code>{@literal @}FeignClient(
+ *     name = "partnerOds",
+ *     url = "${partnerOds.baseUrl}",
+ *     configuration = {SdaTraceTokenClientConfiguration.class})
+ *    public interface OtherServiceClient {
+ *      {@literal @}GetMapping("/partners")
+ *       List&lt;Partner&gt; getPartners();
+ *    }
+ *   </code>
+ * </pre>
+ *
+ * {@link SdaTraceTokenClientConfiguration} will take the {@code Trace-Token} header from the
+ * current request context of the servlet and adds its value to the client request.
+ *
+ * <p>If no Trace-Token header is present in the current request context, the {@link
+ * SdaTraceTokenClientConfiguration} will generate a new Trace-Token and pass it to the following
+ * requests.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @EnableFeignClients
-@Import({SdaClientConfiguration.class, SdaOidcClientConfiguration.class})
+@Import({
+  SdaClientConfiguration.class,
+  SdaOidcClientConfiguration.class,
+  SdaTraceTokenClientConfiguration.class
+})
 public @interface EnableSdaClients {}
