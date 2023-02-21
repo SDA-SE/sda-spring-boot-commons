@@ -79,7 +79,6 @@ class KafkaRetryAndDltConsumerTest {
         KafkaTestUtil.createTestConsumer(
             topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
       await()
-          .atMost(Duration.ofSeconds(5))
           .pollDelay(Duration.ofMillis(1000))
           .pollInterval(Duration.ofMillis(100))
           .untilAsserted(
@@ -123,7 +122,6 @@ class KafkaRetryAndDltConsumerTest {
         KafkaTestUtil.createTestConsumer(
             topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
       await()
-          .atMost(Duration.ofSeconds(5))
           .pollDelay(Duration.ofMillis(1000))
           .pollInterval(Duration.ofMillis(100))
           .untilAsserted(
@@ -156,7 +154,6 @@ class KafkaRetryAndDltConsumerTest {
         KafkaTestUtil.createTestConsumer(
             topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
       await()
-          .atMost(Duration.ofSeconds(5))
           .pollDelay(Duration.ofMillis(1000))
           .pollInterval(Duration.ofMillis(100))
           .untilAsserted(
