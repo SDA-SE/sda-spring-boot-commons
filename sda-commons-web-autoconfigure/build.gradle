@@ -29,6 +29,7 @@ dependencies {
   api 'io.github.openfeign:feign-jaxrs2'
   api 'io.github.openfeign:feign-micrometer'
   api 'io.micrometer:micrometer-registry-prometheus'
+  api 'org.glassfish.jersey.core:jersey-common'
 
   testImplementation project(':sda-commons-web-testing')
   testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
