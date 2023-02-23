@@ -1,6 +1,14 @@
 dependencies {
   api 'org.springframework.boot:spring-boot-starter-test'
-  api 'org.springframework.cloud:spring-cloud-contract-wiremock'
+  api 'org.springframework.cloud:spring-cloud-contract-wiremock', {
+    exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
+  }
+  api 'com.github.tomakehurst:wiremock-jre8', {
+    exclude group: 'org.opentest4j', module:'opentest4j'
+    exclude group: 'org.ow2.asm', module:'asm'
+  }
+  api 'org.opentest4j:opentest4j'
+  api 'org.ow2.asm:asm'
   api 'org.awaitility:awaitility'
   implementation 'com.fasterxml.jackson.core:jackson-databind'
   implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'

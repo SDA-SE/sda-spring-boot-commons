@@ -1,5 +1,6 @@
 rootProject.name = 'sda-spring-boot-commons'
 
+include 'sda-commons-dependency-check'
 include 'sda-commons-dependencies'
 include 'sda-commons-bom'
 include 'sda-commons-web-autoconfigure'
