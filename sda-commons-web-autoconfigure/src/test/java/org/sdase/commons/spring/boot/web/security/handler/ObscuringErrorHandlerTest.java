@@ -133,6 +133,22 @@ class ObscuringErrorHandlerTest {
         .containsExactly(HttpStatus.OK, "This will not be altered.");
   }
 
+  @Test
+  void shouldGetApiErrorOnValidateError() {
+    var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    ResponseEntity<TestResource> exchange =
+        client.exchange(
+            getServerBaseUrl() + "/api/validate",
+            HttpMethod.POST,
+            new HttpEntity<>(headers),
+            TestResource.class);
+    assertThat(exchange)
+        .isNotNull()
+        .extracting(ResponseEntity::getStatusCode, r -> r.getBody().getPostcode())
+        .containsExactly(HttpStatus.UNPROCESSABLE_ENTITY, "Validation error");
+  }
+
   String getServerBaseUrl() {
     return String.format("http://localhost:%s", port);
   }

@@ -7,12 +7,15 @@
  */
 package org.sdase.commons.spring.boot.web.security.handler;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.sdase.commons.spring.boot.web.error.ApiError;
+import org.sdase.commons.spring.boot.web.error.ApiInvalidParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -38,5 +41,41 @@ public class RunTimeExceptionHandler extends ResponseEntityExceptionHandler {
     var headers = new HttpHeaders();
     return new ResponseEntity<>(
         new ApiError(ERROR_MESSAGE), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  private static final PropertyNamingStrategies.UpperSnakeCaseStrategy ERROR_CODE_TRANSLATOR =
+      new PropertyNamingStrategies.UpperSnakeCaseStrategy();
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiError> validationError(MethodArgumentNotValidException ex) {
+    var response =
+        new ApiError(
+            "Validation error",
+            ex.getBindingResult().getFieldErrors().stream()
+                .map(
+                    fieldError ->
+                        new ApiInvalidParam(
+                            fieldError.getField(),
+                            fieldError.getDefaultMessage(),
+                            camelToUpperSnakeCase(fieldError.getCode())))
+                .toList());
+    return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+  }
+
+  static String camelToUpperSnakeCase(String camelCase) {
+    // changing the input so that the result matches the way Guava (used before) created camel case
+    String normalizedToMatchGuava = camelCase;
+    boolean allNormalized = false;
+    while (!allNormalized) {
+      String newNormalized = normalizeToMatchGuava(normalizedToMatchGuava);
+      allNormalized = newNormalized.equals(normalizedToMatchGuava);
+      normalizedToMatchGuava = newNormalized;
+    }
+    // end of backward compatibility implementation to match Guava transformation
+    return ERROR_CODE_TRANSLATOR.translate(normalizedToMatchGuava);
+  }
+
+  private static String normalizeToMatchGuava(String normalizedToMatchGuava) {
+    return normalizedToMatchGuava.replaceAll("([A-Z])([A-Z])", "$1_$2");
   }
 }
