@@ -21,6 +21,9 @@ dependencies {
   constraints {
     api 'org.apache.commons:commons-lang3:3.12.0'
 
+    // forcing upgrade due to CVE-2023-24998
+    api 'commons-fileupload:commons-fileupload:1.5'
+
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.2.0'
 
