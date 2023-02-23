@@ -25,14 +25,14 @@ class RunTimeExceptionHandlerTest {
   @ParameterizedTest
   @MethodSource("testData")
   void shouldConvertToSnakeCase(String given, String expected) {
-    String actual = RunTimeExceptionHandler.camelToUpperSnakeCase(given);
+    String actual = MethodArgumentExceptionHandler.camelToUpperSnakeCase(given);
     assertThat(actual).isEqualTo(expected);
   }
 
   @ParameterizedTest
   @MethodSource("realTestData")
   void differenceToDefault(String given) {
-    String actual = RunTimeExceptionHandler.camelToUpperSnakeCase(given);
+    String actual = MethodArgumentExceptionHandler.camelToUpperSnakeCase(given);
     String expected = new PropertyNamingStrategies.UpperSnakeCaseStrategy().translate(given);
     // would fail on: EAN, ISBN, URL, CNPJ, CPF, NIP, PESEL, REGON, INN
     assumeThat(actual).isEqualTo(expected);
