@@ -11,7 +11,9 @@ import javax.validation.constraints.NotNull;
 
 public class TestResource {
   @NotNull private String value;
-  @NumericString private String postcode;
+
+  @NumericString(message = "postCode should be numeric")
+  private String postcode;
 
   public String getValue() {
     return value;

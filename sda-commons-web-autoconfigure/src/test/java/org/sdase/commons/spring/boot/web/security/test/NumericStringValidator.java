@@ -10,10 +10,10 @@ package org.sdase.commons.spring.boot.web.security.test;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class NumericStringValidator implements ConstraintValidator<NumericString, TestResource> {
+public class NumericStringValidator implements ConstraintValidator<NumericString, String> {
 
   @Override
-  public boolean isValid(TestResource value, ConstraintValidatorContext context) {
-    return value.getValue().matches("[0-9]+");
+  public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
+    return value.matches("[0-9]+");
   }
 }

@@ -10,8 +10,6 @@ package org.sdase.commons.spring.boot.web.security.handler;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.sdase.commons.spring.boot.web.error.ApiError;
 import org.sdase.commons.spring.boot.web.error.ApiInvalidParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +28,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class MethodArgumentExceptionHandler {
-  private static final String ERROR_MESSAGE = "An exception occurred.";
-  private static final Logger LOG = LoggerFactory.getLogger(MethodArgumentExceptionHandler.class);
+  private static final String ERROR_MESSAGE = "Validation error";
 
   private static final PropertyNamingStrategies.UpperSnakeCaseStrategy ERROR_CODE_TRANSLATOR =
       new PropertyNamingStrategies.UpperSnakeCaseStrategy();
@@ -41,7 +38,7 @@ public class MethodArgumentExceptionHandler {
   public ResponseEntity<ApiError> validationError(MethodArgumentNotValidException ex) {
     var response =
         new ApiError(
-            "Validation error",
+            ERROR_MESSAGE,
             ex.getBindingResult().getFieldErrors().stream()
                 .map(
                     fieldError ->
@@ -51,7 +48,6 @@ public class MethodArgumentExceptionHandler {
                             camelToUpperSnakeCase(fieldError.getCode())))
                 .toList());
     return ResponseEntity.unprocessableEntity().body(response);
-    // return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
   static String camelToUpperSnakeCase(String camelCase) {

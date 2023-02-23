@@ -134,12 +134,29 @@ class ObscuringErrorHandlerTest {
   }
 
   @Test
-  void shouldGetApiErrorOnValidateError() {
+  void shouldGetApiErrorOnNotNullAnnotation() {
     var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     var exchange =
         client.postForEntity(
-            getServerBaseUrl() + "/api/validate", new TestResource(), ApiError.class);
+            getServerBaseUrl() + "/api/validate",
+            new TestResource().setPostcode("1234"),
+            ApiError.class);
+    assertThat(exchange)
+        .isNotNull()
+        .extracting(ResponseEntity::getStatusCode, r -> r.getBody().getTitle())
+        .containsExactly(HttpStatus.UNPROCESSABLE_ENTITY, "Validation error");
+  }
+
+  @Test
+  void shouldGetApiErrorOnCustomValidatorAnnotation() {
+    var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    var exchange =
+        client.postForEntity(
+            getServerBaseUrl() + "/api/validate",
+            new TestResource().setValue("test").setPostcode("ab123"),
+            ApiError.class);
     assertThat(exchange)
         .isNotNull()
         .extracting(ResponseEntity::getStatusCode, r -> r.getBody().getTitle())
