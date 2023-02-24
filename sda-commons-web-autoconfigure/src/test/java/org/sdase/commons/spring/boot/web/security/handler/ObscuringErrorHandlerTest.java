@@ -133,6 +133,52 @@ class ObscuringErrorHandlerTest {
         .containsExactly(HttpStatus.OK, "This will not be altered.");
   }
 
+  @Test
+  void shouldGetApiErrorOnNotNullAnnotation() {
+    var exchange =
+        client.postForEntity(
+            getServerBaseUrl() + "/api/validate",
+            new TestResource().setPostcode("1234"),
+            ApiError.class);
+    assertThat(exchange)
+        .isNotNull()
+        .extracting(
+            ResponseEntity::getStatusCode,
+            r -> r.getBody().getTitle(),
+            r -> r.getBody().getInvalidParams().get(0).getField(),
+            r -> r.getBody().getInvalidParams().get(0).getErrorCode(),
+            r -> r.getBody().getInvalidParams().get(0).getReason())
+        .containsExactly(
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "Validation error",
+            "value",
+            "NOT_NULL",
+            "must not be null");
+  }
+
+  @Test
+  void shouldGetApiErrorOnCustomValidatorAnnotation() {
+    var exchange =
+        client.postForEntity(
+            getServerBaseUrl() + "/api/validate",
+            new TestResource().setValue("test").setPostcode("ab123"),
+            ApiError.class);
+    assertThat(exchange)
+        .isNotNull()
+        .extracting(
+            ResponseEntity::getStatusCode,
+            r -> r.getBody().getTitle(),
+            r -> r.getBody().getInvalidParams().get(0).getField(),
+            r -> r.getBody().getInvalidParams().get(0).getErrorCode(),
+            r -> r.getBody().getInvalidParams().get(0).getReason())
+        .containsExactly(
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "Validation error",
+            "postcode",
+            "NUMERIC_STRING",
+            "postCode should be numeric");
+  }
+
   String getServerBaseUrl() {
     return String.format("http://localhost:%s", port);
   }

@@ -7,8 +7,13 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
+import javax.validation.constraints.NotNull;
+
 public class TestResource {
-  private String value;
+  @NotNull private String value;
+
+  @NumericString(message = "postCode should be numeric")
+  private String postcode;
 
   public String getValue() {
     return value;
@@ -16,6 +21,15 @@ public class TestResource {
 
   public TestResource setValue(String value) {
     this.value = value;
+    return this;
+  }
+
+  public String getPostcode() {
+    return postcode;
+  }
+
+  public TestResource setPostcode(String postcode) {
+    this.postcode = postcode;
     return this;
   }
 }
