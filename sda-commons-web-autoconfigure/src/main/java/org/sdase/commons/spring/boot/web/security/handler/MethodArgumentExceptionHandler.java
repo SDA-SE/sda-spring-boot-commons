@@ -51,19 +51,6 @@ public class MethodArgumentExceptionHandler {
   }
 
   static String camelToUpperSnakeCase(String camelCase) {
-    // changing the input so that the result matches the way Guava (used before) created camel case
-    String normalizedToMatchGuava = camelCase;
-    boolean allNormalized = false;
-    while (!allNormalized) {
-      String newNormalized = normalizeToMatchGuava(normalizedToMatchGuava);
-      allNormalized = newNormalized.equals(normalizedToMatchGuava);
-      normalizedToMatchGuava = newNormalized;
-    }
-    // end of backward compatibility implementation to match Guava transformation
-    return ERROR_CODE_TRANSLATOR.translate(normalizedToMatchGuava);
-  }
-
-  private static String normalizeToMatchGuava(String normalizedToMatchGuava) {
-    return normalizedToMatchGuava.replaceAll("([A-Z])([A-Z])", "$1_$2");
+    return ERROR_CODE_TRANSLATOR.translate(camelCase);
   }
 }
