@@ -135,8 +135,6 @@ class ObscuringErrorHandlerTest {
 
   @Test
   void shouldGetApiErrorOnNotNullAnnotation() {
-    var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
     var exchange =
         client.postForEntity(
             getServerBaseUrl() + "/api/validate",
@@ -144,14 +142,22 @@ class ObscuringErrorHandlerTest {
             ApiError.class);
     assertThat(exchange)
         .isNotNull()
-        .extracting(ResponseEntity::getStatusCode, r -> r.getBody().getTitle())
-        .containsExactly(HttpStatus.UNPROCESSABLE_ENTITY, "Validation error");
+        .extracting(
+            ResponseEntity::getStatusCode,
+            r -> r.getBody().getTitle(),
+            r -> r.getBody().getInvalidParams().get(0).getField(),
+            r -> r.getBody().getInvalidParams().get(0).getErrorCode(),
+            r -> r.getBody().getInvalidParams().get(0).getReason())
+        .containsExactly(
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "Validation error",
+            "value",
+            "NOT_NULL",
+            "must not be null");
   }
 
   @Test
   void shouldGetApiErrorOnCustomValidatorAnnotation() {
-    var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
     var exchange =
         client.postForEntity(
             getServerBaseUrl() + "/api/validate",
@@ -159,8 +165,18 @@ class ObscuringErrorHandlerTest {
             ApiError.class);
     assertThat(exchange)
         .isNotNull()
-        .extracting(ResponseEntity::getStatusCode, r -> r.getBody().getTitle())
-        .containsExactly(HttpStatus.UNPROCESSABLE_ENTITY, "Validation error");
+        .extracting(
+            ResponseEntity::getStatusCode,
+            r -> r.getBody().getTitle(),
+            r -> r.getBody().getInvalidParams().get(0).getField(),
+            r -> r.getBody().getInvalidParams().get(0).getErrorCode(),
+            r -> r.getBody().getInvalidParams().get(0).getReason())
+        .containsExactly(
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "Validation error",
+            "postcode",
+            "NUMERIC_STRING",
+            "postCode should be numeric");
   }
 
   String getServerBaseUrl() {
