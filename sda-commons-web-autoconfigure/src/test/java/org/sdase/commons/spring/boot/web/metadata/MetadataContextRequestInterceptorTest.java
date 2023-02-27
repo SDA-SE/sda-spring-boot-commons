@@ -11,16 +11,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import javax.ws.rs.container.ContainerRequestContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedMap;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class MetadataContextFilterTest {
+class MetadataContextRequestInterceptorTest {
 
   @BeforeEach
   void clear() {
@@ -28,13 +28,14 @@ class MetadataContextFilterTest {
   }
 
   @Test
-  void shouldStoreOnlyMetadataContextFieldsInRequest() throws IOException {
-    var metadataContextFilter = new MetadataContextFilter(Set.of("tenant-id", "processes"));
+  void shouldStoreOnlyMetadataContextFieldsInRequest() {
+    MetadataContextRequestInterceptor m =
+        new MetadataContextRequestInterceptor(Set.of("tenant-id", "processes"));
     var headers = new MultivaluedStringMap();
     headers.put("tenant-id", List.of("t1"));
     headers.put("processes", List.of("p1", "p2"));
     headers.put("other-header", List.of("hello"));
-    metadataContextFilter.filter(requestWithHeaders(headers));
+    m.preHandle(requestWithHeaders(headers), null, null);
 
     assertThat(MetadataContext.current().keys())
         .containsExactlyInAnyOrder("tenant-id", "processes");
@@ -43,11 +44,12 @@ class MetadataContextFilterTest {
   }
 
   @Test
-  void shouldSplitFromSingleValue() throws IOException {
-    var metadataContextFilter = new MetadataContextFilter(Set.of("tenant-id"));
+  void shouldSplitFromSingleValue() {
+    MetadataContextRequestInterceptor m =
+        new MetadataContextRequestInterceptor(Set.of("tenant-id"));
     var headers = new MultivaluedStringMap();
     headers.put("tenant-id", List.of("t1,t2, t3 , t4"));
-    metadataContextFilter.filter(requestWithHeaders(headers));
+    m.preHandle(requestWithHeaders(headers), null, null);
 
     assertThat(MetadataContext.current().keys()).containsExactlyInAnyOrder("tenant-id");
     assertThat(MetadataContext.current().valuesByKey("tenant-id"))
@@ -55,11 +57,12 @@ class MetadataContextFilterTest {
   }
 
   @Test
-  void shouldSplitFromMultipleValues() throws IOException {
-    var metadataContextFilter = new MetadataContextFilter(Set.of("tenant-id"));
+  void shouldSplitFromMultipleValues() {
+    MetadataContextRequestInterceptor m =
+        new MetadataContextRequestInterceptor(Set.of("tenant-id"));
     var headers = new MultivaluedStringMap();
     headers.put("tenant-id", List.of("t1,t2", " t3 , t4"));
-    metadataContextFilter.filter(requestWithHeaders(headers));
+    m.preHandle(requestWithHeaders(headers), null, null);
 
     assertThat(MetadataContext.current().keys()).containsExactlyInAnyOrder("tenant-id");
     assertThat(MetadataContext.current().valuesByKey("tenant-id"))
@@ -67,12 +70,13 @@ class MetadataContextFilterTest {
   }
 
   @Test
-  void shouldStoreIncompleteMetadataContextFieldsInRequest() throws IOException {
-    var metadataContextFilter = new MetadataContextFilter(Set.of("tenant-id", "processes"));
+  void shouldStoreIncompleteMetadataContextFieldsInRequest() {
+    MetadataContextRequestInterceptor m =
+        new MetadataContextRequestInterceptor(Set.of("tenant-id", "processes"));
     var headers = new MultivaluedStringMap();
     headers.put("tenant-id", List.of("t1"));
     headers.put("other-header", List.of("hello"));
-    metadataContextFilter.filter(requestWithHeaders(headers));
+    m.preHandle(requestWithHeaders(headers), null, null);
 
     assertThat(MetadataContext.current().keys())
         .containsExactlyInAnyOrder("tenant-id", "processes");
@@ -81,8 +85,9 @@ class MetadataContextFilterTest {
   }
 
   @Test
-  void shouldClearAfterRequest() throws IOException {
-    var metadataContextFilter = new MetadataContextFilter(Set.of("tenant-id", "processes"));
+  void shouldClearAfterRequest() throws Exception {
+    MetadataContextRequestInterceptor m =
+        new MetadataContextRequestInterceptor(Set.of("tenant-id", "processes"));
     var before = new DetachedMetadataContext();
     before.put("tenant-id", List.of("t1"));
     MetadataContext.createContext(before);
@@ -90,14 +95,15 @@ class MetadataContextFilterTest {
     // precondition
     assertThat(MetadataContext.current().keys()).containsExactly("tenant-id");
 
-    metadataContextFilter.filter(null, null);
+    m.afterCompletion(mock(HttpServletRequest.class), null, null, null);
 
     assertThat(MetadataContext.current().keys()).isEmpty();
   }
 
-  ContainerRequestContext requestWithHeaders(MultivaluedMap<String, String> headers) {
-    ContainerRequestContext mock = mock(ContainerRequestContext.class);
-    when(mock.getHeaders()).thenReturn(headers);
+  HttpServletRequest requestWithHeaders(MultivaluedMap<String, String> headers) {
+    HttpServletRequest mock = mock(HttpServletRequest.class);
+    headers.forEach(
+        (key, value) -> when(mock.getHeaders(key)).thenReturn(Collections.enumeration(value)));
     return mock;
   }
 }
