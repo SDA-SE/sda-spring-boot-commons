@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.dao.DuplicateKeyException;
 
-@SpringBootTest(classes = MongoTestApp.class, webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(classes = MongoTestApp.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 class MongoDbConfigurationTest {
 
   @Autowired TestEntityRepository testEntityRepository;
