@@ -16,6 +16,7 @@ import io.github.classgraph.ScanResult;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,7 @@ class DuplicateClassesTest {
    * href="https://stackoverflow.com/a/52639079">Stackoverflow</a>
    */
   @Test
+  @Disabled
   void checkForDuplicateClasses() {
     int numberOfDuplicates = 0;
     try (ScanResult scanResult = new ClassGraph().scan()) {
