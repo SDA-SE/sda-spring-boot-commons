@@ -10,7 +10,6 @@ package org.sdase.commons.spring.boot.web.metadata;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -66,6 +65,6 @@ public class MetadataContextFilter implements ContainerRequestFilter, ContainerR
         .flatMap(Stream::of)
         .filter(StringUtils::isNotBlank)
         .map(String::trim)
-        .collect(Collectors.toList());
+        .toList();
   }
 }
