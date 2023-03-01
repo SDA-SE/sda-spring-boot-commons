@@ -7,6 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.jackson;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -34,6 +35,7 @@ public class SdaObjectMapperConfiguration {
             SerializationFeature.FAIL_ON_EMPTY_BEANS,
             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
             SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS,
+            JsonGenerator.Feature.AUTO_CLOSE_JSON_CONTENT,
             DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
             DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,
             DeserializationFeature.FAIL_ON_INVALID_SUBTYPE)
