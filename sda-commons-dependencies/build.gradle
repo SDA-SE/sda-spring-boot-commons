@@ -10,13 +10,15 @@ ext {
   awaitalityVersion = '4.2.0'
   logbackContribVersion = '0.1.5'
   springBootVersion = '2.7.9'
-  springCloudVersion = '2021.0.5'
+  springCloudVersion = '2021.0.6'
   scalaVersion = '2.13.10'
 }
 
 dependencies {
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
+    exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8'
+  }
 
   constraints {
     api 'org.apache.commons:commons-lang3:3.12.0'
@@ -42,6 +44,7 @@ dependencies {
 
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:9.31'
+    api 'com.github.tomakehurst:wiremock-jre8:2.35.0'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
