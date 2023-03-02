@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "sda.kafka.consumer")
-public record KafkaConsumerConfig(@NotNull RetryConfig retry) {
+public record KafkaConsumerConfig(@NotNull RetryConfig retry, @NotNull Integer concurrency) {
   public record RetryConfig(
       @NotNull Integer maxRetries,
       @NotNull Long initialBackoffInterval,

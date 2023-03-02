@@ -9,12 +9,13 @@ Based on:
 
 ##  Configuration
 
-| **Property**                                            | **Description**                                   | **Default** | **Example** | **Env**                                              |
-|---------------------------------------------------------|---------------------------------------------------|-------------|-------------|------------------------------------------------------|
-| `sda.kafka.consumer.retry.initialBackOffInterval` _int_ | The initial backoff of the retry in ms            | `1000`      | `1500`      | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
-| `sda.kafka.consumer.retry.maxBackOffInterval` _int_     | The max backoff interval  in ms                   | `4000`      | `5000`      | `SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVALL`     |
-| `sda.kafka.consumer.retry.backOffMultiplier` _int_      | The multiplier beginning with the initial backoff | `2`         | `1.5`       | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
-| `sda.kafka.consumer.retry.maxRetries` _int_             | Max retries consuming the offset                  | `4`         | `10`        | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
+| **Property**                                            | **Description**                                    | **Default** | **Example** | **Env**                                             |
+|---------------------------------------------------------|----------------------------------------------------|-------------|-------------|-----------------------------------------------------|
+| `sda.kafka.consumer.retry.initialBackOffInterval` _int_ | The initial backoff of the retry in ms             | `1000`      | `1500`      | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVAL` |
+| `sda.kafka.consumer.retry.maxBackOffInterval` _int_     | The max backoff interval  in ms                    | `4000`      | `5000`      | `SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVAL`     |
+| `sda.kafka.consumer.retry.backOffMultiplier` _int_      | The multiplier beginning with the initial backoff  | `2`         | `1.5`       | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVAL` |
+| `sda.kafka.consumer.retry.maxRetries` _int_             | Max retries consuming the offset                   | `4`         | `10`        | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVAL` |
+| `sda.kafka.consumer.concurrency` _int_                  | Number of threads consuming records from the topic | `1`         | `3`         | `SDA_KAFKA_CONSUMER_CONCURRENCY`                    |
 
 For further information have a look to the Spring Kafka [reference documentation](https://docs.spring.io/spring-kafka/reference/html/).
 
