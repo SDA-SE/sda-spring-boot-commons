@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.assertj.core.api.AbstractAssert;
@@ -58,6 +59,8 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
    * <p>Use this assertion if you want to conveniently store the latest copy of a file in your
    * repository, and let the CI fail if an update has not been committed.
    *
+   * <p>The file is read and compared using {@link StandardCharsets#UTF_8}.
+   *
    * <p>Examples:
    *
    * <pre><code class="java">
@@ -92,6 +95,7 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
       // assert normal text
       Assertions.assertThat(actual)
           .as(ASSERTION_TEXT, fileName, fileName, fileName)
+          .usingCharset(StandardCharsets.UTF_8)
           .hasContent(expected);
 
     } finally {
