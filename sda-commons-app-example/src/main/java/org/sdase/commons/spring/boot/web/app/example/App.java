@@ -7,13 +7,28 @@
  */
 package org.sdase.commons.spring.boot.web.app.example;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
+@RestController
 public class App {
 
   public static void main(String[] args) {
     SpringApplication.run(App.class, args);
+  }
+
+  @GetMapping("myResource")
+  @ApiResponse(
+      description = "A successful response",
+      content = @Content(schema = @Schema(implementation = MyResource.class)),
+      responseCode = "200")
+  public MyResource getMyResource() {
+    return new MyResource().setValue("the value");
   }
 }

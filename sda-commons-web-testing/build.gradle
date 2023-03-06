@@ -36,6 +36,9 @@ dependencies {
   api 'org.eclipse.jetty.http2:http2-hpack'
   api 'net.minidev:json-smart'
 
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
+    exclude group: 'org.junit'
+  }
   implementation 'com.fasterxml.jackson.core:jackson-databind'
   implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
   implementation 'com.nimbusds:nimbus-jose-jwt'

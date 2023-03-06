@@ -11,6 +11,8 @@ repositories {
 dependencies {
   implementation project(':sda-commons-starter-web')
   implementation project(':sda-commons-starter-mongodb')
+
+  testImplementation project(':sda-commons-web-testing')
 }
 
 test {

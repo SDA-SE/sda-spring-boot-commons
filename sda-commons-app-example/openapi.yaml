@@ -1,0 +1,26 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+paths:
+  /myResource:
+    get:
+      tags:
+      - app
+      operationId: getMyResource
+      responses:
+        "200":
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MyResource'
+components:
+  schemas:
+    MyResource:
+      type: object
+      properties:
+        value:
+          type: string
+          description: A value
+      description: A resource
