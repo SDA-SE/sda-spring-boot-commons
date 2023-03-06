@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.assertj.core.api.AbstractAssert;
@@ -97,7 +96,7 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
 
     } finally {
       // always update the file content
-      Files.write(actual, expected.getBytes(StandardCharsets.UTF_8));
+      Files.writeString(actual, expected);
     }
 
     return this;
@@ -150,7 +149,7 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
           .isEqualTo(objectMapper.readTree(expected));
     } finally {
       // always update the file content
-      Files.write(actual, expected.getBytes(StandardCharsets.UTF_8));
+      Files.writeString(actual, expected);
     }
 
     return this;
