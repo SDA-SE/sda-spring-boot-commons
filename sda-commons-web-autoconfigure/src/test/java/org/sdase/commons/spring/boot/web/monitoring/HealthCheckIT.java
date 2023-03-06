@@ -91,7 +91,7 @@ class HealthCheckIT {
         .isEqualTo("502 Bad gateway");
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "[{index}] OpaResponse")
   @MethodSource("getInvalidOpaResponses")
   void shouldReturnOpaHealthCheckInvalidResponse(OpaResponse opaResponse) {
     when(opaRestTemplate.getForObject(anyString(), eq(OpaResponse.class))).thenReturn(opaResponse);
