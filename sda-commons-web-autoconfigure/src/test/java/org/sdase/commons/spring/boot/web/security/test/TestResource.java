@@ -10,7 +10,8 @@ package org.sdase.commons.spring.boot.web.security.test;
 import javax.validation.constraints.NotNull;
 
 public class TestResource {
-  @NotNull private String value;
+  @NotNull(message = "must not be null")
+  private String value;
 
   @NumericString(message = "postCode should be numeric")
   private String postcode;
