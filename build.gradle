@@ -305,12 +305,17 @@ task testReport(type: TestReport) {
 }
 
 // Create a combined XML report of all modules in the root project
-task codeCoverageReport(type: JacocoReport) {
+task codeCoverageReport(type: JacocoReport, dependsOn: [
+  testReport,
+  spotlessGroovyGradle
+]) {
   executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
   subprojects.findAll { !unpublishedModules.contains(it.name) }.each {
     // noinspection GroovyAssignabilityCheck
     sourceSets it.sourceSets.main
+    codeCoverageReport.dependsOn("${it.path}:spotlessJava")
+    codeCoverageReport.dependsOn("${it.path}:spotlessGroovyGradle")
   }
 
   reports {
