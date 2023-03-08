@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeaders;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
@@ -44,6 +45,11 @@ class KafkaMetadataContextConsumerIntegrationTest {
   @Value("${app.kafka.consumer.metadata.topic}")
   private String topic;
 
+  @BeforeEach
+  void clearCollectedContext() {
+    metadataCollector.clearLastCollectedContext();
+  }
+
   @Test
   void shouldCreateMetadataContextFromRecord() {
     kafkaMetadataTemplate.send(
@@ -54,9 +60,9 @@ class KafkaMetadataContextConsumerIntegrationTest {
             new KafkaTestModel().setCheckInt(1).setCheckString("CHECK"),
             new RecordHeaders().add("tenant-id", "t-1".getBytes())));
 
-    await().untilAsserted(() -> assertThat(metadataCollector.getCurrentContext()).isNotNull());
+    await().untilAsserted(() -> assertThat(metadataCollector.getLastCollectedContext()).isNotNull());
 
-    assertThat(metadataCollector.getCurrentContext()).containsEntry("tenant-id", List.of("t-1"));
+    assertThat(metadataCollector.getLastCollectedContext()).containsEntry("tenant-id", List.of("t-1"));
   }
 
   @Test
@@ -69,7 +75,7 @@ class KafkaMetadataContextConsumerIntegrationTest {
             new KafkaTestModel().setCheckInt(1).setCheckString("CHECK"),
             new RecordHeaders().add("tenant-id", "t-1".getBytes())));
 
-    await().untilAsserted(() -> assertThat(metadataCollector.getCurrentContext()).isNotNull());
+    await().untilAsserted(() -> assertThat(metadataCollector.getLastCollectedContext()).isNotNull());
 
     assertThat(MetadataContext.detachedCurrent()).isEmpty();
   }

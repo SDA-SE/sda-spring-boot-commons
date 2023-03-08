@@ -57,7 +57,7 @@ public class KafkaTestListener {
       topics = "${app.kafka.consumer.metadata.topic}",
       containerFactory = SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
   public void consumeMetadata(@Payload @Valid KafkaTestModel kafkaTestModel) {
-    metadataCollector.setCurrentContext(MetadataContext.detachedCurrent());
+    metadataCollector.setLastCollectedContext(MetadataContext.detachedCurrent());
   }
 
   @Component

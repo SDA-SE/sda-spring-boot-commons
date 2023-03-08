@@ -13,17 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetadataCollector {
 
-  private DetachedMetadataContext currentContext = null;
+  private DetachedMetadataContext lastCollectedContext = null;
 
-  public void setCurrentContext(DetachedMetadataContext context) {
-    currentContext = context;
+  public DetachedMetadataContext getLastCollectedContext() {
+    return lastCollectedContext;
   }
 
-  public DetachedMetadataContext getCurrentContext() {
-    return currentContext;
+  public MetadataCollector setLastCollectedContext(DetachedMetadataContext lastCollectedContext) {
+    this.lastCollectedContext = lastCollectedContext;
+    return this;
   }
 
-  public void clearCurrentContext() {
-    currentContext = null;
+  public void clearLastCollectedContext() {
+    lastCollectedContext = null;
   }
 }
