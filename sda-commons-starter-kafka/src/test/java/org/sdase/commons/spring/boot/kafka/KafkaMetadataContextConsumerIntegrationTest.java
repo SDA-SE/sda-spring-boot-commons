@@ -60,7 +60,7 @@ class KafkaMetadataContextConsumerIntegrationTest {
   }
 
   @Test
-  void shouldCleatMetadataContextAfterHandlingMessage() {
+  void shouldClearMetadataContextAfterHandlingMessage() {
     kafkaMetadataTemplate.send(
         new ProducerRecord<>(
             topic,
