@@ -60,9 +60,11 @@ class KafkaMetadataContextConsumerIntegrationTest {
             new KafkaTestModel().setCheckInt(1).setCheckString("CHECK"),
             new RecordHeaders().add("tenant-id", "t-1".getBytes())));
 
-    await().untilAsserted(() -> assertThat(metadataCollector.getLastCollectedContext()).isNotNull());
+    await()
+        .untilAsserted(() -> assertThat(metadataCollector.getLastCollectedContext()).isNotNull());
 
-    assertThat(metadataCollector.getLastCollectedContext()).containsEntry("tenant-id", List.of("t-1"));
+    assertThat(metadataCollector.getLastCollectedContext())
+        .containsEntry("tenant-id", List.of("t-1"));
   }
 
   @Test
@@ -75,7 +77,8 @@ class KafkaMetadataContextConsumerIntegrationTest {
             new KafkaTestModel().setCheckInt(1).setCheckString("CHECK"),
             new RecordHeaders().add("tenant-id", "t-1".getBytes())));
 
-    await().untilAsserted(() -> assertThat(metadataCollector.getLastCollectedContext()).isNotNull());
+    await()
+        .untilAsserted(() -> assertThat(metadataCollector.getLastCollectedContext()).isNotNull());
 
     assertThat(MetadataContext.detachedCurrent()).isEmpty();
   }

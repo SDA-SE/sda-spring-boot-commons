@@ -26,12 +26,6 @@ public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor
   private MetadataContextCloseable metadataContextCloseable;
 
   @Override
-  public ConsumerRecord<K, V> intercept(ConsumerRecord consumerRecord, Consumer consumer) {
-    metadataContextCloseable = createMetadataContext(consumerRecord);
-    return consumerRecord;
-  }
-
-  @Override
   public ConsumerRecord<K, V> intercept(ConsumerRecord consumerRecord) {
     metadataContextCloseable = createMetadataContext(consumerRecord);
     return consumerRecord;
