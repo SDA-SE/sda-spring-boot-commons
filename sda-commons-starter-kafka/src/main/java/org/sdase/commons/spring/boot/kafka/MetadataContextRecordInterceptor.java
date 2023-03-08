@@ -17,26 +17,24 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
 import org.sdase.commons.spring.boot.web.metadata.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.web.metadata.MetadataContext;
-import org.sdase.commons.spring.boot.web.metadata.MetadataContextCloseable;
 import org.springframework.kafka.listener.RecordInterceptor;
 
 public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor<K, V> {
 
   private final Set<String> metadataFields = MetadataContext.metadataFields();
-  private MetadataContextCloseable metadataContextCloseable;
 
   @Override
   public ConsumerRecord<K, V> intercept(ConsumerRecord consumerRecord) {
-    metadataContextCloseable = createMetadataContext(consumerRecord);
+    MetadataContext.createContext(createMetadataContext(consumerRecord));
     return consumerRecord;
   }
 
   @Override
   public void afterRecord(ConsumerRecord consumerRecord, Consumer consumer) {
-    metadataContextCloseable.close();
+    MetadataContext.createContext(new DetachedMetadataContext());
   }
 
-  private MetadataContextCloseable createMetadataContext(ConsumerRecord consumerRecord) {
+  private DetachedMetadataContext createMetadataContext(ConsumerRecord consumerRecord) {
     var newContext = new DetachedMetadataContext();
     var headers = consumerRecord.headers();
     for (var field : metadataFields) {
@@ -49,6 +47,6 @@ public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor
               .toList();
       newContext.put(field, values);
     }
-    return MetadataContext.createCloseableContext(newContext);
+    return newContext;
   }
 }
