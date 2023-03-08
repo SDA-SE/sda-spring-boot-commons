@@ -7,40 +7,46 @@
  */
 package org.sdase.commons.spring.boot.web.metadata;
 
-import java.io.IOException;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import java.util.List;
 import java.util.Set;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * A {@link ClientRequestFilter} to submit the {@link MetadataContext} to other services that are
- * called synchronously.
+ * Sets configured metadata fields to request headers. These headers will be passed to subsequents
+ * requests
  */
-public class MetadataContextClientRequestFilter implements ClientRequestFilter {
+public class MetadataContextClientInterceptor implements RequestInterceptor {
 
   private final Set<String> metadataFields;
 
-  public MetadataContextClientRequestFilter(Set<String> metadataFields) {
+  public MetadataContextClientInterceptor(Set<String> metadataFields) {
     this.metadataFields = metadataFields;
   }
 
+  /**
+   * Applies the configured metadata fields to the request headers of the {@link RequestTemplate}
+   * parameter
+   *
+   * @param template Feign {@link RequestTemplate}
+   */
   @Override
-  public void filter(ClientRequestContext requestContext) throws IOException {
+  public void apply(RequestTemplate template) {
     if (!metadataFields.isEmpty()) {
       MetadataContext metadataContext = MetadataContext.current();
-      var headers = requestContext.getHeaders();
+
       for (String metadataField : metadataFields) {
         List<String> valuesByKey = metadataContext.valuesByKey(metadataField);
         if (valuesByKey == null) {
           continue;
         }
+
         valuesByKey.stream()
             .filter(StringUtils::isNotBlank)
             .map(String::trim)
             .distinct()
-            .forEach(v -> headers.add(metadataField, v));
+            .forEach(v -> template.header(metadataField, v));
       }
     }
   }
