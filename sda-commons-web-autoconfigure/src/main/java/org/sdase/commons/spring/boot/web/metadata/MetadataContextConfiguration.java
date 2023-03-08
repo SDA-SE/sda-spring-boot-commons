@@ -9,17 +9,20 @@ package org.sdase.commons.spring.boot.web.metadata;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfiguration
-public class MetadataContextConfiguration {
+public class MetadataContextConfiguration implements WebMvcConfigurer {
 
   @Bean
-  public MetadataContextClientRequestFilter metadataContextClientRequestFilter() {
-    return new MetadataContextClientRequestFilter(MetadataContext.metadataFields());
+  public HandlerInterceptor metadataContextRequestInterceptor() {
+    return new MetadataContextRequestInterceptor(MetadataContext.metadataFields());
   }
 
-  @Bean
-  public MetadataContextFilter metadataContextFilter() {
-    return new MetadataContextFilter(MetadataContext.metadataFields());
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(metadataContextRequestInterceptor());
   }
 }
