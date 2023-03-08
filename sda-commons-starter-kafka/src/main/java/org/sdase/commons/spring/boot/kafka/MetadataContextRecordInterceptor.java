@@ -20,32 +20,31 @@ import org.sdase.commons.spring.boot.web.metadata.MetadataContext;
 import org.sdase.commons.spring.boot.web.metadata.MetadataContextCloseable;
 import org.springframework.kafka.listener.RecordInterceptor;
 
-@SuppressWarnings("java:S6213") // Suppress warnings for restricted identifiers
-public class MetadataContextRecordInterceptor implements RecordInterceptor {
+public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor<K, V> {
 
   private final Set<String> metadataFields = MetadataContext.metadataFields();
   private MetadataContextCloseable metadataContextCloseable;
 
   @Override
-  public ConsumerRecord<String, Object> intercept(ConsumerRecord record, Consumer consumer) {
-    metadataContextCloseable = createMetadataContext(record);
-    return record;
+  public ConsumerRecord<K, V> intercept(ConsumerRecord consumerRecord, Consumer consumer) {
+    metadataContextCloseable = createMetadataContext(consumerRecord);
+    return consumerRecord;
   }
 
   @Override
-  public ConsumerRecord intercept(ConsumerRecord record) {
-    metadataContextCloseable = createMetadataContext(record);
-    return record;
+  public ConsumerRecord<K, V> intercept(ConsumerRecord consumerRecord) {
+    metadataContextCloseable = createMetadataContext(consumerRecord);
+    return consumerRecord;
   }
 
   @Override
-  public void afterRecord(ConsumerRecord record, Consumer consumer) {
+  public void afterRecord(ConsumerRecord consumerRecord, Consumer consumer) {
     metadataContextCloseable.close();
   }
 
-  private MetadataContextCloseable createMetadataContext(ConsumerRecord record) {
+  private MetadataContextCloseable createMetadataContext(ConsumerRecord consumerRecord) {
     var newContext = new DetachedMetadataContext();
-    var headers = record.headers();
+    var headers = consumerRecord.headers();
     for (var field : metadataFields) {
       var values =
           StreamSupport.stream(headers.headers(field).spliterator(), false)

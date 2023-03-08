@@ -18,14 +18,13 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.sdase.commons.spring.boot.web.metadata.MetadataContext;
 
-@SuppressWarnings("java:S6213") // Suppress warnings for restricted identifiers
-public class MetadataContextProducerInterceptor implements ProducerInterceptor {
+public class MetadataContextProducerInterceptor<K, V> implements ProducerInterceptor<K, V> {
 
   private Set<String> metadataFields;
 
   @Override
-  public ProducerRecord onSend(ProducerRecord record) {
-    var headers = new RecordHeaders(record.headers());
+  public ProducerRecord<K, V> onSend(ProducerRecord<K, V> producerRecord) {
+    var headers = new RecordHeaders(producerRecord.headers());
     MetadataContext metadataContext = MetadataContext.current();
     for (String metadataField : metadataFields) {
       List<String> valuesByKey = metadataContext.valuesByKey(metadataField);
@@ -41,11 +40,11 @@ public class MetadataContextProducerInterceptor implements ProducerInterceptor {
     }
 
     return new ProducerRecord<>(
-        record.topic(),
-        record.partition(),
-        record.timestamp(),
-        record.key(),
-        record.value(),
+        producerRecord.topic(),
+        producerRecord.partition(),
+        producerRecord.timestamp(),
+        producerRecord.key(),
+        producerRecord.value(),
         headers);
   }
 
