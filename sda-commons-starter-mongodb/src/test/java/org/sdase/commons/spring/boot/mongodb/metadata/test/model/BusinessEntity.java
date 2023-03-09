@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.mongodb.metadata.test.model;
 
-import org.sdase.commons.spring.boot.web.metadata.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
