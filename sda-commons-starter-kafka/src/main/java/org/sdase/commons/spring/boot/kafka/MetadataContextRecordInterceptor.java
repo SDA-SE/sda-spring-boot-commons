@@ -15,8 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
-import org.sdase.commons.spring.boot.web.metadata.DetachedMetadataContext;
-import org.sdase.commons.spring.boot.web.metadata.MetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.springframework.kafka.listener.RecordInterceptor;
 
 public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor<K, V> {

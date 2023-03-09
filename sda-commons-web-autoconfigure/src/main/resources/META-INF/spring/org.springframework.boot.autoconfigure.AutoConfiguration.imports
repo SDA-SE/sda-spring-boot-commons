@@ -11,4 +11,3 @@ org.sdase.commons.spring.boot.web.monitoring.SdaMonitoringConfiguration
 org.sdase.commons.spring.boot.web.monitoring.SdaTracingConfiguration
 org.sdase.commons.spring.boot.web.tracing.TraceTokenConfiguration
 org.sdase.commons.spring.boot.web.security.SdaWebSecurityConfiguration
-org.sdase.commons.spring.boot.web.metadata.MetadataContextConfiguration

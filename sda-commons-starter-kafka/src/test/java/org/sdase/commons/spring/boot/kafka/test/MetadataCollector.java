@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.kafka.test;
 
-import org.sdase.commons.spring.boot.web.metadata.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.springframework.stereotype.Component;
 
 @Component

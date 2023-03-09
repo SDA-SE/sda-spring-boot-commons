@@ -3,7 +3,7 @@ dependencies {
   api 'com.fasterxml.jackson.core:jackson-databind'
   api 'org.springframework.boot:spring-boot-starter-validation'
   api 'org.springframework.kafka:spring-kafka'
-  api project(":sda-commons-web-autoconfigure")
+  api project(":sda-commons-metadata-context")
 
   testImplementation 'org.springframework.boot:spring-boot-starter-web'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -23,7 +23,7 @@ import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
 import org.sdase.commons.spring.boot.kafka.test.MetadataCollector;
-import org.sdase.commons.spring.boot.web.metadata.MetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;

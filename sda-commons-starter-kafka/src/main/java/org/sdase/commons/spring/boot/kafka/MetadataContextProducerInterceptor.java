@@ -16,7 +16,7 @@ import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.header.internals.RecordHeaders;
-import org.sdase.commons.spring.boot.web.metadata.MetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 
 public class MetadataContextProducerInterceptor<K, V> implements ProducerInterceptor<K, V> {
 
