@@ -136,6 +136,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     // Please note that ConversionExceptions like mapping exception won't be retried and directly
     // logged to error. We may add some specific handling like DeadLetter topics etc.
     factory.setCommonErrorHandler(errorHandler);
+    factory.setRecordInterceptor(new MetadataContextRecordInterceptor());
     return factory;
   }
 }

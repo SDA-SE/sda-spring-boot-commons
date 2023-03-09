@@ -29,6 +29,16 @@ public class SdaKafkaProducerConfiguration {
   }
 
   @Bean
+  public KafkaTemplate<String, ?> kafkaMetadataTemplate( // NOSONAR
+      ProducerFactory<String, ?> producerFactory) {
+    Map<String, Object> props = new HashMap<>();
+    props.put(
+        ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
+        MetadataContextProducerInterceptor.class.getName());
+    return new KafkaTemplate<>(producerFactory, props);
+  }
+
+  @Bean
   public KafkaTemplate<Object, Object> kafkaDltTemplate( // NOSONAR
       ProducerFactory<Object, Object> producerFactory) {
     Map<String, Object> props = new HashMap<>();

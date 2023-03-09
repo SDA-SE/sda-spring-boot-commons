@@ -117,7 +117,7 @@ spring.kafka.producer.value-serializer=org.springframework.kafka.support.seriali
 
 #### Consumers
 
-* `spring.kafka.consuner.group-id` _string_
+* `spring.kafka.consumer.group-id` _string_
   * Consumer group name of Kafka Consumer
   * Example: `myConsumer`
   * Default: `default`
