@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
-import org.sdase.commons.spring.boot.metadata.context.MetadataContextHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -46,7 +45,7 @@ public class MetadataContextRequestInterceptor implements HandlerInterceptor {
   public boolean preHandle(
       HttpServletRequest request, HttpServletResponse response, Object handler) {
     var metadataContext = buildContext(request);
-    MetadataContextHolder.set(metadataContext.toMetadataContext());
+    MetadataContext.createContext(metadataContext);
     return true;
   }
 
@@ -63,7 +62,7 @@ public class MetadataContextRequestInterceptor implements HandlerInterceptor {
   @Override
   public void afterCompletion(
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-    MetadataContextHolder.clear();
+    MetadataContext.createContext(new DetachedMetadataContext());
   }
 
   private DetachedMetadataContext buildContext(HttpServletRequest request) {

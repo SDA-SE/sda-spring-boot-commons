@@ -22,13 +22,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
-import org.sdase.commons.spring.boot.metadata.context.MetadataContextHolder;
 
 class MetadataContextRequestInterceptorTest {
 
   @BeforeEach
   void clear() {
-    MetadataContextHolder.clear();
+    MetadataContext.createContext(new DetachedMetadataContext());
   }
 
   @Test
