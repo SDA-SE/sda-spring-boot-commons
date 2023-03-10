@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -15,6 +15,9 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContextHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 

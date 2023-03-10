@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.metadata.context;
 
-class MetadataContextHolder {
+public class MetadataContextHolder {
 
   private static final ThreadLocal<MetadataContext> METADATA_CONTEXT = new ThreadLocal<>();
 
@@ -15,15 +15,15 @@ class MetadataContextHolder {
     // only static methods to handle ThreadLocal
   }
 
-  static MetadataContext get() {
+  public static MetadataContext get() {
     return getInternal();
   }
 
-  static void set(MetadataContext metadataContext) {
+  public static void set(MetadataContext metadataContext) {
     METADATA_CONTEXT.set(metadataContext);
   }
 
-  static void clear() {
+  public static void clear() {
     METADATA_CONTEXT.remove();
   }
 

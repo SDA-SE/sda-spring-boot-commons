@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContextHolder;
 
 class MetadataContextClientInterceptorTest {
 

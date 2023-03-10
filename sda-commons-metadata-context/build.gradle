@@ -1,15 +1,8 @@
 dependencies {
-  api 'org.springframework.cloud:spring-cloud-starter-openfeign'
-  api 'org.springframework.boot:spring-boot-starter-web'
   api 'org.apache.commons:commons-lang3'
-  api 'javax.ws.rs:javax.ws.rs-api'
-  api 'org.glassfish.jersey.core:jersey-common', {
-    exclude group: 'jakarta.ws.rs', module: 'jakarta.ws.rs-api'
-  }
 
   // overall testing dependencies
-  testImplementation project(':sda-commons-web-testing')
-  testImplementation project(':sda-commons-web-autoconfigure')
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
     exclude group: 'org.junit'
   }

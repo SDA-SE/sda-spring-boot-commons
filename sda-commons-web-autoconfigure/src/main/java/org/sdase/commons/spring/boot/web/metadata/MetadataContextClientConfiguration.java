@@ -5,9 +5,10 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import feign.RequestInterceptor;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.springframework.context.annotation.Bean;
 
 public class MetadataContextClientConfiguration {
