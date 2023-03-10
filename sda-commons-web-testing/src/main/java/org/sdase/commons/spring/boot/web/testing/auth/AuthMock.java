@@ -106,7 +106,7 @@ public class AuthMock {
                                 String.format("%s%s", server.baseUrl(), TOKEN_PATH),
                                 "subject_types_supported",
                                 List.of("public", "pairwise"))))
-                    .withHeader("Content-Type", "application/json"))
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
             .build());
   }
 
@@ -117,7 +117,7 @@ public class AuthMock {
                 WireMock.aResponse()
                     .withStatus(200)
                     .withBody(Json.write(Map.of("keys", List.of(keyPair.getPublicKeyForJwks()))))
-                    .withHeader("Content-Type", "application/json"))
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
             .build());
   }
 
@@ -142,7 +142,7 @@ public class AuthMock {
                                 "Bearer",
                                 "expires_in",
                                 3600)))
-                    .withHeader("Content-Type", "application/json"))
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
             .build());
   }
 
