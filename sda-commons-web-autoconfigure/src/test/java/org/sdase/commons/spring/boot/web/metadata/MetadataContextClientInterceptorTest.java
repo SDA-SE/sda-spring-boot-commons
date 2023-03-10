@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
-import org.sdase.commons.spring.boot.metadata.context.MetadataContextHolder;
 
 class MetadataContextClientInterceptorTest {
 
@@ -40,7 +39,7 @@ class MetadataContextClientInterceptorTest {
     givenClientRequestContext = mock(HttpServletRequest.class);
     when(givenClientRequestContext.getHeaders(Mockito.anyString())).thenReturn(actualHeaders);
 
-    MetadataContextHolder.clear();
+    MetadataContext.createContext(new DetachedMetadataContext());
   }
 
   @Test
