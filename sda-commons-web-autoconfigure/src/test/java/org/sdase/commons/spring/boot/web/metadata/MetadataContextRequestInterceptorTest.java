@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -16,15 +16,18 @@ import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedMap;
+import org.assertj.core.api.Assertions;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 
 class MetadataContextRequestInterceptorTest {
 
   @BeforeEach
   void clear() {
-    MetadataContextHolder.clear();
+    MetadataContext.createContext(new DetachedMetadataContext());
   }
 
   @Test
@@ -37,7 +40,7 @@ class MetadataContextRequestInterceptorTest {
     headers.put("other-header", List.of("hello"));
     m.preHandle(requestWithHeaders(headers), null, null);
 
-    assertThat(MetadataContext.current().keys())
+    Assertions.assertThat(MetadataContext.current().keys())
         .containsExactlyInAnyOrder("tenant-id", "processes");
     assertThat(MetadataContext.current().valuesByKey("tenant-id")).containsExactly("t1");
     assertThat(MetadataContext.current().valuesByKey("processes")).containsExactly("p1", "p2");
@@ -85,7 +88,7 @@ class MetadataContextRequestInterceptorTest {
   }
 
   @Test
-  void shouldClearAfterRequest() throws Exception {
+  void shouldClearAfterRequest() {
     MetadataContextRequestInterceptor m =
         new MetadataContextRequestInterceptor(Set.of("tenant-id", "processes"));
     var before = new DetachedMetadataContext();

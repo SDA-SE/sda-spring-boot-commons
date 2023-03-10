@@ -3,5 +3,6 @@ dependencies {
   api 'org.springframework.boot:spring-boot-starter-data-mongodb'
   testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation project(":sda-commons-web-testing")
   testImplementation project(":sda-commons-metadata-context")
 }

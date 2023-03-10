@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import org.sdase.commons.spring.boot.web.client.AuthenticationPassThroughClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;

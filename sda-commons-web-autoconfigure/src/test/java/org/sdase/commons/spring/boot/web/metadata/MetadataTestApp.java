@@ -5,13 +5,13 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication(scanBasePackages = "org.sdase.commons.spring.boot.metadata.context")
+@SpringBootApplication(scanBasePackages = "org.sdase.commons.spring.boot.web.metadata")
 @EnableFeignClients
 public class MetadataTestApp {
 

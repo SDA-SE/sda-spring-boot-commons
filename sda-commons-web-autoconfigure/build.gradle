@@ -33,6 +33,8 @@ dependencies {
     exclude group: 'jakarta.ws.rs', module: 'jakarta.ws.rs-api'
   }
 
+  api project(':sda-commons-metadata-context')
+
   testImplementation project(':sda-commons-web-testing')
   testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
     exclude group: 'org.junit'
