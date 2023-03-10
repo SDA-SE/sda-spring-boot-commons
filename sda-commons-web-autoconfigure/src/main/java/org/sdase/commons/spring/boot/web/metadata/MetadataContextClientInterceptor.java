@@ -5,13 +5,14 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 
 /**
  * Sets configured metadata fields to request headers. These headers will be passed to subsequents

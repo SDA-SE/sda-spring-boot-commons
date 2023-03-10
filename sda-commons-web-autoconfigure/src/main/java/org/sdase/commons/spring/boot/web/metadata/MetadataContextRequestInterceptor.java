@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.metadata.context;
+package org.sdase.commons.spring.boot.web.metadata;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -42,8 +44,7 @@ public class MetadataContextRequestInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(
       HttpServletRequest request, HttpServletResponse response, Object handler) {
-    var metadataContext = buildContext(request);
-    MetadataContextHolder.set(metadataContext.toMetadataContext());
+    MetadataContext.createContext(buildContext(request));
     return true;
   }
 
@@ -60,7 +61,7 @@ public class MetadataContextRequestInterceptor implements HandlerInterceptor {
   @Override
   public void afterCompletion(
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-    MetadataContextHolder.clear();
+    MetadataContext.createContext(new DetachedMetadataContext());
   }
 
   private DetachedMetadataContext buildContext(HttpServletRequest request) {

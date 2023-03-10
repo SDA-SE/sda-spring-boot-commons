@@ -1,3 +1,4 @@
+org.sdase.commons.spring.boot.web.metadata.MetadataContextConfiguration
 org.sdase.commons.spring.boot.web.SdaSpringConfiguration
 org.sdase.commons.spring.boot.web.async.SdaAsyncConfiguration
 org.sdase.commons.spring.boot.web.auth.SdaSecurityConfiguration
