@@ -14,13 +14,16 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
+import org.sdase.commons.spring.boot.web.metadata.test.MetadataTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -97,5 +100,27 @@ class MetadataContextRestTest {
     WireMock.verify(
         WireMock.getRequestedFor(WireMock.urlPathEqualTo("/api/metadata-hello"))
             .withoutHeader("tenant-id"));
+  }
+
+  @Test
+  void submitMetadataContextInPlatformAsyncClient() throws Exception {
+    stubFor(
+        get("/api/metadata-auth-hello")
+            .withHeader("tenant-id", equalTo("t-1"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.put("tenant-id", List.of("t-1"));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.request(HttpMethod.GET, "/metadataAuthProxyAsync")
+                .headers(httpHeaders)
+                .accept(APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk());
+
+    WireMock.verify(
+        100,
+        WireMock.getRequestedFor(WireMock.urlPathEqualTo("/api/metadata-auth-hello"))
+            .withHeader("tenant-id", WireMock.equalTo("t-1")));
   }
 }

@@ -7,6 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.async;
 
+import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskDecorator;
@@ -25,30 +27,31 @@ public class ContextCopyTaskDecorator implements TaskDecorator {
   @Override
   public Runnable decorate(Runnable runnable) {
     try {
-      return new ContextAwareRunnable(runnable, RequestContextHolder.currentRequestAttributes());
+      return new ContextAwareRunnable(
+          runnable,
+          RequestContextHolder.currentRequestAttributes(),
+          MetadataContext.detachedCurrent());
     } catch (IllegalStateException e) {
       LOG.debug("Not transferring request attributes. Not in a request context?");
       return runnable;
     }
   }
 
-  private static class ContextAwareRunnable implements Runnable {
-
-    private final Runnable task;
-    private final RequestAttributes requestAttributes;
-
-    public ContextAwareRunnable(Runnable task, RequestAttributes requestAttributes) {
-      this.task = task;
-      this.requestAttributes = requestAttributes;
-    }
+  private record ContextAwareRunnable(
+      Runnable task,
+      RequestAttributes requestAttributes,
+      DetachedMetadataContext detachedMetadataContext)
+      implements Runnable {
 
     @Override
     public void run() {
       RequestContextHolder.setRequestAttributes(requestAttributes);
+      MetadataContext.createContext(detachedMetadataContext);
       try {
         this.task.run();
       } finally {
         RequestContextHolder.resetRequestAttributes();
+        MetadataContext.createContext(new DetachedMetadataContext());
       }
     }
   }
