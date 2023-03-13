@@ -47,7 +47,7 @@ import org.springframework.test.annotation.DirtiesContext;
 @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 class KafkaMetadataContextProducerIntegrationTest {
 
-  @Autowired private KafkaTemplate<String, String> kafkaMetadataTemplate;
+  @Autowired private KafkaTemplate<String, String> kafkaTemplate;
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
 
   @Value("${app.kafka.producer.topic}")
@@ -79,7 +79,7 @@ class KafkaMetadataContextProducerIntegrationTest {
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
 
-    kafkaMetadataTemplate.send(topic, "key", "value");
+    kafkaTemplate.send(topic, "key", "value");
 
     var lastRecord = getLastRecord(KafkaTestUtils.getRecords(consumer).iterator());
     assertThat(lastRecord.headers())
@@ -102,7 +102,7 @@ class KafkaMetadataContextProducerIntegrationTest {
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
 
-    kafkaMetadataTemplate.send(new ProducerRecord<>(topic, 0, "key", "value", headers));
+    kafkaTemplate.send(new ProducerRecord<>(topic, 0, "key", "value", headers));
 
     var lastRecord = getLastRecord(KafkaTestUtils.getRecords(consumer).iterator());
     assertThat(lastRecord.headers())
@@ -127,7 +127,7 @@ class KafkaMetadataContextProducerIntegrationTest {
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
 
-    kafkaMetadataTemplate.send(new ProducerRecord<>(topic, 0, "key", "value", headers));
+    kafkaTemplate.send(new ProducerRecord<>(topic, 0, "key", "value", headers));
 
     var lastRecord = getLastRecord(KafkaTestUtils.getRecords(consumer).iterator());
     assertThat(lastRecord.headers())
@@ -148,7 +148,7 @@ class KafkaMetadataContextProducerIntegrationTest {
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
 
-    kafkaMetadataTemplate.send(topic, UUID.randomUUID().toString(), "value");
+    kafkaTemplate.send(topic, UUID.randomUUID().toString(), "value");
 
     var lastRecord = getLastRecord(KafkaTestUtils.getRecords(consumer).iterator());
     assertThat(lastRecord.headers())
@@ -171,7 +171,7 @@ class KafkaMetadataContextProducerIntegrationTest {
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
 
-    kafkaMetadataTemplate.send(topic, "key", "value");
+    kafkaTemplate.send(topic, "key", "value");
 
     var lastRecord = getLastRecord(KafkaTestUtils.getRecords(consumer).iterator());
     assertThat(lastRecord.headers())

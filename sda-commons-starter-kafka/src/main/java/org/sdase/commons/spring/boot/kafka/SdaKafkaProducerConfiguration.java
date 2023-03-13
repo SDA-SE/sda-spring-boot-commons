@@ -22,26 +22,21 @@ import org.springframework.kafka.core.ProducerFactory;
 @PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/producer.properties")
 public class SdaKafkaProducerConfiguration {
 
+  private final Map<String, Object> commonProperties =
+      Map.of(
+          ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
+          MetadataContextProducerInterceptor.class.getName());
+
   @Bean
   public KafkaTemplate<String, ?> kafkaTemplate( // NOSONAR
       ProducerFactory<String, ?> producerFactory) {
-    return new KafkaTemplate<>(producerFactory);
-  }
-
-  @Bean
-  public KafkaTemplate<String, ?> kafkaMetadataTemplate( // NOSONAR
-      ProducerFactory<String, ?> producerFactory) {
-    Map<String, Object> props = new HashMap<>();
-    props.put(
-        ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
-        MetadataContextProducerInterceptor.class.getName());
-    return new KafkaTemplate<>(producerFactory, props);
+    return new KafkaTemplate<>(producerFactory, commonProperties);
   }
 
   @Bean
   public KafkaTemplate<Object, Object> kafkaDltTemplate( // NOSONAR
       ProducerFactory<Object, Object> producerFactory) {
-    Map<String, Object> props = new HashMap<>();
+    Map<String, Object> props = new HashMap<>(commonProperties);
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
     return new KafkaTemplate<>(producerFactory, props);

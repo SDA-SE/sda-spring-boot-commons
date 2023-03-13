@@ -40,7 +40,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
     brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
 class KafkaMetadataContextConsumerIntegrationTest {
 
-  @Autowired KafkaTemplate<String, KafkaTestModel> kafkaMetadataTemplate;
+  @Autowired KafkaTemplate<String, KafkaTestModel> kafkaTemplate;
 
   @Autowired MetadataCollector metadataCollector;
 
@@ -54,7 +54,7 @@ class KafkaMetadataContextConsumerIntegrationTest {
 
   @Test
   void shouldCreateMetadataContextFromRecord() {
-    kafkaMetadataTemplate.send(
+    kafkaTemplate.send(
         new ProducerRecord<>(
             topic,
             0,
@@ -71,7 +71,7 @@ class KafkaMetadataContextConsumerIntegrationTest {
 
   @Test
   void shouldClearMetadataContextAfterHandlingMessage() {
-    kafkaMetadataTemplate.send(
+    kafkaTemplate.send(
         new ProducerRecord<>(
             topic,
             0,
@@ -87,7 +87,7 @@ class KafkaMetadataContextConsumerIntegrationTest {
 
   @Test
   void shouldNormalizeReceivedMetadataContext() {
-    kafkaMetadataTemplate.send(
+    kafkaTemplate.send(
         new ProducerRecord<>(
             topic,
             0,
@@ -104,7 +104,7 @@ class KafkaMetadataContextConsumerIntegrationTest {
 
   @Test
   void shouldNotReceiveUnknownFields() {
-    kafkaMetadataTemplate.send(
+    kafkaTemplate.send(
         new ProducerRecord<>(
             topic,
             0,
