@@ -7,6 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
+import static org.sdase.commons.spring.boot.web.tracing.TraceTokenRequestInterceptor.TRACE_TOKEN_HEADER_NAME;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
@@ -21,10 +23,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OpaRequestBuilder {
-
-  /** The header name used to send the request token. */
-  // TODO This needs to be a global constant in a place that is more related to the trace token.
-  private static final String TOKEN_HEADER = "Trace-Token";
 
   private final ObjectMapper objectMapper;
   private final List<OpaInputExtension<?>> opaInputExtensions;
@@ -45,7 +43,7 @@ public class OpaRequestBuilder {
     String jwt = extractJwtIfAuthenticated(request);
     String[] path = extractPathSegments(request);
     String httpMethod = request.getMethod();
-    String traceToken = request.getHeader(TOKEN_HEADER);
+    String traceToken = request.getHeader(TRACE_TOKEN_HEADER_NAME);
     return new OpaInput(jwt, path, httpMethod, traceToken);
   }
 
