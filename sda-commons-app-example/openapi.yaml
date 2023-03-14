@@ -15,6 +15,12 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/MyResource'
+        "404":
+          description: Resource not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
 components:
   schemas:
     MyResource:
@@ -24,3 +30,40 @@ components:
           type: string
           description: A value
       description: A resource
+    ApiError:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The human readable description of the error.
+          example: Request parameters are not valid
+        invalidParams:
+          type: array
+          description: Contains a list of invalid parameters in case of validation
+            errors. Parameters in this case can be for example fields in a Json of
+            the request body or query params.
+          example: []
+          items:
+            $ref: '#/components/schemas/ApiInvalidParam'
+      description: Describes an api error object to transfer error information between
+        server and client.
+    ApiInvalidParam:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The name or path of the invalid field or parameter.
+          example: manufacture
+        reason:
+          type: string
+          description: Gives a hint why the value is not valid. This is the error
+            message of the validation. The reason might be in different language due
+            to internationalization.
+          example: Audi has no Golf GTI model (not found)
+        errorCode:
+          type: string
+          description: "The name of the validation annotation given in uppercase,\
+            \ underscore notation."
+          example: FIELD_CORRELATION_ERROR
+      description: Defines a validation error for a parameter or field.
+      example: []
