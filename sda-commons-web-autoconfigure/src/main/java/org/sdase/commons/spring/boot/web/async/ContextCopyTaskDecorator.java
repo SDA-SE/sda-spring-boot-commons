@@ -26,14 +26,16 @@ public class ContextCopyTaskDecorator implements TaskDecorator {
 
   @Override
   public Runnable decorate(Runnable runnable) {
+    return new ContextAwareRunnable(
+        runnable, currentRequestAttributesOrNull(), MetadataContext.detachedCurrent());
+  }
+
+  private RequestAttributes currentRequestAttributesOrNull() {
     try {
-      return new ContextAwareRunnable(
-          runnable,
-          RequestContextHolder.currentRequestAttributes(),
-          MetadataContext.detachedCurrent());
+      return RequestContextHolder.currentRequestAttributes();
     } catch (IllegalStateException e) {
       LOG.debug("Not transferring request attributes. Not in a request context?");
-      return runnable;
+      return null;
     }
   }
 
@@ -45,7 +47,11 @@ public class ContextCopyTaskDecorator implements TaskDecorator {
 
     @Override
     public void run() {
-      RequestContextHolder.setRequestAttributes(requestAttributes);
+      if (requestAttributes != null) {
+        RequestContextHolder.setRequestAttributes(requestAttributes);
+      } else {
+        RequestContextHolder.resetRequestAttributes();
+      }
       MetadataContext.createContext(detachedMetadataContext);
       try {
         this.task.run();
