@@ -35,7 +35,8 @@ dependencies {
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
-    api 'org.springdoc:springdoc-openapi-ui:1.6.15'
+    api 'org.springdoc:springdoc-openapi-webmvc-core:1.6.15'
+    api 'io.github.classgraph:classgraph:4.8.157'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'io.micrometer:micrometer-registry-prometheus:1.10.5'
     api 'org.yaml:snakeyaml:1.33', {
