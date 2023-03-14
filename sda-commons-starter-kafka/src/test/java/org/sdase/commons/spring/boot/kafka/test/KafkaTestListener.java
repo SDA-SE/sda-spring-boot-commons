@@ -10,6 +10,7 @@ package org.sdase.commons.spring.boot.kafka.test;
 import javax.validation.Valid;
 import org.sdase.commons.spring.boot.kafka.NotRetryableKafkaException;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
+import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,9 +22,11 @@ public class KafkaTestListener {
 
   private static final Logger LOG = LoggerFactory.getLogger(KafkaTestListener.class);
   private final ListenerCheck listenerCheck;
+  private final MetadataCollector metadataCollector;
 
-  public KafkaTestListener(ListenerCheck listenerCheck) {
+  public KafkaTestListener(ListenerCheck listenerCheck, MetadataCollector metadataCollector) {
     this.listenerCheck = listenerCheck;
+    this.metadataCollector = metadataCollector;
   }
 
   @KafkaListener(
@@ -48,6 +51,13 @@ public class KafkaTestListener {
   public void logOnFailure(@Payload @Valid KafkaTestModel kafkaTestModel) {
     listenerCheck.check(kafkaTestModel.getCheckString());
     throwExceptionIfDesired(kafkaTestModel);
+  }
+
+  @KafkaListener(
+      topics = "${app.kafka.consumer.metadata.topic}",
+      containerFactory = SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
+  public void consumeMetadata(@Payload @Valid KafkaTestModel kafkaTestModel) {
+    metadataCollector.setLastCollectedContext(MetadataContext.detachedCurrent());
   }
 
   @Component

@@ -13,6 +13,7 @@ Features:
   - [Tracing](#tracing)
   - [Health Checks](#health-checks--actuator)
   - [Logging](#logging)
+  - [Support for Metadata Context](#metadata-context)
 
 Based on:
   - `org.springframework.boot:spring-boot-starter-web`
@@ -539,3 +540,53 @@ Logs are printed to standard out.
 enables output as JSON for structured logs used in log aggregation tools.
 To enable JSON logging in `application.(properties/yaml)`,
 `logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used. 
+
+## Metadata Context
+If you want to make use of the data in the metadata context, you should read the [dedicated documentation](../../sda-commons-web-autoconfigure/docs/metadata-context.md).
+If your service is required to support the metadata context but is not interested in the data,
+continue here:
+
+Services that use the sda-spring-boot-commons:
+- can access the current [MetadataContext](../../sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java)
+  in their implementation
+- will automatically load the context from incoming HTTP requests into the thread handling the
+  request, if you register [MetadataContextConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
+- will automatically load the context from consumed Kafka messages into the thread handling the
+  message and the error when handling the message fails when the consumer is configured with one of
+  the
+  provided [SdaKafkaConsumerConfiguration](../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaConsumerConfiguration.java)
+- will automatically propagate the context to other services via HTTP when using a platform client
+  that uses
+  the [MetadataContextClientConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
+  configuration, e.g:
+  - ```java
+    @FeignClient(
+    value = "name",
+    url = "http://your-api-url",
+    configuration = {
+      MetadataContextClientConfiguration.class
+    })
+    public interface ClientWithMetadataConfiguration {
+
+    @GetMapping("/metadata-hello")
+    Object getSomething();
+    }
+    ```
+- will automatically propagate the context in produced Kafka messages when the producer is created
+  with [SdaKafkaProducerConfiguration](../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaProducerConfiguration.java)
+- are configurable by the property or environment variable `METADATA_FIELDS` to be aware of the
+  metadata used in a specific environment
+
+Services that interrupt a business process should persist the context from
+`MetadataContext.detachedCurrent()` and restore it with `MetadataContext.createContext(…)` when the
+process continues.
+Interrupting a business process means that processing is stopped and continued later in a new thread
+or even another instance of the service.
+Most likely, this will happen when a business entity is stored based on a request and loaded later
+for further processing by a scheduler or due to a new user interaction.
+In this case, the `DetachedMetadataContext` must be persisted along with the entity and recreated
+when the entity is loaded.
+The `DetachedMetadataContext` can be defined as field in any MongoDB entity.
+
+For services that handle requests or messages in parallel, the metadata context attributes will 
+be automatically transferred to the new threads, if `@Async` is used.

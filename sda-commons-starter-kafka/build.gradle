@@ -3,9 +3,13 @@ dependencies {
   api 'com.fasterxml.jackson.core:jackson-databind'
   api 'org.springframework.boot:spring-boot-starter-validation'
   api 'org.springframework.kafka:spring-kafka'
+  api project(":sda-commons-metadata-context")
 
   testImplementation 'org.springframework.boot:spring-boot-starter-web'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.kafka:spring-kafka-test'
   testImplementation 'org.awaitility:awaitility'
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
+    exclude group: 'org.junit'
+  }
 }
