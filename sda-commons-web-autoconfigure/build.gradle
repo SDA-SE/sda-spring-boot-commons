@@ -23,7 +23,7 @@ dependencies {
   // Tracer bean allowing us to use the standardised interfaces
   api 'io.opentracing.brave:brave-opentracing'
   //
-  api 'org.springdoc:springdoc-openapi-ui'
+  api 'org.springdoc:springdoc-openapi-webmvc-core'
   api 'org.bouncycastle:bcpkix-jdk15on'
   api 'javax.ws.rs:javax.ws.rs-api'
   api 'io.github.openfeign:feign-jaxrs2'
@@ -39,4 +39,5 @@ dependencies {
   testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
     exclude group: 'org.junit'
   }
+  testImplementation "io.github.classgraph:classgraph"
 }
