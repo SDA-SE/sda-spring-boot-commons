@@ -59,8 +59,8 @@ class OpenApiDocumentationTest {
 
   @Test
   void shouldNotContainServers() throws JsonProcessingException {
-    var openapi = loadRawOpenApiAsYaml();
-    var actual = YAMLMapper.builder().build().readValue(openapi, Object.class);
+    var actualOpenApiYaml = loadRawOpenApiAsYaml();
+    var actual = YAMLMapper.builder().build().readValue(actualOpenApiYaml, Object.class);
     assertThat(actual)
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsEntry("openapi", "3.0.1")
@@ -69,8 +69,8 @@ class OpenApiDocumentationTest {
 
   @Test
   void shouldSortResponsesByCode() throws JsonProcessingException {
-    var openapi = loadRawOpenApiAsYaml();
-    var actual = YAMLMapper.builder().build().readValue(openapi, Object.class);
+    var actualOpenApiYaml = loadRawOpenApiAsYaml();
+    var actual = YAMLMapper.builder().build().readValue(actualOpenApiYaml, Object.class);
     assertThat(actual)
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsEntry("openapi", "3.0.1")
