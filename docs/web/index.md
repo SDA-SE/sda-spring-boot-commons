@@ -547,7 +547,7 @@ If your service is required to support the metadata context but is not intereste
 continue here:
 
 Services that use the sda-spring-boot-commons:
-- can access the current [MetadataContext](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContext.java)
+- can access the current [MetadataContext](../../sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java)
   in their implementation
 - will automatically load the context from incoming HTTP requests into the thread handling the
   request, if you register [MetadataContextConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
@@ -588,7 +588,5 @@ In this case, the `DetachedMetadataContext` must be persisted along with the ent
 when the entity is loaded.
 The `DetachedMetadataContext` can be defined as field in any MongoDB entity.
 
-Services that handle requests or messages in parallel must transfer the metadata context to their
-`Runnable` or `Callable` with `MetadataContext.transferMetadataContext(…)`.
-In most cases, developers should prefer`ContainerRequestContextHolder.transferRequestContext(…)`,
-which also transfers the metadata context.
+For services that handle requests or messages in parallel, the metadata context attributes will 
+be automatically transferred to the new threads, if `@Async` is used.
