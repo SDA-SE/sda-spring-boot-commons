@@ -7,9 +7,15 @@
  */
 package org.sdase.commons.spring.boot.web.app.example;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Map;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
@@ -33,16 +39,61 @@ class OpenApiDocumentationTest {
 
   @Autowired private TestRestTemplate client;
 
+  // load only once, because servers are readded in subsequent requests
+  private static String openapi;
+
+  // verification of the current OpenAPI
+
   @Test
   void shouldHaveSameOpenApiInRepository() throws IOException {
     // receive the openapi.yaml from your service
-    String expected =
-        client.getForObject(
-            String.format("http://localhost:%s/api/openapi.yaml", port), String.class);
+    var expected = loadRawOpenApiAsYaml();
 
     // specify where you want your file to be stored
-    Path filePath = Paths.get("openapi.yaml").toAbsolutePath();
+    var filePath = Paths.get("openapi.yaml").toAbsolutePath();
 
     GoldenFileAssertions.assertThat(filePath).hasYamlContentAndUpdateGolden(expected);
+  }
+
+  // integration testing of the OpenAPI customisation
+
+  @Test
+  void shouldNotContainServers() throws JsonProcessingException {
+    var openapi = loadRawOpenApiAsYaml();
+    var actual = YAMLMapper.builder().build().readValue(openapi, Object.class);
+    assertThat(actual)
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
+        .containsEntry("openapi", "3.0.1")
+        .doesNotContainKey("servers");
+  }
+
+  @Test
+  void shouldSortResponsesByCode() throws JsonProcessingException {
+    var openapi = loadRawOpenApiAsYaml();
+    var actual = YAMLMapper.builder().build().readValue(openapi, Object.class);
+    assertThat(actual)
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
+        .containsEntry("openapi", "3.0.1")
+        .extractingByKey("paths")
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
+        .extractingByKey("/myResource")
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
+        .extractingByKey("get")
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
+        .extractingByKey("responses")
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
+        .extracting(Map::keySet)
+        .extracting(ArrayList::new)
+        .asList()
+        .containsExactly("200", "404");
+  }
+
+  private String loadRawOpenApiAsYaml() {
+    if (openapi == null) {
+      openapi =
+          client.getForObject(
+              String.format("http://localhost:%s/api/openapi.yaml", port), String.class);
+    }
+    return openapi;
   }
 }
