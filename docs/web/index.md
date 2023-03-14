@@ -577,18 +577,16 @@ Services that use the sda-spring-boot-commons:
 - are configurable by the property or environment variable `METADATA_FIELDS` to be aware of the
   metadata used in a specific environment
 
-### Async processes
-
+Services that interrupt a business process should persist the context from
+`MetadataContext.detachedCurrent()` and restore it with `MetadataContext.createContext(…)` when the
+process continues.
 Interrupting a business process means that processing is stopped and continued later in a new thread
 or even another instance of the service.
 Most likely, this will happen when a business entity is stored based on a request and loaded later
 for further processing by a scheduler or due to a new user interaction.
 In this case, the `DetachedMetadataContext` must be persisted along with the entity and recreated
-when the entity is loaded. The `DetachedMetadataContext` can be defined as field in any MongoDB
-entity.
-So, for services that handle requests or messages in parallel, the
-class [ContextCopyTaskDecorator](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/async/ContextCopyTaskDecorator.java)
-will copy the
-metadata context attributes to the new threads, if
-the `org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration` class is
-registered.
+when the entity is loaded.
+The `DetachedMetadataContext` can be defined as field in any MongoDB entity.
+
+For services that handle requests or messages in parallel, the metadata context attributes will 
+be automatically transferred to the new threads, if `@Async` is used.
