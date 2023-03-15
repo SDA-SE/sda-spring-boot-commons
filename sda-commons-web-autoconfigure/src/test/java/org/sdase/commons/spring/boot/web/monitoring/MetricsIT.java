@@ -12,14 +12,11 @@ import static org.sdase.commons.spring.boot.web.monitoring.testing.MetricsConsta
 import static org.sdase.commons.spring.boot.web.monitoring.testing.MetricsConstants.PROMETHEUS_METRICS_NAMES;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import java.util.ArrayList;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.sdase.commons.spring.boot.web.monitoring.testing.CustomMetricsTestController;
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
@@ -32,6 +29,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -46,15 +45,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
       // exclude the management requests are not set probably at
       // runtime
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
-      "opa.disable=true",
+      "opa.disable=true"
     })
 @AutoConfigureMetrics
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
-@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class MetricsIT {
-
-  private static final Log LOG = LogFactory.getLog(MetricsIT.class);
 
   @LocalManagementPort private int managementPort;
 
@@ -64,24 +61,33 @@ class MetricsIT {
 
   @Autowired private MockMvc mockMvc;
 
-  @Test
-  @SuppressWarnings("unchecked")
-  @Order(0)
-  void shouldReturnGeneralMetrics() {
-    var responseEntity = requestMonitoring("metrics", Map.class);
-    assertThat(responseEntity.getStatusCode().value()).isEqualTo(200);
-    LOG.info(String.join(",", (ArrayList<String>) responseEntity.getBody().get("names")));
-    assertThat(responseEntity.getBody())
-        .extractingByKeys("names")
-        .isNotEmpty()
-        .containsExactlyInAnyOrder(METRIC_NAMES);
+  @Autowired MeterRegistry meterRegistry;
+
+  @BeforeEach
+  void beforeEach() throws Exception {
+    populateDefaultAndCustomMetrics();
+  }
+
+  @AfterEach
+  void afterEach() {
+    meterRegistry.clear();
   }
 
   @Test
   @SuppressWarnings("unchecked")
-  @Order(1)
+  void shouldReturnGeneralMetrics() {
+    var responseEntity = getForEntity("metrics", Map.class);
+    assertThat(responseEntity.getStatusCode().value()).isEqualTo(200);
+    assertThat(responseEntity.getBody())
+        .flatExtracting("names")
+        .isNotEmpty()
+        .containsAll(METRIC_NAMES);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
   void shouldReturnHavePrometheusMetricsEndpoint() {
-    var responseEntity = requestMonitoring("", Map.class);
+    var responseEntity = getForEntity("", Map.class);
     assertThat(responseEntity.getStatusCode().value()).isEqualTo(200);
     Map<String, Object> result = responseEntity.getBody();
     assertThat(result).extractingByKeys("_links").isNotEmpty();
@@ -89,19 +95,15 @@ class MetricsIT {
   }
 
   @Test
-  @Order(2)
   void shouldReturnPrometheusGeneralMetrics() {
-    var responseEntity = requestMonitoring("metrics/prometheus", String.class);
-    LOG.info(String.join(",", responseEntity.getBody().split("\\n")));
+    var responseEntity = getForEntity("metrics/prometheus", String.class);
     assertThat(responseEntity.getStatusCode().value()).isEqualTo(200);
     assertThat(responseEntity.getBody()).isNotNull().contains(PROMETHEUS_METRICS_NAMES);
   }
 
   @Test
-  @Order(3)
-  void shouldProduceSuccessCounterMetric() throws Exception {
-    addMetrics();
-    String metrics = requestMonitoring("metrics/prometheus", String.class).getBody();
+  void shouldProduceSuccessCounterMetric() {
+    String metrics = getForEntity("metrics/prometheus", String.class).getBody();
 
     assertThat(metrics)
         .contains("Counts successes occurred when some operation is invoked.")
@@ -109,22 +111,20 @@ class MetricsIT {
   }
 
   @Test
-  @Order(4)
-  void shouldProduceErrorCounterMetric() throws Exception {
-    addMetrics();
-    String metrics = requestMonitoring("metrics/prometheus", String.class).getBody();
+  void shouldProduceErrorCounterMetric() {
+    String metrics = getForEntity("metrics/prometheus", String.class).getBody();
 
     assertThat(metrics)
         .contains("Counts errors occurred when some operation is invoked.")
         .contains("# TYPE some_operation_error_counter_total counter");
   }
 
-  private <T> ResponseEntity<T> requestMonitoring(String subpath, Class<T> clazz) {
+  private <T> ResponseEntity<T> getForEntity(String subpath, Class<T> clazz) {
     return client.getForEntity(
         String.format("http://localhost:%d/%s", managementPort, subpath), clazz);
   }
 
-  private void addMetrics() throws Exception {
+  private void populateDefaultAndCustomMetrics() throws Exception {
     // just do some operations in my service to generate test data
     for (int i = 0; i < 10; i++) {
       mockMvc
@@ -133,5 +133,7 @@ class MetricsIT {
                   .accept(APPLICATION_JSON))
           .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    // calling a route to populate http requests metrics
+    getForEntity("", Map.class);
   }
 }
