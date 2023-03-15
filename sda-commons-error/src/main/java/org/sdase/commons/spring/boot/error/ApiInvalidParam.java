@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.web.error;
+package org.sdase.commons.spring.boot.error;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

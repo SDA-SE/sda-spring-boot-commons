@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.security.handler;
 
-import org.sdase.commons.spring.boot.web.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;

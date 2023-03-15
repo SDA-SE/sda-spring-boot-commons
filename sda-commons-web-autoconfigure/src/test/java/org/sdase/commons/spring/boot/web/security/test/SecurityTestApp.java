@@ -10,7 +10,7 @@ package org.sdase.commons.spring.boot.web.security.test;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.core.Context;
-import org.sdase.commons.spring.boot.web.error.ApiException;
+import org.sdase.commons.spring.boot.error.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

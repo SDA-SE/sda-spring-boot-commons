@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.security.handler;
 
-import org.sdase.commons.spring.boot.web.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiError;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
