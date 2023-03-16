@@ -40,7 +40,7 @@ class ExampleAppTest {
     authMock.authorizeRequest().withHttpMethod(HttpMethod.GET).withPath("/myResource").deny();
 
     var response =
-        restTemplate.getForEntity("http://localhost:" + port + "/api/myResource", MyResource.class);
+        restTemplate.getForEntity("http://localhost:" + port + "/api/myResource", Car.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
   }

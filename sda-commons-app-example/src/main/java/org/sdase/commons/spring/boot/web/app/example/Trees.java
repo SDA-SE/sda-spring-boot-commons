@@ -8,18 +8,19 @@
 package org.sdase.commons.spring.boot.web.app.example;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 
-@Schema(description = "A resource")
-public class MyResource {
-  @Schema(description = "A value")
-  private String value;
+@Schema(description = "A list of trees")
+public class Trees {
+  @Schema(description = "The trees")
+  private List<Tree> trees;
 
-  public String getValue() {
-    return value;
+  public List<Tree> getTrees() {
+    return trees;
   }
 
-  public MyResource setValue(String value) {
-    this.value = value;
+  public Trees setTrees(List<Tree> trees) {
+    this.trees = trees;
     return this;
   }
 }
