@@ -56,23 +56,26 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   }
 
   @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
-  public ConcurrentKafkaListenerContainerFactory<String, ?> // NOSONAR
+  @SuppressWarnings("java:S1452")
+  public ConcurrentKafkaListenerContainerFactory<String, ?>
       retryAndLogKafkaListenerContainerFactory(
-      @Qualifier("retryErrorHandler") CommonErrorHandler errorHandler) {
+          @Qualifier("retryErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
   @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_DLT)
-  public ConcurrentKafkaListenerContainerFactory<String, ?> // NOSONAR
+  @SuppressWarnings("java:S1452")
+  public ConcurrentKafkaListenerContainerFactory<String, ?>
       retryAndDltKafkaListenerContainerFactory(
-      @Qualifier("retryDeadLetterErrorHandler") CommonErrorHandler errorHandler) {
+          @Qualifier("retryDeadLetterErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
   @Bean(SdaKafkaListenerContainerFactory.LOG_ON_FAILURE)
-  public ConcurrentKafkaListenerContainerFactory<String, ?> // NOSONAR
+  @SuppressWarnings("java:S1452")
+  public ConcurrentKafkaListenerContainerFactory<String, ?>
       logOnFailureKafkaListenerContainerFactory(
-      @Qualifier("loggingErrorHandler") CommonErrorHandler errorHandler) {
+          @Qualifier("loggingErrorHandler") CommonErrorHandler errorHandler) {
     return createDefaultListenerContainerFactory(errorHandler);
   }
 
