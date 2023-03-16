@@ -28,13 +28,14 @@ public class SdaKafkaProducerConfiguration {
           MetadataContextProducerInterceptor.class.getName());
 
   @Bean
-  public KafkaTemplate<String, ?> kafkaTemplate( // NOSONAR
-      ProducerFactory<String, ?> producerFactory) {
+  @SuppressWarnings("java:S1452")
+  public KafkaTemplate<String, ?> kafkaTemplate(ProducerFactory<String, ?> producerFactory) {
     return new KafkaTemplate<>(producerFactory, commonProperties);
   }
 
   @Bean
-  public KafkaTemplate<Object, Object> kafkaDltTemplate( // NOSONAR
+  @SuppressWarnings("java:S1452")
+  public KafkaTemplate<Object, Object> kafkaDltTemplate(
       ProducerFactory<Object, Object> producerFactory) {
     Map<String, Object> props = new HashMap<>(commonProperties);
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
