@@ -37,25 +37,44 @@ class ExampleAppTest {
 
   @Test
   void shouldRejectAnonymousRequest() {
-    authMock.authorizeRequest().withHttpMethod(HttpMethod.GET).withPath("/myResource").deny();
+    authMock.authorizeRequest().withHttpMethod(HttpMethod.GET).withPath("/cars").deny();
 
-    var response =
-        restTemplate.getForEntity("http://localhost:" + port + "/api/myResource", MyResource.class);
+    var response = restTemplate.getForEntity("http://localhost:" + port + "/api/cars", Car.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
   }
 
   @Test
-  void shouldGetStacks() {
+  void shouldGetCars() {
     authMock.authorizeAnyRequest().allow();
 
     var response =
         authMock
             .authentication()
             .authenticatedClient()
-            .getForEntity("http://localhost:" + port + "/api/myResource", Object.class);
+            .getForEntity("http://localhost:" + port + "/api/cars", Cars.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).extracting("value").isEqualTo("the value");
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getCars())
+        .extracting("licensePlate")
+        .containsExactly("HH-AB 1200", "LG-CD 2000");
+  }
+
+  @Test
+  void shouldGetTrees() {
+    authMock.authorizeAnyRequest().allow();
+
+    var response =
+        authMock
+            .authentication()
+            .authenticatedClient()
+            .getForEntity("http://localhost:" + port + "/api/trees", Trees.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getTrees())
+        .extracting("name")
+        .containsExactly("Yellow Birch", "American Elm");
   }
 }

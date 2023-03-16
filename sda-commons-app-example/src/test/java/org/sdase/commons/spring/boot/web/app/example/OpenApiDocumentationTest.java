@@ -19,6 +19,8 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -34,6 +36,8 @@ import org.springframework.test.context.ContextConfiguration;
     properties = {"springdoc.packagesToScan=org.sdase.commons.spring.boot.web.app.example"})
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 class OpenApiDocumentationTest {
+
+  private static final Logger LOG = LoggerFactory.getLogger(OpenApiDocumentationTest.class);
 
   @LocalServerPort private int port;
 
@@ -71,12 +75,13 @@ class OpenApiDocumentationTest {
   void shouldSortResponsesByCode() throws JsonProcessingException {
     var actualOpenApiYaml = loadRawOpenApiAsYaml();
     var actual = YAMLMapper.builder().build().readValue(actualOpenApiYaml, Object.class);
+
     assertThat(actual)
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsEntry("openapi", "3.0.1")
         .extractingByKey("paths")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .extractingByKey("/myResource")
+        .extractingByKey("/cars")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .extractingByKey("get")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
@@ -93,6 +98,7 @@ class OpenApiDocumentationTest {
       openapi =
           client.getForObject(
               String.format("http://localhost:%s/api/openapi.yaml", port), String.class);
+      LOG.info("openapi.yaml: {}", openapi);
     }
     return openapi;
   }

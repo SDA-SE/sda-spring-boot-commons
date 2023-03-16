@@ -7,15 +7,10 @@
  */
 package org.sdase.commons.spring.boot.web.docs;
 
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
-import io.swagger.v3.oas.models.responses.ApiResponses;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springdoc.core.SpringDocConfigProperties;
 import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springdoc.core.providers.ObjectMapperProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -30,37 +25,11 @@ public class SdaOpenApiCustomizerConfiguration {
   }
 
   @Bean
-  public OpenApiCustomiser sortResponseCodes() {
-    return openApi ->
-        openApi.getPaths().values().stream()
-            .map(this::getOperation)
-            .flatMap(List::stream)
-            .forEach(this::sortResponses);
-  }
-
-  private void sortResponses(Operation operation) {
-    operation.responses(
-        operation.getResponses().entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey,
-                    Map.Entry::getValue,
-                    (left, right) -> left,
-                    ApiResponses::new)));
-  }
-
-  private List<Operation> getOperation(PathItem pathItem) {
-    return Stream.of(
-            pathItem.getGet(),
-            pathItem.getPut(),
-            pathItem.getPost(),
-            pathItem.getDelete(),
-            pathItem.getOptions(),
-            pathItem.getHead(),
-            pathItem.getPatch(),
-            pathItem.getTrace())
-        .filter(Objects::nonNull)
-        .toList();
+  public ObjectMapperProvider objectMapperProvider() {
+    SpringDocConfigProperties props = new SpringDocConfigProperties();
+    var result = new ObjectMapperProvider(props);
+    result.yamlMapper().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+    result.jsonMapper().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+    return result;
   }
 }
