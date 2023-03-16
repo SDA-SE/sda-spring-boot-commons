@@ -7,7 +7,10 @@
  */
 package org.sdase.commons.spring.boot.web.error;
 
-import org.sdase.commons.spring.boot.web.error.ApiException.FinalBuilder;
+import org.sdase.commons.spring.boot.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiException;
+import org.sdase.commons.spring.boot.error.ApiException.FinalBuilder;
+import org.sdase.commons.spring.boot.error.ApiInvalidParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

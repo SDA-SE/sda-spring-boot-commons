@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.web.security.test.CreateSomethingResource;
 import org.sdase.commons.spring.boot.web.security.test.SecurityTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;

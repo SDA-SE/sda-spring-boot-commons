@@ -8,8 +8,8 @@
 package org.sdase.commons.spring.boot.web.security.handler;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import org.sdase.commons.spring.boot.web.error.ApiError;
-import org.sdase.commons.spring.boot.web.error.ApiInvalidParam;
+import org.sdase.commons.spring.boot.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiInvalidParam;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

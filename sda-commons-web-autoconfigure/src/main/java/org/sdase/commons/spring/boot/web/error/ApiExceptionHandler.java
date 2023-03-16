@@ -8,6 +8,8 @@
 package org.sdase.commons.spring.boot.web.error;
 
 import javax.servlet.http.HttpServletRequest;
+import org.sdase.commons.spring.boot.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

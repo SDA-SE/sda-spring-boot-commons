@@ -10,7 +10,7 @@ package org.sdase.commons.spring.boot.web.app.example;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.sdase.commons.spring.boot.web.error.ApiError;
+import org.sdase.commons.spring.boot.error.ApiError;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
