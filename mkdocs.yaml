@@ -15,6 +15,7 @@ nav:
   - MongoDB: mongodb/index.md
   - Kafka: kafka/index.md
   - Security Hardening: security/index.md
+  - Annotations: annotations/index.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins

@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.ClearSystemProperty;
 import org.junitpioneer.jupiter.SetSystemProperty;
-import org.sdase.commons.spring.boot.web.EnableSdaPlatform;
 import org.sdase.commons.spring.boot.web.security.test.ContextUtils;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -82,7 +81,6 @@ class JsonLoggingTest {
         .toList();
   }
 
-  @EnableSdaPlatform
   @SpringBootApplication
   @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
   @ContextConfiguration
