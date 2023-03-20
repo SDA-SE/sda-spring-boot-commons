@@ -308,7 +308,7 @@ adds its value to the client request.
 
 ### Trace-Token
 
-The client can be used within the SDA Platform to path through the received Trace-Token header by adding a configuration:
+The client can be used within the SDA Platform to pass through the received `Trace-Token` header by adding a configuration:
 
 ```java
 @FeignClient(
@@ -469,7 +469,7 @@ be serialized with milliseconds, it must be annotated with
 - `java.time.ZonedDateTime` fields are serialized with seconds by default.
   There is no other global configuration for **java.time.ZonedDateTime** serialization available.
 - **Less modules are activated for foreign frameworks**. Compared to SDA Dropwizard Commons,
-  **GuavaExtrasModule, JodaModule, AfterburnerModule and CaffeineModule** are not registered anymore. 
+  **GuavaExtrasModule, JodaModule, and CaffeineModule** are not registered anymore. 
 - No documented customization of the global **com.fasterxml.jackson.databind.ObjectMapper** is available right now. 
 - Support for **HAL Links and embedding linked resources** is not implemented. 
 - Support for **YAML** is not implemented. 
