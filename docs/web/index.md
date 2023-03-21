@@ -62,10 +62,9 @@ The list of web configurations:
 
 - [Spring Security Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.security)
 
-Enables features that make a Spring Boot service compliant with the
-[SDA SE Authentication](https://sda.dev/core-concepts/security-concept/authentication/)
-and [SDA SE Authorization](https://sda.dev/core-concepts/security-concept/authorization/) concepts
-using OIDC and Open Policy Agent.
+Enables feature that make a Spring Boot service compliant with the
+[SDA SE Authentication](https://sda.dev/core-concepts/security-concept/authentication/) concepts
+using OIDC.
 
 OIDC Authentication can be configured with `auth.issuers` to provide a comma separated
 list of trusted issuers. In develop and test environments, the boolean `auth.disable` may
@@ -80,17 +79,38 @@ provided by the Open Policy Agent to decide about denying anonymous requests.**
 Spring Security is disabled for the Management/Admin Port (default: 8081). Be aware that these port
 should not be accessible out of the deployment context.
 
+This security implementation lacks some features compared to [sda-dropwizard-commons](https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-auth):
+- No configuration of static local public keys to verify the token signature. 
+- No configuration of JWKS URIs to verify the token signature. 
+- The IDP must provide an `iss` claim that matches the base URI for discovery. 
+- Leeway is not configurable yet. 
+- The client that loads the JWKS is not configurable yet.
+
 ## Authorization
 
-The authorization is done by the [Open Policy Agent](https://www.openpolicyagent.org/). 
+Enables feature that make a Spring Boot service compliant with the
+[SDA SE Authorization](https://sda.dev/core-concepts/security-concept/authorization/) concepts
+using Open Policy Agent.
+
+The authorization is done by the [Open Policy Agent](https://www.openpolicyagent.org/). It can be 
+configured as described in
+[OpaAccessDecisionVoter#OpaAccessDecisionVoter
+(boolean, String, String, OpaRequestBuilder, RestTemplate, ApplicationContext, io.opentracing.Tracer)
+](sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaAccessDecisionVoter.java)
+and [OpaRestTemplateConfiguration#OpaRestTemplateConfiguration(Duration, Duration)
+](sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaRestTemplateConfiguration.java).
+
 
 The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter (
 Access Decision Manager) which is part of the `SecurityFilterChain` including the OIDC
 Authentication.
 
 Constraints provided with the Open Policy Agent response can be mapped to a custom POJO. If the
-class extends `AbstractConstraints` and is annotated with `@Constraints` it can be
-`@Autowired` in `@Controllers` or `@RestControllers`.
+class extends [`AbstractConstraints`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/AbstractConstraints.java) 
+and is annotated with [`@Constraints`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/Constraints.java) it can be
+[`@Autowired`](https://javadoc.io/doc/org.springframework/spring-beans/latest/org/springframework/beans/factory/annotation/Autowired.html) 
+in [`@Controllers`](https://javadoc.io/doc/org.springframework/spring-webmvc/latest/org/springframework/web/servlet/mvc/Controller.html) 
+or [`@RestControllers`](https://javadoc.io/doc/org.springframework/spring-web/latest/org/springframework/web/bind/annotation/RestController.html).
 
 ```java
 @Constraints
@@ -117,9 +137,13 @@ public class AuthTestApp {
 }
 ```
 
+Additional parameters that are needed for the authorization decision may be provided with custom
+[OpaInputExtensions](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/extension/OpaInputExtension.java).
+
 ### Testing
 
-TODO
+The testing module provides aligned test dependencies including Wiremock for external APIs and 
+JUnit extensions to mock or disable authentication and authorization.
 
 ### OPA 
 ![Overview](assets/overview_opa.svg)
@@ -231,10 +255,11 @@ with a list of string values.
 
 ## Http Client
 
-Enables support for `org.springframework.cloud.openfeign.FeignClients` that support SDA Platform
-features like:
+Enables support for [`org.springframework.cloud.openfeign.FeignClients`](https://javadoc.io/doc/org.springframework.cloud/spring-cloud-openfeign-core/3.1.6/index.html) 
+that support SDA Platform features like:
 
   - passing the Authorization header to downstream services.
+  - passing the Trace-Token header to downstream services.
   - OIDC client authentication
 
 A feign client can be created as interface like this:
@@ -256,8 +281,10 @@ public class ExampleApplication { (...)
 
 The Partner ODS base url must be configured as `http://partner-ods:8080/api` in the Spring
 environment property `partnerOds.baseUrl`. Detailed configuration like timeouts can be configured
-with default feign properties in the `application.yaml` or `derived environment` properties based on
-the name attribute of the `org.springframework.cloud.openfeign.FeignClient `annotation.
+with [default feign properties](https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-overriding-defaults) 
+in the `application.yaml` or `derived environment` properties based on the `name` attribute of the 
+[`org.springframework.cloud.openfeign.FeignClient`](https://javadoc.io/doc/org.springframework.cloud/spring-cloud-openfeign-core/3.1.6/index.html) 
+annotation.
 
 The client is then available as bean in the Spring context.
 
@@ -270,22 +297,46 @@ adding a configuration:
   url = "${partnerOds.baseUrl}",
   configuration = {AuthenticationPassThroughClientConfiguration.class}
 )
-public interface OtherServiceClient {
-@GetMapping("/partners")
+public interface OtherServiceClient { 
+  @GetMapping("/partners")
   List<Partner> getPartners();
 }
 ```
 
-`AuthenticationPassThroughClientConfiguration` will take the Authorization header from the current
-request context of the servlet and adds its value to the client request.
+[`AuthenticationPassThroughClientConfiguration`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/client/AuthenticationPassThroughClientConfiguration.java) 
+will take the **Authorization** header from the current request context of the servlet and 
+adds its value to the client request.
+
+### Trace-Token
+
+The client can be used within the SDA Platform to pass through the received `Trace-Token` header by adding a configuration:
+
+```java
+@FeignClient(
+  name = "partnerOds", 
+  url = "${partnerOds.baseUrl}", 
+  configuration = {SdaTraceTokenClientConfiguration.class}
+)
+public interface OtherServiceClient {
+  @GetMapping("/partners") 
+  List<Partner> getPartners();
+}
+```
+
+[SdaTraceTokenClientConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
+will take the `Trace-Token` header from the current request context of the servlet and adds its value to the client request.
+
+If no `Trace-Token` header is present in the current request context, the [SdaTraceTokenClientConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
+will generate a new Trace-Token and pass it to the following requests.
 
 ### OIDC Client
 
 If the request context is not always existing, e.g. in cases where a technical user for
-service-to-service communication is required, the `OidcClientRequestConfiguration` will request the
-required OIDC authentication token with the client credentials flow.
+service-to-service communication is required, the [`OidcClientRequestConfiguration`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/client/OidcClientRequestConfiguration.java) 
+will request the required OIDC authentication token with the client credentials flow using the 
+configured `"oidc.client.issuer.uri"`, `"oidc.client.id"` and `"oidc.client.secret"`.
 
-If the current request context contains the Authorization header, the authentication pass-through
+If the current request context contains the **Authorization** header, the authentication pass-through
 will be applied instead.
 
 ### JAX-RS Mapping
@@ -387,16 +438,17 @@ In this example the controller would return with http status `422` and body:
 
 ## Async
 
-The default Spring async task executor is autoconfigured to transfer the request attributes of the
-current request to the thread running the asynchronous method.
+The default Spring [async](https://javadoc.io/doc/org.springframework/spring-context/latest/org/springframework/scheduling/annotation/Async.html) 
+task executor is autoconfigured to transfer the request attributes of the 
+current request to the **Thread** running the asynchronous method.
 
 ## Jackson
 
-Enables features that make a Spring Boot service compliant with
+Enables feature that make a Spring Boot service compliant with
 the [SDA SE RESTful API Guide](https://sda.dev/core-concepts/communication/restful-api-guide/) .
 So far this covers:
 - the tolerant reader pattern
-- consistent serialization of java.time.ZonedDateTime compatible to the type date-time of JSON-Schema.
+- consistent serialization of `java.time.ZonedDateTime` compatible to the [type `date-time` of JSON-Schema](https://json-schema.org/understanding-json-schema/reference/string.html#dates-and-times).
   It is strongly recommended to use
   - `java.time.LocalDate` for dates without time serialized as `2018-09-23`
   - `java.time.ZonedDateTime` for date and times serialized as `2018-09-23T14:21:41+01:00`
@@ -406,12 +458,24 @@ So far this covers:
 All these types can be read and written in JSON as ISO 8601 formats.
 Reading `java.time.ZonedDateTime` is configured to be tolerant so that added nanoseconds or missing
 milliseconds or missing seconds are supported.
+
 `@com.fasterxml.jackson.annotation.JsonFormat(pattern = "...")` should not be used for customizing
 serialization because it breaks tolerant reading of formatting variants. If a specific field should
 be serialized with milliseconds, it must be annotated with
 `@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithMillis.class)`
 . If a specific field should be serialized with nanoseconds, it must be annotated with
 `@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithNanos.class)`
+
+**Differences to the known [SDA Dropwizard Commons configuration](https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-jackson)**
+- `java.time.ZonedDateTime` fields are serialized with seconds by default.
+  There is no other global configuration for **java.time.ZonedDateTime** serialization available.
+- **Less modules are activated for foreign frameworks**. Compared to SDA Dropwizard Commons,
+  **GuavaExtrasModule, JodaModule, and CaffeineModule** are not registered anymore. 
+- No documented customization of the global **com.fasterxml.jackson.databind.ObjectMapper** is available right now. 
+- Support for **HAL Links and embedding linked resources** is not implemented. 
+- Support for **YAML** is not implemented. 
+- There is **no support for [field filters](https://sda.dev/core-concepts/communication/restful-api-guide/#RESTfulAPIGuide-MAY%3AProvidefieldfilteringtoretrievepartialresources)**.
+  Such filters have been barely used in the SDA SE.
 
 ## Monitoring
 
@@ -436,7 +500,7 @@ Boot autoconfiguration for distributed tracing. Sleuth was built around Zipkin t
 supports forwarding them to Zipkin (Thrift via Brave) format for now. But since Jaeger supports
 Zipkin traces and the OpenTracing Jaeger Spring support is not heavily maintained, there is a need
 to stick with Sleuth. However, Spring Sleuth is compatible with OpenTracing, so we can use the
-standardized interfaces, hence the OpenTracing `io.opentracing.Tracer` is on classpath.
+standardized interfaces, hence the OpenTracing [io.opentracing.Tracer](https://javadoc.io/doc/io.opentracing/opentracing-api/0.32.0/io/opentracing/Tracer.html) is on classpath.
 
 Even if Jaeger supports the Zipkin B3 propagation format, Sleuth is forced to just use per default
 the [W3C context propagation](https://www.w3.org/TR/trace-context)
@@ -448,9 +512,8 @@ Default features are:
 * Instruments common ingress and egress points from Spring applications (servlet filter, rest
   template, scheduled actions, message channels, feign client).
 * The service name is derived from `spring.application.name`
-* Generate and report Jaeger-compatible traces via HTTP. By default it sends them to a Zipkin
-  collector on localhost (port 9411). Configure the location of the service using `spring.zipkin.base-url`
-
+* Generate and report Jaeger-compatible traces via HTTP. By default, it sends them to a Zipkin
+  collector on localhost (port 9411). Configure the location of the service using `spring.zipkin.base-url`.
 
 * `spring.zipkin.base.url` _string_
   * Base url to Zipkin or Zipkin Collector of Jaeger instance.
@@ -472,7 +535,7 @@ spring.sleuth.opentracing.enabled=true
 
 ## Health Checks / Actuator
 
-Enables features that make a Spring Boot service compliant with
+Enable features that make a Spring Boot service compliant with
 the [SDA SE Health Checks](https://sda.dev/developer-guide/deployment/health-checks/).
 
 Configures the Spring Boot Actuator to be accessible on root path `/` at default management
@@ -485,11 +548,11 @@ The following endpoints are provided at the admin management endpoint:
 
 The readiness group contains the following indicators:
 
-*   `ReadinessStateHealthIndicator`
-*   `MongoHealthIndicator`, if auto-configured.
+*   [`ReadinessStateHealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/availability/ReadinessStateHealthIndicator.html)
+*   [`MongoHealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/data/mongo/MongoHealthIndicator.html), if auto-configured.
 *   `OpenPolicyAgentHealthIndicator` if [OPA](#opa) is enabled for authentication
 
-To overwrite the defaults `HealthIndicator` of the readiness group, you can overwrite the property
+To overwrite the defaults [`HealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/health/HealthIndicator.html) of the readiness group, you can overwrite the property
 source:
 
 ```properties
@@ -509,7 +572,8 @@ public class CustomHealthIndicator implements HealthIndicator {
 ```
 
 The custom health indicator will be available under `/healthcheck/custom` which is resolved by the
-prefix of the HealthIndicator implementing component.
+prefix of the [HealthIndicator](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/health/HealthIndicator.html)
+implementing component.
 
 ### Default properties
 
