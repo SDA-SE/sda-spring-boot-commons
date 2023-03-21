@@ -142,7 +142,8 @@ Additional parameters that are needed for the authorization decision may be prov
 
 ### Testing
 
-TODO
+The testing module provides aligned test dependencies including Wiremock for external APIs and 
+JUnit extensions to mock or disable authentication and authorization.
 
 ### OPA 
 ![Overview](assets/overview_opa.svg)
