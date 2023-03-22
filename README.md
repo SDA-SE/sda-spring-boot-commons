@@ -1,4 +1,6 @@
 # sda-spring-boot-commons
+[![Latest Release](https://img.shields.io/github/v/release/sda-se/sda-spring-boot-commons?label=latest)](https://github.com/SDA-SE/sda-spring-boot-commons/releases/latest)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.sdase.commons.spring.boot/sda-commons-starter-web/badge.svg)](https://search.maven.org/search?q=org.sdase.commons.spring.boot)
 [![Java CI](https://github.com/SDA-SE/sda-spring-boot-commons/actions/workflows/java-ci.yaml/badge.svg)](https://github.com/SDA-SE/sda-spring-boot-commons/actions/workflows/java-ci.yaml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8463%2Fsda-spring-boot-commons.svg?type=shield)](https://app.fossa.com/reports/868957a2-81ed-4de3-8d43-dd59da3f8c68)
 
@@ -6,13 +8,6 @@
 
 A set of libraries to bootstrap spring boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
-
-> ⚠️ **BETA** ⚠️
-> 
-> This library is still in BETA. APIs, provided modules and patterns may change until version 1.x.x is released.
-> 
-> [Feedback](https://github.com/SDA-SE/sda-spring-boot-commons/issues/new) is welcome.
-
 
 ## Features
 
