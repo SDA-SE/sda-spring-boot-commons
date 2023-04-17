@@ -37,7 +37,7 @@ dependencies {
   api project(':sda-commons-error')
 
   testImplementation project(':sda-commons-web-testing')
-  testImplementation 'org.junit-pioneer:junit-pioneer:2.0.0', {
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.0.1', {
     exclude group: 'org.junit'
   }
   testImplementation "io.github.classgraph:classgraph"
