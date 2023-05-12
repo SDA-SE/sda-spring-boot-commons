@@ -60,8 +60,7 @@ class KafkaHealthIndicatorIntegrationTest {
     assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
     assertThat(response.getBody().status()).isEqualTo("UP");
     assertThat(kafkaInfo.status()).isEqualTo("UP");
-    assertThat(kafkaInfo.details().clusterId()).isNotBlank();
-    assertThat(kafkaInfo.details().nodeCount()).isEqualTo(1);
+    assertThat(kafkaInfo.details().info()).isEqualTo("Kafka health check operation succeeded");
   }
 
   @Test
@@ -106,7 +105,7 @@ class KafkaHealthIndicatorIntegrationTest {
   record HealthInfo(String status, Components components) {
     record Components(KafkaInfo kafka) {
       record KafkaInfo(String status, KafkaInfoDetails details) {
-        record KafkaInfoDetails(int nodeCount, String clusterId, String error) {}
+        record KafkaInfoDetails(String info, String error) {}
       }
     }
   }

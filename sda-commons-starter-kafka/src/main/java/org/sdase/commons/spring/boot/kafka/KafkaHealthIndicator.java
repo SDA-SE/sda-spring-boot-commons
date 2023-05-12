@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.DescribeClusterOptions;
+import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +37,7 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator {
   public KafkaHealthIndicator(
       @Value("${management.health.kafka.timeout:4s}") Duration kafkaCommandTimeout,
       KafkaAdmin kafkaAdmin) {
-    super("Kafka health check failed");
+    super("Kafka health check operation failed");
 
     this.kafkaCommandTimeout = kafkaCommandTimeout;
     this.kafkaAdminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties());
@@ -47,19 +47,13 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator {
 
   @Override
   protected void doHealthCheck(Health.Builder builder) throws Exception {
-    var clusterInfo =
-        kafkaAdminClient.describeCluster(
-            new DescribeClusterOptions()
-                .timeoutMs((int) TimeUnit.MILLISECONDS.convert(kafkaCommandTimeout)));
+    kafkaAdminClient
+        .listTopics(
+            new ListTopicsOptions()
+                .timeoutMs((int) TimeUnit.MILLISECONDS.convert(kafkaCommandTimeout)))
+        .names()
+        .get();
 
-    builder
-        .up()
-        .withDetails(
-            Map.of(
-                "clusterId",
-                clusterInfo.clusterId().get(),
-                "nodeCount",
-                clusterInfo.nodes().get().size()))
-        .build();
+    builder.up().withDetails(Map.of("info", "Kafka health check operation succeeded")).build();
   }
 }
