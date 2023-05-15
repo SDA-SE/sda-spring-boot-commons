@@ -14,7 +14,7 @@ Based on:
 | `sda.kafka.consumer.retry.initialBackOffInterval` _int_ | The initial backoff of the retry in ms           | `1000`      | `1500`      | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
 | `sda.kafka.consumer.retry.maxBackOffInterval` _int_     | The max backoff interval  in ms                  | `4000`      | `5000`      | `SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVALL`     |
 | `sda.kafka.consumer.retry.backOffMultiplier` _int_      | The multiplier beginning with the initial backoff | `2`         | `1.5`       | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
-| `sda.kafka.consumer.retry.maxRetries` _int_             | Max retries consuming the offset                 | `4`         | `10`        | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
+| `sda.kafka.consumer.retry.maxRetries` _int_             | Max retries consuming the offset                 | `4`         | `10`        | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_MAXRETRIES` |
 | `management.health.kafka.enabled` _boolean_             | Flag to enable kafka health check                | `true`      | `false`     | `MANAGEMENT_HEALTH_KAFKA_ENABLED` |
 | `management.health.kafka.timeout` _duration_            | Allowed duration for health check to finish      | `4s`        | `5000ms`    | `MANAGEMENT_HEALTH_KAFKA_TIMEOUT` |
 
