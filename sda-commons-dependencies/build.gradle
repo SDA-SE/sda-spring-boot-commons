@@ -48,7 +48,7 @@ dependencies {
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:9.31'
     api 'com.github.tomakehurst:wiremock-jre8:2.35.0'
-    api 'net.minidev:json-smart:2.4.10', {
+    api 'net.minidev:json-smart:2.4.11', {
       because 'Temporary: this version is used to solve CVE-2023-1370'
     }
 
