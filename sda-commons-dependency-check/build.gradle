@@ -6,6 +6,8 @@ dependencies {
   api project(":sda-commons-starter-web")
   api project(":sda-commons-web-autoconfigure")
   api project(":sda-commons-web-testing")
+  api project(":sda-commons-cloudevents")
+  api project(":sda-commons-asyncapi")
 
   testImplementation "io.github.classgraph:classgraph"
 }

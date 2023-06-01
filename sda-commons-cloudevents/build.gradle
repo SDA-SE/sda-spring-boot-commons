@@ -1,0 +1,12 @@
+dependencies {
+
+  api ('jakarta.validation:jakarta.validation-api')
+  api ('com.kjetland:mbknor-jackson-jsonschema_2.13') {
+    exclude group: "javax.validation", module: "validation-api"
+  }
+
+  testImplementation project(':sda-commons-starter-kafka')
+  testImplementation project(':sda-commons-asyncapi')
+  testImplementation project(':sda-commons-web-testing')
+  testImplementation ('org.springframework.kafka:spring-kafka-test')
+}
