@@ -63,7 +63,7 @@ dependencies {
     }
 
     // sda-commons-starter-s3
-    api "io.awspring.cloud:spring-cloud-aws-core:2.4.4"
+    api "io.awspring.cloud:spring-cloud-aws-core:3.0.1"
 
     // sda-commons-shared-asyncapi
     api "com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39"
