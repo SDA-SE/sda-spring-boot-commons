@@ -9,37 +9,54 @@ package org.sdase.commons.spring.boot.web.client;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import java.util.Optional;
 import javax.ws.rs.core.HttpHeaders;
-import org.springframework.beans.factory.ObjectProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 
 public class OidcClientRequestConfiguration {
 
-  private final OAuth2TokenProvider oAuth2TokenProvider;
+  private final ApplicationContext applicationContext;
 
-  public OidcClientRequestConfiguration(ObjectProvider<OAuth2TokenProvider> oAuth2TokenProvider) {
-    this.oAuth2TokenProvider = oAuth2TokenProvider.getIfAvailable();
+  public OidcClientRequestConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
   }
 
   @Bean
+  @Lazy
   @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
   public RequestInterceptor getOidcRequestInterceptor() {
-    return new OidcClientRequestInterceptor(oAuth2TokenProvider);
+    return new OidcClientRequestInterceptor(applicationContext);
   }
 
   public static class OidcClientRequestInterceptor extends AuthHeaderClientInterceptor {
 
-    private final OAuth2TokenProvider oAuth2TokenProvider;
+    private static final Logger LOG = LoggerFactory.getLogger(OidcClientRequestInterceptor.class);
 
-    public OidcClientRequestInterceptor(OAuth2TokenProvider oAuth2TokenProvider) {
-      this.oAuth2TokenProvider = oAuth2TokenProvider;
+    private final ApplicationContext applicationContext;
+
+    public OidcClientRequestInterceptor(ApplicationContext applicationContext) {
+      this.applicationContext = applicationContext;
     }
 
     @Override
     public void apply(RequestTemplate template) {
       firstAuthHeaderFromServletRequest()
-          .or(() -> oAuth2TokenProvider.getAuthenticationTokenForTechnicalUser("oidc"))
+          .or(
+              () -> {
+                try {
+                  var bean =
+                      applicationContext.getBean("oAuth2Provider", OAuth2TokenProvider.class);
+                  return bean.getAuthenticationTokenForTechnicalUser("oidc");
+                } catch (Exception e) {
+                  LOG.error("Error retrieving OAuth 2 provider", e.getCause());
+                }
+                return Optional.empty();
+              })
           .ifPresent(token -> template.header(HttpHeaders.AUTHORIZATION, token));
     }
   }
