@@ -8,6 +8,8 @@
 package org.sdase.commons.spring.boot.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.TopicPartition;
 import org.sdase.commons.spring.boot.kafka.config.KafkaConsumerConfig;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -113,10 +115,21 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   public DefaultErrorHandler retryDeadLetterErrorHandler() {
     // Will result into 1s, 2s, 4s, 4s retry backoff
     ExponentialBackOffWithMaxRetries backOff = createDefaultRetryBackOff();
-    DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(recoverTemplate);
+    DeadLetterPublishingRecoverer recoverer =
+        new DeadLetterPublishingRecoverer(recoverTemplate, this::getDeadLetterTopicName);
     DefaultErrorHandler handler = new DefaultErrorHandler(recoverer, backOff);
     handler.addNotRetryableExceptions(NotRetryableKafkaException.class);
     return handler;
+  }
+
+  protected TopicPartition getDeadLetterTopicName(
+      ConsumerRecord<?, ?> consumerRecord, Exception exception) {
+
+    if (consumerConfig.dlt() != null && consumerConfig.dlt().name() != null) {
+      return new TopicPartition(consumerConfig.dlt().name(), consumerRecord.partition());
+    }
+
+    return new TopicPartition(consumerRecord.topic() + ".DLT", consumerRecord.partition());
   }
 
   private ExponentialBackOffWithMaxRetries createDefaultRetryBackOff() {
