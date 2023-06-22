@@ -9,14 +9,15 @@ Based on:
 
 ##  Configuration
 
-| **Property**                                            | **Description**                                  | **Default** | **Example** | **Env**                                              |
-|---------------------------------------------------------|--------------------------------------------------|-------------|-------------|------------------------------------------------------|
-| `sda.kafka.consumer.retry.initialBackOffInterval` _int_ | The initial backoff of the retry in ms           | `1000`      | `1500`      | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
-| `sda.kafka.consumer.retry.maxBackOffInterval` _int_     | The max backoff interval  in ms                  | `4000`      | `5000`      | `SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVALL`     |
-| `sda.kafka.consumer.retry.backOffMultiplier` _int_      | The multiplier beginning with the initial backoff | `2`         | `1.5`       | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
-| `sda.kafka.consumer.retry.maxRetries` _int_             | Max retries consuming the offset                 | `4`         | `10`        | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_MAXRETRIES` |
-| `management.health.kafka.enabled` _boolean_             | Flag to enable kafka health check                | `true`      | `false`     | `MANAGEMENT_HEALTH_KAFKA_ENABLED` |
-| `management.health.kafka.timeout` _duration_            | Allowed duration for health check to finish      | `4s`        | `5000ms`    | `MANAGEMENT_HEALTH_KAFKA_TIMEOUT` |
+| **Property**                                            | **Description**                                    | **Default**  | **Example**       | **Env**                                              |
+|---------------------------------------------------------|----------------------------------------------------|--------------|-------------------|------------------------------------------------------|
+| `sda.kafka.consumer.retry.initialBackOffInterval` _int_ | The initial backoff of the retry in ms             | `1000`       | `1500`            | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
+| `sda.kafka.consumer.retry.maxBackOffInterval` _int_     | The max backoff interval  in ms                    | `4000`       | `5000`            | `SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVALL`     |
+| `sda.kafka.consumer.retry.backOffMultiplier` _int_      | The multiplier beginning with the initial backoff  | `2`          | `1.5`             | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL` |
+| `sda.kafka.consumer.retry.maxRetries` _int_             | Max retries consuming the offset                   | `4`          | `10`              | `SDA_KAFKA_CONSUMER_RETRY_INITIAL_MAXRETRIES`        |
+| `sda.kafka.consumer.dlt.name` _string_                  | Name of consumer dead letter topic                 |              | `topic-PR-36.DLT` | `SDA_KAFKA_CONSUMER_DLT_NAME`                        |
+| `management.health.kafka.enabled` _boolean_             | Flag to enable kafka health check                  | `true`       | `false`           | `MANAGEMENT_HEALTH_KAFKA_ENABLED`                    |
+| `management.health.kafka.timeout` _duration_            | Allowed duration for health check to finish        | `4s`         | `5000ms`          | `MANAGEMENT_HEALTH_KAFKA_TIMEOUT`                    |
 
 For further information have a look to the Spring Kafka [reference documentation](https://docs.spring.io/spring-kafka/reference/html/).
 
@@ -37,8 +38,9 @@ which can be referenced in `@KafkaListener` annotated methods.
     produces failed record to topic with `.DLT` suffix.
   - By default, the dead-letter record is sent to a topic named .DLT (the original topic name
     suffixed with .DLT) and to the same partition as the original record. Therefore, when you use
-    the default configuration, the dead-letter topic must have at least as many partitions as the
-    original topic.
+    the default configuration, **the dead-letter topic must have at least as many partitions as the
+    original topic.**
+  - The spring default DLT naming convention can be overwritten using the `sda.kafka.consumer.dlt.name` property
 
 To skip retry for specific business errors, you can throw the custom `NotRetryableKafkaException`.
 
