@@ -91,7 +91,7 @@ public class AuthMock {
 
   private void initDiscovery() {
     server.addStubMapping(
-        WireMock.request("GET", WireMock.urlMatching(DISCOVERY_PATH))
+        WireMock.request("GET", WireMock.urlPathEqualTo(DISCOVERY_PATH))
             .willReturn(
                 WireMock.aResponse()
                     .withStatus(200)
