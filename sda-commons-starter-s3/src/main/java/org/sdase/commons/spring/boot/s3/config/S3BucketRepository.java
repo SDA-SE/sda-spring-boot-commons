@@ -42,7 +42,7 @@ public class S3BucketRepository {
    * @throws IOException if the object content could not be provided as byte array.
    */
   public byte[] findByName(String key) throws IOException {
-    try(var file = amazonS3.getObject(bucketName, key)){
+    try (var file = amazonS3.getObject(bucketName, key)) {
       var s3ObjectInputStream = file.getObjectContent();
 
       return IOUtils.toByteArray(s3ObjectInputStream);
