@@ -57,6 +57,8 @@ class S3BucketRepositoryTest {
 
     byte[] response = subject.findByName("testFileName");
     assertThat(response).isNotEmpty().isEqualTo(expected.getBytes());
+
+    verify(s3Object).close();
   }
 
   @Test
