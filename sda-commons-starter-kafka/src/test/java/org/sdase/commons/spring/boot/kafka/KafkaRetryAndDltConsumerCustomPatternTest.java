@@ -59,7 +59,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
-      "sda.kafka.consumer.dlt.name=custom-dlt-topic"
+      "sda.kafka.consumer.dlt.pattern=custom-prefix-<topic>-custom-suffix"
     })
 @EmbeddedKafka(
     partitions = 1,
@@ -67,7 +67,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-class KafkaRetryAndDltConsumerCustomNameTest {
+class KafkaRetryAndDltConsumerCustomPatternTest {
 
   @Autowired KafkaTemplate<String, KafkaTestModel> kafkaTemplate;
 
@@ -97,7 +97,8 @@ class KafkaRetryAndDltConsumerCustomNameTest {
         new DefaultKafkaConsumerFactory<>(
             configs, new StringDeserializer(), new StringDeserializer());
 
-    ContainerProperties containerProperties = new ContainerProperties("custom-dlt-topic");
+    ContainerProperties containerProperties =
+        new ContainerProperties("custom-prefix-dlt-topic-consumer-custom-suffix");
     containerDLT = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
 
     consumerRecordsDLT = new LinkedBlockingQueue<>();
