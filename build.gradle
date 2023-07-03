@@ -24,6 +24,20 @@ group 'org.sdase.commons.spring.boot'
 
 allprojects {
   apply plugin: 'idea'
+
+  dependencyLocking { lockAllConfigurations() }
+
+  // Task for creating gradle.lockfile per module. Needed for Trivy vulnerability scan.
+  task resolveAndLockAll {
+    doFirst {
+      assert gradle.startParameter.writeDependencyLocks
+    }
+    doLast {
+      configurations.findAll {
+        it.canBeResolved
+      }.each { it.resolve() }
+    }
+  }
 }
 
 /**
