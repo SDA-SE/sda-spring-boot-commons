@@ -11,7 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.sdase.commons.spring.boot.kafka.config.KafkaConsumerConfig;
+import org.sdase.commons.spring.boot.kafka.config.SdaDltPatternValidator;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -38,6 +41,11 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @ConfigurationPropertiesScan
 public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
 
+  private static final Logger LOG = LoggerFactory.getLogger(SdaKafkaConsumerConfiguration.class);
+
+  public static final String DLT_SUFFIX = ".DLT";
+  public static final String DLT_REGEX = "<topic>";
+
   private final KafkaProperties kafkaProperties;
   private final KafkaTemplate<Object, Object> recoverTemplate;
   private final LocalValidatorFactoryBean validator;
@@ -55,6 +63,11 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     this.validator = validator;
     this.objectMapper = objectMapper;
     this.consumerConfig = consumerConfig;
+  }
+
+  @Bean
+  public static SdaDltPatternValidator configurationPropertiesValidator() {
+    return new SdaDltPatternValidator();
   }
 
   @Bean(SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
@@ -125,11 +138,21 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   protected TopicPartition getDeadLetterTopicName(
       ConsumerRecord<?, ?> consumerRecord, Exception exception) {
 
-    if (consumerConfig.dlt() != null && consumerConfig.dlt().name() != null) {
-      return new TopicPartition(consumerConfig.dlt().name(), consumerRecord.partition());
+    if (consumerConfig.dlt() != null && consumerConfig.dlt().pattern() != null) {
+
+      try {
+
+        String pattern = consumerConfig.dlt().pattern();
+        String dltTopicName = pattern.replace(DLT_REGEX, consumerRecord.topic());
+        return new TopicPartition(dltTopicName, consumerRecord.partition());
+      } catch (Exception e) {
+
+        LOG.error(
+            "Custom DLT pattern " + consumerConfig.dlt().pattern() + ", could not be used", e);
+      }
     }
 
-    return new TopicPartition(consumerRecord.topic() + ".DLT", consumerRecord.partition());
+    return new TopicPartition(consumerRecord.topic() + DLT_SUFFIX, consumerRecord.partition());
   }
 
   private ExponentialBackOffWithMaxRetries createDefaultRetryBackOff() {
