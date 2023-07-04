@@ -47,6 +47,16 @@ since release [0.11.2](https://github.com/SDA-SE/sda-spring-boot-commons/release
 Since Spring Boot runs in an embedded Tomcat server, it needs some tmp directories to support the container run in a readonly file system.
 Therefore, your application need to set a folder called `static` and a folder structure `tmp/tomcat` in the root directory of your container.
 In order to do so, create a folder `static` and `tmp/tomcat` on `src/main/jib`.
+If you use non-root docker images, your jib config in your `build.gradle` file must include `container.workingDirectory='/'`,
+so jib will use the root folder to create the sub folders, e.g:
+
+```gradle
+jib {
+  from.image = 'gcr.io/distroless/java17-debian11:nonroot'
+  container.workingDirectory='/'
+}
+```
+
 When the container's image is generated with `gradlew jibDockerBuild`, these folders will be copied to the container.
 In case you need the tmp folder to be writable, you can mount a volume in your container. The default path is `/tmp/tomcat`, but you can overwrite it setting the environment variable pointing to your folder:
 
