@@ -383,6 +383,23 @@ public interface CustomerServiceApi {
   * Example: `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm`
   * Default: ``
 
+### Platform Client
+
+The Platform Client combines the authentication forwarding, trace token and OIDC configuration
+without the need to configure each individually.
+
+```java
+@PlatformClient(
+    value = "customerService",
+    url = "${customer.api.base.url}")
+public interface CustomerServiceApi {
+
+  // ...
+}
+```
+
+It abstracts some configuration of the FeignClient and is then available as bean as well.
+
 ## Error Handling
 
 The `sda-commons-web-starter` provides a shared `ApiError` model, to provide a common
