@@ -7,14 +7,14 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
-import static io.opentracing.tag.Tags.COMPONENT;
+// import static io.opentracing.tag.Tags.COMPONENT;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
-import io.opentracing.Scope;
+/*import io.opentracing.Scope;
 import io.opentracing.Span;
-import io.opentracing.Tracer;
+import io.opentracing.Tracer;*/
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,8 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
   private final String opaRequestUrl;
   private final OpaRequestBuilder opaRequestBuilder;
   private final RestTemplate opaRestTemplate;
-  private final Tracer tracer;
+  // TODO update to opentelemetry
+  // private final Tracer tracer;
 
   /**
    * @param disableOpa Disables authorization checks with Open Policy Agent completely. In this case
@@ -78,10 +79,10 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
       OpaRequestBuilder opaRequestBuilder,
       @Qualifier("opaRestTemplate") RestTemplate opaRestTemplate,
       ApplicationContext applicationContext,
-      Tracer tracer) {
+      /* TODO update to opentelemetry*/ Object tracer) {
     this.disableOpa = disableOpa;
     this.opaRestTemplate = opaRestTemplate;
-    this.tracer = tracer;
+    // this.tracer = tracer;
     var derivedPolicyPackage = createOpaPackageName(policyPackage, applicationContext);
     this.opaRequestUrl = createOpaRequestUri(opaBaseUrl, derivedPolicyPackage);
     this.opaRequestBuilder = opaRequestBuilder;
@@ -106,13 +107,13 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
       FilterInvocation filterInvocation,
       Collection<ConfigAttribute> attributes) {
     var httpRequest = filterInvocation.getHttpRequest();
-    Span span =
+    /*Span span =
         tracer
             .buildSpan("authorizeUsingOpa")
             .withTag("opa.allow", false)
             .withTag(COMPONENT, "OpaAuthFilter")
             .start();
-    try (Scope ignored = tracer.scopeManager().activate(span)) {
+    try (Scope ignored = tracer.scopeManager().activate(span)) {*/
       if (disableOpa) {
         return handleOpaDisabled(httpRequest);
       }
@@ -122,15 +123,15 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
             "Invalid response from OPA. Maybe the policy path or the response format is not correct");
         return ACCESS_ABSTAIN;
       }
-      span.setTag("opa.allow", opaResponse.isAllow());
+      // span.setTag("opa.allow", opaResponse.isAllow());
       if (!opaResponse.isAllow()) {
         return ACCESS_ABSTAIN;
       }
       storeConstraints(opaResponse);
       return ACCESS_GRANTED;
-    } finally {
+    /*} finally {
       span.finish();
-    }
+    }*/
   }
 
   private void storeConstraints(OpaResponse opaResponse) {
