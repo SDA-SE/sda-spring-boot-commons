@@ -7,12 +7,13 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
-// import static io.opentracing.tag.Tags.COMPONENT;
-import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
-
-/*import io.opentracing.Scope;
+/*
+import static io.opentracing.tag.Tags.COMPONENT;
+import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;*/
+import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
+
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
@@ -43,6 +44,7 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
   private final String opaRequestUrl;
   private final OpaRequestBuilder opaRequestBuilder;
   private final RestTemplate opaRestTemplate;
+
   // TODO update to opentelemetry
   // private final Tracer tracer;
 
@@ -114,21 +116,21 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
             .withTag(COMPONENT, "OpaAuthFilter")
             .start();
     try (Scope ignored = tracer.scopeManager().activate(span)) {*/
-      if (disableOpa) {
-        return handleOpaDisabled(httpRequest);
-      }
-      OpaResponse opaResponse = authorizeWithOpa(httpRequest);
-      if (opaResponse == null) {
-        LOG.warn(
-            "Invalid response from OPA. Maybe the policy path or the response format is not correct");
-        return ACCESS_ABSTAIN;
-      }
-      // span.setTag("opa.allow", opaResponse.isAllow());
-      if (!opaResponse.isAllow()) {
-        return ACCESS_ABSTAIN;
-      }
-      storeConstraints(opaResponse);
-      return ACCESS_GRANTED;
+    if (disableOpa) {
+      return handleOpaDisabled(httpRequest);
+    }
+    OpaResponse opaResponse = authorizeWithOpa(httpRequest);
+    if (opaResponse == null) {
+      LOG.warn(
+          "Invalid response from OPA. Maybe the policy path or the response format is not correct");
+      return ACCESS_ABSTAIN;
+    }
+    // span.setTag("opa.allow", opaResponse.isAllow());
+    if (!opaResponse.isAllow()) {
+      return ACCESS_ABSTAIN;
+    }
+    storeConstraints(opaResponse);
+    return ACCESS_GRANTED;
     /*} finally {
       span.finish();
     }*/
