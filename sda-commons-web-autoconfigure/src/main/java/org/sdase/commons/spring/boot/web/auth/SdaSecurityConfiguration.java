@@ -7,10 +7,10 @@
  */
 package org.sdase.commons.spring.boot.web.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import javax.servlet.http.HttpServletRequest;
 import org.sdase.commons.spring.boot.web.security.headers.SdaSecurityHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

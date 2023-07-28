@@ -11,10 +11,10 @@ import static org.sdase.commons.spring.boot.web.tracing.TraceTokenRequestInterce
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import javax.servlet.http.HttpServletRequest;
 import org.sdase.commons.spring.boot.web.auth.opa.extension.OpaInputExtension;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaInput;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaRequest;
