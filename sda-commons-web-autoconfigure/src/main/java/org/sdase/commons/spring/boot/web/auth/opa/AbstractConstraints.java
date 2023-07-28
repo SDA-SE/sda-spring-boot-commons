@@ -11,7 +11,7 @@ import static org.sdase.commons.spring.boot.web.auth.opa.OpaAccessDecisionVoter.
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
