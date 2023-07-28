@@ -10,7 +10,7 @@ ext {
   awaitalityVersion = '4.2.0'
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.0.2'
-  springCloudVersion = '2021.0.6'
+  springCloudVersion = '2022.0.3'
   scalaVersion = '2.13.11'
 }
 
@@ -53,6 +53,7 @@ dependencies {
     api 'net.minidev:json-smart:2.5.0', {
       because 'Temporary: this version is used to solve CVE-2023-1370'
     }
+    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.7.0'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
