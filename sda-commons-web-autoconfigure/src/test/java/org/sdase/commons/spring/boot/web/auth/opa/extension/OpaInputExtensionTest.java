@@ -9,8 +9,8 @@ package org.sdase.commons.spring.boot.web.auth.opa.extension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
