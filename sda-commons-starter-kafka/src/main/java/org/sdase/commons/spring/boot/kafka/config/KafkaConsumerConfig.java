@@ -7,11 +7,9 @@
  */
 package org.sdase.commons.spring.boot.kafka.config;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConstructorBinding
 @ConfigurationProperties(prefix = "sda.kafka.consumer")
 public record KafkaConsumerConfig(@NotNull RetryConfig retry, DLTConfig dlt) {
   public record RetryConfig(

@@ -8,7 +8,7 @@
 package org.sdase.commons.spring.boot.web.auth.opa.extension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaInput;
 
 /**

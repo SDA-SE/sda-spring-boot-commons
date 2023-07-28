@@ -7,8 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class NumericStringValidator implements ConstraintValidator<NumericString, String> {
 
