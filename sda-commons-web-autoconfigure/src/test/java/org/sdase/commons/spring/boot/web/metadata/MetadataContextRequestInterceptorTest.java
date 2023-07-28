@@ -11,11 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MultivaluedMap;
 import org.assertj.core.api.Assertions;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,7 +102,7 @@ class MetadataContextRequestInterceptorTest {
     assertThat(MetadataContext.current().keys()).isEmpty();
   }
 
-  HttpServletRequest requestWithHeaders(MultivaluedMap<String, String> headers) {
+  HttpServletRequest requestWithHeaders(MultivaluedStringMap headers) {
     HttpServletRequest mock = mock(HttpServletRequest.class);
     headers.forEach(
         (key, value) -> when(mock.getHeaders(key)).thenReturn(Collections.enumeration(value)));

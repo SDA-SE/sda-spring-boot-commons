@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.security.validation;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.sdase.commons.spring.boot.web.jackson.SdaObjectMapperConfiguration;
 import org.sdase.commons.spring.boot.web.security.exception.InsecureConfigurationException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

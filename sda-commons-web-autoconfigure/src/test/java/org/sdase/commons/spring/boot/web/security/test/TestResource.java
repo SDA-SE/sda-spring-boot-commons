@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class TestResource {
   @NotNull(message = "must not be null")

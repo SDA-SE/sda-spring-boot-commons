@@ -24,9 +24,9 @@ public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor
   private final Set<String> metadataFields = MetadataContext.metadataFields();
 
   @Override
-  public ConsumerRecord<K, V> intercept(ConsumerRecord consumerRecord) {
-    MetadataContext.createContext(createMetadataContext(consumerRecord));
-    return consumerRecord;
+  public ConsumerRecord<K, V> intercept(ConsumerRecord<K, V> record, Consumer<K, V> consumer) {
+    MetadataContext.createContext(createMetadataContext(record));
+    return record;
   }
 
   @Override
