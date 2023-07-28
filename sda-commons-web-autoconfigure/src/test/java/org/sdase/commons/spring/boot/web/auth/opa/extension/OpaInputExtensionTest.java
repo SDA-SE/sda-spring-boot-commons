@@ -26,7 +26,9 @@ class OpaInputExtensionTest {
         FancyName.class
       })
   void shouldNormalizeNamespaceFromClassName(Class<? extends OpaInputExtension<?>> given)
-      throws NoSuchMethodException, InvocationTargetException, InstantiationException,
+      throws NoSuchMethodException,
+          InvocationTargetException,
+          InstantiationException,
           IllegalAccessException {
     var opaInputExtension = given.getDeclaredConstructor().newInstance();
     assertThat(opaInputExtension.getNamespace()).isEqualTo("customData");
