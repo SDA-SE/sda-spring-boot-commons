@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.error;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.error.ApiException;
 import org.springframework.core.Ordered;
