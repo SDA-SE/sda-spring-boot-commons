@@ -30,9 +30,11 @@ public class SdaOidcClientConfiguration {
   /** the oidc client id */
   @Value("${oidc.client.id}")
   private String clientId;
+
   /** the oidc client secret */
   @Value("${oidc.client.secret}")
   private String clientSecret;
+
   /** the oidc client issuer URI */
   @Value("${oidc.client.issuer.uri}")
   private String oidcIssuer;
