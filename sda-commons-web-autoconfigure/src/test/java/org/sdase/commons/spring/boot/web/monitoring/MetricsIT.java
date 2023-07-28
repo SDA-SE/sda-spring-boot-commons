@@ -21,7 +21,7 @@ import org.sdase.commons.spring.boot.web.monitoring.testing.CustomMetricsTestCon
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
+import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -47,7 +47,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "opa.disable=true"
     })
-@AutoConfigureMetrics
+@AutoConfigureObservability
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
