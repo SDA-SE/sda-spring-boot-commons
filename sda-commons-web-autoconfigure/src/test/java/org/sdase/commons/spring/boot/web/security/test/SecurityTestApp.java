@@ -7,8 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import javax.ws.rs.core.Context;
 import org.sdase.commons.spring.boot.error.ApiException;
 import org.slf4j.Logger;

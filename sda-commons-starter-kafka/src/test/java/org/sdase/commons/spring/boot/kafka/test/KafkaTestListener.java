@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.kafka.test;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.sdase.commons.spring.boot.kafka.NotRetryableKafkaException;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
