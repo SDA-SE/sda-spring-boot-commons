@@ -22,6 +22,7 @@ public class SdaKafkaListenerContainerFactory {
    * and produces failed record to topic with .DLT suffix.
    */
   public static final String RETRY_AND_DLT = "RETRY_AND_DLT";
+
   /**
    * Simply logs the exception; with a record listener, the remaining records from the previous poll
    * are passed to the listener.
