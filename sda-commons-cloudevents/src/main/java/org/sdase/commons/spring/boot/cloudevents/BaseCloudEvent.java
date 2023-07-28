@@ -9,7 +9,7 @@ package org.sdase.commons.spring.boot.cloudevents;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaExamples;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 public abstract class BaseCloudEvent {
 
