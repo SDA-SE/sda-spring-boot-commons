@@ -8,8 +8,8 @@
 package org.sdase.commons.spring.boot.web.docs;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.springdoc.core.SpringDocConfigProperties;
-import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.providers.ObjectMapperProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.PropertySource;
 public class SdaOpenApiCustomizerConfiguration {
 
   @Bean
-  public OpenApiCustomiser removeServers() {
+  public OpenApiCustomizer removeServers() {
     return openApi -> openApi.servers(null);
   }
 

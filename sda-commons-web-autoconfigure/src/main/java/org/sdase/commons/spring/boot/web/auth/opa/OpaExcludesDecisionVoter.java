@@ -7,13 +7,14 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
+import static org.springdoc.core.utils.Constants.API_DOCS_URL;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.springdoc.core.SpringDocConfigProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
@@ -28,10 +29,9 @@ public class OpaExcludesDecisionVoter implements AccessDecisionVoter<FilterInvoc
 
   public OpaExcludesDecisionVoter(
       @Value("${opa.exclude.patterns:}") String excludedPathPatterns,
-      SpringDocConfigProperties springDocConfigProperties) {
+      @Value(API_DOCS_URL) String apiDocsUrl) {
     if (excludedPathPatterns.isEmpty()) {
-      var configuredSpringDocPath = springDocConfigProperties.getApiDocs().getPath();
-      this.excludedPathPatterns.add(Pattern.compile(configuredSpringDocPath + "\\.(json|yaml)"));
+      this.excludedPathPatterns.add(Pattern.compile(apiDocsUrl + "\\.(json|yaml)"));
     } else {
       Stream.of(excludedPathPatterns.split(","))
           .filter(Objects::nonNull)
