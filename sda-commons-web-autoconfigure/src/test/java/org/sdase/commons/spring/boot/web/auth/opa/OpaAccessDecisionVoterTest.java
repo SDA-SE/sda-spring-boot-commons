@@ -57,13 +57,8 @@ class OpaAccessDecisionVoterTest {
   void shouldAllowAnonymousIfDisabled() {
     var disabledDecisionVoter =
         new OpaAccessDecisionVoter(
-            true,
-            opaBaseUrl,
-            "",
-            opaRequestBuilder,
-            opaRestTemplate,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            true, opaBaseUrl, "", opaRequestBuilder, opaRestTemplate, applicationContext /* ,
+            null TODO update to opentelemetry*/);
     var requestMock = mock(HttpServletRequest.class);
     when(requestMock.getUserPrincipal()).thenReturn(null);
     var filterInvocationMock = mock(FilterInvocation.class);
@@ -77,13 +72,8 @@ class OpaAccessDecisionVoterTest {
   void shouldAllowPrincipalIfDisabled() {
     var disabledDecisionVoter =
         new OpaAccessDecisionVoter(
-            true,
-            opaBaseUrl,
-            "",
-            opaRequestBuilder,
-            opaRestTemplate,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            true, opaBaseUrl, "", opaRequestBuilder, opaRestTemplate, applicationContext /* ,
+            null TODO update to opentelemetry*/);
     var requestMock = mock(HttpServletRequest.class);
     final JwtAuthenticationToken authenticationTokenMock =
         new JwtAuthenticationToken(mock(Jwt.class));
@@ -99,13 +89,8 @@ class OpaAccessDecisionVoterTest {
   void shouldDerivePolicyPackageFromApplicationClass() {
     var decisionVoter =
         new OpaAccessDecisionVoter(
-            false,
-            opaBaseUrl,
-            "",
-            opaRequestBuilder,
-            opaRestTemplate,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            false, opaBaseUrl, "", opaRequestBuilder, opaRestTemplate, applicationContext /* ,
+            null TODO update to opentelemetry*/);
     assertThat(decisionVoter)
         .extracting("opaRequestUrl")
         .asString()
@@ -121,8 +106,8 @@ class OpaAccessDecisionVoterTest {
             "com.example.package",
             opaRequestBuilder,
             opaRestTemplate,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            applicationContext /* ,
+                               null TODO update to opentelemetry*/);
     assertThat(decisionVoter)
         .extracting("opaRequestUrl")
         .asString()
@@ -139,13 +124,8 @@ class OpaAccessDecisionVoterTest {
             });
     var decisionVoter =
         new OpaAccessDecisionVoter(
-            false,
-            opaBaseUrl,
-            "",
-            opaRequestBuilder,
-            restTemplateMock,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            false, opaBaseUrl, "", opaRequestBuilder, restTemplateMock, applicationContext /* ,
+            null TODO update to opentelemetry*/);
     var requestMock = mock(HttpServletRequest.class);
     when(requestMock.getUserPrincipal()).thenReturn(null);
     when(requestMock.getHeaderNames()).thenReturn(Collections.emptyEnumeration());
@@ -161,13 +141,8 @@ class OpaAccessDecisionVoterTest {
   void shouldNotVoteIfAllowFalse() {
     var decisionVoter =
         new OpaAccessDecisionVoter(
-            false,
-            opaBaseUrl,
-            "",
-            opaRequestBuilder,
-            opaRestTemplate,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            false, opaBaseUrl, "", opaRequestBuilder, opaRestTemplate, applicationContext /* ,
+            null TODO update to opentelemetry*/);
     var requestMock = mock(HttpServletRequest.class);
     when(requestMock.getUserPrincipal()).thenReturn(null);
     when(requestMock.getHeaderNames()).thenReturn(Collections.emptyEnumeration());
@@ -185,13 +160,8 @@ class OpaAccessDecisionVoterTest {
   void shouldGrantAccessIfAllowTrue() {
     var decisionVoter =
         new OpaAccessDecisionVoter(
-            false,
-            opaBaseUrl,
-            "",
-            opaRequestBuilder,
-            opaRestTemplate,
-            applicationContext,
-            null /* TODO update to opentelemetry*/);
+            false, opaBaseUrl, "", opaRequestBuilder, opaRestTemplate, applicationContext /* ,
+            null TODO update to opentelemetry*/);
     var requestMock = mock(HttpServletRequest.class);
     when(requestMock.getUserPrincipal()).thenReturn(null);
     when(requestMock.getHeaderNames()).thenReturn(Collections.emptyEnumeration());

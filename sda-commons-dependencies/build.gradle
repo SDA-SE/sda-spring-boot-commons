@@ -10,7 +10,7 @@ ext {
   awaitalityVersion = '4.2.0'
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.0.2'
-  springCloudVersion = '2022.0.3'
+  springCloudVersion = '2022.0.4'
   scalaVersion = '2.13.11'
 }
 
@@ -23,11 +23,6 @@ dependencies {
   }
 
   constraints {
-    api 'org.apache.commons:commons-lang3:3.13.0'
-
-    // forcing upgrade due to CVE-2023-24998
-    api 'commons-fileupload:commons-fileupload:1.5'
-
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.2.0'
 
@@ -37,7 +32,7 @@ dependencies {
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
-    api 'org.springdoc:springdoc-openapi-webmvc-core:1.7.0'
+    api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
     // should align with transitive dependency of org.springdoc:springdoc-openapi-webmvc-core:
     api 'io.swagger.core.v3:swagger-annotations:2.2.9'
     api 'io.github.classgraph:classgraph:4.8.162'
@@ -64,7 +59,7 @@ dependencies {
     }
 
     // sda-commons-starter-s3
-    api "io.awspring.cloud:spring-cloud-aws-core:2.4.4"
+    api "io.awspring.cloud:spring-cloud-aws-core:3.0.1"
 
     // sda-commons-shared-asyncapi
     api "com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39"
