@@ -32,4 +32,9 @@ public class SdaOpenApiCustomizerConfiguration {
     result.jsonMapper().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
     return result;
   }
+
+  @Bean
+  public SpringDocConfigProperties springDocConfigProperties() {
+    return new SpringDocConfigProperties();
+  }
 }
