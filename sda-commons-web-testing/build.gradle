@@ -3,7 +3,7 @@ dependencies {
   api 'org.springframework.cloud:spring-cloud-contract-wiremock', {
     exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
   }
-  api 'com.github.tomakehurst:wiremock-jre8', {
+  api 'com.github.tomakehurst:wiremock-jre8-standalone', {
     exclude group: 'org.opentest4j', module:'opentest4j'
     exclude group: 'org.ow2.asm', module: 'asm'
     exclude group: 'com.fasterxml.jackson', module: 'jackson-bom'
@@ -11,6 +11,7 @@ dependencies {
     exclude group: 'org.eclipse.jetty', module: 'jetty-io'
     exclude group: 'org.eclipse.jetty', module: 'jetty-security'
     exclude group: 'org.eclipse.jetty', module: 'jetty-util-ajax'
+    exclude group: 'org.eclipse.jetty', module: 'jetty-continuation'
     exclude group: 'org.eclipse.jetty', module: 'jetty-util'
     exclude group: 'org.eclipse.jetty', module: 'jetty-xml'
     exclude group: 'org.eclipse.jetty', module: 'jetty-client'
