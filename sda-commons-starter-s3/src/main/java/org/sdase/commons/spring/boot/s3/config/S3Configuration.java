@@ -7,16 +7,14 @@
  */
 package org.sdase.commons.spring.boot.s3.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+// import com.amazonaws.auth.AWSCredentials; TODO packages and classes changed
+// import com.amazonaws.auth.AWSStaticCredentialsProvider;
+// import com.amazonaws.auth.BasicAWSCredentials;
+// import com.amazonaws.client.builder.AwsClientBuilder;
+// import com.amazonaws.services.s3.AmazonS3;
+// import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
 public class S3Configuration {
@@ -36,23 +34,25 @@ public class S3Configuration {
   @Value("${s3.bucketName}")
   private String bucketName;
 
-  @Bean
-  @ConditionalOnMissingBean
-  public AmazonS3 getAmazonS3Client() {
-    final AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
+  // TODO API has completely changed, is there good reason to provide the raw client instead of
+  // using Spring Cloud S3Operations?
+  //  @Bean
+  //  @ConditionalOnMissingBean
+  //  public AmazonS3 getAmazonS3Client() {
+  //    final AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
+  //
+  //    return AmazonS3ClientBuilder.standard()
+  //        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
+  //        .withPathStyleAccessEnabled(true)
+  //        .withCredentials(new AWSStaticCredentialsProvider(credentials))
+  //        .build();
+  //  }
 
-    return AmazonS3ClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
-        .withPathStyleAccessEnabled(true)
-        .withCredentials(new AWSStaticCredentialsProvider(credentials))
-        .build();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  public S3BucketRepository s3BucketRepository(AmazonS3 getAmazonS3Client) {
-    return new S3BucketRepository(getAmazonS3Client, bucketName);
-  }
+  //  @Bean
+  //  @ConditionalOnMissingBean
+  //  public S3BucketRepository s3BucketRepository(AmazonS3 getAmazonS3Client) {
+  //    return new S3BucketRepository(getAmazonS3Client, bucketName);
+  //  }
 
   String getAccessKeyId() {
     return accessKeyId;
