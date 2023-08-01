@@ -3,41 +3,13 @@ dependencies {
   api 'org.springframework.cloud:spring-cloud-contract-wiremock', {
     exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
   }
-  api 'com.github.tomakehurst:wiremock-jre8-standalone', {
-    exclude group: 'org.opentest4j', module:'opentest4j'
-    exclude group: 'org.ow2.asm', module: 'asm'
-    exclude group: 'com.fasterxml.jackson', module: 'jackson-bom'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-http'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-io'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-security'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-util-ajax'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-continuation'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-util'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-xml'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-client'
-    exclude group: 'org.eclipse.jetty', module: 'jetty-alpn-client'
-    exclude group: 'org.eclipse.jetty.http2', module: 'http2-common'
-    exclude group: 'org.eclipse.jetty.http2', module: 'http2-hpack'
-    exclude group: 'net.minidev', module: 'json-smart'
-  }
-  api 'org.opentest4j:opentest4j'
-  api 'org.ow2.asm:asm'
+  api 'com.github.tomakehurst:wiremock-jre8-standalone'
   api 'org.awaitility:awaitility'
-  api 'org.eclipse.jetty:jetty-http'
-  api 'org.eclipse.jetty:jetty-io'
-  api 'org.eclipse.jetty:jetty-security'
-  api 'org.eclipse.jetty:jetty-util-ajax'
-  api 'org.eclipse.jetty:jetty-util'
-  api 'org.eclipse.jetty:jetty-xml'
-  api 'org.eclipse.jetty:jetty-client'
-  api 'org.eclipse.jetty:jetty-alpn-client'
-  api 'org.eclipse.jetty.http2:http2-common'
-  api 'org.eclipse.jetty.http2:http2-hpack'
-  api 'net.minidev:json-smart'
 
   testImplementation 'org.junit-pioneer:junit-pioneer:2.1.0', {
     exclude group: 'org.junit'
   }
+
   implementation 'com.fasterxml.jackson.core:jackson-databind'
   implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
   implementation 'com.nimbusds:nimbus-jose-jwt'
