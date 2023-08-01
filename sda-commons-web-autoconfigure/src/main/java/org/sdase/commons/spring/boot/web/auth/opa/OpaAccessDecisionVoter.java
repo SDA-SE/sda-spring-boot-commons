@@ -80,8 +80,8 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
       @Value("${opa.policy.package:}") String policyPackage,
       OpaRequestBuilder opaRequestBuilder,
       @Qualifier("opaRestTemplate") RestTemplate opaRestTemplate,
-      ApplicationContext applicationContext,
-      /* TODO update to opentelemetry*/ Object tracer) {
+      ApplicationContext applicationContext
+      /*, TODO update to opentelemetry Object tracer*/ ) {
     this.disableOpa = disableOpa;
     this.opaRestTemplate = opaRestTemplate;
     // this.tracer = tracer;
