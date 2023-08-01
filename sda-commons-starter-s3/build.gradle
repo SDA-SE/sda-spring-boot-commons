@@ -1,6 +1,6 @@
 dependencies {
   implementation "org.springframework.boot:spring-boot-autoconfigure"
-  implementation "io.awspring.cloud:spring-cloud-aws-core"
+  implementation "io.awspring.cloud:spring-cloud-aws-s3"
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
