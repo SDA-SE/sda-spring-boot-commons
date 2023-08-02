@@ -77,10 +77,21 @@ class JsonLoggingMdcTest {
         .anySatisfy(
             log ->
                 assertThat(log)
+                    .containsKey("mdc")
                     .extracting("mdc")
                     .asInstanceOf(InstanceOfAssertFactories.MAP)
                     .isNotNull()
-                    .isNotEmpty());
+                    .isNotEmpty()
+                    .containsKeys(
+                        "protocol",
+                        "method",
+                        "contentLength",
+                        "userAgent",
+                        "uri",
+                        "remoteAddress",
+                        "status",
+                        "requestHeaderTraceToken",
+                        "responseHeaderTraceToken"));
   }
 
   private List<Map<String, Object>> toStructuredLogs(CapturedOutput capturedOutput) {
