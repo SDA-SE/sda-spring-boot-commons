@@ -15,15 +15,15 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuration making results from {@link HealthIndicator}s also available as metrics in
  * Monitoring like in the dropwizard services. This allows to create dashboards displaying the
  * health status of a service independent of which framework used to implement a service.
  */
-@Configuration
+@AutoConfiguration
 public class RegisterHealthStatusAsMetricConfiguration {
   private static final String METRICNAME_HEALTHCHECK = "healthcheck_status";
 
