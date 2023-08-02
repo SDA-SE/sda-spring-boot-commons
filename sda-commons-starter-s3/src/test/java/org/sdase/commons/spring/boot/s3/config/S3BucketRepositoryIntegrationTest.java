@@ -171,6 +171,22 @@ class S3BucketRepositoryIntegrationTest {
         .hasSameContentAs(new FileInputStream(testFile));
   }
 
+  @Test
+  void shouldSaveBinaryFile() throws IOException, URISyntaxException {
+    File testFile =
+        new File(
+            Objects.requireNonNull(getClass().getResource("/test-data/some-text.md.zip")).toURI());
+    createObjects(Map.of());
+    // precondition
+    assertThat(testClient.listObjects(TEST_BUCKET).getObjectSummaries()).isEmpty();
+    S3BucketRepository s3BucketRepository = createS3BucketRepository();
+
+    s3BucketRepository.saveFile("test-binary-file", testFile);
+
+    assertThat(testClient.getObject(TEST_BUCKET, "test-binary-file").getObjectContent())
+        .hasSameContentAs(new FileInputStream(testFile));
+  }
+
   private static S3BucketRepository createS3BucketRepository() {
     S3Configuration s3Configuration =
         new S3Configuration("", "", endpoint, TEST_REGION, TEST_BUCKET);
