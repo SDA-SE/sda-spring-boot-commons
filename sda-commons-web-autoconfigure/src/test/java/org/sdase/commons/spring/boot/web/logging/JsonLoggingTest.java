@@ -60,12 +60,7 @@ class JsonLoggingTest {
   }
 
   private List<String> nonTestLogLines(CapturedOutput capturedOutput) {
-    return capturedOutput
-        .toString()
-        .lines()
-        .filter(l -> !l.contains(".test.context."))
-        .filter(l -> !l.contains("Test worker"))
-        .toList();
+    return capturedOutput.toString().lines().filter(l -> !l.contains(".test.context.")).toList();
   }
 
   private List<String> jsonLines(CapturedOutput capturedOutput) {
@@ -74,10 +69,7 @@ class JsonLoggingTest {
 
   private List<String> onlyConfigurableLogLines(List<String> logLines) {
     return logLines.stream()
-        .filter(
-            l ->
-                !l.contains(
-                    "org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class"))
+        // Logs that are written before any configuration is possible may be filtered here.
         .toList();
   }
 
