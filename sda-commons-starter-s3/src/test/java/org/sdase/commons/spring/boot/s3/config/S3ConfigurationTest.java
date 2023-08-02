@@ -25,12 +25,7 @@ class S3ConfigurationTest {
   void test_configurationAutowiredCorrectly() {
     assertThat(s3Configuration)
         .isNotNull()
-        .extracting(
-            S3Configuration::getAccessKeyId,
-            S3Configuration::getSecretKey,
-            S3Configuration::getRegion,
-            S3Configuration::getEndpoint,
-            S3Configuration::getBucketName)
+        .extracting("accessKeyId", "secretKey", "region", "endpoint", "bucketName")
         .contains("sdase", "test1234", "eu-west3", "http://localhost:37012", "test-bucket");
   }
 
