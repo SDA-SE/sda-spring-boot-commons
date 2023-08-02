@@ -20,6 +20,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.InvalidObjectStateException;
 import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
@@ -156,6 +157,11 @@ public class S3BucketRepository {
    *     an instance of this type.
    */
   public boolean doesObjectExist(String key) {
-    return listings().contains(key);
+    try {
+      s3Client.headObject(HeadObjectRequest.builder().bucket(bucketName).key(key).build());
+      return true;
+    } catch (NoSuchKeyException ignored) {
+      return false;
+    }
   }
 }
