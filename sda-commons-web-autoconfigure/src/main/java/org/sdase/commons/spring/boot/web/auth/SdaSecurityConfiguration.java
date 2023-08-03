@@ -26,6 +26,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
@@ -42,7 +43,7 @@ public class SdaSecurityConfiguration {
 
   private final boolean disableAuthentication;
 
-  private final SdaAccessDecisionManager sdaAccessDecisionManager;
+  private final SdaAuthorizationManager sdaAccessDecisionManager;
 
   private final SdaSecurityHeaders sdaSecurityHeaders;
 
@@ -50,12 +51,13 @@ public class SdaSecurityConfiguration {
    * @param issuers Comma separated string of open id discovery key sources with required issuers.
    * @param disableAuthentication Disables all authentication
    * @param sdaAccessDecisionManager {@link
-   *     org.springframework.security.access.AccessDecisionManager} that decides about authorization
+   *     org.springframework.security.authorization.AuthorizationManager} that decides about
+   *     authorization
    */
   public SdaSecurityConfiguration(
       @Value("${auth.issuers:}") String issuers,
       @Value("${auth.disable:false}") boolean disableAuthentication,
-      SdaAccessDecisionManager sdaAccessDecisionManager,
+      SdaAuthorizationManager sdaAccessDecisionManager,
       Optional<SdaSecurityHeaders> sdaSecurityHeaders) {
     this.issuers = issuers;
     this.disableAuthentication = disableAuthentication;
@@ -83,11 +85,10 @@ public class SdaSecurityConfiguration {
 
   private void oidcAuthentication(HttpSecurity http) throws Exception {
     var authenticationManagerResolver = createAuthenticationManagerResolver();
-    http.csrf()
-        .disable() // NOSONAR
-        .authorizeRequests(
-            authorize ->
-                authorize.anyRequest().permitAll().accessDecisionManager(sdaAccessDecisionManager))
+
+    http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            authorize -> authorize.requestMatchers("/**").access(sdaAccessDecisionManager))
         .oauth2ResourceServer(
             oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver))
         .headers(
@@ -118,11 +119,9 @@ public class SdaSecurityConfiguration {
   }
 
   private void noAuthentication(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable() // NOSONAR
-        .authorizeRequests(
-            authorize ->
-                authorize.anyRequest().permitAll().accessDecisionManager(sdaAccessDecisionManager))
+    http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            authorize -> authorize.requestMatchers("/**").access(sdaAccessDecisionManager))
         .headers(
             configurer ->
                 configurer.addHeaderWriter(

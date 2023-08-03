@@ -32,8 +32,11 @@ dependencies {
     }
 
     // sda-commons-web-autoconfigure
-    api 'org.bouncycastle:bcpkix-jdk15on:1.70', {
-      because 'This version is used in org.springframework.security:spring-security-rsa:1.0.10.RELEASE'
+    api 'org.bouncycastle:bcpkix-jdk18on:1.74', {
+      because 'fix CVE-2023-33201'
+    }
+    api 'org.bouncycastle:bcprov-jdk18on:1.74', {
+      because 'fix CVE-2023-33201'
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
@@ -44,6 +47,9 @@ dependencies {
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'org.yaml:snakeyaml:1.33', {
       because 'Temporary: this version is used to solve CVE-2022-25857'
+    }
+    api 'org.xerial.snappy:snappy-java:1.1.10.1', {
+      because 'fix CVE-2023-34455'
     }
 
     // sda-commons-web-testing
