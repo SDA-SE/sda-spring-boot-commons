@@ -26,6 +26,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
@@ -85,8 +86,7 @@ public class SdaSecurityConfiguration {
   private void oidcAuthentication(HttpSecurity http) throws Exception {
     var authenticationManagerResolver = createAuthenticationManagerResolver();
 
-    http.csrf()
-        .disable() // NOSONAR
+    http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             authorize -> authorize.requestMatchers("/**").access(sdaAccessDecisionManager))
         .oauth2ResourceServer(
@@ -119,8 +119,7 @@ public class SdaSecurityConfiguration {
   }
 
   private void noAuthentication(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable() // NOSONAR
+    http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             authorize -> authorize.requestMatchers("/**").access(sdaAccessDecisionManager))
         .headers(
