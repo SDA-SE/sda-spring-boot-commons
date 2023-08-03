@@ -123,6 +123,9 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
    * original topic name suffixed with .DLT) and to the same partition as the original record.
    * Therefore, when you use the default resolver, the dead-letter topic must have at least as many
    * partitions as the original topic.
+   *
+   * @return the default error handler that retries according to the {@link
+   *     KafkaConsumerConfig#retry()} before producing an error message
    */
   @Bean("retryDeadLetterErrorHandler")
   public DefaultErrorHandler retryDeadLetterErrorHandler() {

@@ -10,7 +10,6 @@ package org.sdase.commons.spring.boot.web.testing;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,12 +73,12 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
    * @param expected the expected text content to compare the actual {@code Path}'s content to.
    * @return {@code this} assertion object.
    * @throws NullPointerException if the given content is {@code null}.
-   * @throws UncheckedIOException if an I/O error occurs.
    * @throws AssertionError if the actual {@code Path} is {@code null}.
    * @throws AssertionError if the actual {@code Path} is not a {@link Files#isReadable(Path)
    *     readable} file.
    * @throws AssertionError if the content of the actual {@code Path} is not equal to the given
    *     content.
+   * @throws IOException when the file can't be updated
    */
   public GoldenFileAssertions hasContentAndUpdateGolden(String expected) throws IOException {
     // check if path is not null
@@ -128,12 +127,10 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
    * @param expected the expected text content to compare the actual {@code Path}'s content to.
    * @return {@code this} assertion object.
    * @throws NullPointerException if the given content is {@code null}.
-   * @throws UncheckedIOException if an I/O error occurs.
-   * @throws AssertionError if the actual {@code Path} is {@code null}.
-   * @throws AssertionError if the actual {@code Path} is not a {@link Files#isReadable(Path)
-   *     readable} file.
-   * @throws AssertionError if the content of the actual {@code Path} is not equal to the given
-   *     content.
+   * @throws AssertionError if the actual {@code Path} is {@code null} or the content of the actual
+   *     {@code Path} is not equal to the given content.
+   * @throws IOException when the file or the expected value can't read as Yaml or the actual file
+   *     can't be updated
    */
   public GoldenFileAssertions hasYamlContentAndUpdateGolden(String expected) throws IOException {
     // check if path is not null

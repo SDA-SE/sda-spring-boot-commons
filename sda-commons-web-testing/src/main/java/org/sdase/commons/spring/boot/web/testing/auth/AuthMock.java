@@ -146,7 +146,9 @@ public class AuthMock {
             .build());
   }
 
-  /** Returns the provided access token when requesting the token endpoint. */
+  /**
+   * @return the provided access token when requesting the token endpoint.
+   */
   public String providedAccessToken() {
     return this.accessToken;
   }
