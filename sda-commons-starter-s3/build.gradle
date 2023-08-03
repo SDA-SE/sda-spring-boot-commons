@@ -5,5 +5,6 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'io.findify:s3mock_2.13:0.2.6', {
     exclude group: 'com.google.guava', module: 'guava' // 21.0, CVE-2023-2976 + CVE-2018-10237
+    exclude group: 'commons-logging', module: 'commons-logging' // conflict
   }
 }
