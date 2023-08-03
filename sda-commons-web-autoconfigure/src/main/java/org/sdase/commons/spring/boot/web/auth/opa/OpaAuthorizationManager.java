@@ -72,7 +72,6 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
    * @param opaRestTemplate the {@code RestTemplate} used to make requests to the external Open
    *     Policy Agent server
    * @param applicationContext the current application context is used to derive the default OPA
-   * @param tracer
    */
   public OpaAuthorizationManager(
       @Value("${opa.disable:false}") boolean disableOpa,
