@@ -7,10 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.auth;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -135,7 +132,8 @@ class AuthenticationIT {
                         "$.input.headers.authorization[0]",
                         equalTo("Bearer " + authentication.token())))
                 .withRequestBody(
-                    matchingJsonPath("$.input.headers.connection[0]", equalTo("Keep-Alive"))));
+                    matchingJsonPath(
+                        "$.input.headers.connection[0]", equalToIgnoreCase("Keep-Alive"))));
   }
 
   @Test
