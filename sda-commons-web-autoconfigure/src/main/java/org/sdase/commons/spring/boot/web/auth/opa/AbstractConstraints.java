@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
-import static org.sdase.commons.spring.boot.web.auth.opa.OpaAccessDecisionVoter.CONSTRAINTS_ATTRIBUTE;
+import static org.sdase.commons.spring.boot.web.auth.opa.OpaAuthorizationManager.CONSTRAINTS_ATTRIBUTE;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
