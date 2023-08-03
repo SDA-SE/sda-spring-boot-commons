@@ -57,7 +57,7 @@ Prometheus metrics are exposed as expected by SDA environments.
 
 - The size of request and response headers is limited to 8KiB.
 - The size of a request body is limited to 1 MB by default, chunked encoding is not accepted and the
-  `Content-Length` request header is required. The limit [can be changed](web.md#configuration).
+  `Content-Length` request header is required. The limit [can be changed](starter-web.md#configuration).
 
 ## Header
 
