@@ -15,7 +15,7 @@ import io.opentracing.Tracer;*/
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Collection;
+import java.util.function.Supplier;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,22 +23,22 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @Component
-public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocation> {
+public class OpaAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
   static final String CONSTRAINTS_ATTRIBUTE =
-      OpaAccessDecisionVoter.class.getName() + ".constraints";
+      OpaAuthorizationManager.class.getName() + ".constraints";
 
-  private static final Logger LOG = LoggerFactory.getLogger(OpaAccessDecisionVoter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OpaAuthorizationManager.class);
 
   private final boolean disableOpa;
   private final String opaRequestUrl;
@@ -74,7 +74,7 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
    * @param applicationContext the current application context is used to derive the default OPA
    * @param tracer
    */
-  public OpaAccessDecisionVoter(
+  public OpaAuthorizationManager(
       @Value("${opa.disable:false}") boolean disableOpa,
       @Value("${opa.base.url:http://localhost:8181}") String opaBaseUrl,
       @Value("${opa.policy.package:}") String policyPackage,
@@ -94,21 +94,15 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
   }
 
   @Override
-  public boolean supports(ConfigAttribute attribute) {
-    return true;
+  public void verify(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    AuthorizationManager.super.verify(authentication, object);
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
-    return FilterInvocation.class.isAssignableFrom(clazz);
-  }
-
-  @Override
-  public int vote(
-      Authentication authentication,
-      FilterInvocation filterInvocation,
-      Collection<ConfigAttribute> attributes) {
-    var httpRequest = filterInvocation.getHttpRequest();
+  public AuthorizationDecision check(
+      Supplier<Authentication> authentication,
+      RequestAuthorizationContext requestAuthorizationContext) {
+    var httpRequest = requestAuthorizationContext.getRequest();
     /*Span span =
         tracer
             .buildSpan("authorizeUsingOpa")
@@ -123,14 +117,14 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
     if (opaResponse == null) {
       LOG.warn(
           "Invalid response from OPA. Maybe the policy path or the response format is not correct");
-      return ACCESS_ABSTAIN;
+      return new AuthorizationDecision(false);
     }
     // span.setTag("opa.allow", opaResponse.isAllow());
     if (!opaResponse.isAllow()) {
-      return ACCESS_ABSTAIN;
+      return new AuthorizationDecision(false);
     }
     storeConstraints(opaResponse);
-    return ACCESS_GRANTED;
+    return new AuthorizationDecision(true);
     /*} finally {
       span.finish();
     }*/
@@ -159,11 +153,11 @@ public class OpaAccessDecisionVoter implements AccessDecisionVoter<FilterInvocat
     return opaRestTemplate.getForObject(opaRequestUrl, OpaResponse.class);
   }
 
-  private int handleOpaDisabled(HttpServletRequest httpRequest) {
+  private AuthorizationDecision handleOpaDisabled(HttpServletRequest httpRequest) {
     if (httpRequest.getUserPrincipal() == null) {
       LOG.warn("OPA is disabled. Access is granted for anonymous user without constraints.");
     }
-    return ACCESS_GRANTED;
+    return new AuthorizationDecision(true);
   }
 
   private String createOpaRequestUri(String opaBaseUrl, String policyPackage) {

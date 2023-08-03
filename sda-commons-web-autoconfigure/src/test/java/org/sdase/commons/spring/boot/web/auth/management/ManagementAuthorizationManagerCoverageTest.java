@@ -14,25 +14,27 @@ import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.web.security.test.SecurityTestApp;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.authorization.AuthorizationDecision;
 
-class ManagementAccessDecisionVoterCoverageTest {
+class ManagementAuthorizationManagerCoverageTest {
 
   @Test
   void shouldNotDecideOnSamePort() {
     assertThat(createTestContext(ActuatorSamePortApp.class))
         .hasSingleBean(
-            ManagementAccessDecisionVoter.IgnoreSamePortManagementAccessDecisionVoter.class)
-        .getBean(ManagementAccessDecisionVoter.IgnoreSamePortManagementAccessDecisionVoter.class)
-        .returns(AccessDecisionVoter.ACCESS_ABSTAIN, dv -> dv.vote(null, null, null));
+            ManagementAuthorizationManager.IgnoreSamePortManagementAccessDecisionVoter.class)
+        .getBean(ManagementAuthorizationManager.IgnoreSamePortManagementAccessDecisionVoter.class)
+        .returns(
+            new AuthorizationDecision(false).isGranted(), dv -> dv.check(null, null).isGranted());
   }
 
   @Test
   void shouldNotDecideOnDisabledPort() {
     assertThat(createTestContext(ActuatorDisabledPortApp.class))
-        .hasSingleBean(ManagementAccessDecisionVoter.DisabledManagementAccessDecisionVoter.class)
-        .getBean(ManagementAccessDecisionVoter.DisabledManagementAccessDecisionVoter.class)
-        .returns(AccessDecisionVoter.ACCESS_ABSTAIN, dv -> dv.vote(null, null, null));
+        .hasSingleBean(ManagementAuthorizationManager.DisabledManagementAccessDecisionVoter.class)
+        .getBean(ManagementAuthorizationManager.DisabledManagementAccessDecisionVoter.class)
+        .returns(
+            new AuthorizationDecision(false).isGranted(), dv -> dv.check(null, null).isGranted());
   }
 
   @SpringBootApplication
