@@ -26,7 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
     webEnvironment = RANDOM_PORT,
     properties = {"opa.exclude.patterns=/ping,/ping/.*"})
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
-class OpaExcludesDecisionVoterIT {
+class OpaExcludesAuthorizationManagerIT {
 
   @LocalServerPort private int port;
 
