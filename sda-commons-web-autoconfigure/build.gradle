@@ -28,7 +28,7 @@ dependencies {
   //  api 'io.opentracing.brave:brave-opentracing'
   //
   api 'org.springdoc:springdoc-openapi-starter-webmvc-api'
-  api 'org.bouncycastle:bcpkix-jdk15on'
+  api 'org.bouncycastle:bcpkix-jdk18on'
   api 'javax.ws.rs:javax.ws.rs-api'
   api 'io.github.openfeign:feign-jaxrs2'
   api 'io.github.openfeign:feign-micrometer'
