@@ -9,25 +9,26 @@ package org.sdase.commons.spring.boot.web.auth.opa;
 
 import static org.springdoc.core.utils.Constants.API_DOCS_URL;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OpaExcludesDecisionVoter implements AccessDecisionVoter<FilterInvocation> {
+public class OpaExcludesAuthorizationManager
+    implements AuthorizationManager<RequestAuthorizationContext> {
 
   private final Set<Pattern> excludedPathPatterns = new HashSet<>();
 
-  public OpaExcludesDecisionVoter(
+  public OpaExcludesAuthorizationManager(
       @Value("${opa.exclude.patterns:}") String excludedPathPatterns,
       @Value(API_DOCS_URL) String apiDocsUrl) {
     if (excludedPathPatterns.isEmpty()) {
@@ -43,24 +44,17 @@ public class OpaExcludesDecisionVoter implements AccessDecisionVoter<FilterInvoc
   }
 
   @Override
-  public boolean supports(ConfigAttribute attribute) {
-    return true;
+  public void verify(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    AuthorizationManager.super.verify(authentication, object);
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
-    return FilterInvocation.class.isAssignableFrom(clazz);
-  }
-
-  @Override
-  public int vote(
-      Authentication authentication,
-      FilterInvocation filterInvocation,
-      Collection<ConfigAttribute> attributes) {
-    var httpRequest = filterInvocation.getHttpRequest();
+  public AuthorizationDecision check(
+      Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    var httpRequest = object.getRequest();
     var path = httpRequest.getServletPath();
     return excludedPathPatterns.stream().anyMatch(p -> p.matcher(path).matches())
-        ? ACCESS_GRANTED
-        : ACCESS_ABSTAIN;
+        ? new AuthorizationDecision(true)
+        : new AuthorizationDecision(false);
   }
 }
