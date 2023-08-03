@@ -1,4 +1,4 @@
-# sda-commons-s3-starter
+# Starter S3
 
 This library provides features for dealing with the Amazon S3 file storage.
 
