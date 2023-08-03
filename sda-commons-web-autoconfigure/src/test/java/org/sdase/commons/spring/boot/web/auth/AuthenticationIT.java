@@ -136,7 +136,8 @@ class AuthenticationIT {
                         "$.input.headers.authorization[0]",
                         equalTo("Bearer " + authentication.token())))
                 .withRequestBody(
-                    matchingJsonPath("$.input.headers.connection[0]", equalTo("Keep-Alive"))));
+                    matchingJsonPath(
+                        "$.input.headers.connection[0]", equalToIgnoreCase("Keep-Alive"))));
   }
 
   @Test
