@@ -26,9 +26,9 @@ public class OpenPolicyAgentHealthIndicator extends AbstractHealthIndicator {
 
   private static final Logger LOG = LoggerFactory.getLogger(OpenPolicyAgentHealthIndicator.class);
 
-  private final OpaAccessDecisionVoter opaAccessDecisionVoter;
+  private final OpaAuthorizationManager opaAccessDecisionVoter;
 
-  public OpenPolicyAgentHealthIndicator(OpaAccessDecisionVoter opaAccessDecisionVoter) {
+  public OpenPolicyAgentHealthIndicator(OpaAuthorizationManager opaAccessDecisionVoter) {
     this.opaAccessDecisionVoter = opaAccessDecisionVoter;
   }
 
