@@ -1,69 +1,56 @@
 # sda-commons-web-starter
 
-The `sda-commons-web-starter` provides several features to provide a service based
-on the SDA core concepts.
-
-Features:
-  - [Authentication](#authentication)
-  - [Authorization](#authorization)
-  - [Http Client](#http-client)
-  - [Async Request Context](#async)
-  - [Jackson Object Mapping](#jackson)
-  - [Monitoring](#monitoring)
-  - [Tracing](#tracing)
-  - [Health Checks](#health-checks--actuator)
-  - [Logging](#logging)
-  - [Support for Metadata Context](#metadata-context)
-
-Based on:
-  - `org.springframework.boot:spring-boot-starter-web`
-  - `org.springframework.boot:spring-boot-starter-oauth2-resource-server`
-  - `org.springframework.boot:spring-boot-starter-oauth2-client`
-  - `org.springframework.boot:spring-boot-starter-validation`
-  - `org.springframework.boot:spring-boot-starter-actuator`
-  - `org.springframework.cloud:spring-cloud-starter-openfeign`
-  - `org.springframework.boot:spring-boot-starter-validation`
-  - `org.springframework.cloud:spring-cloud-starter-sleuth`
-  - `org.springframework.cloud:spring-cloud-sleuth-zipkin`
+The `sda-commons-web-starter` provides several features to create a service based on the SDA core
+concepts.
 
 ###  Configuration
-| **Property**                             | **Description**                                                                                                                         | **Default**                                                          | **Example**                                                  | **Env**                         |
-|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------|---------------------------------|
-| `auth.issuers` _string_                  | Comma separated string of open id discovery key sources with required issuers.                                                          |                                                                      | `https://iam-int.dev.de/auth/realms/123`                     | `AUTH_ISSUERS`                  |
-| `auth.disable` _boolean_                 | Disables authorization checks completely.                                                                                               | `false`                                                              | `true`                                                       | `AUTH_DISABLE`                  |
-| `opa.disable` _boolean_                  | Disables authorization checks with Open Policy Agent completely.                                                                        | `false`                                                              | `true`                                                       | `OPA_DISABLE`                   |
-| `opa.base.url` _string_                  | The baseUrl of OPA.                                                                                                                     | `http://localhost:8181`                                              | `http://opa-service:8181`                                    | `OPA_BASE_URL`                  |
-| `opa.policy.package` _string_            | The policy package to check for authorization.                                                                                          | Defaults to package name of `@SpringBootApplication` annotated class | `com.custom.package.name`                                    | `OPA_POLICY_PACKAGE`            |
-| `opa.exclude.patterns` _string_          | Custom excluded paths can be configured as comma separated list of regex.                                                               | `openapi.json` and `openapi.yaml `                                   | `/customPathOne,/customPathTwo`                              | `OPA_EXCLUDE_PATTERNS`          |
-| `opa.client.connection.timeout` _string_ | The connection timeout of the client that calls the Open Policy Agent server.                                                           | `500ms`                                                              | `2s`                                                         | `OPA_CLIENT_CONNECTION_TIMEOUT` |
-| `opa.client.timeout` _string_            | The read timeout of the client that calls the Open Policy Agent server.                                                                 | `500ms`                                                              | `2s`                                                         | `OPA_CLIENT_TIMEOUT`            |
-| `oidc.client.enabled` _boolean_          | Enables OIDC Authentication (Client Credentials Flow) for the configured clients.                                                       | `false`                                                              | `true`                                                       | `OIDC_CLIENT_ENABLED`           |
-| `oidc.client.id` _string_                | The client ID for the registration.                                                                                                     | ``                                                                   | `exampleClient`                                              | `OPA_CLIENT_ID`                 |
-| `oid.client.secret` _string_             | The Client secret of the registration.                                                                                                  | ``                                                                   | `s3cret`                                                     | `OIDC_CLIENT_SECRET`            |
-| `oidc.client.issuer.uri` _string_        | URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414. | ``                                                                   | `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm` | `OIDC_CLIENT_ISSUER_URI`        |
-| `cors.allowed-origin-patterns` _string_  | Comma separated list of URL patterns for which CORS requests are allowed.                                                               | _none allowed_                                                       | `https://*.all-subdomains.com, https://static-domain.com`    | `CORS_ALLOWEDORIGINPATTERNS`    |
-| `request.body.max.size` _size_           | The maximum size allowed for request body data sent by a client.                                                                        | _1 MB_                                                               | `100 KB`, `10MB`                                             | `REQUEST_BODY_MAX_SIZE`         |
-| `enable.json.logging` _boolean_          | If logs should be printed as JSON. _Note: This config param is not available for application.properties or application.yaml_            | _false_                                                              | `true`                                                       | `ENABLE_JSON_LOGGING`           |
+
+| Property                                    | Description                                                                                                                                                                                   | Default                                                                                                                                                  | Example                                                      | Env                                       |
+|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|-------------------------------------------|
+| `auth.issuers` _string_                     | Comma separated string of open id discovery key sources with required issuers.                                                                                                                |                                                                                                                                                          | `https://iam-int.dev.de/auth/realms/123`                     | `AUTH_ISSUERS`                            |
+| `auth.disable` _boolean_                    | Disables authorization checks completely.                                                                                                                                                     | `false`                                                                                                                                                  | `true`                                                       | `AUTH_DISABLE`                            |
+| `opa.disable` _boolean_                     | Disables authorization checks with Open Policy Agent completely. In this case access to all resources is granted but no constraints are provided.                                             | `false`                                                                                                                                                  | `true`                                                       | `OPA_DISABLE`                             |
+| `opa.base.url` _string_                     | The baseUrl of the Open Policy Agent Server.                                                                                                                                                  | `"http://localhost:8181"`                                                                                                                                | `http://opa-service:8181`                                    | `OPA_BASE_URL`                            |
+| `opa.policy.package` _string_               | The policy package to check for authorization. The policy must return the property `allow` as _boolean_ as access decision and may return additional properties as constraints.               | the package of the application class, be aware that moving the class causes a breaking change regarding deployment if the package is not explicitly set. | `com.custom.package.name`                                    | `OPA_POLICY_PACKAGE`                      |
+| `opa.exclude.patterns` _string_             | Custom excluded paths can be configured as comma separated list of regex.                                                                                                                     | `openapi.json` and `openapi.yaml `                                                                                                                       | `/customPathOne,/customPathTwo`                              | `OPA_EXCLUDE_PATTERNS`                    |
+| `opa.client.connection.timeout` _string_    | The connection timeout of the client that calls the Open Policy Agent server.                                                                                                                 | `500ms`                                                                                                                                                  | `2s`                                                         | `OPA_CLIENT_CONNECTION_TIMEOUT`           |
+| `opa.client.timeout` _string_               | The read timeout of the client that calls the Open Policy Agent server.                                                                                                                       | `500ms`                                                                                                                                                  | `2s`                                                         | `OPA_CLIENT_TIMEOUT`                      |
+| `oidc.client.enabled` _boolean_             | Enables OIDC Authentication (Client Credentials Flow) for the configured clients.                                                                                                             | `false`                                                                                                                                                  | `true`                                                       | `OIDC_CLIENT_ENABLED`                     |
+| `oidc.client.id` _string_                   | The client ID for the registration.                                                                                                                                                           |                                                                                                                                                          | `exampleClient`                                              | `OPA_CLIENT_ID`                           |
+| `oid.client.secret` _string_                | The Client secret of the registration.                                                                                                                                                        |                                                                                                                                                          | `s3cret`                                                     | `OIDC_CLIENT_SECRET`                      |
+| `oidc.client.issuer.uri` _string_           | URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414.                                                       |                                                                                                                                                          | `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm` | `OIDC_CLIENT_ISSUER_URI`                  |
+| `cors.allowed-origin-patterns` _string_     | Comma separated list of URL patterns for which CORS requests are allowed.                                                                                                                     | _none allowed_                                                                                                                                           | `https://*.all-subdomains.com, https://static-domain.com`    | `CORS_ALLOWEDORIGINPATTERNS`              |
+| `request.body.max.size` _size_              | The maximum size allowed for request body data sent by a client.                                                                                                                              | _1 MB_                                                                                                                                                   | `100 KB`, `10MB`                                             | `REQUEST_BODY_MAX_SIZE`                   |
+| `enable.json.logging` _boolean_             | If logs should be printed as JSON. _Note: This config param is not available for application.properties or application.yaml_                                                                  | _false_                                                                                                                                                  | `true`                                                       | `ENABLE_JSON_LOGGING`                     |
+| `management.otlp.tracing.endpoint` _string_ | Base url to OTLP Collector instance.                                                                                                                                                          | `"http://localhost:4318"`                                                                                                                                | `"http://grafana-agent-traces.monitoring:4317"`              | `MANAGEMENT_OTLP_TRACING_ENDPOINT`        |
+| `management.tracing.enabled` _boolean_      | For testing purposes it's maybe required to disable tracing. It is important to have also the annotation `@AutoConfigureObservability` on your class and in your tests to enable the tracing. | `true`                                                                                                                                                   | `false`                                                      | `MANAGEMENT_TRACING_ENABLED`              |
+| `management.tracing.sampling.probability`   | Probability in the range from 0.0 to 1.0 that a trace will be sampled.                                                                                                                        | `1.0`                                                                                                                                                    | `0.2`                                                        | `MANAGEMENT_TRACING_SAMPLING_PROBABILITY` |
+| `management.tracing.propagation.type`       | Tracing context propagation types produced and consumed by the application. Setting this property overrides the more fine-grained propagation type properties.                                | `b3,w3c`                                                                                                                                                 | `b3`                                                         | `MANAGEMENT_TRACING_PROPAGATION_TYPE`     |
+| `management.tracing.grpc.enabled`           | You only need to set this property to true if you want to use grpc (port 4317) vs http (port 4318) channel for span export.                                                                   | `false`                                                                                                                                                  | `true`                                                       | `MANAGEMENT_TRACING_GRPC_ENABLED`         |
 
 For further information have a look at the [Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation).
 
-## Web
+??? info "Default configuration set by this library"
+    ```properties
+    --8<-- "sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/defaults.properties"
 
-The list of web configurations: 
+    --8<-- "sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/monitoring/monitoring.properties"
 
-- The`server.servlet.context-path` defaults to `/api`
-- The`server.port` defaults to `8080`
-- The`managment.server.port` defaults to `8081`
-- The `openapi.yaml` is available under `/api/openapi.yaml`
+    --8<-- "sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/monitoring/tracing.properties"
 
-**Please make sure to configure `spring.application.name` for every service**
+    --8<-- "sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/client/default.properties"
+
+    --8<-- "sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/docs/default.properties"
+    ```
+
+**Please make sure to configure `spring.application.name` for every service.**
+
 
 ## Authentication
 
 - [Spring Security Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.security)
 
-Enables feature that make a Spring Boot service compliant with the
-[SDA SE Authentication](https://sda.dev/core-concepts/security-concept/authentication/) concepts
+Enables feature that make a Spring Boot service compliant with the SDA SE Authentication concepts
 using OIDC.
 
 OIDC Authentication can be configured with `auth.issuers` to provide a comma separated
@@ -73,8 +60,9 @@ be used to disable authentication.
 The JWKS URI of each issuer is updated when an unknown Key ID is received and every 5 minutes. The
 cache of known JWK is invalidated after 15 minutes.
 
-**This setup allows authenticated and anonymous requests! It is the responsibility of policies
-provided by the Open Policy Agent to decide about denying anonymous requests.**
+!!! warning
+    This setup allows authenticated and anonymous requests! It is the responsibility of policies
+    provided by the Open Policy Agent to decide about denying anonymous requests.
 
 Spring Security is disabled for the Management/Admin Port (default: 8081). Be aware that these port
 should not be accessible out of the deployment context.
@@ -88,170 +76,164 @@ This security implementation lacks some features compared to [sda-dropwizard-com
 
 ## Authorization
 
-Enables feature that make a Spring Boot service compliant with the
-[SDA SE Authorization](https://sda.dev/core-concepts/security-concept/authorization/) concepts
+Enables feature that make a Spring Boot service compliant with the SDA SE Authorization concepts
 using Open Policy Agent.
 
 The authorization is done by the [Open Policy Agent](https://www.openpolicyagent.org/). It can be 
-configured as described in
-[OpaAccessDecisionVoter#OpaAccessDecisionVoter
-(boolean, String, String, OpaRequestBuilder, RestTemplate, ApplicationContext, io.opentelemetry.api.trace.Tracer)
-](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaAccessDecisionVoter.java)
-and [OpaRestTemplateConfiguration#OpaRestTemplateConfiguration(Duration, Duration)
-](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaRestTemplateConfiguration.java).
+configured with [`opa.` configuration properties](#configuration).
 
+??? info "Requests to the Open Policy Agent"
+    Requests to the server are determined by the base URL and the policy package.
+    Given the default base URL `http://localhost:8181` and an example package of `com.my.service`,
+    the Open Policy Agent server will be requested for authorization decision at
+    `http://localhost:8181/v1/data/com/my/package`.
 
-The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter (
-Access Decision Manager) which is part of the `SecurityFilterChain` including the OIDC
-Authentication.
+The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter
+which is part of the `SecurityFilterChain` including the OIDC Authentication.
 
-Constraints provided with the Open Policy Agent response can be mapped to a custom POJO. If the
-class extends [`AbstractConstraints`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/AbstractConstraints.java) 
-and is annotated with [`@Constraints`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/Constraints.java) it can be
-[`@Autowired`](https://javadoc.io/doc/org.springframework/spring-beans/latest/org/springframework/beans/factory/annotation/Autowired.html) 
+Constraints provided with the Open Policy Agent response can be mapped to a custom POJO.
+The class must extend `org.sdase.commons.spring.boot.web.auth.opa.AbstractConstraints` and must be
+annotated with `org.sdase.commons.spring.boot.web.auth.opa.Constraints`.
+It has request scope and can be [`@Autowired`](https://javadoc.io/doc/org.springframework/spring-beans/latest/org/springframework/beans/factory/annotation/Autowired.html) 
 in [`@Controllers`](https://javadoc.io/doc/org.springframework/spring-webmvc/latest/org/springframework/web/servlet/mvc/Controller.html) 
 or [`@RestControllers`](https://javadoc.io/doc/org.springframework/spring-web/latest/org/springframework/web/bind/annotation/RestController.html).
 
-```java
-@Constraints
-public class MyConstraints extends AbstractConstraints {
+??? example "Custom Constraint implementation"
+    === "com.example.my.service.rego"
+        ```python
+        package com.example.my.service
+        
+        import input
+        
+        # decode the token
+        token = {"payload": payload} {
+          not input.jwt = null
+          io.jwt.decode(input.jwt, [_, payload, _])
+        }
+        
+        # deny by default!
+        default allow = false
+        
+        allow {
+          # your rules
+        }
+        
+        admin {
+          token.payload.admin = "yes"
+        }
+        ```
+    
+    === "MyConstraints.java"
+        ```java
+        @Constraints
+        public class MyConstraints extends AbstractConstraints {
+        
+          private boolean admin;
+        
+          public MyConstraints setAdmin(boolean admin) {
+            this.admin = admin;
+            return this;
+          }
+        
+          public boolean isAdmin() {
+            return admin;
+          }
+        }
+        ```
 
-  private boolean admin;
-
-  public MyConstraints setAdmin(boolean admin) {
-    this.admin = admin;
-    return this;
-  }
-
-  public boolean isAdmin() {
-    return admin;
-  }
-}
-```
-```java
-@RestController
-public class AuthTestApp {
-    @Autowired
-    private MyConstraints myConstraints;
-    // ...
-}
-```
+    === "MyController.java"
+        ```java
+        @RestController
+        public class MyController {
+            @Autowired
+            private MyConstraints myConstraints;
+            // ...
+        }
+        ```
 
 Additional parameters that are needed for the authorization decision may be provided with custom
-[OpaInputExtensions](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/extension/OpaInputExtension.java).
+`org.sdase.commons.spring.boot.web.auth.opa.extension.OpaInputExtension`s.
 
 ### Testing
 
 The testing module provides aligned test dependencies including Wiremock for external APIs and 
 JUnit extensions to mock or disable authentication and authorization.
 
-### OPA 
+### OPA
 ![Overview](assets/overview_opa.svg)
 
 The OPA configuration requests the policy decision providing the following inputs
 
-* HTTP path as Array
-* HTTP method as String
-* validated JWT (if available)
-* all request headers
+| Property           | Description                                                                                           | Example                                                                              |
+|--------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| `input.httpMethod` | HTTP method as uppercase string.                                                                      | `"GET"`                                                                              |
+| `input.path`       | Requested path as array of path segments without context or servlet path.                             | `["myResource", "123-id", "someSubresource"]`                                        |
+| `input.jwt`        | Validated encoded JWT as string (if available).                                                       | `"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.Xpk63zUfXiI5f_bdGjqrhx03aGyBn9ETgXbkAgLalPk"` |
+| `input.headers`    | All HTTP request headers as object with lower-case header names as key and array of headers as value. | `{"accept": "text/plain", "accept": "application/json"}`                             |
 
-_Remark to HTTP request headers:_  
-The configuration normalizes header names to lower case to simplify handling in OPA since HTTP
-specification defines header names as case-insensitive.
-Multivalued headers are not normalized with respect to the representation as list or single string
-with separator char.
-They are forwarded as parsed by the framework.
+!!! warning "Security note"
+    While a service might only consider one value of a specific header, that a policy might
+    authorize on an array of those or vice versa.
+    Consider this in your policy when you want to make sure you authorize on the same value that a
+    service might use to evaluate the output.
 
-_Security note:_
-Please be aware while a service might only consider one value of a specific header, the OPA is able
-to authorize on a array of those.
-Consider this in your policy when you want to make sure you authorize on the same value that a
-service might use to evaluate the output.
+??? info "Remark to HTTP request headers"  
+    The configuration normalizes header names to lower case to simplify handling in OPA since HTTP
+    specification defines header names as case-insensitive.
+    Multivalued headers are not normalized with respect to the representation as list or single string
+    with separator char.
+    They are forwarded as parsed by the framework.
 
-These [inputs](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/model/OpaInput.java)
-can be accessed inside a policy `.rego`-file in this way:
+??? example "Example Policy Using Input"
 
-```rego
-# each policy lies in a package that is referenced in the configuration of the OpaBundle
-package example
+    === "Policy"
+        ```python
+        # each policy lies in a package that is referenced in the configuration of the OpaBundle
+        package example
+        
+        # decode the JWT as new variable 'token'
+        token = {"payload": payload} {
+            not input.jwt == null
+            io.jwt.decode(input.jwt, [_, payload, _])
+        }
+        
+        # deny by default
+        default allow = false
+        
+        # the allow property is required for authorization
+        allow {
+            # allow if path match '/contracts/:anyid' 
+            input.path = ["contracts", _]
+        
+            # allow if request method 'GET' is used
+            input.httpMethod == "GET"
+        
+            # allow if 'claim' exists in the JWT payload
+            token.payload.claim
+        
+            # allow if a request header 'HttpRequestHeaderName' has a certain value 
+            input.headers["httprequestheadername"][_] == "certain-value"
+        }
+        
+        # set some example constraints
+        # constraints are always service dependent and the structure, if any, is defined in each service
+        constraint1 := true                # always true
+        constraint2 := [ "v2.1", "v2.2" ]  # always an array of "v2.1" and "v2.2"
+        constraint3[token.payload.sub]     # always a set that contains the 'sub' claim from the token
+                                           # or is empty if no token is present
+        ```
+    === "Result"
+        ```json
+        {
+          "result": {
+            "allow": true,
+            "constraint1": true,
+            "constraint2": [ "v2.1", "v2.2" ],
+            "constraint3": ["my-sub"]
+          }
+        }
+        ```
 
-# decode the JWT as new variable 'token'
-token = {"payload": payload} {
-    not input.jwt == null
-    io.jwt.decode(input.jwt, [_, payload, _])
-}
-
-# deny by default
-default allow = false
-
-allow {
-    # allow if path match '/contracts/:anyid' 
-    input.path = ["contracts", _]
-
-    # allow if request method 'GET' is used
-    input.httpMethod == "GET"
-
-    # allow if 'claim' exists in the JWT payload
-    token.payload.claim
-
-    # allow if a request header 'HttpRequestHeaderName' has a certain value 
-    input.headers["httprequestheadername"][_] == "certain-value"
-}
-
-# set some example constraints 
-constraint1 := true                # always true
-constraint2 := [ "v2.1", "v2.2" ]  # always an array of "v2.1" and "v2.2"
-constraint3[token.payload.sub]     # always a set that contains the 'sub' claim from the token
-                                   # or is empty if no token is present
-
-```
-
-The response consists of two parts: The overall `allow` decision, and optional rules that represent _constraints_ to limit data access
-within the service. These constraints are fully service dependent and MUST be applied when querying the database or
-filtering received data.
-
-The following listing presents a sample OPA result with a positive allow decision and two constraints, the first with boolean value and second
-with a list of string values.
-```json
-{
-  "result": {
-    "allow": true,
-    "constraint1": true,
-    "constraint2": [ "v2.1", "v2.2" ],
-    "constraint3": ["my-sub"]
-  }
-}
-```
-
-###  Configuration Properties
-
-- `opa.disable` _boolean_
-  - Disables authorization checks with Open Policy Agent completely. In this case access to all
-    resources is granted but no constraints are provided.
-- `opa.base.url` _string_
-  - The base url of the Open Policy Agent Server. Defaults to `http://localhost:8181`.
-    Requests to the server are determined by the base URL and the policy package. Given the default
-    base URL `http://localhost:8181` and an example package of `com.my.service`, the Open Policy Agent
-    server will be requested for authorization decision
-    at `http://localhost:8181/v1/data/com/my/package`
-- `opa.policy.package` _string_
-  - The policy package to check for authorization. It will be reformatted to a URL path to request
-    the authorization form the Open Policy Agent server. Example: `com.my.service`. If the policy
-    package is blank, the package of the application class (the first bean found that is annotated
-    with `@SpringBootApplication`) is used as a default. Be aware that moving the class causes a
-    breaking change regarding deployment if the package is not explicitly set.
-    Requests to the server are determined by the base URL and the policy package. Given the default
-    base URL `http://localhost:8181` and an example package of `com.my.service`, the Open Policy Agent
-    server will be requested for authorization decision
-    at `http://localhost:8181/v1/data/com/my/package`
-- `opa.exclude.patterns` _string_
-  - `/openapi.yaml` and `/openapi.json` are excluded from authorization requirements. Custom excluded
-    paths can be configured as comma separated list of regex. This will overwrite the default
-    excludes of the OpenAPI documentation paths.
-- `opa.client.timeout` _string_
-  - The read timeout of the client that calls the Open Policy Agent server. Defaults to 500ms.
-- `opa.client.connection.timeout` _string_
-  - The connection timeout of the client that calls the Open Policy Agent server. Defaults to 500ms.
 
 ## Http Client
 
@@ -303,9 +285,9 @@ public interface OtherServiceClient {
 }
 ```
 
-[`AuthenticationPassThroughClientConfiguration`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/client/AuthenticationPassThroughClientConfiguration.java) 
-will take the **Authorization** header from the current request context of the servlet and 
-adds its value to the client request.
+`org.sdase.commons.spring.boot.web.client.AuthenticationPassThroughClientConfiguration` will take
+the **Authorization** header from the current request context of the servlet and adds its value to
+the client request.
 
 ### Trace-Token
 
@@ -323,21 +305,24 @@ public interface OtherServiceClient {
 }
 ```
 
-[SdaTraceTokenClientConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
-will take the `Trace-Token` header from the current request context of the servlet and adds its value to the client request.
+`org.sdase.commons.spring.boot.web.tracing.SdaTraceTokenClientConfiguration` will take the
+`Trace-Token` header from the current request context of the servlet and adds its value to the
+client request.
 
-If no `Trace-Token` header is present in the current request context, the [SdaTraceTokenClientConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
-will generate a new Trace-Token and pass it to the following requests.
+If no `Trace-Token` header is present in the current request context, the
+`SdaTraceTokenClientConfiguration` will generate a new Trace-Token and pass it to the following
+requests.
 
 ### OIDC Client
 
 If the request context is not always existing, e.g. in cases where a technical user for
-service-to-service communication is required, the [`OidcClientRequestConfiguration`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/client/OidcClientRequestConfiguration.java) 
-will request the required OIDC authentication token with the client credentials flow using the 
-configured `"oidc.client.issuer.uri"`, `"oidc.client.id"` and `"oidc.client.secret"`.
+service-to-service communication is required, the
+`.org.sdase.commons.spring.boot.web.client.OidcClientRequestConfiguration` will request the required
+OIDC authentication token with the client credentials flow using the configured
+`"oidc.client.issuer.uri"`, `"oidc.client.id"` and `"oidc.client.secret"`.
 
-If the current request context contains the **Authorization** header, the authentication pass-through
-will be applied instead.
+If the current request context contains the **Authorization** header, the authentication
+pass-through will be applied instead.
 
 ### JAX-RS Mapping
 
@@ -362,30 +347,9 @@ public interface CustomerServiceApi {
 
 ```
 
-### Configuration properties
-
-* `oidc.client.enabled` _boolean_
-  * Enables OIDC Authentication (Client Credentials Flow) for the configured clients.
-    If enabled, provide a client id, secret and an issuer url.
-  * Example: `true`
-  * Default: `false`
-* `oidc.client.id` _string_
-  * Client ID for the registration
-  * Example: `oidcClient`
-  * Default: ``
-* `oid.client.secret` _string_
-  * Client secret of the registration.
-  * Example: `s3cret`
-  * Default: ``
-* `oidc.client.issuer.uri` _string_
-  * URI that can either be an OpenID Connect discovery endpoint
-    or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414.
-  * Example: `https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm`
-  * Default: ``
-
 ### Platform Client
 
-The Platform Client combines the authentication forwarding, trace token and OIDC configuration
+The `PlatformClient` combines the authentication forwarding, trace token and OIDC configuration
 without the need to configure each individually.
 
 ```java
@@ -461,8 +425,7 @@ current request to the **Thread** running the asynchronous method.
 
 ## Jackson
 
-Enables feature that make a Spring Boot service compliant with
-the [SDA SE RESTful API Guide](https://sda.dev/core-concepts/communication/restful-api-guide/) .
+Enables feature that make a Spring Boot service compliant with the REST guide of SDA SE.
 So far this covers:
 - the tolerant reader pattern
 - consistent serialization of `java.time.ZonedDateTime` compatible to the [type `date-time` of JSON-Schema](https://json-schema.org/understanding-json-schema/reference/string.html#dates-and-times).
@@ -486,34 +449,24 @@ be serialized with milliseconds, it must be annotated with
 **Differences to the known [SDA Dropwizard Commons configuration](https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-jackson)**
 - `java.time.ZonedDateTime` fields are serialized with seconds by default.
   There is no other global configuration for **java.time.ZonedDateTime** serialization available.
-- **Less modules are activated for foreign frameworks**. Compared to SDA Dropwizard Commons,
-  **GuavaExtrasModule, JodaModule, and CaffeineModule** are not registered anymore. 
-- No documented customization of the global **com.fasterxml.jackson.databind.ObjectMapper** is available right now. 
-- Support for **HAL Links and embedding linked resources** is not implemented. 
-- Support for **YAML** is not implemented. 
-- There is **no support for [field filters](https://sda.dev/core-concepts/communication/restful-api-guide/#RESTfulAPIGuide-MAY%3AProvidefieldfilteringtoretrievepartialresources)**.
+- **Fewer modules are activated for foreign frameworks**. Compared to SDA Dropwizard Commons,
+  **GuavaExtrasModule, JodaModule, and CaffeineModule** are not registered anymore.
+- No documented customization of the global **com.fasterxml.jackson.databind.ObjectMapper** is available right now.
+- Support for **HAL Links and embedding linked resources** is not implemented.
+- Support for **YAML** is not implemented.
+- There is **no support for field filters**.
   Such filters have been barely used in the SDA SE.
 
 ## Monitoring
 
-TODO PROMETHEUS
+TODO PROMETHEUS (config to table above)
 
 Prometheus Metrics: `http://{serviceURL}:{adminPort}/metrics/prometheus`
-
-### Default properties
-
-```properties
-# Metrics
-management.endpoints.web.path-mapping.prometheus=metrics/prometheus
-management.metrics.web.server.request.autotime.enabled=true
-management.endpoint.prometheus.enabled=true
-management.endpoint.metrics.enabled=true
-```
 
 ## Tracing
 
 Currently, tracing is leveraged by Micrometer Tracing rand OpenTelemetry in the Spring context.
-OpenTelemetry (Otel) is a collection of standardized vendor-agnostic tools, APIs, and SDKs. It's a
+OpenTelemetry (OTEL) is a collection of standardized vendor-agnostic tools, APIs, and SDKs. It's a
 CNCF incubating project and is a merger of the OpenTracing and OpenCensus projects.
 OpenTracing is a vendor-neutral API for sending telemetry data over to an observability backend.
 It uses Micrometer for code instrumentation & provide tracing bridge to OpenTelemetry and 
@@ -529,43 +482,12 @@ Default features are:
 * Generate and report OTLP traces via HTTP or gRPC. By default, it sends them to a OTLP compatible
   collector (e.g. Jaeger) on localhost (http port 4317, gRPC port 4318). Configure the location of
   the service using `management.otlp.tracing.endpoint`.
+* See [above](#configuration) for more common options.
+* You can check all the possible values on [OtlpProperties](https://docs.spring.io/spring-boot/docs/current/api//org/springframework/boot/actuate/autoconfigure/metrics/export/otlp/OtlpProperties.html)
+  and [TracingProperties](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html)
 
-* `management.otlp.tracing.endpoint` _string_
-  * Base url to OTLP Collector instance.
-  * Default: `http://localhost:4318`
-* `management.tracing.enabled=false` _boolean_
-  * For testing purposes it's maybe required to disable tracing. It is important to have also the
-    annotation `@AutoConfigureObservability` on your class and in your tests to enable the tracing.
-  * Example: `false`
-  * Default: `true`
-* `management.tracing.sampling.probability=0.20`
-  * Probability in the range from 0.0 to 1.0 that a trace will be sampled.
-  * Example: `0.20`
-  * Default: `1.0`
-* `management.tracing.propagation.type=b3`
-  * Tracing context propagation types produced and consumed by the application. Setting this property overrides the more fine-grained propagation type properties.
-  * Example: `b3`
-  * Default: `b3,w3c`
-* `management.tracing.grpc.enabled`
-  * You only need to set this property to true if you want to use grpc (port 4317) vs http (port 4318) channel for span export.
-  
-You can check all the possible values on [OtlpProperties](https://docs.spring.io/spring-boot/docs/current/api//org/springframework/boot/actuate/autoconfigure/metrics/export/otlp/OtlpProperties.html)
-and [TracingProperties](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html)
-
-
-### Default properties
-
-```properties
-management.otlp.tracing.endpoint=http://localhost:4318
-management.tracing.enabled=true
-management.tracing.propagation.type=b3,w3c
-management.tracing.sampling.probability=1.0
-```
 
 ## Health Checks / Actuator
-
-Enable features that make a Spring Boot service compliant with
-the [SDA SE Health Checks](https://sda.dev/developer-guide/deployment/health-checks/).
 
 Configures the Spring Boot Actuator to be accessible on root path `/` at default management
 port `8081`.
@@ -577,9 +499,9 @@ The following endpoints are provided at the admin management endpoint:
 
 The readiness group contains the following indicators:
 
-*   [`ReadinessStateHealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/availability/ReadinessStateHealthIndicator.html)
-*   [`MongoHealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/data/mongo/MongoHealthIndicator.html), if auto-configured.
-*   `OpenPolicyAgentHealthIndicator` if [OPA](#opa) is enabled for authentication
+- [`ReadinessStateHealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/availability/ReadinessStateHealthIndicator.html)
+- [`MongoHealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/data/mongo/MongoHealthIndicator.html), if auto-configured.
+- `OpenPolicyAgentHealthIndicator` if [OPA](#opa) is enabled for authentication
 
 To overwrite the defaults [`HealthIndicator`](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/health/HealthIndicator.html) of the readiness group, you can overwrite the property
 source:
@@ -604,26 +526,6 @@ The custom health indicator will be available under `/healthcheck/custom` which 
 prefix of the [HealthIndicator](https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/health/HealthIndicator.html)
 implementing component.
 
-### Default properties
-
-```properties
-# Actuator
-management.server.port=8081
-management.server.base-path=/
-management.endpoints.web.base-path=/
-management.endpoints.web.exposure.include=*
-management.endpoints.enabled-by-default=false
-# Healthcheck
-management.endpoint.health.enabled=true
-management.endpoints.web.path-mapping.health=healthcheck
-management.endpoint.health.probes.enabled=true
-# Add the required auto configured health indicators which are supported in org.sdase.commons.spring
-# See https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.health.auto-configured-health-indicators
-# to see the available indicators. If an included HealthIndicator is not autoconfigured, it will be automatically ignored
-management.endpoint.health.group.readiness.include=readinessState, mongo
-management.endpoint.health.show-details=always
-management.endpoint.health.show-components=always
-```
 
 ## Logging
 
@@ -640,17 +542,16 @@ If your service is required to support the metadata context but is not intereste
 continue here:
 
 Services that use the sda-spring-boot-commons:
-- can access the current [MetadataContext](../../sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java)
-  in their implementation
+- can access the current `org.sdase.commons.spring.boot.metadata.context.MetadataContext` in their
+  implementation
 - will automatically load the context from incoming HTTP requests into the thread handling the
-  request, if you register [MetadataContextConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
+  request, if you register `org.sdase.commons.spring.boot.web.metadata.MetadataContextConfiguration`
 - will automatically load the context from consumed Kafka messages into the thread handling the
   message and the error when handling the message fails when the consumer is configured with one of
-  the
-  provided [SdaKafkaConsumerConfiguration](../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaConsumerConfiguration.java)
+  the provided `org.sdase.commons.spring.boot.kafka.SdaKafkaConsumerConfiguration`
 - will automatically propagate the context to other services via HTTP when using a platform client
   that uses
-  the [MetadataContextClientConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
+  the `org.sdase.commons.spring.boot.web.metadata.MetadataContextClientConfiguration`
   configuration, e.g:
   - ```java
     @FeignClient(
@@ -666,7 +567,7 @@ Services that use the sda-spring-boot-commons:
     }
     ```
 - will automatically propagate the context in produced Kafka messages when the producer is created
-  with [SdaKafkaProducerConfiguration](../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaProducerConfiguration.java)
+  with `org.sdase.commons.spring.boot.kafka.SdaKafkaProducerConfiguration`
 - are configurable by the property or environment variable `METADATA_FIELDS` to be aware of the
   metadata used in a specific environment
 
