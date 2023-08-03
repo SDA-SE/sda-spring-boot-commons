@@ -10,7 +10,7 @@ plugins {
   id 'idea'
   id 'maven-publish'
   id 'signing'
-  id 'com.diffplug.spotless' version '6.19.0'
+  id 'com.diffplug.spotless' version '6.20.0' // cleanup ignore-policy.rego on update
   id 'org.sonarqube' version '4.2.1.3168'
   id 'project-report'
   id 'io.codearte.nexus-staging' version '0.30.0'
