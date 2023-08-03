@@ -53,6 +53,7 @@ public class SdaSecurityConfiguration {
    * @param sdaAccessDecisionManager {@link
    *     org.springframework.security.authorization.AuthorizationManager} that decides about
    *     authorization
+   * @param sdaSecurityHeaders static response headers that should be added for security reasons
    */
   public SdaSecurityConfiguration(
       @Value("${auth.issuers:}") String issuers,
