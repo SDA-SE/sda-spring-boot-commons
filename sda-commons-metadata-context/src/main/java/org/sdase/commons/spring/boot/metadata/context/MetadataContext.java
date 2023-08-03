@@ -156,6 +156,7 @@ public interface MetadataContext {
    * Transfers the current metadata context to the callable when executed in a new thread.
    *
    * @param callable The runnable to wrap with the current metadata context.
+   * @param <V> the type of the return value
    * @return The original callable wrapped with code to transfer the metadata context when executed
    *     in a new thread.
    */
