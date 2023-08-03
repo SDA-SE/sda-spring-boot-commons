@@ -9,7 +9,7 @@ javaPlatform {
 ext {
   awaitalityVersion = '4.2.0'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '3.0.2'
+  springBootVersion = '3.1.2'
   springCloudVersion = '2022.0.4'
   scalaVersion = '2.13.11'
 }
@@ -26,6 +26,11 @@ dependencies {
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.2.0'
 
+    // spring cloud
+    api 'org.apache.httpcomponents:httpclient:4.5.13', {
+      because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
+    }
+
     // sda-commons-web-autoconfigure
     api 'org.bouncycastle:bcpkix-jdk15on:1.70', {
       because 'This version is used in org.springframework.security:spring-security-rsa:1.0.10.RELEASE'
@@ -37,7 +42,6 @@ dependencies {
     api 'io.swagger.core.v3:swagger-annotations:2.2.9'
     api 'io.github.classgraph:classgraph:4.8.161'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'io.micrometer:micrometer-registry-prometheus:1.11.2'
     api 'org.yaml:snakeyaml:1.33', {
       because 'Temporary: this version is used to solve CVE-2022-25857'
     }
@@ -56,6 +60,9 @@ dependencies {
     }
     api "org.scala-lang:scala-library:${scalaVersion}", {
       because 'conflict between com.fasterxml.jackson.module:jackson-module-scala_2.13:2.13.3, com.typesafe.scala-logging:scala-logging_2.13:3.9.3 and org.scala-lang.modules:scala-collection-compat_2.13:2.4.4'
+    }
+    api "org.apache.zookeeper:zookeeper:3.6.4", {
+      because 'version conflict in transitive managed depedencies'
     }
 
     // sda-commons-starter-s3
