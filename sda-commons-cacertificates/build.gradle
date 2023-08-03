@@ -2,5 +2,4 @@ dependencies {
   implementation 'org.bouncycastle:bcpkix-jdk15on'
   implementation 'org.springframework.boot:spring-boot-starter'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'org.apache.httpcomponents:httpclient'
 }

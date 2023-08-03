@@ -11,19 +11,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.TrustManagerFactory;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.cacertificates.ssl.CertificateReader;
 import org.sdase.commons.cacertificates.ssl.SslUtil;
@@ -44,15 +44,14 @@ class CaCertificatesBundleHttpsIT {
     SSLContext sslContext = createSSlContextWithoutDefaultMerging(pemContent.get());
 
     assertThatExceptionOfType(SSLHandshakeException.class)
-        .isThrownBy(() -> callSecureEndpointWithSSLContext(sslContext));
+        .isThrownBy(() -> callSecureEndpointWithSSLContextForStatus(sslContext));
   }
 
   @Test
   void shouldHttpsOK200WithDefaultTrustStore() throws Exception {
     // The default context should be created with an empty certificate bundle
     SSLContext sslContext = SslUtil.createSslContext(SslUtil.createTruststoreFromPemKey(null));
-    assertThat(callSecureEndpointWithSSLContext(sslContext).getStatusLine().getStatusCode())
-        .isEqualTo(200);
+    assertThat(callSecureEndpointWithSSLContextForStatus(sslContext)).isEqualTo(200);
   }
 
   @Test
@@ -65,14 +64,20 @@ class CaCertificatesBundleHttpsIT {
     SSLContext sslContext =
         SslUtil.createSslContext(SslUtil.createTruststoreFromPemKey(pemContent.get()));
 
-    assertThat(callSecureEndpointWithSSLContext(sslContext).getStatusLine().getStatusCode())
-        .isEqualTo(200);
+    assertThat(callSecureEndpointWithSSLContextForStatus(sslContext)).isEqualTo(200);
   }
 
-  public static CloseableHttpResponse callSecureEndpointWithSSLContext(SSLContext sslContext)
+  public static int callSecureEndpointWithSSLContextForStatus(SSLContext sslContext)
       throws IOException {
-    CloseableHttpClient httpclient = HttpClients.custom().setSSLContext(sslContext).build();
-    return httpclient.execute(new HttpGet(securedHost));
+    URLConnection urlConnection = new URL(securedHost).openConnection();
+    if (urlConnection instanceof HttpsURLConnection httpsURLConnection) {
+      httpsURLConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+      httpsURLConnection.connect();
+      try (InputStream ignored = httpsURLConnection.getInputStream()) {
+        return httpsURLConnection.getResponseCode();
+      }
+    }
+    throw new IllegalStateException("Not a HttpsURLConnection");
   }
 
   private static SSLContext createSSlContextWithoutDefaultMerging(String pemContent)
