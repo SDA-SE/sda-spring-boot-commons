@@ -24,7 +24,10 @@ channels:
       message:
         oneOf:
           - $ref: '#/components/messages/ContractCreatedEvent'
-
+  'car-lifecycle':
+    subscribe:
+      message:
+        $ref: '#/components/messages/CarLifecycleEvents'
 
 
 components:
@@ -44,3 +47,6 @@ components:
       description: An event that represents when a new contract was created
       payload:
         $ref: 'class://org.sdase.commons.spring.boot.cloudevents.app.contract.ContractCreatedEvent'
+    CarLifecycleEvents:
+      payload:
+        $ref: 'class://org.sdase.commons.spring.boot.cloudevents.app.polymorphism.CarLifecycleEvents'
