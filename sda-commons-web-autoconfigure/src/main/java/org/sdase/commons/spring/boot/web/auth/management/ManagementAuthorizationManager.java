@@ -7,32 +7,28 @@
  */
 package org.sdase.commons.spring.boot.web.auth.management;
 
-import java.util.Collection;
+import java.util.function.Supplier;
 import org.springframework.boot.actuate.autoconfigure.web.server.ConditionalOnManagementPort;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
 import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
-public interface ManagementAccessDecisionVoter extends AccessDecisionVoter<FilterInvocation> {
+public interface ManagementAuthorizationManager
+    extends AuthorizationManager<RequestAuthorizationContext> {
 
   @Override
-  default boolean supports(ConfigAttribute attribute) {
-    return true;
-  }
-
-  @Override
-  default boolean supports(Class<?> clazz) {
-    return FilterInvocation.class.isAssignableFrom(clazz);
+  default void verify(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    AuthorizationManager.super.verify(authentication, object);
   }
 
   @Component
   @ConditionalOnManagementPort(ManagementPortType.DIFFERENT)
-  class DifferentPortManagementAccessDecisionVoter implements ManagementAccessDecisionVoter {
+  class DifferentPortManagementAccessDecisionVoter implements ManagementAuthorizationManager {
 
     /**
      * The management port discovered in {@link
@@ -49,36 +45,34 @@ public interface ManagementAccessDecisionVoter extends AccessDecisionVoter<Filte
     }
 
     @Override
-    public int vote(
-        Authentication authentication,
-        FilterInvocation filterInvocation,
-        Collection<ConfigAttribute> attributes) {
-      int requestLocalPort = filterInvocation.getRequest().getLocalPort();
-      return requestLocalPort == this.managementPort ? ACCESS_GRANTED : ACCESS_ABSTAIN;
+    public AuthorizationDecision check(
+        Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+      int requestLocalPort = object.getRequest().getLocalPort();
+      return requestLocalPort == this.managementPort
+          ? new AuthorizationDecision(true)
+          : new AuthorizationDecision(false);
     }
   }
 
   @Component
   @ConditionalOnManagementPort(ManagementPortType.SAME)
-  class IgnoreSamePortManagementAccessDecisionVoter implements ManagementAccessDecisionVoter {
+  class IgnoreSamePortManagementAccessDecisionVoter implements ManagementAuthorizationManager {
+
     @Override
-    public int vote(
-        Authentication authentication,
-        FilterInvocation filterInvocation,
-        Collection<ConfigAttribute> attributes) {
-      return ACCESS_ABSTAIN;
+    public AuthorizationDecision check(
+        Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+      return new AuthorizationDecision(false);
     }
   }
 
   @Component
   @ConditionalOnManagementPort(ManagementPortType.DISABLED)
-  class DisabledManagementAccessDecisionVoter implements ManagementAccessDecisionVoter {
+  class DisabledManagementAccessDecisionVoter implements ManagementAuthorizationManager {
+
     @Override
-    public int vote(
-        Authentication authentication,
-        FilterInvocation filterInvocation,
-        Collection<ConfigAttribute> attributes) {
-      return ACCESS_ABSTAIN;
+    public AuthorizationDecision check(
+        Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+      return new AuthorizationDecision(false);
     }
   }
 }
