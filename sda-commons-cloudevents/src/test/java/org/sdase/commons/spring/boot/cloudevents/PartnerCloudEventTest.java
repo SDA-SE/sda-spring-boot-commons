@@ -9,7 +9,6 @@ package org.sdase.commons.spring.boot.cloudevents;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -52,7 +51,7 @@ class PartnerCloudEventTest {
 
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
 
-  private String TOPIC = "test-topic";
+  private static final String TOPIC = "test-topic";
 
   private BlockingQueue<ConsumerRecord<String, PartnerCreatedEvent>> consumerRecords;
 
@@ -96,15 +95,13 @@ class PartnerCloudEventTest {
     PartnerCreatedEvent cloudEvent =
         (PartnerCreatedEvent)
             new PartnerCreatedEvent()
-                .setData(new PartnerCreatedEvent.PartnerCreated().setId(partnerId))
-                .setSource(URI.create("/SDA-SE/partner/partner-example/partner-example-service"))
-                .setSubject(partnerId)
-                .setType("com.sdase.partner.ods.partner.created");
+                .setData(new PartnerCreatedEvent.PartnerCreated(partnerId))
+                .setSubject(partnerId);
 
     partnerCreatedMessageProducer.send(TOPIC, cloudEvent);
 
     ConsumerRecord<String, PartnerCreatedEvent> poll = consumerRecords.poll(10, TimeUnit.SECONDS);
     PartnerCreatedEvent value = poll.value();
-    assertThat(value.getData().getId()).isEqualTo(partnerId);
+    assertThat(value.getData().id()).isEqualTo(partnerId);
   }
 }
