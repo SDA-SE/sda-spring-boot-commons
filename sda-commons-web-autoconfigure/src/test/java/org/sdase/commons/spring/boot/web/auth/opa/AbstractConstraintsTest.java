@@ -41,12 +41,12 @@ class AbstractConstraintsTest {
     var abstractConstraints = new AbstractConstraints() {};
 
     RequestContextHolder.currentRequestAttributes()
-        .setAttribute(OpaAccessDecisionVoter.CONSTRAINTS_ATTRIBUTE, new Object(), 0);
+        .setAttribute(OpaAuthorizationManager.CONSTRAINTS_ATTRIBUTE, new Object(), 0);
     try {
       assertThatCode(abstractConstraints::process).doesNotThrowAnyException();
     } finally {
       RequestContextHolder.currentRequestAttributes()
-          .removeAttribute(OpaAccessDecisionVoter.CONSTRAINTS_ATTRIBUTE, 0);
+          .removeAttribute(OpaAuthorizationManager.CONSTRAINTS_ATTRIBUTE, 0);
     }
   }
 
