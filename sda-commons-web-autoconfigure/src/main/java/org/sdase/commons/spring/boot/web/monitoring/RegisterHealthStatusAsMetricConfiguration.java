@@ -12,7 +12,6 @@ import io.micrometer.core.instrument.Tag;
 import java.util.Arrays;
 import java.util.Map;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -27,8 +26,13 @@ import org.springframework.context.ApplicationContext;
 public class RegisterHealthStatusAsMetricConfiguration {
   private static final String METRICNAME_HEALTHCHECK = "healthcheck_status";
 
-  @Autowired private MeterRegistry registry;
-  @Autowired private ApplicationContext context;
+  private final MeterRegistry registry;
+  private final ApplicationContext context;
+
+  public RegisterHealthStatusAsMetricConfiguration(MeterRegistry registry, ApplicationContext context) {
+    this.registry = registry;
+    this.context = context;
+  }
 
   @PostConstruct
   void init() {
