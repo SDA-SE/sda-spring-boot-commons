@@ -26,10 +26,8 @@ class DuplicateClassesTest {
       List.of(
           // Spring JCL duplicates classes of commons logging
           Pattern.compile("org/apache/commons/logging/.*"),
-          // AspectJ duplicates its own classes in various modules
-          Pattern.compile("org/aspectj/.*"),
           // Tomcat embed duplicates the servlet classes
-          Pattern.compile("javax/servlet/.*"));
+          Pattern.compile("jakarta/servlet/.*"));
 
   private static final Logger LOG = LoggerFactory.getLogger(DuplicateClassesTest.class);
 
