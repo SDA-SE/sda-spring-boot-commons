@@ -28,7 +28,7 @@ import java.util.UUID;
     [CloudEvents](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)
     specification.
     The field documentation will contain the official documentation and also some hints how values
-    should should be set when used on the SDA platform.
+    should be set when used on the SDA platform.
     """)
 public class CloudEventV1<T> extends BaseCloudEvent {
 
