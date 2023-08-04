@@ -8,7 +8,7 @@
 package org.sdase.commons.spring.boot.cloudevents;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaExamples;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 
 public abstract class BaseCloudEvent {
@@ -26,7 +26,7 @@ public abstract class BaseCloudEvent {
       property's value in the serialization.
       Note: for 'release candidate' releases a suffix might be used for testing purposes.
       """)
-  @JsonSchemaExamples("1.0")
+  @Schema(example = "1.0")
   @NotEmpty
   private String specversion;
 

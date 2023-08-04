@@ -5,28 +5,24 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.cloudevents;
+package org.sdase.commons.spring.boot.asyncapi;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.asyncapi.AsyncApiGenerator;
 import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
 
-class AsyncApiDocumentationTest {
+class AsyncApiTest {
 
   @Test
   void generateAndVerifySpec() throws IOException {
-
-    String expected =
-        AsyncApiGenerator.builder()
-            .withAsyncApiBase(getClass().getResource("/asyncapi-template.yml"))
-            .generateYaml();
-
-    // specify where you want your file to be stored
+    // get template
+    var template = getClass().getResource("/demo/asyncapi_template.yaml");
+    // generate AsyncAPI yaml
+    String expected = AsyncApiGenerator.builder().withAsyncApiBase(template).generateYaml();
+    // specify where to store the result, e.g. Path.of("asyncapi.yaml") for the project root.
     Path filePath = Paths.get("asyncapi.yaml");
-
     // check and update the file
     GoldenFileAssertions.assertThat(filePath).hasYamlContentAndUpdateGolden(expected);
   }
