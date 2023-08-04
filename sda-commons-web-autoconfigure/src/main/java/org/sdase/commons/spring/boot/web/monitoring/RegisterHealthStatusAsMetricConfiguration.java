@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContext;
  */
 @AutoConfiguration
 public class RegisterHealthStatusAsMetricConfiguration {
-  private static final String METRICNAME_HEALTHCHECK = "healthcheck_status";
+  private static final String HEALTHCHECK_METRIC_NAME = "healthcheck_status";
 
   private final MeterRegistry registry;
   private final ApplicationContext context;
@@ -46,7 +46,7 @@ public class RegisterHealthStatusAsMetricConfiguration {
 
   private void registerHealthcheck(String tagName, HealthIndicator healthIndicator) {
     registry.gauge(
-        METRICNAME_HEALTHCHECK,
+        HEALTHCHECK_METRIC_NAME,
         List.of(Tag.of("name", tagName)),
         healthIndicator,
         ind -> ind.health().getStatus() == Status.UP ? 1 : 0);
