@@ -12,6 +12,7 @@ ext {
   springBootVersion = '3.1.2'
   springCloudVersion = '2022.0.4'
   scalaVersion = '2.13.11'
+  victoolsVersion = '4.31.1'
 }
 
 dependencies {
@@ -19,6 +20,9 @@ dependencies {
     exclude group: 'net.minidev', module: 'json-smart'
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+  // asyncapi generation
+  api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
   constraints {
     // overall testing dependencies
@@ -38,9 +42,14 @@ dependencies {
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
+    api 'io.github.springwolf:springwolf-core:0.13.0'
     api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
+
     // should align with transitive dependency of org.springdoc:springdoc-openapi-webmvc-core:
+    api 'io.swagger.core.v3:swagger-core-jakarta:2.2.9'
+    api 'io.swagger.core.v3:swagger-models-jakarta:2.2.9'
     api 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.9'
+
     api 'io.github.classgraph:classgraph:4.8.162'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'org.yaml:snakeyaml:1.33', {
@@ -72,7 +81,5 @@ dependencies {
     // sda-commons-starter-s3
     api "io.awspring.cloud:spring-cloud-aws-s3:3.0.1"
 
-    // sda-commons-shared-asyncapi
-    api "com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39"
   }
 }
