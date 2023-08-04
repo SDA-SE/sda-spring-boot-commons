@@ -9,10 +9,9 @@ package org.sdase.commons.spring.boot.web.monitoring;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
-import java.util.Arrays;
-import java.util.Map;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Map;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -25,10 +24,16 @@ import org.springframework.context.ApplicationContext;
  */
 @AutoConfiguration
 public class RegisterHealthStatusAsMetricConfiguration {
-  private static final String METRICNAME_HEALTHCHECK = "healthcheck_status";
+  private static final String HEALTHCHECK_METRIC_NAME = "healthcheck_status";
 
-  @Autowired private MeterRegistry registry;
-  @Autowired private ApplicationContext context;
+  private final MeterRegistry registry;
+  private final ApplicationContext context;
+
+  public RegisterHealthStatusAsMetricConfiguration(
+      MeterRegistry registry, ApplicationContext context) {
+    this.registry = registry;
+    this.context = context;
+  }
 
   @PostConstruct
   void init() {
@@ -41,8 +46,8 @@ public class RegisterHealthStatusAsMetricConfiguration {
 
   private void registerHealthcheck(String tagName, HealthIndicator healthIndicator) {
     registry.gauge(
-        METRICNAME_HEALTHCHECK,
-        Arrays.asList(Tag.of("name", tagName)),
+        HEALTHCHECK_METRIC_NAME,
+        List.of(Tag.of("name", tagName)),
         healthIndicator,
         ind -> ind.health().getStatus() == Status.UP ? 1 : 0);
   }
