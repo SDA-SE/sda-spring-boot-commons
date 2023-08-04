@@ -7,89 +7,107 @@
  */
 package org.sdase.commons.spring.boot.asyncapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
+import java.io.UncheckedIOException;
+import java.lang.reflect.Type;
+import java.util.LinkedHashSet;
 import java.util.Map;
-import org.sdase.commons.spring.boot.asyncapi.internal.JsonNodeUtil;
-import org.sdase.commons.spring.boot.asyncapi.internal.JsonSchemaEmbedder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.sdase.commons.spring.boot.asyncapi.jsonschema.JsonSchemaBuilder;
+import org.sdase.commons.spring.boot.asyncapi.jsonschema.victools.VictoolsJsonSchemaBuilder;
+import org.sdase.commons.spring.boot.asyncapi.util.JsonNodeUtil;
+import org.sdase.commons.spring.boot.asyncapi.util.RefUtil;
 
-@Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AsyncBuilder
-    implements AsyncApiGenerator.AsyncApiBaseBuilder, AsyncApiGenerator.SchemaBuilder {
-
-  private static final Logger LOG = LoggerFactory.getLogger(AsyncBuilder.class);
-
-  @Autowired private JsonSchemaGenerator jsonSchemaGenerator;
+    implements AsyncApiGenerator.AsyncApiBaseBuilder,
+        AsyncApiGenerator.SchemaBuilder,
+        FinalBuilder {
 
   private JsonNode asyncApiBaseTemplate;
-  private final Map<String, JsonNode> schemas = new HashMap<>();
-  private final JsonSchemaEmbedder jsonSchemaEmbedder =
-      new JsonSchemaEmbedder(
-          "/components/schemas",
-          key -> {
-            if (!schemas.containsKey(key)) {
-              throw new UnknownSchemaException("Can't find schema for URL '" + key + "'");
-            }
-            return schemas.get(key);
-          });
+  private JsonSchemaBuilder jsonSchemaBuilder;
+
+  public AsyncBuilder() {
+    this.jsonSchemaBuilder = VictoolsJsonSchemaBuilder.fromDefaultConfig();
+  }
 
   @Override
-  public AsyncApiGenerator.SchemaBuilder withAsyncApiBase(URL url) {
+  public AsyncApiGenerator.SchemaBuilder withAsyncApiBase(String yamlAsyncApiContent) {
     try {
-
-      asyncApiBaseTemplate = YAMLMapper.builder().build().readTree(url);
+      asyncApiBaseTemplate = YAMLMapper.builder().build().readTree(yamlAsyncApiContent);
     } catch (IOException e) {
-
-      LOG.error("ERROR while converting YAML to JSONNode", e);
+      throw new UncheckedIOException("Error while converting YAML to JSONNode", e);
     }
     return this;
   }
 
   @Override
-  public <T> AsyncApiGenerator.SchemaBuilder withSchema(String name, Class<T> clazz) {
-    schemas.put(
-        name,
-        jsonSchemaGenerator.builder().forClass(clazz).allowAdditionalProperties(true).generate());
-
-    return this;
-  }
-
-  @Override
-  public AsyncApiGenerator.SchemaBuilder withSchema(String name, JsonNode node) {
-    schemas.put(name, node);
-
+  public FinalBuilder withJsonSchemaBuilder(JsonSchemaBuilder jsonSchemaBuilder) {
+    this.jsonSchemaBuilder = jsonSchemaBuilder;
     return this;
   }
 
   @Override
   public JsonNode generate() {
-    JsonNode jsonNode = jsonSchemaEmbedder.resolve(asyncApiBaseTemplate);
-    JsonNodeUtil.sortJsonNodeInPlace(jsonNode.at("/components/schemas"));
-    return jsonNode;
+    ObjectNode asyncApiObject = asyncApiBaseTemplate.deepCopy();
+    var jsonSchemas = createSchemasFromReferencedClasses(asyncApiObject);
+    insertSchemas(jsonSchemas, asyncApiObject);
+    JsonNodeUtil.sortJsonNodeInPlace(asyncApiObject.at("/components/schemas"));
+    return asyncApiObject;
   }
 
-  @Override
-  public String generateYaml() {
+  private Map<String, JsonNode> createSchemasFromReferencedClasses(ObjectNode asyncApi) {
+    var types =
+        findRequiredSchemas(asyncApi).stream().map(this::toType).collect(Collectors.toSet());
+    return jsonSchemaBuilder.toJsonSchema(types);
+  }
 
-    try {
+  private Set<String> findRequiredSchemas(JsonNode asyncApiJsonNode) {
+    String prefix = "class://";
+    Set<String> result = new LinkedHashSet<>();
+    RefUtil.updateAllRefsRecursively(
+        asyncApiJsonNode,
+        ref -> {
+          String refText = ref.asText();
+          if (refText.startsWith(prefix)) {
+            result.add(refText.substring(prefix.length()));
+            String simpleClassName = refText.substring(refText.lastIndexOf(".") + 1);
+            return "#/components/schemas/%s".formatted(simpleClassName);
+          }
+          return refText;
+        });
+    return result;
+  }
 
-      return YAMLMapper.builder().build().writeValueAsString(generate());
-    } catch (JsonProcessingException e) {
+  private void insertSchemas(Map<String, JsonNode> newSchemas, ObjectNode targetAsyncApiObject) {
+    ObjectNode components = getOrCreateObject(targetAsyncApiObject, "components");
+    ObjectNode targetSchemas = getOrCreateObject(components, "schemas");
+    newSchemas.forEach(targetSchemas::set);
+  }
 
-      LOG.error("Error while converting JSON to YAML: ", e);
+  private ObjectNode getOrCreateObject(ObjectNode source, String fieldName) {
+    if (source.has(fieldName)) {
+      JsonNode jsonNode = source.get(fieldName);
+      if (jsonNode instanceof ObjectNode objectNode) {
+        return objectNode;
+      }
+      throw new IllegalStateException(
+          "'%s' is not an Object node but a %s in %s"
+              .formatted(fieldName, jsonNode.getClass().getSimpleName(), source));
     }
+    ObjectNode newObjectNode = source.objectNode();
+    source.set(fieldName, newObjectNode);
+    return newObjectNode;
+  }
 
-    return null;
+  private Type toType(String fullyQualifiedClassName) {
+    try {
+      return getClass().getClassLoader().loadClass(fullyQualifiedClassName);
+    } catch (ClassNotFoundException e) {
+      throw new ReferencedClassNotFoundException(e);
+    }
   }
 }

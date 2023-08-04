@@ -9,8 +9,7 @@ package org.sdase.commons.spring.boot.cloudevents;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaDefault;
-import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaExamples;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -41,7 +40,7 @@ public class CloudEventV1<T> extends BaseCloudEvent {
 
       **SDA**: The default is to use a random UUID.
       """)
-  @JsonSchemaExamples("57d67827-3f4f-46e8-a126-fa6a6b724ae2")
+  @Schema(example = "57d67827-3f4f-46e8-a126-fa6a6b724ae2")
   @NotEmpty
   private String id = UUID.randomUUID().toString();
 
@@ -73,10 +72,7 @@ public class CloudEventV1<T> extends BaseCloudEvent {
       - `SYSTEM`: The name of the system of the service, e.g. `partner-consent-stack`
       - `SERVICE`: The name of the service, e.g. `consent-configuration-service`
       """)
-  @JsonSchemaExamples({
-    "/COMPANY/DOMAIN/SYSTEM/SERVICE",
-    "/SDA-SE/consent/partner-consent-stack/consent-configuration-service"
-  })
+  @Schema(example = "/SDA-SE/consent/partner-consent-stack/consent-configuration-service")
   @NotNull
   private URI source;
 
@@ -100,11 +96,7 @@ public class CloudEventV1<T> extends BaseCloudEvent {
       ⚠️ Be careful if you want to derive the event type automatically from a class or package name,
       because it makes it harder to refactor/rename your class without changing your API.
       """)
-  @JsonSchemaExamples({
-    "com.sdase.relocation.service.customer.moved",
-    "com.sdase.consent.service.consent.agreed",
-    "com.sdase.offer.service.contract.offered"
-  })
+  @Schema(example = "com.sdase.offer.service.contract.offered")
   @NotEmpty
   private String type;
 
@@ -123,7 +115,7 @@ public class CloudEventV1<T> extends BaseCloudEvent {
       '.jpg' or '.jpeg' and the subject attribute allows for constructing a simple and efficient
       string-suffix filter for that subset of events.
       """)
-  @JsonSchemaExamples("terms-and-conditions-1")
+  @Schema(example = "terms-and-conditions-1")
   private String subject;
 
   @JsonPropertyDescription(
@@ -154,8 +146,7 @@ public class CloudEventV1<T> extends BaseCloudEvent {
 
       **SDA**: The default is to use 'application/json'
       """)
-  @JsonSchemaExamples("application/json")
-  @JsonSchemaDefault("application/json")
+  @Schema(example = "application/json", defaultValue = "application/json")
   private String datacontenttype = "application/json";
 
   @JsonPropertyDescription(
@@ -169,7 +160,7 @@ public class CloudEventV1<T> extends BaseCloudEvent {
 
       **SDA**: Default will be set to the current time.
       """)
-  @JsonSchemaExamples("2022-03-12T23:20:50.52Z")
+  @Schema(example = "2022-03-12T23:20:50.52Z")
   private OffsetDateTime time = OffsetDateTime.now();
 
   @JsonPropertyDescription(
