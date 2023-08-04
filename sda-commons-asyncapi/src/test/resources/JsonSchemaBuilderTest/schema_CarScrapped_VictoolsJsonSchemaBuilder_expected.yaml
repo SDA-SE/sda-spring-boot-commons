@@ -1,0 +1,38 @@
+---
+CarScrapped:
+  allOf:
+  - type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "The id of the message"
+        minLength: 1
+        examples:
+        - "626A0F21-D940-4B44-BD36-23F0F567B0D0"
+      type:
+        type: "string"
+        description: "The type of message"
+      vehicleRegistration:
+        type: "string"
+        description: "The registration of the vehicle"
+        minLength: 1
+        examples:
+        - "BB324A81"
+      date:
+        type: "string"
+        format: "date-time"
+        description: "The time of scrapping"
+      location:
+        type: "string"
+        description: "The location where the car was scrapped"
+    required:
+    - "id"
+    - "vehicleRegistration"
+    - "date"
+    description: "A car was scrapped"
+  - type: "object"
+    properties:
+      type:
+        const: "CAR_SCRAPPED"
+    required:
+    - "type"

@@ -7,25 +7,29 @@
  */
 package org.sdase.commons.spring.boot.cloudevents.app.contract;
 
-import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaDefault;
+import com.fasterxml.jackson.annotation.JsonClassDescription;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.net.URI;
 import org.sdase.commons.spring.boot.cloudevents.CloudEventV1;
 
 public class ContractCreatedEvent extends CloudEventV1<ContractCreatedEvent.ContractCreated> {
 
-  @JsonSchemaDefault(
-      "/SDA-SE/insurance-contract/insurance-contract-stack/insurance-contract-service")
+  @Schema(
+      defaultValue =
+          "/SDA-SE/insurance-contract/insurance-contract-stack/insurance-contract-service")
   @Override
   public URI getSource() {
     return super.getSource();
   }
 
-  @JsonSchemaDefault("com.sdase.contract.foo.contract.created")
+  @Schema(defaultValue = "com.sdase.contract.foo.contract.created")
   @Override
   public String getType() {
     return super.getType();
   }
 
+  @JsonClassDescription("The data of the contract created event.")
+  @SuppressWarnings("unused")
   public static class ContractCreated {
 
     private String contractId;
