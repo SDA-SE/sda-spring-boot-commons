@@ -8,69 +8,72 @@
 package org.sdase.commons.spring.boot.asyncapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.asyncapi.AsyncApiGenerator.SchemaBuilder;
-import org.sdase.commons.spring.boot.asyncapi.models.BaseEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
 
-@SpringBootTest(classes = AsyncTestApp.class)
 class AsyncApiGeneratorTest {
 
-  @Autowired private AsyncApiGenerator asyncApiGenerator;
+  public static final String GIVEN_ASYNC_API_TEMPLATE =
+      "/AsyncApiGeneratorTest/asyncapi_template.yaml";
 
   @Test
-  void shouldGenerateAsyncApi() throws IOException, URISyntaxException {
+  void shouldGenerateAsyncApi() throws IOException {
     String actual =
-        asyncApiGenerator
-            .builder()
-            .withAsyncApiBase(getClass().getResource("/asyncapi_template.yaml"))
-            .withSchema("./schema.json", BaseEvent.class)
+        AsyncApiGenerator.builder()
+            .withAsyncApiBase(getClass().getResource(GIVEN_ASYNC_API_TEMPLATE))
             .generateYaml();
-    String expected = TestUtil.readResource("/asyncapi_expected.yaml");
 
-    Map<String, Object> expectedJson =
-        YAMLMapper.builder()
-            .build()
-            .readValue(expected, new TypeReference<Map<String, Object>>() {});
-    Map<String, Object> actualJson =
-        YAMLMapper.builder().build().readValue(actual, new TypeReference<Map<String, Object>>() {});
-
-    assertThat(actualJson).usingRecursiveComparison().isEqualTo(expectedJson);
-  }
-
-  @Test
-  void shouldNotGenerateAsyncApi() {
-    final SchemaBuilder schemaBuilder =
-        asyncApiGenerator
-            .builder()
-            .withAsyncApiBase(getClass().getResource("/asyncapi_template.yaml"))
-            .withSchema("BAD_PLACEHOLDER", BaseEvent.class);
-    assertThatCode(schemaBuilder::generateYaml).isInstanceOf(UnknownSchemaException.class);
+    GoldenFileAssertions.assertThat(
+            Path.of("src/test/resources/AsyncApiGeneratorTest/asyncapi_expected.yaml"))
+        .hasYamlContentAndUpdateGolden(actual);
   }
 
   @Test
   void shouldSortSchemas() {
     JsonNode actual =
-        asyncApiGenerator
-            .builder()
-            .withAsyncApiBase(getClass().getResource("/asyncapi_template.yaml"))
-            .withSchema("./schema.json", BaseEvent.class)
+        AsyncApiGenerator.builder()
+            .withAsyncApiBase(getClass().getResource(GIVEN_ASYNC_API_TEMPLATE))
             .generate();
     JsonNode schemas = actual.at("/components/schemas");
     List<String> keys = new ArrayList<>();
     schemas.fieldNames().forEachRemaining(keys::add);
     // usingRecursiveComparison() is unable to compare the order, so we have to do it manually.
     assertThat(keys).isSorted();
+  }
+
+  @Test
+  void shouldUseCustomSchemaGenerator() {
+    ObjectMapper om = new ObjectMapper();
+    JsonNode actual =
+        AsyncApiGenerator.builder()
+            .withAsyncApiBase(getClass().getResource(GIVEN_ASYNC_API_TEMPLATE))
+            .withJsonSchemaBuilder(
+                c -> Map.of(((Class<?>) c).getSimpleName() + "Custom", om.createObjectNode()))
+            .generate();
+    assertThat(actual.get("components").get("schemas").fieldNames())
+        .toIterable()
+        .containsExactlyInAnyOrder("CarManufacturedCustom", "CarScrappedCustom");
+  }
+
+  @Test
+  void shouldFailIfRefIsNotFound() {
+    URL asyncApiWithBadReferences =
+        getClass().getResource("/AsyncApiGeneratorTest/asyncapi_reference_failure_template.yaml");
+    SchemaBuilder builderForSchemaWithBadReferences =
+        AsyncApiGenerator.builder().withAsyncApiBase(asyncApiWithBadReferences);
+    assertThatExceptionOfType(ReferencedClassNotFoundException.class)
+        .isThrownBy(builderForSchemaWithBadReferences::generate)
+        .withMessageContaining("com.example.CarManufactured");
   }
 }

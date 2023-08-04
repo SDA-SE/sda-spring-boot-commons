@@ -14,6 +14,7 @@ nav:
   - S3: s3/index.md
   - MongoDB: mongodb/index.md
   - Kafka: kafka/index.md
+  - AsyncAPI: asyncapi/index.md
   - Security Hardening: security/index.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
@@ -21,3 +22,8 @@ nav:
 
 plugins:
   - techdocs-core
+
+markdown_extensions:
+  # Add support for the `--8<--` feature to import files. Remove this as soon as it is
+  # part of the techdocs-core plugin: https://github.com/backstage/mkdocs-techdocs-core/issues/20
+  - pymdownx.snippets
