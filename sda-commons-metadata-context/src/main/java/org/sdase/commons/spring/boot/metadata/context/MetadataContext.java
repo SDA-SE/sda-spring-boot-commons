@@ -129,15 +129,9 @@ public interface MetadataContext {
     var current = detachedCurrent();
     var newNonNull = Optional.ofNullable(newContextData).orElse(new DetachedMetadataContext());
     switch (mergeStrategy) {
-      case EXTEND:
-        createContext(MetadataContextUtil.merge(current, newNonNull));
-        break;
-      case REPLACE:
-        createContext(MetadataContextUtil.mergeWithPreference(newNonNull, current));
-        break;
-      case KEEP:
-        createContext(MetadataContextUtil.mergeWithPreference(current, newNonNull));
-        break;
+      case EXTEND -> createContext(MetadataContextUtil.merge(current, newNonNull));
+      case REPLACE -> createContext(MetadataContextUtil.mergeWithPreference(newNonNull, current));
+      case KEEP -> createContext(MetadataContextUtil.mergeWithPreference(current, newNonNull));
     }
   }
 
