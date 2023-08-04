@@ -25,11 +25,12 @@ public class HttpRequestLoggingInterceptor implements HandlerInterceptor {
   @Override
   public void afterCompletion(
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+    String userAgent = request.getHeader("user-agent");
     try (var protocolIgnored = MDC.putCloseable("protocol", request.getProtocol());
         var methodIgnored = MDC.putCloseable("method", request.getMethod());
         var contentLengthIgnored =
             MDC.putCloseable("contentLength", String.valueOf(request.getContentLength()));
-        var userAgentIgnored = MDC.putCloseable("userAgent", request.getHeader("user-agent"));
+        var userAgentIgnored = MDC.putCloseable("userAgent", userAgent);
         var uriIgnored =
             MDC.putCloseable("uri", request.getContextPath() + request.getServletPath());
         var remoteAddressIgnored = MDC.putCloseable("remoteAddress", request.getRemoteAddr());
@@ -46,7 +47,7 @@ public class HttpRequestLoggingInterceptor implements HandlerInterceptor {
           request.getContextPath(),
           request.getServletPath(),
           response.getStatus(),
-          request.getHeader("user-agent"));
+          userAgent);
     }
   }
 }
