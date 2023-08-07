@@ -44,7 +44,7 @@ import org.springframework.test.annotation.DirtiesContext;
 @EmbeddedKafka(
     partitions = 1,
     brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
-@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class KafkaMetadataContextProducerIntegrationTest {
 
   @Autowired private KafkaTemplate<String, String> kafkaTemplate;
