@@ -64,13 +64,13 @@ class KafkaRetryAndDltConsumerTest {
   private String topic;
 
   @Test
-  void shouldReceiveAndDeserializeToJson() throws Exception {
+  void shouldReceiveAndDeserializeToJson() {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
     verify(listenerCheck, timeout(5000)).check("CHECK");
   }
 
   @Test
-  void shouldNotReceiveInvalidModelButProduceToDLT() throws Exception {
+  void shouldNotReceiveInvalidModelButProduceToDLT() {
     KafkaTestModel expectedMessage = new KafkaTestModel().setCheckString("CHECK").setCheckInt(null);
     kafkaTemplate.send(topic, expectedMessage);
     verify(listenerCheck, new Timeout(5000, never())).check("CHECK");
@@ -108,7 +108,7 @@ class KafkaRetryAndDltConsumerTest {
   }
 
   @Test
-  void shouldProduceToDLTForNotRetryableKafkaException() throws Exception {
+  void shouldProduceToDLTForNotRetryableKafkaException() {
     KafkaTestModel expectedMessage =
         new KafkaTestModel()
             .setCheckString("CHECK")
@@ -143,7 +143,7 @@ class KafkaRetryAndDltConsumerTest {
   }
 
   @Test
-  void shouldProduceToDLTForRuntimeException() throws Exception {
+  void shouldProduceToDLTForRuntimeException() {
     KafkaTestModel expectedMessage =
         new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true);
     kafkaTemplate.send(topic, expectedMessage);
