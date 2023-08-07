@@ -8,17 +8,18 @@
 package org.sdase.commons.spring.boot.kafka.config;
 
 import org.sdase.commons.spring.boot.kafka.SdaKafkaConsumerConfiguration;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 public class SdaDltPatternValidator implements Validator {
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return KafkaConsumerConfig.class.isAssignableFrom(clazz);
   }
 
   @Override
-  public void validate(Object target, Errors errors) {
+  public void validate(@NonNull Object target, @NonNull Errors errors) {
 
     KafkaConsumerConfig kafkaConsumerConfig = (KafkaConsumerConfig) target;
     if (kafkaConsumerConfig.dlt() != null
