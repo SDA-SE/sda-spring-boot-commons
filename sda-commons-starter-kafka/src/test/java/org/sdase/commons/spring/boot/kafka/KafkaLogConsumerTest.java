@@ -54,19 +54,19 @@ class KafkaLogConsumerTest {
   private final int DEFAULT_TIMEOUT = 10000;
 
   @Test
-  void shouldReceiveAndDeserializeToJson() throws Exception {
+  void shouldReceiveAndDeserializeToJson() {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
     verify(listenerCheck, timeout(DEFAULT_TIMEOUT)).check("CHECK");
   }
 
   @Test
-  void shouldNotReceiveInvalidModel() throws Exception {
+  void shouldNotReceiveInvalidModel() {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(null));
     verify(listenerCheck, new Timeout(DEFAULT_TIMEOUT, never())).check("CHECK");
   }
 
   @Test
-  void shouldNeverRetryWithNotRetryableException() throws Exception {
+  void shouldNeverRetryWithNotRetryableException() {
     kafkaTemplate.send(
         topic,
         new KafkaTestModel()
