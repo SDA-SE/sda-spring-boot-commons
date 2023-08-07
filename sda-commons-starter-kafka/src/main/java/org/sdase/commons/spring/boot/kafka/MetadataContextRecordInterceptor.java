@@ -18,23 +18,26 @@ import org.apache.kafka.common.header.Header;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.springframework.kafka.listener.RecordInterceptor;
+import org.springframework.lang.NonNull;
 
 public class MetadataContextRecordInterceptor<K, V> implements RecordInterceptor<K, V> {
 
   private final Set<String> metadataFields = MetadataContext.metadataFields();
 
   @Override
-  public ConsumerRecord<K, V> intercept(ConsumerRecord<K, V> record, Consumer<K, V> consumer) {
-    MetadataContext.createContext(createMetadataContext(record));
-    return record;
+  public ConsumerRecord<K, V> intercept(
+      @NonNull ConsumerRecord<K, V> consumerRecord, @NonNull Consumer<K, V> consumer) {
+    MetadataContext.createContext(createMetadataContext(consumerRecord));
+    return consumerRecord;
   }
 
   @Override
-  public void afterRecord(ConsumerRecord consumerRecord, Consumer consumer) {
+  public void afterRecord(
+      @NonNull ConsumerRecord<K, V> consumerRecord, @NonNull Consumer<K, V> consumer) {
     MetadataContext.createContext(new DetachedMetadataContext());
   }
 
-  private DetachedMetadataContext createMetadataContext(ConsumerRecord consumerRecord) {
+  private DetachedMetadataContext createMetadataContext(ConsumerRecord<K, V> consumerRecord) {
     var newContext = new DetachedMetadataContext();
     var headers = consumerRecord.headers();
     for (var field : metadataFields) {
