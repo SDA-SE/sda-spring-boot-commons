@@ -534,7 +534,8 @@ Default features are:
   * Base url to OTLP Collector instance.
   * Default: `http://localhost:4318`
 * `management.tracing.enabled=false` _boolean_
-  * For testing purposes it's maybe required to disable tracing.
+  * For testing purposes it's maybe required to disable tracing. It is important to have also the
+    annotation `@AutoConfigureObservability` on your class and in your tests to enable the tracing.
   * Example: `false`
   * Default: `true`
 * `management.tracing.sampling.probability=0.20`
