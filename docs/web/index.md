@@ -95,7 +95,7 @@ using Open Policy Agent.
 The authorization is done by the [Open Policy Agent](https://www.openpolicyagent.org/). It can be 
 configured as described in
 [OpaAccessDecisionVoter#OpaAccessDecisionVoter
-(boolean, String, String, OpaRequestBuilder, RestTemplate, ApplicationContext, io.opentracing.Tracer)
+(boolean, String, String, OpaRequestBuilder, RestTemplate, ApplicationContext, io.opentelemetry.api.trace.Tracer)
 ](sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaAccessDecisionVoter.java)
 and [OpaRestTemplateConfiguration#OpaRestTemplateConfiguration(Duration, Duration)
 ](sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaRestTemplateConfiguration.java).
@@ -512,15 +512,12 @@ management.endpoint.metrics.enabled=true
 
 ## Tracing
 
-Currently, tracing is leveraged by Sleuth in the Spring context. Spring Cloud Sleuth provides Spring
-Boot autoconfiguration for distributed tracing. Sleuth was built around Zipkin traces and so only
-supports forwarding them to Zipkin (Thrift via Brave) format for now. But since Jaeger supports
-Zipkin traces and the OpenTracing Jaeger Spring support is not heavily maintained, there is a need
-to stick with Sleuth. However, Spring Sleuth is compatible with OpenTracing, so we can use the
-standardized interfaces, hence the OpenTracing [io.opentracing.Tracer](https://javadoc.io/doc/io.opentracing/opentracing-api/0.32.0/io/opentracing/Tracer.html) is on classpath.
-
-Even if Jaeger supports the Zipkin B3 propagation format, Sleuth is forced to just use per default
-the [W3C context propagation](https://www.w3.org/TR/trace-context)
+Currently, tracing is leveraged by Micrometer Tracing rand OpenTelemetry in the Spring context.
+OpenTelemetry (Otel) is a collection of standardized vendor-agnostic tools, APIs, and SDKs. It's a
+CNCF incubating project and is a merger of the OpenTracing and OpenCensus projects.
+OpenTracing is a vendor-neutral API for sending telemetry data over to an observability backend.
+It uses Micrometer for code instrumentation & provide tracing bridge to OpenTelemetry and 
+OpenTelemetry for tools to collect and send telemetry data to the reporter/collector.
 
 Default features are:
 
@@ -529,25 +526,40 @@ Default features are:
 * Instruments common ingress and egress points from Spring applications (servlet filter, rest
   template, scheduled actions, message channels, feign client).
 * The service name is derived from `spring.application.name`
-* Generate and report Jaeger-compatible traces via HTTP. By default, it sends them to a Zipkin
-  collector on localhost (port 9411). Configure the location of the service using `spring.zipkin.base-url`.
+* Generate and report OTLP traces via HTTP or gRPC. By default, it sends them to a OTLP compatible
+  collector (e.g. Jaeger) on localhost (http port 4317, gRPC port 4318). Configure the location of
+  the service using `management.otlp.tracing.endpoint`.
 
-* `spring.zipkin.base.url` _string_
-  * Base url to Zipkin or Zipkin Collector of Jaeger instance.
-    In case of Jaeger, the Zipkin collector
-    must be enabled manually.
-  * Example: `http://jaeger:9411`
-  * Default: `http://localhost:9411`
-* `spring.zipkin.enabled` _boolean_
-  * For testing purposes it's may required to disable tracing.
+* `management.otlp.tracing.endpoint` _string_
+  * Base url to OTLP Collector instance.
+  * Default: `http://localhost:4318`
+* `management.tracing.enabled=false` _boolean_
+  * For testing purposes it's maybe required to disable tracing. It is important to have also the
+    annotation `@AutoConfigureObservability` on your class and in your tests to enable the tracing.
   * Example: `false`
   * Default: `true`
+* `management.tracing.sampling.probability=0.20`
+  * Probability in the range from 0.0 to 1.0 that a trace will be sampled.
+  * Example: `0.20`
+  * Default: `1.0`
+* `management.tracing.propagation.type=b3`
+  * Tracing context propagation types produced and consumed by the application. Setting this property overrides the more fine-grained propagation type properties.
+  * Example: `b3`
+  * Default: `b3,w3c`
+* `management.tracing.grpc.enabled`
+  * You only need to set this property to true if you want to use grpc (port 4317) vs http (port 4318) channel for span export.
+  
+You can check all the possible values on [OtlpProperties](https://docs.spring.io/spring-boot/docs/current/api//org/springframework/boot/actuate/autoconfigure/metrics/export/otlp/OtlpProperties.html)
+and [TracingProperties](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html)
+
 
 ### Default properties
 
 ```properties
-spring.sleuth.propagation.type=W3C, B3
-spring.sleuth.opentracing.enabled=true
+management.otlp.tracing.endpoint=http://localhost:4318
+management.tracing.enabled=true
+management.tracing.propagation.type=b3,w3c
+management.tracing.sampling.probability=1.0
 ```
 
 ## Health Checks / Actuator

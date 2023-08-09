@@ -45,8 +45,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
     properties = {
       "opa.disable=true",
       "metadata.other.baseUrl=http://localhost:${wiremock.server.port}/api",
-      "metadata.otherAuthenticated.baseUrl=http://localhost:${wiremock.server.port}/api",
-      "spring.zipkin.enabled=false",
+      "metadata.otherAuthenticated.baseUrl=http://localhost:${wiremock.server.port}/api"
     })
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
 @AutoConfigureWireMock(port = 0)
