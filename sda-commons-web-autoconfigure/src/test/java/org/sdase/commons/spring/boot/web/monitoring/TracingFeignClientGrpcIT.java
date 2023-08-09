@@ -48,14 +48,14 @@ import org.springframework.web.client.RestTemplate;
     properties = {
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "opa.disable=true",
-      "management.otlp.tracing.endpoint=http://localhost:${wiremock.server.port}/otlp",
       "management.tracing.enabled=true",
-      "management.tracing.grpc.enabled=false"
+      "management.tracing.grpc.enabled=true",
+      "management.otlp.tracing.endpoint=http://localhost:${wiremock.server.port}"
     })
 @AutoConfigureWireMock(port = 0)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
 @AutoConfigureObservability
-class TracingFeignClientIT {
+class TracingFeignClientGrpcIT {
 
   @LocalServerPort private int port;
 
@@ -72,7 +72,7 @@ class TracingFeignClientIT {
     // WHEN
     reset();
     stubFor(get("/feign/pongMetrics").willReturn(ok()));
-    stubFor(post("/otlp").willReturn(ok()));
+    stubFor(post("/opentelemetry.proto.collector.trace.v1.TraceService/Export").willReturn(ok()));
 
     authMock.reset();
     authMock.authorizeAnyRequest().allow();
@@ -99,7 +99,9 @@ class TracingFeignClientIT {
         getRequestedFor(urlPathEqualTo("/feign/pongMetrics"))
             .withHeader("traceparent", containing("00000000000000000000000000000001")));
 
-    verify(postRequestedFor(urlPathEqualTo("/otlp")).withRequestBody(containing("opentelemetry")));
+    verify(
+        postRequestedFor(
+            urlPathEqualTo("/opentelemetry.proto.collector.trace.v1.TraceService/Export")));
   }
 
   @Test
@@ -107,7 +109,7 @@ class TracingFeignClientIT {
 
     // WHEN
     stubFor(get("/feign/pong").willReturn(ok()));
-    stubFor(post("/otlp").willReturn(ok()));
+    stubFor(post("/opentelemetry.proto.collector.trace.v1.TraceService/Export").willReturn(ok()));
 
     var result =
         client.exchange(
@@ -130,6 +132,8 @@ class TracingFeignClientIT {
             .withHeader("b3", containing("0000000000000001"))
             .withHeader("uber-trace-id", containing("00000000000000000000000000000001")));
 
-    verify(postRequestedFor(urlPathEqualTo("/otlp")).withRequestBody(containing("opentelemetry")));
+    verify(
+        postRequestedFor(
+            urlPathEqualTo("/opentelemetry.proto.collector.trace.v1.TraceService/Export")));
   }
 }
