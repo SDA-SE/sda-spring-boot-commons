@@ -63,7 +63,7 @@ public enum SdaSecurityType {
         List.of(
             new Header("X-Frame-Options", "DENY"),
             new Header("X-Content-Type-Options", "nosniff"),
-            new Header("X-XSS-Protection", "1; mode=block"),
+            new Header("X-XSS-Protection", "0"), // the new default for Spring is 0
             new Header("Referrer-Policy", "same-origin"),
             new Header("X-Permitted-Cross-Domain-Policies", "none"));
   }
