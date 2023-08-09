@@ -54,7 +54,7 @@ abstract class AbstractSecurityHeadersTest {
         // security headers
         of("X-Frame-Options", "DENY"),
         of("X-Content-Type-Options", "nosniff"),
-        of("X-XSS-Protection", "1; mode=block"),
+        of("X-XSS-Protection", "0"),
         of("Referrer-Policy", "same-origin"),
         of("X-Permitted-Cross-Domain-Policies", "none"),
         of("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'; sandbox"));
@@ -70,7 +70,7 @@ abstract class AbstractSecurityHeadersTest {
         // security headers
         of("X-Frame-Options", "DENY"),
         of("X-Content-Type-Options", "nosniff"),
-        of("X-XSS-Protection", "1; mode=block"),
+        of("X-XSS-Protection", "0"),
         of("Referrer-Policy", "same-origin"),
         of("X-Permitted-Cross-Domain-Policies", "none"),
         of(
