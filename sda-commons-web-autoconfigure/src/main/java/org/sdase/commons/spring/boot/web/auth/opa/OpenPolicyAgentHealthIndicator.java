@@ -10,6 +10,7 @@ package org.sdase.commons.spring.boot.web.auth.opa;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,7 +23,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnProperty(name = "opa.disable", havingValue = "false", matchIfMissing = true)
-public class OpenPolicyAgentHealthIndicator extends AbstractHealthIndicator {
+public class OpenPolicyAgentHealthIndicator extends AbstractHealthIndicator
+    implements OperationResponseBody {
 
   private static final Logger LOG = LoggerFactory.getLogger(OpenPolicyAgentHealthIndicator.class);
 
