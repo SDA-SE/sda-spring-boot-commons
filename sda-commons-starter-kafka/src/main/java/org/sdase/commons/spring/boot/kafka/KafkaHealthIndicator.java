@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.health.ConditionalOnEnabledHealthIndicator;
+import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("kafka")
 @ConditionalOnEnabledHealthIndicator("kafka")
-public class KafkaHealthIndicator extends AbstractHealthIndicator {
+public class KafkaHealthIndicator extends AbstractHealthIndicator implements OperationResponseBody {
 
   private static final Logger LOG = LoggerFactory.getLogger(KafkaHealthIndicator.class);
 
