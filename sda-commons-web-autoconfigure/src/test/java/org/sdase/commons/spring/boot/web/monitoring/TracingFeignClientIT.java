@@ -21,14 +21,18 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+import io.opentelemetry.sdk.testing.junit5.OpenTelemetryExtension;
 import java.net.URI;
 import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -43,24 +47,31 @@ import org.springframework.web.client.RestTemplate;
     webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = {
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
-      "spring.zipkin.base-url=http://localhost:${wiremock.server.port}/zipkin",
-      "opa.disable=true"
+      "opa.disable=true",
+      "management.otlp.tracing.endpoint=http://localhost:${wiremock.server.port}/otlp",
+      "management.tracing.enabled=true",
     })
 @AutoConfigureWireMock(port = 0)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
+@AutoConfigureObservability
 class TracingFeignClientIT {
 
   @LocalServerPort private int port;
-  RestTemplate client = new RestTemplate();
 
   @Autowired AuthMock authMock;
+
+  RestTemplate client = new RestTemplate();
+
+  @RegisterExtension
+  @Order(0)
+  static final OpenTelemetryExtension OTEL = OpenTelemetryExtension.create();
 
   @BeforeEach
   void setUp() {
     // WHEN
     reset();
     stubFor(get("/feign/pongMetrics").willReturn(ok()));
-    stubFor(post("/zipkin/api/v2/spans").willReturn(ok()));
+    stubFor(post("/otlp").willReturn(ok()));
 
     authMock.reset();
     authMock.authorizeAnyRequest().allow();
@@ -80,16 +91,14 @@ class TracingFeignClientIT {
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     await()
-        .atMost(Duration.ofSeconds(2))
+        .atMost(Duration.ofSeconds(5))
         .untilAsserted(() -> assertThat(getAllServeEvents()).hasSize(2));
 
     verify(
         getRequestedFor(urlPathEqualTo("/feign/pongMetrics"))
             .withHeader("traceparent", containing("00000000000000000000000000000001")));
 
-    verify(
-        postRequestedFor(urlPathEqualTo("/zipkin/api/v2/spans"))
-            .withRequestBody(containing("\"traceId\":\"0000000000000001\"")));
+    verify(postRequestedFor(urlPathEqualTo("/otlp")).withRequestBody(containing("opentelemetry")));
   }
 
   @Test
@@ -97,7 +106,7 @@ class TracingFeignClientIT {
 
     // WHEN
     stubFor(get("/feign/pong").willReturn(ok()));
-    stubFor(post("/zipkin/api/v2/spans").willReturn(ok()));
+    stubFor(post("/otlp").willReturn(ok()));
 
     var result =
         client.exchange(
@@ -112,15 +121,14 @@ class TracingFeignClientIT {
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     await()
-        .atMost(Duration.ofSeconds(2))
+        .atMost(Duration.ofSeconds(5))
         .untilAsserted(() -> assertThat(getAllServeEvents().stream()).hasSize(2));
 
     verify(
         getRequestedFor(urlPathEqualTo("/feign/pongMetrics"))
-            .withHeader("x-b3-traceid", containing("0000000000000001")));
+            .withHeader("b3", containing("0000000000000001"))
+            .withHeader("uber-trace-id", containing("00000000000000000000000000000001")));
 
-    verify(
-        postRequestedFor(urlPathEqualTo("/zipkin/api/v2/spans"))
-            .withRequestBody(containing("\"traceId\":\"0000000000000001\"")));
+    verify(postRequestedFor(urlPathEqualTo("/otlp")).withRequestBody(containing("opentelemetry")));
   }
 }

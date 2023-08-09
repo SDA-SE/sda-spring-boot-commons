@@ -18,9 +18,7 @@ dependencies {
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'net.minidev', module: 'json-smart'
   }
-  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
-    exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8'
-  }
+  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
 
   constraints {
     // overall testing dependencies
