@@ -27,7 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest(classes = ClientTestApp.class)
+@SpringBootTest(
+    classes = ClientTestApp.class,
+    properties = {
+     "other.baseUrl=http://localhost:3030/api",
+     "otherAuthenticated.baseUrl=http://localhost:3031/api",
+    })
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @AutoConfigureMockMvc
 class FeignClientMockedContextTest {
