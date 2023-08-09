@@ -609,7 +609,7 @@ implementing component.
 ```properties
 # Actuator
 management.server.port=8081
-management.server.servlet.context-path=/
+management.server.base-path=/
 management.endpoints.web.base-path=/
 management.endpoints.web.exposure.include=*
 management.endpoints.enabled-by-default=false
