@@ -45,7 +45,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
       // exclude the management requests are not set probably at
       // runtime
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
-      "opa.disable=true"
+      "opa.disable=true",
+      "management.tracing.enabled=true"
     })
 @AutoConfigureObservability
 @AutoConfigureMockMvc
@@ -66,6 +67,7 @@ class MetricsIT {
   @BeforeEach
   void beforeEach() throws Exception {
     populateDefaultAndCustomMetrics();
+    ensureGcMetrics();
   }
 
   @AfterEach
@@ -135,5 +137,10 @@ class MetricsIT {
     }
     // calling a route to populate http requests metrics
     getForEntity("", Map.class);
+  }
+
+  /** for ensuring gc metrics generation */
+  private static void ensureGcMetrics() {
+    System.gc();
   }
 }

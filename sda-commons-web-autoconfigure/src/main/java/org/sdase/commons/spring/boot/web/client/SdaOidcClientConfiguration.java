@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties.Provider;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties.Registration;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
@@ -72,7 +72,8 @@ public class SdaOidcClientConfiguration {
     oAuth2ClientProperties.validate();
     List<ClientRegistration> registrations =
         new ArrayList<>(
-            OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(oAuth2ClientProperties)
+            new OAuth2ClientPropertiesMapper(oAuth2ClientProperties)
+                .asClientRegistrations()
                 .values());
     return new InMemoryClientRegistrationRepository(registrations);
   }
