@@ -12,21 +12,11 @@ dependencies {
   api 'ch.qos.logback.contrib:logback-json-classic'
   api 'ch.qos.logback.contrib:logback-jackson'
 
-  // Moving forward compatibility with the now OpenTelemetry standard (OTEL) is desirable.
-  // Sleuth does not currently integrate this as it’s extremely new, but as with most standards,
-  // the Spring team are actively working on it (https://github.com/spring-cloud-incubator/spring-cloud-sleuth-otel ).
-
-  // TODO migrate to open telemetry
-  //api 'org.springframework.cloud:spring-cloud-starter-sleuth'
-  //api 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
-
-  // Until recently Sleuth only supported the Zipkin B3 propagation type,
-  // but now has support for the W3C format which is preferable moving forward.
-  // By adding the brave-opentracing library, Sleuth will also automatically register an OpenTracing
-  // Tracer bean allowing us to use the standardised interfaces
-  // TODO migrate to open telemetry
-  //  api 'io.opentracing.brave:brave-opentracing'
-  //
+  api 'io.micrometer:micrometer-tracing-bridge-otel', {
+    exclude group: 'io.opentelemetry', module: 'opentelemetry-semconv'
+    exclude group: 'aopalliance'
+  }
+  api 'io.opentelemetry:opentelemetry-exporter-otlp'
   api 'org.springdoc:springdoc-openapi-starter-webmvc-api'
   api 'org.bouncycastle:bcpkix-jdk18on'
   api 'javax.ws.rs:javax.ws.rs-api'
@@ -43,4 +33,6 @@ dependencies {
     exclude group: 'org.junit'
   }
   testImplementation "io.github.classgraph:classgraph"
+
+  testImplementation 'io.opentelemetry:opentelemetry-sdk-testing'
 }
