@@ -64,14 +64,7 @@ public final class MetricsConstants {
           "jvm_threads_daemon_threads",
           "tomcat_sessions_expired_sessions_total",
           "logback_events_total",
-          "system_cpu_count",
-          "zipkin_reporter_spans_dropped_total",
-          "zipkin_reporter_spans_bytes_total",
-          "zipkin_reporter_queue_spans",
-          "zipkin_reporter_messages_total",
-          "zipkin_reporter_spans_total",
-          "zipkin_reporter_messages_bytes_total",
-          "zipkin_reporter_queue_bytes");
+          "system_cpu_count");
 
   public static final List<String> METRIC_NAMES =
       List.of(
@@ -120,12 +113,5 @@ public final class MetricsConstants {
           "tomcat.sessions.alive.max",
           "tomcat.sessions.created",
           "tomcat.sessions.expired",
-          "tomcat.sessions.rejected",
-          "zipkin.reporter.messages",
-          "zipkin.reporter.messages.total",
-          "zipkin.reporter.queue.bytes",
-          "zipkin.reporter.queue.spans",
-          "zipkin.reporter.spans",
-          "zipkin.reporter.spans.dropped",
-          "zipkin.reporter.spans.total");
+          "tomcat.sessions.rejected");
 }

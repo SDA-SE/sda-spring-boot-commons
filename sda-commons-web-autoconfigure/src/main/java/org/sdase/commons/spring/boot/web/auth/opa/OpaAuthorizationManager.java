@@ -7,13 +7,12 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
-/*
-import static io.opentracing.tag.Tags.COMPONENT;
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;*/
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.function.Supplier;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
@@ -45,8 +44,7 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
   private final OpaRequestBuilder opaRequestBuilder;
   private final RestTemplate opaRestTemplate;
 
-  // TODO update to opentelemetry
-  // private final Tracer tracer;
+  private final Tracer tracer;
 
   /**
    * @param disableOpa Disables authorization checks with Open Policy Agent completely. In this case
@@ -72,6 +70,8 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
    * @param opaRestTemplate the {@code RestTemplate} used to make requests to the external Open
    *     Policy Agent server
    * @param applicationContext the current application context is used to derive the default OPA
+   * @param openTelemetry the open telemetry instance used to send traces to an OTLP compatible
+   *     collector
    */
   public OpaAuthorizationManager(
       @Value("${opa.disable:false}") boolean disableOpa,
@@ -79,11 +79,11 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
       @Value("${opa.policy.package:}") String policyPackage,
       OpaRequestBuilder opaRequestBuilder,
       @Qualifier("opaRestTemplate") RestTemplate opaRestTemplate,
-      ApplicationContext applicationContext
-      /*, TODO update to opentelemetry Object tracer*/ ) {
+      ApplicationContext applicationContext,
+      OpenTelemetry openTelemetry) {
     this.disableOpa = disableOpa;
     this.opaRestTemplate = opaRestTemplate;
-    // this.tracer = tracer;
+    this.tracer = openTelemetry.getTracer("sda-commons-web-autoconfigure");
     var derivedPolicyPackage = createOpaPackageName(policyPackage, applicationContext);
     this.opaRequestUrl = createOpaRequestUri(opaBaseUrl, derivedPolicyPackage);
     this.opaRequestBuilder = opaRequestBuilder;
@@ -102,31 +102,31 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
       Supplier<Authentication> authentication,
       RequestAuthorizationContext requestAuthorizationContext) {
     var httpRequest = requestAuthorizationContext.getRequest();
-    /*Span span =
+    Span span =
         tracer
-            .buildSpan("authorizeUsingOpa")
-            .withTag("opa.allow", false)
-            .withTag(COMPONENT, "OpaAuthFilter")
-            .start();
-    try (Scope ignored = tracer.scopeManager().activate(span)) {*/
-    if (disableOpa) {
-      return handleOpaDisabled(httpRequest);
+            .spanBuilder("authorizeUsingOpa")
+            .setAttribute("opa.allow", false)
+            .setAttribute("component", "OpaAuthFilter")
+            .startSpan();
+    try (Scope ignored = span.makeCurrent()) {
+      if (disableOpa) {
+        return handleOpaDisabled(httpRequest);
+      }
+      OpaResponse opaResponse = authorizeWithOpa(httpRequest);
+      if (opaResponse == null) {
+        LOG.warn(
+            "Invalid response from OPA. Maybe the policy path or the response format is not correct");
+        return new AuthorizationDecision(false);
+      }
+      span.setAttribute("opa.allow", opaResponse.isAllow());
+      if (!opaResponse.isAllow()) {
+        return new AuthorizationDecision(false);
+      }
+      storeConstraints(opaResponse);
+      return new AuthorizationDecision(true);
+    } finally {
+      span.end();
     }
-    OpaResponse opaResponse = authorizeWithOpa(httpRequest);
-    if (opaResponse == null) {
-      LOG.warn(
-          "Invalid response from OPA. Maybe the policy path or the response format is not correct");
-      return new AuthorizationDecision(false);
-    }
-    // span.setTag("opa.allow", opaResponse.isAllow());
-    if (!opaResponse.isAllow()) {
-      return new AuthorizationDecision(false);
-    }
-    storeConstraints(opaResponse);
-    return new AuthorizationDecision(true);
-    /*} finally {
-      span.finish();
-    }*/
   }
 
   private void storeConstraints(OpaResponse opaResponse) {
