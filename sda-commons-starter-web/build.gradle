@@ -1,3 +1,38 @@
 dependencies {
-  api project(':sda-commons-web-autoconfigure')
+
+  compileOnly 'org.springframework.boot:spring-boot-autoconfigure-processor'
+
+  api 'org.springframework.boot:spring-boot-starter-web'
+  api 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  api 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  api 'org.springframework.boot:spring-boot-starter-validation'
+  api 'org.springframework.boot:spring-boot-starter-actuator'
+  api 'org.springframework.cloud:spring-cloud-starter-openfeign'
+  api 'org.springframework.boot:spring-boot-starter-validation'
+  api 'ch.qos.logback.contrib:logback-json-classic'
+  api 'ch.qos.logback.contrib:logback-jackson'
+
+  api 'io.micrometer:micrometer-tracing-bridge-otel', {
+    exclude group: 'io.opentelemetry', module: 'opentelemetry-semconv'
+    exclude group: 'aopalliance'
+  }
+  api 'io.opentelemetry:opentelemetry-exporter-otlp'
+  api 'org.springdoc:springdoc-openapi-starter-webmvc-api'
+  api 'org.bouncycastle:bcpkix-jdk18on'
+  api 'javax.ws.rs:javax.ws.rs-api'
+  api 'io.github.openfeign:feign-jaxrs2'
+  api 'io.github.openfeign:feign-micrometer'
+  api 'io.micrometer:micrometer-registry-prometheus'
+  api 'org.glassfish.jersey.core:jersey-common'
+
+  api project(':sda-commons-metadata-context')
+  api project(':sda-commons-error')
+
+  testImplementation project(':sda-commons-web-testing')
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.0.1', {
+    exclude group: 'org.junit'
+  }
+  testImplementation "io.github.classgraph:classgraph"
+
+  testImplementation 'io.opentelemetry:opentelemetry-sdk-testing'
 }
