@@ -9,7 +9,7 @@ dependencies {
   }
   api project(":sda-commons-metadata-context")
 
-  testImplementation project(":sda-commons-web-autoconfigure")
+  testImplementation project(":sda-commons-starter-web")
   testImplementation project(":sda-commons-web-testing")
   testImplementation 'org.springframework.kafka:spring-kafka-test', {
     exclude group: 'com.fasterxml.jackson.module'
