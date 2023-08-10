@@ -96,9 +96,9 @@ The authorization is done by the [Open Policy Agent](https://www.openpolicyagent
 configured as described in
 [OpaAccessDecisionVoter#OpaAccessDecisionVoter
 (boolean, String, String, OpaRequestBuilder, RestTemplate, ApplicationContext, io.opentelemetry.api.trace.Tracer)
-](sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaAccessDecisionVoter.java)
+](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaAccessDecisionVoter.java)
 and [OpaRestTemplateConfiguration#OpaRestTemplateConfiguration(Duration, Duration)
-](sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaRestTemplateConfiguration.java).
+](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaRestTemplateConfiguration.java).
 
 
 The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter (
@@ -106,8 +106,8 @@ Access Decision Manager) which is part of the `SecurityFilterChain` including th
 Authentication.
 
 Constraints provided with the Open Policy Agent response can be mapped to a custom POJO. If the
-class extends [`AbstractConstraints`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/AbstractConstraints.java) 
-and is annotated with [`@Constraints`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/Constraints.java) it can be
+class extends [`AbstractConstraints`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/AbstractConstraints.java) 
+and is annotated with [`@Constraints`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/Constraints.java) it can be
 [`@Autowired`](https://javadoc.io/doc/org.springframework/spring-beans/latest/org/springframework/beans/factory/annotation/Autowired.html) 
 in [`@Controllers`](https://javadoc.io/doc/org.springframework/spring-webmvc/latest/org/springframework/web/servlet/mvc/Controller.html) 
 or [`@RestControllers`](https://javadoc.io/doc/org.springframework/spring-web/latest/org/springframework/web/bind/annotation/RestController.html).
@@ -138,7 +138,7 @@ public class AuthTestApp {
 ```
 
 Additional parameters that are needed for the authorization decision may be provided with custom
-[OpaInputExtensions](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/extension/OpaInputExtension.java).
+[OpaInputExtensions](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/extension/OpaInputExtension.java).
 
 ### Testing
 
@@ -168,7 +168,7 @@ to authorize on a array of those.
 Consider this in your policy when you want to make sure you authorize on the same value that a
 service might use to evaluate the output.
 
-These [inputs](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/model/OpaInput.java)
+These [inputs](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/model/OpaInput.java)
 can be accessed inside a policy `.rego`-file in this way:
 
 ```rego
@@ -303,7 +303,7 @@ public interface OtherServiceClient {
 }
 ```
 
-[`AuthenticationPassThroughClientConfiguration`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/client/AuthenticationPassThroughClientConfiguration.java) 
+[`AuthenticationPassThroughClientConfiguration`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/client/AuthenticationPassThroughClientConfiguration.java) 
 will take the **Authorization** header from the current request context of the servlet and 
 adds its value to the client request.
 
@@ -323,16 +323,16 @@ public interface OtherServiceClient {
 }
 ```
 
-[SdaTraceTokenClientConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
+[SdaTraceTokenClientConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
 will take the `Trace-Token` header from the current request context of the servlet and adds its value to the client request.
 
-If no `Trace-Token` header is present in the current request context, the [SdaTraceTokenClientConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
+If no `Trace-Token` header is present in the current request context, the [SdaTraceTokenClientConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java)
 will generate a new Trace-Token and pass it to the following requests.
 
 ### OIDC Client
 
 If the request context is not always existing, e.g. in cases where a technical user for
-service-to-service communication is required, the [`OidcClientRequestConfiguration`](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/client/OidcClientRequestConfiguration.java) 
+service-to-service communication is required, the [`OidcClientRequestConfiguration`](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/client/OidcClientRequestConfiguration.java) 
 will request the required OIDC authentication token with the client credentials flow using the 
 configured `"oidc.client.issuer.uri"`, `"oidc.client.id"` and `"oidc.client.secret"`.
 
@@ -635,7 +635,7 @@ To enable JSON logging in `application.(properties/yaml)`,
 `logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used. 
 
 ## Metadata Context
-If you want to make use of the data in the metadata context, you should read the [dedicated documentation](../../sda-commons-web-autoconfigure/docs/metadata-context.md).
+If you want to make use of the data in the metadata context, you should read the [dedicated documentation](../../sda-commons-starter-web/docs/metadata-context.md).
 If your service is required to support the metadata context but is not interested in the data,
 continue here:
 
@@ -643,14 +643,14 @@ Services that use the sda-spring-boot-commons:
 - can access the current [MetadataContext](../../sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java)
   in their implementation
 - will automatically load the context from incoming HTTP requests into the thread handling the
-  request, if you register [MetadataContextConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
+  request, if you register [MetadataContextConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
 - will automatically load the context from consumed Kafka messages into the thread handling the
   message and the error when handling the message fails when the consumer is configured with one of
   the
   provided [SdaKafkaConsumerConfiguration](../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaConsumerConfiguration.java)
 - will automatically propagate the context to other services via HTTP when using a platform client
   that uses
-  the [MetadataContextClientConfiguration](../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
+  the [MetadataContextClientConfiguration](../../sda-commons-starter-web/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java)
   configuration, e.g:
   - ```java
     @FeignClient(

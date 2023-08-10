@@ -83,7 +83,7 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
       OpenTelemetry openTelemetry) {
     this.disableOpa = disableOpa;
     this.opaRestTemplate = opaRestTemplate;
-    this.tracer = openTelemetry.getTracer("sda-commons-web-autoconfigure");
+    this.tracer = openTelemetry.getTracer("sda-commons-starter-web");
     var derivedPolicyPackage = createOpaPackageName(policyPackage, applicationContext);
     this.opaRequestUrl = createOpaRequestUri(opaBaseUrl, derivedPolicyPackage);
     this.opaRequestBuilder = opaRequestBuilder;
