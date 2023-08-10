@@ -36,7 +36,7 @@ dependencies {
       because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
     }
 
-    // sda-commons-web-autoconfigure
+    // sda-commons-starter-web
     api 'org.bouncycastle:bcpkix-jdk18on:1.74', {
       because 'fix CVE-2023-33201'
     }
