@@ -4,10 +4,7 @@ import data.lib.trivy
 
 default ignore = false
 
-ignore_cves := {
-  # com.amazonaws:aws-java-sdk-s3 transitive test dependency of io.findify:s3mock_2.13
-  "CVE-2022-31159"
-}
+ignore_cves := {}
 
 ignore {
   input.VulnerabilityID == ignore_cves[_]
