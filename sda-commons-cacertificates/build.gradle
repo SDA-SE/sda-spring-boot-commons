@@ -1,5 +1,8 @@
 dependencies {
   implementation 'org.bouncycastle:bcpkix-jdk18on'
-  implementation 'org.springframework.boot:spring-boot-starter'
+  implementation 'org.springframework.boot:spring-boot-starter', {
+    exclude group: 'org.yaml', module: 'snakeyaml' // 1.x CVE-2022-1471
+  }
+  implementation 'org.yaml:snakeyaml'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
