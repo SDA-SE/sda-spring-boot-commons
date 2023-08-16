@@ -18,8 +18,11 @@ ext {
 dependencies {
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'net.minidev', module: 'json-smart'
+    exclude group: 'org.yaml', module: 'snakeyaml' // 1.x CVE-2022-1471
   }
-  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
+    exclude group: 'org.yaml', module: 'snakeyaml' // 1.x CVE-2022-1471
+  }
 
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
@@ -52,8 +55,8 @@ dependencies {
 
     api 'io.github.classgraph:classgraph:4.8.162'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'org.yaml:snakeyaml:1.33', {
-      because 'Temporary: this version is used to solve CVE-2022-25857'
+    api 'org.yaml:snakeyaml:2.0', {
+      because 'Temporary: this version is used to solve CVE-2022-1471'
     }
     api 'org.xerial.snappy:snappy-java:1.1.10.1', {
       because 'fix CVE-2023-34455'
