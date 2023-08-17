@@ -635,7 +635,7 @@ To enable JSON logging in `application.(properties/yaml)`,
 `logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used. 
 
 ## Metadata Context
-If you want to make use of the data in the metadata context, you should read the [dedicated documentation](../../sda-commons-starter-web/docs/metadata-context.md).
+If you want to make use of the data in the metadata context, you should read the [dedicated documentation](metadata-context.md).
 If your service is required to support the metadata context but is not interested in the data,
 continue here:
 
