@@ -3,6 +3,13 @@
 A set of libraries to bootstrap Spring Boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
+!!! info "Spring Boot 3"
+    🥳 Upgrade to Spring Boot 3 is released with
+    [version 3.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/3.0.0). 🥳
+    
+    Please follow [the migration guide](migration-2-to-3.md) to upgrade.
+
+
 ## Features
 
 | **Starter**                                     | **Description**                                                                                                                                                                                                     |
