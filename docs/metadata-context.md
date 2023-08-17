@@ -28,7 +28,7 @@ The metadata context is technically transferred via HTTP headers and Kafka messa
 services in the same environment.
 At runtime, it is held in a thread local variable to be available for the current process.
 
-[The example below](#example--template-selection) explains what kind of problems the metadata context
+[The example below](#example-template-selection) explains what kind of problems the metadata context
 can solve.
 
 
@@ -142,7 +142,7 @@ To keep the flexibility the metadata context offers, it defines the environment 
 `TEMPLATE_HINT_METADATA_FIELD`.
 The operations team configures it as `landing-page-source`.
 The service developer can use `TEMPLATE_HINT_METADATA_FIELD` in the
-[`MetadataContext`](../../sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java)
+[`MetadataContext`](https://github.com/SDA-SE/sda-spring-boot-commons/blob/master/sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java)
 API to get the values of current context, but must be aware that the result is empty or contains
 multiple values.
 
