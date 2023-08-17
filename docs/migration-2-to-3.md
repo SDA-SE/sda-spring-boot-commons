@@ -17,6 +17,6 @@ Summary of noticeable changes:
 - `javax` dependencies are replaced by `jakarta` dependencies.
 - Tracing moved from Sleuth to Open Telemetry.
 - AsyncAPI setup has been changed, as well as the used library to generate Json Schemas from code.
-  Using of the generator is simpler now as [described in its documentation](asyncapi/index.md).
+  Using of the generator is simpler now as [described in its documentation](asyncapi.md).
 - A major upgrade of Spring Security is included.
 - Spring configuration properties changed.
