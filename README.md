@@ -9,14 +9,18 @@
 A set of libraries to bootstrap spring boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
+> :partying_face: Upgrade to Spring Boot 3 is released with [version 3.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/3.0.0). :partying_face:
+> 
+> Please follow [the migration guide](./docs/migration-2-to-3.md) to upgrade.
+
 ## Features
 
-| **Starter**                                          | **Description**                                                                                                                                                         |
-|------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [sda-commons-starter-web](docs/web/index.md)         | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTelemetry and Prometheus metrics. |
-| [sda-commons-starter-mongodb](docs/mongodb/index.md) | Provides default configuration based on the `org.springframework.boot:spring-boot-starter-data-mongodb`                                                                 |
-| [sda-commons-starter-kafka](docs/kafka/index.md)     | Provides default producer und consumer configuration based on `org.springframework.kafka:spring-kafka`                                                                  |
-| [sda-commons-starter-s3](docs/s3/index.md)           |                                                                                                                                                                         |
+| **Starter**                                    | **Description**                                                                                                                                                         |
+|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [sda-commons-starter-web](docs/web.md)         | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTelemetry and Prometheus metrics. |
+| [sda-commons-starter-mongodb](docs/mongodb.md) | Provides default configuration based on the `org.springframework.boot:spring-boot-starter-data-mongodb`                                                                 |
+| [sda-commons-starter-kafka](docs/kafka.md)     | Provides default producer und consumer configuration based on `org.springframework.kafka:spring-kafka`                                                                  |
+| [sda-commons-starter-s3](docs/s3.md)           |                                                                                                                                                                         |
 
 
 ## Changelog and Versioning
