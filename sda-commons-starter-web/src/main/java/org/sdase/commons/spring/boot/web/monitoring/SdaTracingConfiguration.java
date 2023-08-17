@@ -11,6 +11,8 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
+import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +40,14 @@ public class SdaTracingConfiguration {
 
   @Bean
   @ConditionalOnProperty(value = "management.tracing.grpc.enabled", havingValue = "true")
-  public OtlpGrpcSpanExporter otlpGrpcExporter() {
-    return OtlpGrpcSpanExporter.getDefault();
+  public OtlpGrpcSpanExporter otlpGrpcExporter(
+      @Value("${management.tracing.grpc.endpoint}") String endpoint,
+      @Value("${management.tracing.grpc.compression}") String compression,
+      @Value("${management.tracing.grpc.timeoutMs}") Long timeout) {
+    var builder = OtlpGrpcSpanExporter.builder();
+    builder.setEndpoint(endpoint);
+    builder.setCompression(compression);
+    builder.setTimeout(Duration.ofMillis(timeout));
+    return builder.build();
   }
 }
