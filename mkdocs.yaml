@@ -17,6 +17,7 @@ nav:
   - Kafka: kafka.md
   - AsyncAPI: asyncapi.md
   - Security Hardening: security.md
+  - Metadata Context: metadata-context.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins
