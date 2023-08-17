@@ -9,6 +9,10 @@
 A set of libraries to bootstrap spring boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
+> :partying_face: Upgrade to Spring Boot 3 is released with [version 3.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/3.0.0). :partying_face:
+> 
+> Please follow [the migration guide](./docs/migration-2-to-3.md) to upgrade.
+
 ## Features
 
 | **Starter**                                          | **Description**                                                                                                                                                         |
