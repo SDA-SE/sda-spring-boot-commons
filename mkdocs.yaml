@@ -11,12 +11,12 @@ site_name: sda-spring-boot-commons
 nav:
   - Overview: index.md
   - Migrate to v3: migration-2-to-3.md
-  - Web: web/index.md
-  - S3: s3/index.md
-  - MongoDB: mongodb/index.md
-  - Kafka: kafka/index.md
-  - AsyncAPI: asyncapi/index.md
-  - Security Hardening: security/index.md
+  - Web: web.md
+  - S3: s3.md
+  - MongoDB: mongodb.md
+  - Kafka: kafka.md
+  - AsyncAPI: asyncapi.md
+  - Security Hardening: security.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins

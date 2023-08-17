@@ -11,4 +11,4 @@ This module contains the `AsyncApiGenerator` to generate [AsyncAPI](https://www.
 from a template and model classes.
 The AsyncAPI specification is the industry standard for defining asynchronous APIs.
 
-How to use the `AsyncApiGenerator` is [described in the documentation](../docs/asyncapi/index.md).
+How to use the `AsyncApiGenerator` is [described in the documentation](../docs/asyncapi.md).
