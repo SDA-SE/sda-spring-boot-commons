@@ -50,7 +50,7 @@ import org.springframework.web.client.RestTemplate;
       "opa.disable=true",
       "management.tracing.enabled=true",
       "management.tracing.grpc.enabled=true",
-      "management.tracing.grpc.endpoint=http://localhost:${wiremock.server.port}"
+      "management.otlp.tracing.endpoint=http://localhost:${wiremock.server.port}"
     })
 @AutoConfigureWireMock(port = 0)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
