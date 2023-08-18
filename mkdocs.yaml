@@ -14,7 +14,7 @@ nav:
   - Starter Web: starter-web.md
   - Starter MongoDB: starter-mongodb.md
   - Starter Kafka: starter-kafka.md
-  - S3: s3.md
+  - Starter S3: starter-s3.md
   - AsyncAPI: asyncapi.md
   - Security Hardening: security.md
   - Metadata Context: metadata-context.md
