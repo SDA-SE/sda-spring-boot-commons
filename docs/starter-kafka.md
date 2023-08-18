@@ -1,6 +1,7 @@
-# sda-commons-kafka-starter
+# Starter Kafka
 
-The `sda-commons-kafka-starter` provides autoconfigured Kafka producer and consumer configuration.
+The module `sda-commons-starter-kafka` provides autoconfigured Kafka producer and consumer
+configuration.
 
 Based on:
 - `org.springframework.boot:spring-boot-starter`
