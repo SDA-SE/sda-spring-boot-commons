@@ -1,6 +1,6 @@
-# sda-commons-mongodb-starter
+# Starter MongoDB
 
-The `sda-commons-mongodb-starter` provides several autoconfigured features including:
+The module `sda-commons-starter-mongodb` provides several autoconfigured features including:
 
   - The Read/Write`ZonedDateTime` converter
   - Automatic index creation

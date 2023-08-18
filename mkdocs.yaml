@@ -12,8 +12,8 @@ nav:
   - Overview: index.md
   - Migrate to v3: migration-2-to-3.md
   - Starter Web: starter-web.md
+  - Starter MongoDB: starter-mongodb.md
   - S3: s3.md
-  - MongoDB: mongodb.md
   - Kafka: kafka.md
   - AsyncAPI: asyncapi.md
   - Security Hardening: security.md
