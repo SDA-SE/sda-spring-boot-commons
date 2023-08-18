@@ -23,6 +23,10 @@ channels:
       message:
         oneOf:
         - $ref: "#/components/messages/ContractCreatedEvent"
+  car-lifecycle:
+    subscribe:
+      message:
+        $ref: "#/components/messages/CarLifecycleEvents"
 components:
   messages:
     PlainCloudEvent:
@@ -40,7 +44,300 @@ components:
       description: "An event that represents when a new contract was created"
       payload:
         $ref: "#/components/schemas/ContractCreatedEvent"
+    CarLifecycleEvents:
+      payload:
+        $ref: "#/components/schemas/CarLifecycleEvents"
   schemas:
+    CarLifecycleEvents:
+      anyOf:
+      - $ref: "#/components/schemas/CarManufactured"
+      - $ref: "#/components/schemas/CarScrapped"
+    CarManufactured:
+      allOf:
+      - type: "object"
+        properties:
+          specversion:
+            type: "string"
+            description: "The version of the CloudEvents specification which the event\
+              \ uses.\nThis enables the interpretation of the context.\nCompliant\
+              \ event producers MUST use a value of `1.0` when referring to this version\
+              \ of the\nspecification.\n\nCurrently, this attribute will only have\
+              \ the 'major' and 'minor' version numbers included in\nit.\nThis allows\
+              \ for 'patch' changes to the specification to be made without changing\
+              \ this\nproperty's value in the serialization.\nNote: for 'release candidate'\
+              \ releases a suffix might be used for testing purposes.\n"
+            minLength: 1
+            examples:
+            - "1.0"
+          id:
+            type: "string"
+            description: "Identifies the event. Producers MUST ensure that `source`\
+              \ + `id` is unique for each distinct\nevent.\nIf a duplicate event is\
+              \ re-sent (e.g. due to a network error) it MAY have the same id.\nConsumers\
+              \ MAY assume that Events with identical `source` and `id` are duplicates.\n\
+              \n**SDA**: The default is to use a random UUID.\n"
+            minLength: 1
+            examples:
+            - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
+          source:
+            type: "string"
+            description: "Identifies the context in which an event happened.\nOften\
+              \ this will include information such as the type of the event source,\
+              \ the organization\npublishing the event or the process that produced\
+              \ the event.\nThe exact syntax and semantics behind the data encoded\
+              \ in the URI is defined by the event\nproducer.\n\nProducers MUST ensure\
+              \ that `source` + `id` is unique for each distinct event.\n\nAn application\
+              \ MAY assign a unique `source` to each distinct producer, which makes\
+              \ it easy to\nproduce unique IDs since no other producer will have the\
+              \ same source.\nThe application MAY use UUIDs, URNs, DNS authorities\
+              \ or an application-specific scheme to\ncreate unique source identifiers.\n\
+              \nA source MAY include more than one producer. In that case the producers\
+              \ MUST collaborate to\nensure that `source` + `id` is unique for each\
+              \ distinct event.\n\n**SDA**: Most importantly the source MUST identify\
+              \ the producer of your event uniquely.\nIf you don't have any other\
+              \ guidelines defined by your company we recommend the following\npattern:\
+              \ `/COMPANY/DOMAIN/SYSTEM/SERVICE`\n\n- `COMPANY`: An identifier of\
+              \ the company that is responsible for the service, e.g.\n  `SDA-SE`\n\
+              - `DOMAIN`: The name of the business domain of the service, e.g. `consent`\n\
+              - `SYSTEM`: The name of the system of the service, e.g. `partner-consent-stack`\n\
+              - `SERVICE`: The name of the service, e.g. `consent-configuration-service`\n"
+            examples:
+            - "/SDA-SE/consent/partner-consent-stack/consent-configuration-service"
+          type:
+            type: "string"
+            description: "This attribute contains a value describing the type of event\
+              \ related to the originating\noccurrence.\nOften this attribute is used\
+              \ for routing, observability, policy enforcement, etc.\nThe format of\
+              \ this is producer defined and might include information such as the\
+              \ version of\nthe type - see Versioning of Attributes in the Primer\
+              \ for more information.\n\nIn compliance with the [Cloud Events specification](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type)\n\
+              the value SHOULD be prefixed with a reverse-DNS name.\nThe prefixed\
+              \ domain dictates the organization which defines the semantics of this\
+              \ event type.\n\n⚠️ Be careful if you want to derive the event type\
+              \ automatically from a class or package name,\nbecause it makes it harder\
+              \ to refactor/rename your class without changing your API.\n"
+            minLength: 1
+            examples:
+            - "com.sdase.offer.service.contract.offered"
+          subject:
+            type: "string"
+            description: "This describes the subject of the event in the context of\
+              \ the event producer (identified by\n`source`).\nIn publish-subscribe\
+              \ scenarios, a subscriber will typically subscribe to events emitted\
+              \ by a\nsource, but the `source` identifier alone might not be sufficient\
+              \ as a qualifier for any\nspecific event if the `source` context has\
+              \ internal sub-structure.\n\nIdentifying the subject of the event in\
+              \ context metadata (opposed to only in the data payload)\nis particularly\
+              \ helpful in generic subscription filtering scenarios where middleware\
+              \ is unable\nto interpret the data content.\nIn the above example, the\
+              \ subscriber might only be interested in blobs with names ending with\n\
+              '.jpg' or '.jpeg' and the subject attribute allows for constructing\
+              \ a simple and efficient\nstring-suffix filter for that subset of events.\n"
+            examples:
+            - "terms-and-conditions-1"
+          datacontenttype:
+            type: "string"
+            description: "Content type of data value.\nThis attribute enables data\
+              \ to carry any type of content, whereby format and encoding might\n\
+              differ from that of the chosen event format.\nFor example, an event\
+              \ rendered using the JSON envelope format might carry an XML payload\
+              \ in\ndata, and the consumer is informed by this attribute being set\
+              \ to \"application/xml\".\nThe rules for how data content is rendered\
+              \ for different `datacontenttype` values are defined\nin the event format\
+              \ specifications; for example, the JSON event format defines the\nrelationship\
+              \ in section 3.1.\n\nFor some binary mode protocol bindings, this field\
+              \ is directly mapped to the respective\nprotocol's content-type metadata\
+              \ property.\nNormative rules for the binary mode and the content-type\
+              \ metadata mapping can be found in the\nrespective protocol\n\nIn some\
+              \ event formats the `datacontenttype` attribute MAY be omitted.\nFor\
+              \ example, if a JSON format event has no `datacontenttype` attribute,\
+              \ then it is implied\nthat the data is a JSON value conforming to the\
+              \ \"application/json\" media type.\nIn other words: a JSON-format event\
+              \ with no `datacontenttype` is exactly equivalent to one\nwith `datacontenttype=\"\
+              application/json\"`.\n\nWhen translating an event message with no `datacontenttype`\
+              \ attribute to a different format or\nprotocol binding, the target `datacontenttype`\
+              \ SHOULD be set explicitly to the implied\n`datacontenttype` of the\
+              \ source.\n\n**SDA**: The default is to use 'application/json'\n"
+            default: "application/json"
+            examples:
+            - "application/json"
+          time:
+            type: "string"
+            format: "date-time"
+            description: "Timestamp of when the occurrence happened.\nIf the time\
+              \ of the occurrence cannot be determined then this attribute MAY be\
+              \ set to some\nother time (such as the current time) by the CloudEvents\
+              \ producer, however all producers for\nthe same source MUST be consistent\
+              \ in this respect.\nIn other words, either they all use the actual time\
+              \ of the occurrence or they all use the same\nalgorithm to determine\
+              \ the value used.\n\n**SDA**: Default will be set to the current time.\n"
+            examples:
+            - "2022-03-12T23:20:50.52Z"
+          data:
+            allOf:
+            - $ref: "#/components/schemas/CarManufacturedData"
+            - description: "As defined by the term Data, CloudEvents MAY include domain-specific\
+                \ information about the occurrence."
+        required:
+        - "specversion"
+        - "id"
+        - "source"
+        - "type"
+      - type: "object"
+        properties:
+          type:
+            const: "se.sda.car.manufactured"
+        required:
+        - "type"
+    CarManufacturedData:
+      type: "object"
+      properties:
+        brand:
+          type: "string"
+        model:
+          type: "string"
+    CarScrapped:
+      allOf:
+      - type: "object"
+        properties:
+          specversion:
+            type: "string"
+            description: "The version of the CloudEvents specification which the event\
+              \ uses.\nThis enables the interpretation of the context.\nCompliant\
+              \ event producers MUST use a value of `1.0` when referring to this version\
+              \ of the\nspecification.\n\nCurrently, this attribute will only have\
+              \ the 'major' and 'minor' version numbers included in\nit.\nThis allows\
+              \ for 'patch' changes to the specification to be made without changing\
+              \ this\nproperty's value in the serialization.\nNote: for 'release candidate'\
+              \ releases a suffix might be used for testing purposes.\n"
+            minLength: 1
+            examples:
+            - "1.0"
+          id:
+            type: "string"
+            description: "Identifies the event. Producers MUST ensure that `source`\
+              \ + `id` is unique for each distinct\nevent.\nIf a duplicate event is\
+              \ re-sent (e.g. due to a network error) it MAY have the same id.\nConsumers\
+              \ MAY assume that Events with identical `source` and `id` are duplicates.\n\
+              \n**SDA**: The default is to use a random UUID.\n"
+            minLength: 1
+            examples:
+            - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
+          source:
+            type: "string"
+            description: "Identifies the context in which an event happened.\nOften\
+              \ this will include information such as the type of the event source,\
+              \ the organization\npublishing the event or the process that produced\
+              \ the event.\nThe exact syntax and semantics behind the data encoded\
+              \ in the URI is defined by the event\nproducer.\n\nProducers MUST ensure\
+              \ that `source` + `id` is unique for each distinct event.\n\nAn application\
+              \ MAY assign a unique `source` to each distinct producer, which makes\
+              \ it easy to\nproduce unique IDs since no other producer will have the\
+              \ same source.\nThe application MAY use UUIDs, URNs, DNS authorities\
+              \ or an application-specific scheme to\ncreate unique source identifiers.\n\
+              \nA source MAY include more than one producer. In that case the producers\
+              \ MUST collaborate to\nensure that `source` + `id` is unique for each\
+              \ distinct event.\n\n**SDA**: Most importantly the source MUST identify\
+              \ the producer of your event uniquely.\nIf you don't have any other\
+              \ guidelines defined by your company we recommend the following\npattern:\
+              \ `/COMPANY/DOMAIN/SYSTEM/SERVICE`\n\n- `COMPANY`: An identifier of\
+              \ the company that is responsible for the service, e.g.\n  `SDA-SE`\n\
+              - `DOMAIN`: The name of the business domain of the service, e.g. `consent`\n\
+              - `SYSTEM`: The name of the system of the service, e.g. `partner-consent-stack`\n\
+              - `SERVICE`: The name of the service, e.g. `consent-configuration-service`\n"
+            examples:
+            - "/SDA-SE/consent/partner-consent-stack/consent-configuration-service"
+          type:
+            type: "string"
+            description: "This attribute contains a value describing the type of event\
+              \ related to the originating\noccurrence.\nOften this attribute is used\
+              \ for routing, observability, policy enforcement, etc.\nThe format of\
+              \ this is producer defined and might include information such as the\
+              \ version of\nthe type - see Versioning of Attributes in the Primer\
+              \ for more information.\n\nIn compliance with the [Cloud Events specification](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type)\n\
+              the value SHOULD be prefixed with a reverse-DNS name.\nThe prefixed\
+              \ domain dictates the organization which defines the semantics of this\
+              \ event type.\n\n⚠️ Be careful if you want to derive the event type\
+              \ automatically from a class or package name,\nbecause it makes it harder\
+              \ to refactor/rename your class without changing your API.\n"
+            minLength: 1
+            examples:
+            - "com.sdase.offer.service.contract.offered"
+          subject:
+            type: "string"
+            description: "This describes the subject of the event in the context of\
+              \ the event producer (identified by\n`source`).\nIn publish-subscribe\
+              \ scenarios, a subscriber will typically subscribe to events emitted\
+              \ by a\nsource, but the `source` identifier alone might not be sufficient\
+              \ as a qualifier for any\nspecific event if the `source` context has\
+              \ internal sub-structure.\n\nIdentifying the subject of the event in\
+              \ context metadata (opposed to only in the data payload)\nis particularly\
+              \ helpful in generic subscription filtering scenarios where middleware\
+              \ is unable\nto interpret the data content.\nIn the above example, the\
+              \ subscriber might only be interested in blobs with names ending with\n\
+              '.jpg' or '.jpeg' and the subject attribute allows for constructing\
+              \ a simple and efficient\nstring-suffix filter for that subset of events.\n"
+            examples:
+            - "terms-and-conditions-1"
+          datacontenttype:
+            type: "string"
+            description: "Content type of data value.\nThis attribute enables data\
+              \ to carry any type of content, whereby format and encoding might\n\
+              differ from that of the chosen event format.\nFor example, an event\
+              \ rendered using the JSON envelope format might carry an XML payload\
+              \ in\ndata, and the consumer is informed by this attribute being set\
+              \ to \"application/xml\".\nThe rules for how data content is rendered\
+              \ for different `datacontenttype` values are defined\nin the event format\
+              \ specifications; for example, the JSON event format defines the\nrelationship\
+              \ in section 3.1.\n\nFor some binary mode protocol bindings, this field\
+              \ is directly mapped to the respective\nprotocol's content-type metadata\
+              \ property.\nNormative rules for the binary mode and the content-type\
+              \ metadata mapping can be found in the\nrespective protocol\n\nIn some\
+              \ event formats the `datacontenttype` attribute MAY be omitted.\nFor\
+              \ example, if a JSON format event has no `datacontenttype` attribute,\
+              \ then it is implied\nthat the data is a JSON value conforming to the\
+              \ \"application/json\" media type.\nIn other words: a JSON-format event\
+              \ with no `datacontenttype` is exactly equivalent to one\nwith `datacontenttype=\"\
+              application/json\"`.\n\nWhen translating an event message with no `datacontenttype`\
+              \ attribute to a different format or\nprotocol binding, the target `datacontenttype`\
+              \ SHOULD be set explicitly to the implied\n`datacontenttype` of the\
+              \ source.\n\n**SDA**: The default is to use 'application/json'\n"
+            default: "application/json"
+            examples:
+            - "application/json"
+          time:
+            type: "string"
+            format: "date-time"
+            description: "Timestamp of when the occurrence happened.\nIf the time\
+              \ of the occurrence cannot be determined then this attribute MAY be\
+              \ set to some\nother time (such as the current time) by the CloudEvents\
+              \ producer, however all producers for\nthe same source MUST be consistent\
+              \ in this respect.\nIn other words, either they all use the actual time\
+              \ of the occurrence or they all use the same\nalgorithm to determine\
+              \ the value used.\n\n**SDA**: Default will be set to the current time.\n"
+            examples:
+            - "2022-03-12T23:20:50.52Z"
+          data:
+            allOf:
+            - $ref: "#/components/schemas/CarScrappedData"
+            - description: "As defined by the term Data, CloudEvents MAY include domain-specific\
+                \ information about the occurrence."
+        required:
+        - "specversion"
+        - "id"
+        - "source"
+        - "type"
+      - type: "object"
+        properties:
+          type:
+            const: "se.sda.car.scrapped"
+        required:
+        - "type"
+    CarScrappedData:
+      type: "object"
+      properties:
+        reason:
+          $ref: "#/components/schemas/ScrapReason"
     CloudEventV1:
       type: "object"
       properties:
@@ -315,6 +612,10 @@ components:
       properties:
         id:
           type: "string"
+          description: "The unique id of a partner."
+          examples:
+          - "FF427BC8-B38F-43CC-8AAB-512843808A18"
+      description: "Details about the created partner."
     PartnerCreatedEvent:
       type: "object"
       properties:
@@ -445,3 +746,9 @@ components:
       - "id"
       - "source"
       - "type"
+      description: "An event that is published when a partner has been created."
+    ScrapReason:
+      type: "string"
+      enum:
+      - "ACCIDENT"
+      - "TECHNICAL_DAMAGE"
