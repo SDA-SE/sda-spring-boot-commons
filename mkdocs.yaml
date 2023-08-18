@@ -15,8 +15,9 @@ nav:
   - Starter MongoDB: starter-mongodb.md
   - Starter Kafka: starter-kafka.md
   - Starter S3: starter-s3.md
-  - AsyncAPI: asyncapi.md
   - Security Hardening: security.md
+  - AsyncAPI: asyncapi.md
+  - Cloud Events: cloudevents.md
   - Metadata Context: metadata-context.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
