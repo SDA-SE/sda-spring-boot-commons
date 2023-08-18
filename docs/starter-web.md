@@ -1,7 +1,7 @@
-# sda-commons-web-starter
+# Starter Web
 
-The `sda-commons-web-starter` provides several features to create a service based on the SDA core
-concepts.
+The module `sda-commons-starter-web` provides several features to create a service based on the SDA
+core concepts.
 
 ###  Configuration
 
@@ -366,12 +366,12 @@ It abstracts some configuration of the FeignClient and is then available as bean
 
 ## Error Handling
 
-The `sda-commons-web-starter` provides a shared `ApiError` model, to provide a common
+The module `sda-commons-starter-web` provides a shared `ApiError` model, to provide a common
 response error structure for SDA-restful services.
 
 ### Usage
 
-Per default, the `sda-commons-web-starter` autoconfigures a
+Per default, the module `sda-commons-starter-web` autoconfigures a
 global `@ExceptionHandler(ApiException.class)` as `@ControllerAdvice`. As a result, the
 exception handler is per default provided to every `@Controller`.
 
