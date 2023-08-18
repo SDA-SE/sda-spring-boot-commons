@@ -11,7 +11,7 @@ site_name: sda-spring-boot-commons
 nav:
   - Overview: index.md
   - Migrate to v3: migration-2-to-3.md
-  - Web: web.md
+  - Starter Web: starter-web.md
   - S3: s3.md
   - MongoDB: mongodb.md
   - Kafka: kafka.md

@@ -17,7 +17,7 @@ specifications promoted by the SDA SE.
 
 | **Starter**                                    | **Description**                                                                                                                                                         |
 |------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [sda-commons-starter-web](docs/web.md)         | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTelemetry and Prometheus metrics. |
+| [sda-commons-starter-web](docs/starter-web.md) | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTelemetry and Prometheus metrics. |
 | [sda-commons-starter-mongodb](docs/mongodb.md) | Provides default configuration based on the `org.springframework.boot:spring-boot-starter-data-mongodb`                                                                 |
 | [sda-commons-starter-kafka](docs/kafka.md)     | Provides default producer und consumer configuration based on `org.springframework.kafka:spring-kafka`                                                                  |
 | [sda-commons-starter-s3](docs/s3.md)           |                                                                                                                                                                         |
