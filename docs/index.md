@@ -17,7 +17,7 @@ specifications promoted by the SDA SE.
 | [sda-commons-starter-web](starter-web.md)         | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTelemetry, Prometheus metrics and [hardening the service](security.md). |
 | [sda-commons-starter-mongodb](starter-mongodb.md) | Provides default configuration based on the `org.springframework.boot:spring-boot-starter-data-mongodb`.                                                                                                      |
 | [sda-commons-starter-kafka](starter-kafka.md)     | Provides default producer und consumer configuration based on `org.springframework.kafka:spring-kafka`.                                                                                                       |
-| [sda-commons-starter-s3](s3.md)                   | Provides features for dealing with the Amazon S3 file storage.                                                                                                                                                |
+| [sda-commons-starter-s3](starter-s3.md)           | Provides features for dealing with the Amazon S3 file storage.                                                                                                                                                |
 | [sda-commons-asyncapi](asyncapi.md)               | Provides utilities to create AsyncAPI schemas, usually used as test dependency to build the schema in a test.                                                                                                 |
 
 The provided documentation aims to provide SDA-specific information.
