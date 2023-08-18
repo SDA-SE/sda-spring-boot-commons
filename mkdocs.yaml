@@ -13,8 +13,8 @@ nav:
   - Migrate to v3: migration-2-to-3.md
   - Starter Web: starter-web.md
   - Starter MongoDB: starter-mongodb.md
+  - Starter Kafka: starter-kafka.md
   - S3: s3.md
-  - Kafka: kafka.md
   - AsyncAPI: asyncapi.md
   - Security Hardening: security.md
   - Metadata Context: metadata-context.md
