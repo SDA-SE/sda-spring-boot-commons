@@ -12,10 +12,10 @@ For further documentation please have a look at the Spring Data MongoDB [referen
 
 ## Main Configuration
 
-| **Property**                       | **Description**                                                                                                                 | **Default** | **Example**                      | **Env**                   |
-|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|-------------|----------------------------------|---------------------------|
-| `spring.data.mongodb.uri` _string_ | The MongoDB [connection string](https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-uri-format). |             | `mongodb://localhost:27017/test` | `SPRING_DATA_MONGODB_URI` |
-
+| **Property**                                  | **Description**                                                                                                                 | **Default**                  | **Example**                      | **Env**                              |
+|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|------------------------------|----------------------------------|--------------------------------------|
+| `spring.data.mongodb.uri` _string_            | The MongoDB [connection string](https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-uri-format). |                              | `mongodb://localhost:27017/test` | `SPRING_DATA_MONGODB_URI`            |
+| `sda.caCertificates.certificatesDir` _string_ | A directory with CA certificates in PEM format that will be picked up to trust the connection to the database.                  | `"/var/trust/certificates"`  | `"/my-certs"`                    | `SDA_CACERTIFICATES_CERTIFICATESDIR` |
 
 
 ## Configuration properties
@@ -36,7 +36,9 @@ For further documentation please have a look at the Spring Data MongoDB [referen
 
 ### SSL support
 
-The mongodb starter can be configured to use ssl when the option `?ssl=true` is used. Certificates in PEM format can be mounted
-in the directory `/var/trust/certificates` they will be used by the mongodb client. All certificates found in sub-directories will also be loaded.
+The mongodb starter can be configured to use ssl when the option `?ssl=true` is used.
+Certificates in PEM format can be mounted in the directory `/var/trust/certificates` they will be
+used by the mongodb client.
+All certificates found in subdirectories will also be loaded.
 
 Note that this directory is also configurable through the property `sda.caCertificates.certificatesDir`.
