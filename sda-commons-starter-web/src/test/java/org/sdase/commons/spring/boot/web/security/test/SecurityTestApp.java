@@ -9,7 +9,7 @@ package org.sdase.commons.spring.boot.web.security.test;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import javax.ws.rs.core.Context;
+import jakarta.ws.rs.core.Context;
 import org.sdase.commons.spring.boot.error.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
