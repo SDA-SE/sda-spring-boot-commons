@@ -16,7 +16,7 @@ public record KafkaConsumerConfig(@NotNull RetryConfig retry, DLTConfig dlt) {
       @NotNull Integer maxRetries,
       @NotNull Long initialBackoffInterval,
       @NotNull Long maxBackoffInterval,
-      @NotNull Long backoffMultiplier) {}
+      @NotNull Double backoffMultiplier) {}
 
   public record DLTConfig(String pattern) {}
 }
