@@ -9,7 +9,7 @@ package org.sdase.commons.spring.boot.web.app.example;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.ws.rs.HttpMethod;
+import jakarta.ws.rs.HttpMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
