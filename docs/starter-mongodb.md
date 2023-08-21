@@ -22,17 +22,15 @@ For further documentation please have a look at the Spring Data MongoDB [referen
 * `spring.data.mongodb.uri` _string_
   * Mongo database URI.
   * Example: `mongodb://exampleUser:examplePassword@mongoHost:27017`
-  *
-  Format: `mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]`
+  * Format: `mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]`
   * Connection String Options need to be added to the end of the URI e.g.
     * `?ssl=true` to enable SSL
     * `?retryWrites=false` to disable retryable writes for the connection.
-    * `?readPreference=secondardPreferred` In most situations, operations read from secondary
-      members,
-      but in situations where the set consists of a single primary (and no other members),
+    * `?readPreference=secondaryPreferred` In most situations, operations read from secondary
+      members, but in situations where the set consists of a single primary (and no other members),
       the read operation will use the replica set's primary.
-    * For further information take a look on
-      [Connection String documentation](https://docs.mongodb.com/manual/reference/connection-string)
+  * For further information take a look on
+    [Connection String documentation](https://docs.mongodb.com/manual/reference/connection-string)
 
 ### SSL support
 
