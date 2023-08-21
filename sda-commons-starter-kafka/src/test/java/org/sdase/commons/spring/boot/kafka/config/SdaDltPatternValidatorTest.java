@@ -23,7 +23,7 @@ class SdaDltPatternValidatorTest {
   @BeforeEach
   void setUp() {
     validator = new SdaDltPatternValidator();
-    retryConfig = new KafkaConsumerConfig.RetryConfig(1, 1L, 1L, 1L);
+    retryConfig = new KafkaConsumerConfig.RetryConfig(1, 1L, 1L, 1.0D);
   }
 
   @Test
