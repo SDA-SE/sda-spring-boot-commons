@@ -62,7 +62,7 @@ Previously, classes to integrate were defined in the code
 (`.withSchema("./schema.json", BaseEvent.class)`) and referenced in the AsyncAPI template
 (`$ref: './schema.json#/definitions/CarManufactured'`).
 Now the classes are referenced directly in the template (`$ref: 'class://com.example.BaseEvent`).
-The builder method `withSchema` does not exist eny more.
+The builder method `withSchema` does not exist any more.
 
 Please review the differences in the generated AsyncAPI file.
 Both libraries work different and have a different feature set.
