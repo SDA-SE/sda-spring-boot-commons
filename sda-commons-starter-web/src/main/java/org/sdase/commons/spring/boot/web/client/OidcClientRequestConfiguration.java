@@ -9,8 +9,8 @@ package org.sdase.commons.spring.boot.web.client;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import jakarta.ws.rs.core.HttpHeaders;
 import java.util.Optional;
-import javax.ws.rs.core.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

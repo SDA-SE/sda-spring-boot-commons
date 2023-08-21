@@ -20,3 +20,14 @@ Summary of noticeable changes:
   Using of the generator is simpler now as [described in its documentation](asyncapi.md).
 - A major upgrade of Spring Security is included.
 - Spring configuration properties changed.
+
+
+## Jakarta EE
+
+Please make sure dependencies do not pull in transitive `javax` modules and migrate all `javax`
+imports to `jakarta`.
+The provided dependency management should take care about all dependencies by referring to the
+dependency management of Spring Boot as mentioned in [the migration guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide#jakarta-ee).
+
+Please note that Wiremock repackaged `javax` classes.
+They will be available in tests but should not be used in your code.
