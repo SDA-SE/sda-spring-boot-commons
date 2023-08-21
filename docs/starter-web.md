@@ -86,7 +86,7 @@ configured with [`opa.` configuration properties](#configuration).
     Requests to the server are determined by the base URL and the policy package.
     Given the default base URL `http://localhost:8181` and an example package of `com.my.service`,
     the Open Policy Agent server will be requested for authorization decision at
-    `http://localhost:8181/v1/data/com/my/package`.
+    `http://localhost:8181/v1/data/com/my/service`.
 
 The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter
 which is part of the `SecurityFilterChain` including the OIDC Authentication.
@@ -425,7 +425,7 @@ current request to the **Thread** running the asynchronous method.
 
 ## Jackson
 
-Enables feature that make a Spring Boot service compliant with the REST guide of SDA SE.
+Enables feature that makes a Spring Boot service compliant with the REST guide of SDA SE.
 So far this covers:
 - the tolerant reader pattern
 - consistent serialization of `java.time.ZonedDateTime` compatible to the [type `date-time` of JSON-Schema](https://json-schema.org/understanding-json-schema/reference/string.html#dates-and-times).
