@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.sdase.commons.spring.boot.kafka.config.KafkaConsumerConfig;
@@ -141,7 +142,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   protected TopicPartition getDeadLetterTopicName(
       ConsumerRecord<?, ?> consumerRecord, Exception exception) {
 
-    if (consumerConfig.dlt() != null && consumerConfig.dlt().pattern() != null) {
+    if (consumerConfig.dlt() != null && StringUtils.isNotBlank(consumerConfig.dlt().pattern())) {
 
       try {
 
