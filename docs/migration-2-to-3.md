@@ -119,3 +119,14 @@ If you define this bean with custom configuration you need to update your config
 
 You can check the new API
 definition [here](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/s3/S3Client.html).
+
+## Kafka
+
+There has been introduced a new default value for the `sda.kafka.consumer.dlt.pattern` property,
+which is `dlt-<topic>`. If you want to keep the old behaviour, which is appending `.DLT` to the
+consumed topic, you have to
+explicitly unset the property (`sda.kafka.consumer.dlt.pattern=`).
+
+!!! Info
+We do not recommend using a '.' within the topic name, since it does not allow the standard
+replacement approach in our kustomize deployments and let to errors in customer's environments.
