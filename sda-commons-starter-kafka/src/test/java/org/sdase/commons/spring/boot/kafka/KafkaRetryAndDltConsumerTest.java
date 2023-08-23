@@ -13,8 +13,8 @@ import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+import static org.sdase.commons.spring.boot.kafka.KafkaTestUtil.readValue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -44,7 +44,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @SpringBootTest(
     classes = KafkaTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {"spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"})
+    properties = {
+      "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
+      "sda.kafka.consumer.dlt.pattern="
+    })
 @EmbeddedKafka(
     partitions = 1,
     brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
@@ -87,7 +90,7 @@ class KafkaRetryAndDltConsumerTest {
                       s -> {
                         ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
-                        var actual = readValue(nextRecord);
+                        var actual = readValue(nextRecord, objectMapper);
                         s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
                         s.assertThat(nextRecord.headers())
                             .extracting(Header::key, header -> new String(header.value()))
@@ -96,14 +99,6 @@ class KafkaRetryAndDltConsumerTest {
                                     "kafka_dlt-exception-cause-fqcn",
                                     MethodArgumentNotValidException.class.getName()));
                       }));
-    }
-  }
-
-  private KafkaTestModel readValue(ConsumerRecord<String, ?> nextRecord) {
-    try {
-      return objectMapper.readValue((String) nextRecord.value(), KafkaTestModel.class);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
     }
   }
 
@@ -130,7 +125,7 @@ class KafkaRetryAndDltConsumerTest {
                       s -> {
                         ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
-                        var actual = readValue(nextRecord);
+                        var actual = readValue(nextRecord, objectMapper);
                         s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
                         s.assertThat(nextRecord.headers())
                             .extracting(Header::key, header -> new String(header.value()))
@@ -162,7 +157,7 @@ class KafkaRetryAndDltConsumerTest {
                       s -> {
                         ConsumerRecord<String, ?> nextRecord =
                             KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
-                        var actual = readValue(nextRecord);
+                        var actual = readValue(nextRecord, objectMapper);
                         s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
                         s.assertThat(nextRecord.headers())
                             .extracting(Header::key, header -> new String(header.value()))

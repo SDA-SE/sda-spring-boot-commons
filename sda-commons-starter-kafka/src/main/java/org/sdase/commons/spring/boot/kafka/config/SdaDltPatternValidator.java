@@ -7,6 +7,7 @@
  */
 package org.sdase.commons.spring.boot.kafka.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sdase.commons.spring.boot.kafka.SdaKafkaConsumerConfiguration;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
@@ -23,7 +24,7 @@ public class SdaDltPatternValidator implements Validator {
 
     KafkaConsumerConfig kafkaConsumerConfig = (KafkaConsumerConfig) target;
     if (kafkaConsumerConfig.dlt() != null
-        && kafkaConsumerConfig.dlt().pattern() != null
+        && StringUtils.isNotBlank(kafkaConsumerConfig.dlt().pattern())
         && (!kafkaConsumerConfig
             .dlt()
             .pattern()

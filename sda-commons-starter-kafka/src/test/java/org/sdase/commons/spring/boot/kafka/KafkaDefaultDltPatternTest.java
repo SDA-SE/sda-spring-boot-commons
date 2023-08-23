@@ -9,7 +9,6 @@ package org.sdase.commons.spring.boot.kafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.sdase.commons.spring.boot.kafka.KafkaTestUtil.readValue;
 
@@ -33,17 +32,15 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.verification.Timeout;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
-import org.sdase.commons.spring.boot.kafka.test.KafkaTestListener.ListenerCheck;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestListener;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
@@ -52,22 +49,21 @@ import org.springframework.kafka.test.utils.ContainerTestUtils;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest(
     classes = KafkaTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
-      "sda.kafka.consumer.dlt.pattern=custom-prefix-<topic>-custom-suffix"
+      "app.kafka.consumer.retry-and-dlt.topic=topic-consumer"
     })
 @EmbeddedKafka(
     partitions = 1,
     brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-class KafkaRetryAndDltConsumerCustomPatternTest {
+class KafkaDefaultDltPatternTest {
 
   @Autowired KafkaTemplate<String, KafkaTestModel> kafkaTemplate;
 
@@ -75,11 +71,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
 
   @Autowired ObjectMapper objectMapper;
 
-  @MockBean ListenerCheck listenerCheck;
-
-  @Autowired
-  @Qualifier("retryDeadLetterErrorHandler")
-  private DefaultErrorHandler retryDeadLetterErrorHandler;
+  @MockBean KafkaTestListener.ListenerCheck listenerCheck;
 
   @Value("${app.kafka.consumer.retry-and-dlt.topic}")
   private String topic;
@@ -97,8 +89,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
         new DefaultKafkaConsumerFactory<>(
             configs, new StringDeserializer(), new StringDeserializer());
 
-    ContainerProperties containerProperties =
-        new ContainerProperties("custom-prefix-dlt-topic-consumer-custom-suffix");
+    ContainerProperties containerProperties = new ContainerProperties("dlt-topic-consumer");
     containerDLT = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
 
     consumerRecordsDLT = new LinkedBlockingQueue<>();
@@ -113,7 +104,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
   }
 
   @Test
-  void shouldNotReceiveInvalidModelButProduceToDLT() throws Exception {
+  void shouldUseDefaultDltPattern() throws Exception {
     KafkaTestModel message = new KafkaTestModel().setCheckString("CHECK").setCheckInt(null);
     kafkaTemplate.send(topic, message);
     verify(listenerCheck, new Timeout(5000, never())).check("CHECK");
@@ -129,52 +120,5 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
             .findFirst();
     assertThat(new String(headerExceptionCause.get().value()))
         .isEqualTo(MethodArgumentNotValidException.class.getName());
-  }
-
-  @Test
-  void shouldProduceToDLTForNotRetryableKafkaException() throws Exception {
-    KafkaTestModel expectedMessage =
-        new KafkaTestModel()
-            .setCheckString("CHECK")
-            .setCheckInt(1)
-            .setThrowNotRetryableException(true);
-    kafkaTemplate.send(topic, expectedMessage);
-
-    verify(listenerCheck, timeout(5000).times(1)).check("CHECK");
-
-    ConsumerRecord<String, String> pollDLT = consumerRecordsDLT.poll(10, TimeUnit.SECONDS);
-
-    KafkaTestModel messageFromDLT = readValue(pollDLT, objectMapper);
-    assertThat(messageFromDLT.getCheckString()).isEqualTo("CHECK");
-    assertThat(messageFromDLT.getCheckInt()).isEqualTo(1);
-
-    Optional<Header> headerExceptionCause =
-        Arrays.stream(pollDLT.headers().toArray())
-            .filter(header -> header.key().equals("kafka_dlt-exception-cause-fqcn"))
-            .findFirst();
-    assertThat(new String(headerExceptionCause.get().value()))
-        .isEqualTo(NotRetryableKafkaException.class.getName());
-  }
-
-  @Test
-  void shouldProduceToDLTForRuntimeException() throws Exception {
-    KafkaTestModel expectedMessage =
-        new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true);
-    kafkaTemplate.send(topic, expectedMessage);
-
-    verify(listenerCheck, timeout(5000).times(2)).check("CHECK");
-
-    ConsumerRecord<String, String> pollDLT = consumerRecordsDLT.poll(10, TimeUnit.SECONDS);
-
-    KafkaTestModel messageFromDLT = readValue(pollDLT, objectMapper);
-    assertThat(messageFromDLT.getCheckString()).isEqualTo("CHECK");
-    assertThat(messageFromDLT.getCheckInt()).isEqualTo(1);
-
-    Optional<Header> headerExceptionCause =
-        Arrays.stream(pollDLT.headers().toArray())
-            .filter(header -> header.key().equals("kafka_dlt-exception-cause-fqcn"))
-            .findFirst();
-    assertThat(new String(headerExceptionCause.get().value()))
-        .isEqualTo(RuntimeException.class.getName());
   }
 }
