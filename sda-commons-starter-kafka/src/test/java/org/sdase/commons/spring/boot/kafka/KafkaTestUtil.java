@@ -7,11 +7,14 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
@@ -34,5 +37,14 @@ public class KafkaTestUtil {
             deserializer);
     consumer.subscribe(List.of(topic));
     return consumer;
+  }
+
+  public static KafkaTestModel readValue(
+      ConsumerRecord<String, ?> nextRecord, ObjectMapper objectMapper) {
+    try {
+      return objectMapper.readValue((String) nextRecord.value(), KafkaTestModel.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
