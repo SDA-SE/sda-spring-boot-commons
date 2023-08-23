@@ -81,5 +81,37 @@ To define the database version used for tests, use the property
 
 ## S3
 
-TODO new library, new packages, new classes, testing? findify brings the old lib
+The simple interface
+client [`com.amazonaws.services.s3.AmazonS3`](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/AmazonS3.html) (
+Java 1.x), available on version 2.x, was
+replaced by the service
+client [`software.amazon.awssdk.services.s3.S3Client`](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/s3/S3Client.html) (
+Java 2.x) in this version, so you
+should replace your autowired beans with this new service client and its methods.
+If you define this bean with custom configuration you need to update your configuration, e.g.:
 
+```diff
+ @Configuration
+ public class Foo {
+-  private AmazonS3 createClientWithCustomConfiguration() {
+-    final AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
+-    return AmazonS3ClientBuilder.standard()
+-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
+-        .withPathStyleAccessEnabled(true)
+-        .withCredentials(new AWSStaticCredentialsProvider(credentials))
++  private S3Client createClientWithCustomConfiguration() {
++    return S3Client.builder()
++        .region(Region.of(region))
++        .credentialsProvider(
++            StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKeyId, secretKey)))
++        .endpointProvider(S3EndpointProvider.defaultProvider())
++        .endpointOverride(URI.create(endpoint))
++        .forcePathStyle(true)
+         .build();
+   }
+ }
+
+```
+
+You can check the new API
+definition [here](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/s3/S3Client.html).
