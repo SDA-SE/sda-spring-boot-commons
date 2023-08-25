@@ -461,9 +461,83 @@ be serialized with milliseconds, it must be annotated with
 
 ## Monitoring
 
-TODO PROMETHEUS (config to table above)
+Services use Prometheus to scrape and store metrics.
 
-Prometheus Metrics: `http://{serviceURL}:{adminPort}/metrics/prometheus`
+An actuator exposing metrics in prometheus format is available using the following endpoint
+
+```
+http://{serviceURL}:{adminPort}/metrics/prometheus
+```
+
+Spring Boot is using [micrometer](https://micrometer.io/) to instrument code using out-of-the-box bindings for common libraries.
+
+### SDA specific metrics
+
+
+| Metric Name          | Labels | Description                                           |
+|----------------------|--------|-------------------------------------------------------|
+| `healthcheck_status` | `name` | Exposes healthcheck as metric for multiple indicators |
+
+
+### JVM and System metrics
+
+| Metric Name                                  | Labels                  | Description                                                                                                                                                                       |
+|----------------------------------------------|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `jvm_classes_loaded_classes`                 |                         | The number of classes that are currently loaded in the Java virtual machine.                                                                                                      |
+| `jvm_classes_unloaded_classes`               |                         | The total number of classes unloaded since the Java virtual machine has started execution.                                                                                        |
+| `jvm_buffer_count_buffers`                   | `id`                    | An estimate of the number of buffers in the pool.                                                                                                                                 |
+| `jvm_buffer_memory_used_bytes`               | `id`                    | An estimate of the memory that the Java virtual machine is using for this buffer pool.                                                                                            |
+| `jvm_buffer_total_capacity_bytes`            | `id`                    | An estimate of the total capacity of the buffers in this pool.                                                                                                                    |
+| `jvm_memory_used_bytes`                      | `id`, `area`            | The amount of used memory.                                                                                                                                                        |
+| `jvm_memory_committed_bytes`                 | `id`, `area`            | The amount of memory in bytes that is committed for the Java virtual machine to use.                                                                                              |
+| `jvm_memory_max_bytes`                       | `id`, `area`            | The maximum amount of memory in bytes that can be used for memory management.                                                                                                     |
+| `jvm_gc_max_data_size_bytes`                 |                         | Max size of long-lived heap memory pool.                                                                                                                                          |
+| `jvm_gc_live_data_size_bytes`                |                         | Size of long-lived heap memory pool after reclamation.                                                                                                                            |
+| `jvm_gc_memory_allocated_bytes_total`        |                         | Incremented for an increase in the size of the (young) heap memory pool after one GC to before the next.                                                                          |
+| `jvm_gc_memory_promoted_bytes_total`         |                         | Count of positive increases in the size of the old generation memory pool before GC to after GC.                                                                                  |
+| `jvm_gc_concurrent_phase_time_seconds_count` | `gc`, `action`, `cause` | Time spent in concurrent phase.                                                                                                                                                   |
+| `jvm_gc_concurrent_phase_time_seconds_sum`   | `gc`, `action`, `cause` |                                                                                                                                                                                   |
+| `jvm_gc_concurrent_phase_time_seconds_max`   | `gc`, `action`, `cause` |                                                                                                                                                                                   |
+| `jvm_gc_pause_seconds_count`                 | `gc`, `action`, `cause` | Time spent in GC pause.                                                                                                                                                           |
+| `jvm_gc_pause_seconds_sum`                   | `gc`, `action`, `cause` |                                                                                                                                                                                   |
+| `jvm_gc_pause_seconds_max`                   | `gc`, `action`, `cause` |                                                                                                                                                                                   |
+| `system_cpu_count`                           |                         | The number of processors available to the Java virtual machine.                                                                                                                   |
+| `system_load_average_1m`                     |                         | The sum of the number of runnable entities queued to available processors and the number of runnable entities running on the available processors averaged over a period of time. |
+| `system_cpu_usage`                           |                         | The "recent cpu usage" of the system the application is running in.                                                                                                               |
+| `process_cpu_usage`                          |                         | The "recent cpu usage" for the Java Virtual Machine process.                                                                                                                      |
+| `jvm_threads_peak_threads`                   |                         | The peak live thread count since the Java virtual machine started or peak was reset.                                                                                              |
+| `jvm_threads_daemon_threads`                 |                         | The current number of live daemon threads.                                                                                                                                        |
+| `jvm_threads_live`                           |                         | The current number of live threads including both daemon and non-daemon threads.                                                                                                  |
+| `jvm_threads_started_threads_total`          |                         | The total number of application threads started in the JVM.                                                                                                                       |
+| `jvm_threads_states_threads`                 | `state`                 | The current number of threads.                                                                                                                                                    |
+
+### Key Metrics for monitoring Kafka
+
+| Metric name                            | Labels                 | Description                                                                                                                           |
+|----------------------------------------|------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `kafka_producer_compression_rate_avg`  | `client.id`            | The average compression rate of record batches, defined as the average ratio of the compressed batch size over the uncompressed size. |
+| `kafka_producer_response_rate`         | `client.id`            | The number of responses received per second                                                                                           |
+| `kafka_producer_request_rate`          | `client.id`            | The number of requests sent per second                                                                                                |
+| `kafka_producer_request_latency_avg`   | `client.id`            | The average request latency in ms                                                                                                     |
+| `kafka_producer_outgoing_byte_rate`    | `client.id`            | The number of outgoing bytes sent to all servers per second                                                                           |
+| `kafka_producer_io_wait_time_ns_avg`   | `client.id`            | The average length of time the I/O thread spent waiting for a socket ready for reads or writes in nanoseconds.                        |
+| `kafka_producer_batch_size_avg`        | `client.id`            | The average number of bytes sent per partition per-request.                                                                           |
+| `kafka_consumer_records_lag`           | `client.id`            | Number of messages consumer is behind producer on this partition                                                                      |
+| `kafka_consumer_records_lag_max`       | `client.id`            | Maximum number of messages consumer is behind producer, either for a specific partition or across all partitions on this client       |
+| `kafka_consumer_bytes_consumed_rate`   | `client.id`            | Average number of bytes consumed per second for a specific topic or across all topics.                                                |
+| `kafka_consumer_records_consumed_rate` | `client.id`            | Average number of records consumed per second for a specific topic or across all topics                                               |
+| `kafka_consumer_fetch_rate `           | `client.id`            | Number of fetch requests per second from the consumer                                                                                 |
+
+### MongoDB metrics
+
+| Metric name                             | Labels                                                             | Description                                                                    |
+|-----------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| `mongodb_driver_pool_waitqueuesize`     | `cluster_id`, `server_address`                                     | The current size of the wait queue for a connection from the pool              |
+| `mongodb_driver_pool_checkedout`        | `cluster_id`, `server_address`                                     | The count of connections that are currently in use                             |
+| `mongodb_driver_pool_size`              | `cluster_id`, `server_address`                                     | The current size of the connection pool, including idle and and in-use members |
+| `mongodb_driver_commands_seconds_max`   | `cluster_id`, `server_address`, `collection`, `command`, `status`  | Timer of mongodb commands                                                      |
+| `mongodb_driver_commands_seconds_count` | `cluster_id`, `server_address`, `collection`, `command`, `status`  | Timer of mongodb commands                                                      |
+| `mongodb_driver_commands_seconds_sum`   | `cluster_id`, `server_address`, `collection`, `command`, `status`  | Timer of mongodb commands                                                      |
 
 ## Tracing
 
