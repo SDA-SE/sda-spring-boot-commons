@@ -22,15 +22,19 @@ public class MetadataContextClientTestController {
 
   private final MetadataOtherServiceAuthenticatedClient metadataOtherServiceAuthenticatedClient;
 
+  private final MetadataPlatformServiceClient metadataPlatformServiceClient;
+
   private final MetadataAsyncClientAdapter asyncClientAdapter;
 
   public MetadataContextClientTestController(
       MetadataOtherServiceClient metadataOtherServiceClient,
       MetadataOtherServiceAuthenticatedClient metadataOtherServiceAuthenticatedClient,
-      MetadataAsyncClientAdapter asyncClientAdapter) {
+      MetadataAsyncClientAdapter asyncClientAdapter,
+      MetadataPlatformServiceClient metadataPlatformServiceClient) {
     this.metadataOtherServiceClient = metadataOtherServiceClient;
     this.metadataOtherServiceAuthenticatedClient = metadataOtherServiceAuthenticatedClient;
     this.asyncClientAdapter = asyncClientAdapter;
+    this.metadataPlatformServiceClient = metadataPlatformServiceClient;
   }
 
   @GetMapping("/metadataProxy")
@@ -48,6 +52,20 @@ public class MetadataContextClientTestController {
     List<CompletableFuture<ObjectNode>> responses = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
       responses.add(asyncClientAdapter.getSomethingAsync());
+    }
+    return responses.stream().map(CompletableFuture::join).collect(Collectors.toList());
+  }
+
+  @GetMapping("/metadataPlatformProxy")
+  public Object getSomethingFromPlatformService() {
+    return metadataPlatformServiceClient.getSomething();
+  }
+
+  @GetMapping("/metadataPlatformProxyAsync")
+  public Object getSomethingFromPlatformServiceAsync() {
+    List<CompletableFuture<ObjectNode>> responses = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+      responses.add(asyncClientAdapter.getPlatformSomethingAsync());
     }
     return responses.stream().map(CompletableFuture::join).collect(Collectors.toList());
   }
