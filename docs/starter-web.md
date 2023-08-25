@@ -619,30 +619,43 @@ If your service is required to support the metadata context but is not intereste
 continue here:
 
 Services that use the sda-spring-boot-commons:
+
 - can access the current `org.sdase.commons.spring.boot.metadata.context.MetadataContext` in their
   implementation
-- will automatically load the context from incoming HTTP requests into the thread handling the
+- will automatically load the context from incoming HTTP requests into the thread, handling the
   request, if you register `org.sdase.commons.spring.boot.web.metadata.MetadataContextConfiguration`
 - will automatically load the context from consumed Kafka messages into the thread handling the
   message and the error when handling the message fails when the consumer is configured with one of
   the provided `org.sdase.commons.spring.boot.kafka.SdaKafkaConsumerConfiguration`
-- will automatically propagate the context to other services via HTTP when using a platform client
-  that uses
+- will automatically propagate the context to other services via HTTP when using
+  a `org.sdase.commons.spring.boot.web.client.PlatformClient`:
+  ```java
+  @PlatformClient(
+    value = "name",
+    url = "http://your-api-url"
+  })
+  public interface ClientWithMetadataConfiguration {
+  @GetMapping("/metadata-hello")
+    Object getSomething();
+  }
+  ```
+- when using a FeignClient, that behaviour can be achieved by using
   the `org.sdase.commons.spring.boot.web.metadata.MetadataContextClientConfiguration`
-  configuration, e.g:
-  - ```java
-    @FeignClient(
+  configuration.
+
+  ```java
+  @FeignClient(
     value = "name",
     url = "http://your-api-url",
     configuration = {
       MetadataContextClientConfiguration.class
-    })
-    public interface ClientWithMetadataConfiguration {
-
+  })
+  public interface ClientWithMetadataConfiguration {
     @GetMapping("/metadata-hello")
     Object getSomething();
-    }
-    ```
+  }
+  ```
+
 - will automatically propagate the context in produced Kafka messages when the producer is created
   with `org.sdase.commons.spring.boot.kafka.SdaKafkaProducerConfiguration`
 - are configurable by the property or environment variable `METADATA_FIELDS` to be aware of the

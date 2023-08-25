@@ -45,7 +45,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
     properties = {
       "opa.disable=true",
       "metadata.other.baseUrl=http://localhost:${wiremock.server.port}/api",
-      "metadata.otherAuthenticated.baseUrl=http://localhost:${wiremock.server.port}/api"
+      "metadata.otherAuthenticated.baseUrl=http://localhost:${wiremock.server.port}/api",
+      "metadata.platformService.baseUrl=http://localhost:${wiremock.server.port}/api"
     })
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
 @AutoConfigureWireMock(port = 0)
@@ -60,7 +61,7 @@ class MetadataContextRestTest {
   }
 
   @Test
-  void submitMetadataContextInPlatformClient() throws Exception {
+  void submitMetadataContextInAuthenticationPassThroughEnabledClient() throws Exception {
     stubFor(
         get("/api/metadata-auth-hello").withHeader("tenant-id", equalTo("t-1")).willReturn(ok()));
     var httpHeaders = new HttpHeaders();
@@ -102,7 +103,7 @@ class MetadataContextRestTest {
   }
 
   @Test
-  void submitMetadataContextInPlatformAsyncClient() throws Exception {
+  void submitMetadataContextInAuthenticationPassThroughEnabledAsyncClient() throws Exception {
     stubFor(
         get("/api/metadata-auth-hello")
             .withHeader("tenant-id", equalTo("t-1"))
@@ -120,6 +121,49 @@ class MetadataContextRestTest {
     WireMock.verify(
         100,
         WireMock.getRequestedFor(WireMock.urlPathEqualTo("/api/metadata-auth-hello"))
+            .withHeader("tenant-id", WireMock.equalTo("t-1")));
+  }
+
+  @Test
+  void submitMetadataContextInPlatformClient() throws Exception {
+    stubFor(
+        get("/api/metadata-platform-hello")
+            .withHeader("tenant-id", equalTo("t-1"))
+            .willReturn(ok()));
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.put("tenant-id", List.of("t-1"));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.request(HttpMethod.GET, "/metadataPlatformProxy")
+                .headers(httpHeaders)
+                .accept(APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk());
+
+    WireMock.verify(
+        WireMock.getRequestedFor(WireMock.urlPathEqualTo("/api/metadata-platform-hello"))
+            .withHeader("tenant-id", WireMock.equalTo("t-1")));
+  }
+
+  @Test
+  void submitMetadataContextInPlatformAsyncClient() throws Exception {
+    stubFor(
+        get("/api/metadata-platform-hello")
+            .withHeader("tenant-id", equalTo("t-1"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.put("tenant-id", List.of("t-1"));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.request(HttpMethod.GET, "/metadataPlatformProxyAsync")
+                .headers(httpHeaders)
+                .accept(APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk());
+
+    WireMock.verify(
+        100,
+        WireMock.getRequestedFor(WireMock.urlPathEqualTo("/api/metadata-platform-hello"))
             .withHeader("tenant-id", WireMock.equalTo("t-1")));
   }
 }
