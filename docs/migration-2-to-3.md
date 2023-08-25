@@ -37,9 +37,13 @@ They will be available in tests but should not be used in your code.
 ## Tracing
 
 Tracing uses OpenTelemetry now.
-Any configuration that references `zipkin` or `sleuth` is not considered anymore.
+Any configuration that references `zipkin` or `sleuth` is not considered anymore, such as
+environment variables `JAEGER_ENABLED` `SPRING_ZIPKIN_BASE_URL` and `SPRING_ZIPKIN_ENABLED`.
 
-Please refer to the respective `management.tracing` properties in
+The environment variable `JAEGER_SERVICE_NAME` was replaced by the spring's default system
+property `spring.application.name`.
+
+Please refer to the respective `management.tracing` and other migrated properties in
 [the documentation](starter-web.md#configuration).
 
 
