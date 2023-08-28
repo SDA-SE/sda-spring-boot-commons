@@ -21,6 +21,8 @@ Summary of noticeable changes:
 - A major upgrade of Spring Security is included.
 - Spring configuration properties changed.
 - S3 libraries changed to a new and different Java API of AWS.
+- WireMock dependency changed to _standalone_ variant that provides transitive dependencies
+  directly in new packages.
 
 
 ## Jakarta EE
@@ -120,6 +122,7 @@ If you define this bean with custom configuration you need to update your config
 You can check the new API
 definition [here](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/s3/S3Client.html).
 
+
 ## Kafka
 
 There has been introduced a new default value for the `sda.kafka.consumer.dlt.pattern` property,
@@ -130,3 +133,16 @@ explicitly unset the property (`sda.kafka.consumer.dlt.pattern=`).
 !!! Info
 We do not recommend using a '.' within the topic name, since it does not allow the standard
 replacement approach in our kustomize deployments and let to errors in customer's environments.
+
+
+## Testing - WireMock
+
+WireMock changed from `wiremock-jre8` to `wiremock-jre8-standalone` as
+[suggested here](https://github.com/wiremock/wiremock/issues/1760).
+The standalone variant repackages transitive dependencies to a new package and avoids the
+dependency.
+Tests are affected if Jackson classes are used to interact with WireMock, e.g.
+`.willReturn(jsonResponse(jacksonsJsonNode, 200))`.
+All imports related to Jackson classes interacting with WireMock, including an `ObjectMapper` that
+is used to read or write these objects, must be updated from `com.fasterxml.…` to
+`wiremock.com.fasterxml.…`.
