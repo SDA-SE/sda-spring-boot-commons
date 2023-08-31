@@ -40,3 +40,40 @@ used by the mongodb client.
 All certificates found in subdirectories will also be loaded.
 
 Note that this directory is also configurable through the property `sda.caCertificates.certificatesDir`.
+
+
+## Testing
+
+It is recommended to test with an embedded MongoDB using Flapdoodle's Spring Boot module and the
+SDA Spring Boot Commons testing module:
+
+```groovy
+dependencies {
+  testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x'
+  testImplementation 'org.sdase.commons.spring.boot:sda-commons-web-testing'
+}
+```
+
+Flapdoodle will start a MongoDB server and configures the connection for Spring Boot tests.
+The MongoDB version can be selected with (test) application properties:
+
+```properties
+de.flapdoodle.mongodb.embedded.version=4.4.1
+```
+
+`MongoOperations` can be used to clean the database between tests:
+
+```java
+  @Autowired MongoOperations mongoOperations;
+
+  @BeforeEach
+  void beforeEach() {
+    mongoOperations.dropCollection("collectionUnderTest");
+  }
+```
+
+To skip Flapdoodle's autoconfiguration and use a provided database (e.g. an AWS DocumentDB), the
+property `test.mongodb.connection.string` (or environment variable `TEST_MONGODB_CONNECTION_STRING`)
+can be used to provide a complete [MongoDB Connection String](https://docs.mongodb.com/manual/reference/connection-string/).
+This feature is provided by the SDA Spring Boot Commons testing module and is only activated when
+Flapdoodle's autoconfiguration is available for the test setup.
