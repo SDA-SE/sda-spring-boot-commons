@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=org.sdase.commons.spring.boot.web.testing.mongodb.ExternalMongoAutoConfiguration
