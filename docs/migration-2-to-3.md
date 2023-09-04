@@ -25,6 +25,37 @@ Summary of noticeable changes:
   directly in new packages.
 
 
+## Compile task
+
+Spring Boot 3 requires reflection information about parameters in compiled classes.
+If no such information is added, warning logs will complain about it.
+To avoid warnings, the `-parameters` flag must be added to the compile task.
+
+=== "Gradle"
+    ```groovy
+    tasks.withType(JavaCompile).configureEach {
+      options.encoding = 'UTF-8'
+      options.compilerArgs << '-parameters'
+    }
+    ```
+=== "Maven"
+    ```xml
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <compilerArgs>
+              <arg>-parameters</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+    ```
+
+
 ## Jakarta EE
 
 Please make sure dependencies do not pull in transitive `javax` modules and migrate all `javax`
