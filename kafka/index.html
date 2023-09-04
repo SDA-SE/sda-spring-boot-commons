@@ -1,0 +1,727 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../mongodb/">
+      
+      
+        <link rel="next" href="../security/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.3">
+    
+    
+      
+        <title>Kafka - sda-spring-boot-commons</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sda-commons-kafka-starter" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="sda-spring-boot-commons" class="md-header__button md-logo" aria-label="sda-spring-boot-commons" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            sda-spring-boot-commons
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kafka
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+      </form>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="sda-spring-boot-commons" class="md-nav__button md-logo" aria-label="sda-spring-boot-commons" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    sda-spring-boot-commons
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        S3
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mongodb/" class="md-nav__link">
+        MongoDB
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Kafka
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Kafka
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consumer-configuration" class="md-nav__link">
+    Consumer configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Consumer configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defaults" class="md-nav__link">
+    Defaults
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#producer-configuration" class="md-nav__link">
+    Producer configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Producer configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defaults_1" class="md-nav__link">
+    Defaults
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-properties" class="md-nav__link">
+    Configuration properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#consumers" class="md-nav__link">
+    Consumers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        Security Hardening
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consumer-configuration" class="md-nav__link">
+    Consumer configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Consumer configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defaults" class="md-nav__link">
+    Defaults
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#producer-configuration" class="md-nav__link">
+    Producer configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Producer configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defaults_1" class="md-nav__link">
+    Defaults
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-properties" class="md-nav__link">
+    Configuration properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#consumers" class="md-nav__link">
+    Consumers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="sda-commons-kafka-starter">sda-commons-kafka-starter<a class="headerlink" href="#sda-commons-kafka-starter" title="Permanent link">&para;</a></h1>
+<p>The <code>sda-commons-kafka-starter</code> provides autoconfigured Kafka producer and consumer configuration.</p>
+<p>Based on:
+- <code>org.springframework.boot:spring-boot-starter</code>
+- <code>org.springframework.boot:spring-boot-starter-validation</code>
+- <code>org.springframework.kafka:spring-kafka</code></p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th><strong>Property</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Example</strong></th>
+<th><strong>Env</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sda.kafka.consumer.retry.initialBackOffInterval</code> <em>int</em></td>
+<td>The initial backoff of the retry in ms</td>
+<td><code>1000</code></td>
+<td><code>1500</code></td>
+<td><code>SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL</code></td>
+</tr>
+<tr>
+<td><code>sda.kafka.consumer.retry.maxBackOffInterval</code> <em>int</em></td>
+<td>The max backoff interval  in ms</td>
+<td><code>4000</code></td>
+<td><code>5000</code></td>
+<td><code>SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVALL</code></td>
+</tr>
+<tr>
+<td><code>sda.kafka.consumer.retry.backOffMultiplier</code> <em>int</em></td>
+<td>The multiplier beginning with the initial backoff</td>
+<td><code>2</code></td>
+<td><code>1.5</code></td>
+<td><code>SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL</code></td>
+</tr>
+<tr>
+<td><code>sda.kafka.consumer.retry.maxRetries</code> <em>int</em></td>
+<td>Max retries consuming the offset</td>
+<td><code>4</code></td>
+<td><code>10</code></td>
+<td><code>SDA_KAFKA_CONSUMER_RETRY_INITIAL_MAXRETRIES</code></td>
+</tr>
+<tr>
+<td><code>sda.kafka.consumer.dlt.pattern</code> <em>string</em></td>
+<td>Pattern of consumer dead letter topic. <code>&lt;topic&gt;</code> will be replaced by topic name</td>
+<td></td>
+<td><code>prefix-&lt;topic&gt;</code></td>
+<td><code>SDA_KAFKA_CONSUMER_DLT_PATTERN</code></td>
+</tr>
+<tr>
+<td><code>management.health.kafka.enabled</code> <em>boolean</em></td>
+<td>Flag to enable kafka health check</td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>MANAGEMENT_HEALTH_KAFKA_ENABLED</code></td>
+</tr>
+<tr>
+<td><code>management.health.kafka.timeout</code> <em>duration</em></td>
+<td>Allowed duration for health check to finish</td>
+<td><code>4s</code></td>
+<td><code>5000ms</code></td>
+<td><code>MANAGEMENT_HEALTH_KAFKA_TIMEOUT</code></td>
+</tr>
+</tbody>
+</table>
+<p>For further information have a look to the Spring Kafka <a href="https://docs.spring.io/spring-kafka/reference/html/">reference documentation</a>.</p>
+<h2 id="consumer-configuration">Consumer configuration<a class="headerlink" href="#consumer-configuration" title="Permanent link">&para;</a></h2>
+<p>The autoconfigured consumer configuration provides
+several <code>ConcurrentKafkaListenerContainerFactory&lt;String, ?&gt;</code>
+which can be referenced in <code>@KafkaListener</code> annotated methods.</p>
+<ul>
+<li><code>SdaKafkaListenerContainerFactory.LOG_ON_FAILURE</code><ul>
+<li>Simply logs the exception; with a record listener, the remaining records from the previous poll
+  are passed to the listener.</li>
+</ul>
+</li>
+<li><code>SdaKafkaListenerContainerFactory.RETRY_AND_LOG</code><ul>
+<li>Skips record that keeps failing after <code>sda.kafka.consumer.retry.maxRetries</code>(default: <code>4</code>) and
+  log exception.</li>
+</ul>
+</li>
+<li><code>SdaKafkaListenerContainerFactory.RETRY_AND_DLT</code><ul>
+<li>Skips record that keeps failing after <code>sda.kafka.consumer.retry.maxRetries</code> (default: 4) and
+  produces failed record to topic with <code>.DLT</code> suffix.</li>
+<li>By default, the dead-letter record is sent to a topic named .DLT (the original topic name
+  suffixed with .DLT) and to the same partition as the original record. Therefore, when you use
+  the default configuration, <strong>the dead-letter topic must have at least as many partitions as the
+  original topic.</strong></li>
+<li>The spring default DLT naming convention can be overwritten using the <code>sda.kafka.consumer.dlt.pattern</code> property.
+  The pattern must contain <code>&lt;topic&gt;</code>, which will be replaced by the actual topic name.</li>
+</ul>
+</li>
+</ul>
+<p>To skip retry for specific business errors, you can throw the custom <code>NotRetryableKafkaException</code>.</p>
+<p>Each <code>containerFactory</code> expects a message key as <code>String</code> and the message payload of any type.
+The payload is deserialized as byte array and converted with the <code>ByteArrayJsonMessageConverter</code>.
+The ack mode for offsets is per default <code>RECORD</code> where the offset after each record is
+processed by the listener.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@KafkaListener</span><span class="p">(</span>
+<span class="w">  </span><span class="n">topics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;TestTopic&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">containerFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SdaKafkaListenerContainerFactory</span><span class="p">.</span><span class="na">RETRY_AND_LOG</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">retryAndLog</span><span class="p">(</span><span class="nd">@Payload</span><span class="w"> </span><span class="nd">@Valid</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// doSomething</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">businessError</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotRetryableKafkaException</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="defaults">Defaults<a class="headerlink" href="#defaults" title="Permanent link">&para;</a></h3>
+<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">spring.kafka.consumer.group-id</span><span class="o">=</span><span class="s">default</span>
+<span class="na">spring.kafka.consumer.auto-offset-reset</span><span class="o">=</span><span class="s">earliest</span>
+<span class="na">spring.kafka.consumer.key-deserializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.ErrorHandlingDeserializer</span>
+<span class="na">spring.kafka.consumer.value-deserializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.ErrorHandlingDeserializer</span>
+<span class="na">spring.kafka.consumer.properties.spring.deserializer.key.delegate.class</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
+<span class="na">spring.kafka.consumer.properties.spring.deserializer.value.delegate.class</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.ByteArrayDeserializer</span>
+<span class="na">spring.kafka.consumer.properties.spring.json.trusted.packages</span><span class="o">=</span><span class="s">*</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Make sure to overwrite <code>spring.kafka.consumer.group-id</code> in your <code>application.properties</code> otherwise you could have conflicts
+with other services using <code>default</code>.</strong></p>
+<h2 id="producer-configuration">Producer configuration<a class="headerlink" href="#producer-configuration" title="Permanent link">&para;</a></h2>
+<p>The autoconfigured producer configuration provides a preconfigured  <code>KafkaTemplate</code> for producing 
+messages with <code>String</code> key and payload as <code>json</code>.</p>
+<p>You just need to autowire the <code>KafkaTemplate</code> and you are ready to go.</p>
+<h3 id="defaults_1">Defaults<a class="headerlink" href="#defaults_1" title="Permanent link">&para;</a></h3>
+<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">spring.kafka.producer.key-serializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringSerializer</span>
+<span class="na">spring.kafka.producer.value-serializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.JsonSerializer</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="configuration-properties">Configuration properties<a class="headerlink" href="#configuration-properties" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>spring.kafka.bootstrap.servers</code> <em>string</em><ul>
+<li>Comma-delimited list of <code>host:port</code> pairs to use for establishing the initial connections to the
+  Kafka cluster</li>
+<li>Example:  <code>kafka-broker:9092"</code></li>
+<li>Default: <code>localhost:9092</code></li>
+</ul>
+</li>
+<li><code>spring.kafka.security.protocol</code> <em>string</em><ul>
+<li>The security protocol used by Kafka. Please note that SASL mechanism requires some manual
+  configuration.</li>
+<li>Example: <code>PLAINTEXT</code> or <code>SSL</code></li>
+<li>Default: <code>PLAINTEXT</code></li>
+</ul>
+</li>
+<li><code>spring.kafka.ssl.key-store-location</code> <em>string</em><ul>
+<li>Location of the SSL keystore file</li>
+<li>Example: <code>file:/kafka/kafka.client.keystore.jks</code></li>
+<li>Default: ``</li>
+</ul>
+</li>
+<li><code>spring.kafka.ssl.key-store-password</code> <em>string</em><ul>
+<li>Password for the SSL keystore file</li>
+<li>Example: <code>s3cret</code></li>
+<li>Default: ``</li>
+</ul>
+</li>
+<li><code>spring.kafka.ssl.trust-store-location´</code> <em>string</em><ul>
+<li>Location of the SSL truststore file</li>
+<li>Example: <code>file:/kafka-certs/kafka.client.keystore.jks</code></li>
+<li>Default: ``</li>
+</ul>
+</li>
+<li><code>Sspring.kafka.ssl.trust-store-password</code> <em>string</em><ul>
+<li>Password for the SSL truststore file</li>
+<li>Example: <code>s3cret</code></li>
+<li>Default: ``</li>
+</ul>
+</li>
+</ul>
+<h4 id="consumers">Consumers<a class="headerlink" href="#consumers" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>spring.kafka.consumer.group-id</code> <em>string</em><ul>
+<li>Consumer group name of Kafka Consumer</li>
+<li>Example: <code>myConsumer</code></li>
+<li>Default: <code>default</code></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../mongodb/" class="md-footer__link md-footer__link--prev" aria-label="Previous: MongoDB" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Previous
+                </span>
+                MongoDB
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Next: Security Hardening" rel="next">
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Next
+                </span>
+                Security Hardening
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer", "content.action.edit"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      
+        <script src="../search/main.js"></script>
+      
+    
+  </body>
+</html>

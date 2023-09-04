@@ -1,0 +1,544 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../kafka/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.3">
+    
+    
+      
+        <title>Security Hardening - sda-spring-boot-commons</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#security-hardening" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="sda-spring-boot-commons" class="md-header__button md-logo" aria-label="sda-spring-boot-commons" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            sda-spring-boot-commons
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Security Hardening
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+      </form>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="sda-spring-boot-commons" class="md-nav__button md-logo" aria-label="sda-spring-boot-commons" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    sda-spring-boot-commons
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        S3
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mongodb/" class="md-nav__link">
+        MongoDB
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        Kafka
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Security Hardening
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Security Hardening
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#risk-accessing-critical-resources-from-untrusted-environments" class="md-nav__link">
+    Risk: Accessing critical resources from untrusted environments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-root-start" class="md-nav__link">
+    Risk: Root start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-exploitation-of-http-methods" class="md-nav__link">
+    Risk: Exploitation of HTTP methods
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-loss-of-source-ip-address" class="md-nav__link">
+    Risk: Loss of source IP address
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-detection-of-confidential-components" class="md-nav__link">
+    Risk: Detection of confidential components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-lack-of-visibility" class="md-nav__link">
+    Risk: Lack of visibility
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-buffer-overflow" class="md-nav__link">
+    Risk: Buffer Overflow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#header" class="md-nav__link">
+    Header
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#risk-accessing-critical-resources-from-untrusted-environments" class="md-nav__link">
+    Risk: Accessing critical resources from untrusted environments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-root-start" class="md-nav__link">
+    Risk: Root start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-exploitation-of-http-methods" class="md-nav__link">
+    Risk: Exploitation of HTTP methods
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-loss-of-source-ip-address" class="md-nav__link">
+    Risk: Loss of source IP address
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-detection-of-confidential-components" class="md-nav__link">
+    Risk: Detection of confidential components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-lack-of-visibility" class="md-nav__link">
+    Risk: Lack of visibility
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-buffer-overflow" class="md-nav__link">
+    Risk: Buffer Overflow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#header" class="md-nav__link">
+    Header
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="security-hardening">Security Hardening<a class="headerlink" href="#security-hardening" title="Permanent link">&para;</a></h1>
+<p>sda-spring-boot-commons changes some default configuration for security reasons.
+This document provides a brief overview about the addressed risks.</p>
+<h2 id="risk-accessing-critical-resources-from-untrusted-environments">Risk: Accessing critical resources from untrusted environments<a class="headerlink" href="#risk-accessing-critical-resources-from-untrusted-environments" title="Permanent link">&para;</a></h2>
+<p>To avoid exposing internal resources, Spring Boot Actuator is configured to listen on a separate
+port.
+Health, metrics and other sensitive information can't be exposed to the internet by accident, e.g.
+by missing to exclude the actuator path.</p>
+<p>Custom critical resources can be exposed at the management port by implementing
+<code>org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint</code> or
+<code>org.springframework.boot.actuate.endpoint.web.annotation.ControllerEndpoint</code>.
+Note that there is an <a href="https://github.com/spring-projects/spring-boot/issues/31768">open discussion</a>
+about these annotations.
+As long as they are not deprecated, it is suggested to use them because the use is most similar to
+controllers used in regular REST APIs.</p>
+<h2 id="risk-root-start">Risk: Root start<a class="headerlink" href="#risk-root-start" title="Permanent link">&para;</a></h2>
+<p>If the service is started with extended privileges as the root user, an attacker can more easily
+attack the operating system after taking over from the container.</p>
+<p>The default configuration is capable to run as no root, listening to ports 8080 and 8081.
+Deployment checks must ensure, that the container is not configured with a root user.</p>
+<h2 id="risk-exploitation-of-http-methods">Risk: Exploitation of HTTP methods<a class="headerlink" href="#risk-exploitation-of-http-methods" title="Permanent link">&para;</a></h2>
+<p>The HTTP method <code>TRACE</code> is disabled by default to mitigate <a href="https://owasp.org/www-community/attacks/Cross_Site_Tracing">Cross Site Tracing</a>.</p>
+<h2 id="risk-loss-of-source-ip-address">Risk: Loss of source IP address<a class="headerlink" href="#risk-loss-of-source-ip-address" title="Permanent link">&para;</a></h2>
+<p>We expect, that services built with sda-spring-boot-commons are deployed behind a proxy, e.g. an
+Ingress in Kubernetes.</p>
+<p>This library is configured by default to consider <code>X-Forwarded-*</code> headers to identify the original
+caller.</p>
+<h2 id="risk-detection-of-confidential-components">Risk: Detection of confidential components<a class="headerlink" href="#risk-detection-of-confidential-components" title="Permanent link">&para;</a></h2>
+<p>Knowing the components used in a software makes it easier to look for and exploit specific CVEs.</p>
+<p>Custom error handlers and other configurations are used to avoid identifiable default output from
+the framework and its components.</p>
+<h2 id="risk-lack-of-visibility">Risk: Lack of visibility<a class="headerlink" href="#risk-lack-of-visibility" title="Permanent link">&para;</a></h2>
+<p>If there is no visibility, there is no response to an abusive action and attackers can explore risks
+undisturbed.</p>
+<p>Logs are written to standard out by default to comply with Kubernetes environments.
+Prometheus metrics are exposed as expected by SDA environments.</p>
+<h2 id="risk-buffer-overflow">Risk: Buffer Overflow<a class="headerlink" href="#risk-buffer-overflow" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The size of request and response headers is limited to 8KiB.</li>
+<li>The size of a request body is limited to 1 MB by default, chunked encoding is not accepted and the
+  <code>Content-Length</code> request header is required. The limit <a href="../web/#configuration">can be changed</a>.</li>
+</ul>
+<h2 id="header">Header<a class="headerlink" href="#header" title="Permanent link">&para;</a></h2>
+<p>By configuring the default headers, the following risks are addressed:</p>
+<ul>
+<li>Cross-Site Scripting</li>
+<li>Content interpretation by the browser</li>
+<li>Content loading in Flash and PDFs</li>
+<li>Clickjacking</li>
+<li>Sharing visited URLs with third parties</li>
+<li>Abuse from Cross-Origin Resource Sharing</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../kafka/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Kafka" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Previous
+                </span>
+                Kafka
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer", "content.action.edit"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      
+        <script src="../search/main.js"></script>
+      
+    
+  </body>
+</html>
