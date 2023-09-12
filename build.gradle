@@ -10,7 +10,7 @@ plugins {
   id 'idea'
   id 'maven-publish'
   id 'signing'
-  id 'com.diffplug.spotless' version '6.20.0'
+  id 'com.diffplug.spotless' version '6.21.0'
   id 'org.sonarqube' version '4.3.0.3225'
   id 'project-report'
   id 'io.codearte.nexus-staging' version '0.30.0'
