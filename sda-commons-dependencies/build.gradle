@@ -42,7 +42,7 @@ dependencies {
     api 'io.swagger.core.v3:swagger-annotations:2.2.9'
     api 'io.github.classgraph:classgraph:4.8.162'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'io.micrometer:micrometer-registry-prometheus:1.11.3'
+    api 'io.micrometer:micrometer-registry-prometheus:1.11.4'
     api 'org.yaml:snakeyaml:1.33', {
       because 'Temporary: this version is used to solve CVE-2022-25857'
     }
