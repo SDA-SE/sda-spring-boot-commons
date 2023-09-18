@@ -10,8 +10,9 @@ CarScrapped:
         examples:
         - "626A0F21-D940-4B44-BD36-23F0F567B0D0"
       type:
-        type: "string"
-        description: "The type of message"
+        allOf:
+        - $ref: "#/components/schemas/Type"
+        - description: "The type of message"
       vehicleRegistration:
         type: "string"
         description: "The registration of the vehicle"
@@ -36,3 +37,8 @@ CarScrapped:
         const: "CAR_SCRAPPED"
     required:
     - "type"
+Type:
+  type: "string"
+  enum:
+  - "CAR_MANUFACTURED"
+  - "CAR_SCRAPPED"

@@ -91,6 +91,88 @@ class JsonSchemaBuilderTest {
             """));
   }
 
+  @Test
+  void shouldMergeSameDuplicateSchema() {
+    JsonSchemaBuilder jsonSchemaBuilder =
+        c -> {
+          // use existing types to produce test data
+          if (c.equals(String.class)) {
+            return yamlAsJsonNodeMap(
+                """
+                Task:
+                  type: object
+                  properties:
+                    status:
+                      $ref: #/components/schemas/TaskStatus
+                    assignee:
+                      $ref: #/components/schemas/UserStatus
+                User:
+                  type: object
+                  properties:
+                    status:
+                      $ref: #/components/schemas/UserStatus
+                UserStatus:
+                  type: string
+                  enum:
+                    - active
+                    - disabled
+                TaskStatus:
+                  type: string
+                  enum:
+                    - todo
+                    - done
+                """);
+          }
+          if (c.equals(Number.class)) {
+            return yamlAsJsonNodeMap(
+                """
+                User:
+                  type: object
+                  properties:
+                    status:
+                      $ref: #/components/schemas/UserStatus
+                UserStatus:
+                  type: string
+                  enum:
+                    - active
+                    - disabled
+                """);
+          }
+          return Map.of();
+        };
+
+    List<Type> givenTypes = List.of(String.class, Number.class);
+
+    Map<String, JsonNode> actual = jsonSchemaBuilder.toJsonSchema(givenTypes);
+    assertThat(actual)
+        .isEqualTo(
+            yamlAsJsonNodeMap(
+                """
+            Task:
+              type: object
+              properties:
+                status:
+                  $ref: #/components/schemas/TaskStatus
+                assignee:
+                  $ref: #/components/schemas/UserStatus
+            TaskStatus:
+              type: string
+              enum:
+                - todo
+                - done
+            User:
+              type: object
+              properties:
+                status:
+                  $ref: #/components/schemas/UserStatus
+            UserStatus:
+              type: string
+              enum:
+                - active
+                - disabled
+            """));
+  }
+
   /**
    * This test documents limitations. We may resolve the (or some) conflicts later and remove or
    * adapt this test.
