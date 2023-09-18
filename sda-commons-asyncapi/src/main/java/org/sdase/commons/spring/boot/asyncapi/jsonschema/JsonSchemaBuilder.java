@@ -51,8 +51,8 @@ public interface JsonSchemaBuilder {
    *
    * <p>In the default implementation, conflicting schemas may be created if classes with the same
    * simple name are involved, e.g. a {@code Status} enum from different packages, when used in
-   * different given types. These conflicts are not resolved, but an {@link IllegalStateException}
-   * is thrown.
+   * different given types. These conflicts are not resolved unless the resulting schema is equal,
+   * but an {@link IllegalStateException} is thrown.
    *
    * @param types the java types, usually {@link Class}es, for which the Json Schema should be
    *     created. Types given multiple times are only considered once.
@@ -72,6 +72,7 @@ public interface JsonSchemaBuilder {
         .map(this::toJsonSchema)
         .map(Map::entrySet)
         .flatMap(Set::stream)
+        .distinct() // mitigates duplicate schemas transitively used in multiple input classes
         .collect(
             Collectors.toMap(
                 Map.Entry::getKey,

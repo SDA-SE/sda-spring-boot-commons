@@ -33,7 +33,7 @@ public abstract class BaseEvent {
   private String id;
 
   @JsonPropertyDescription("The type of message")
-  private String type;
+  private Type type;
 
   public String getId() {
     return id;
@@ -44,12 +44,17 @@ public abstract class BaseEvent {
     return this;
   }
 
-  public String getType() {
+  public Type getType() {
     return type;
   }
 
-  public BaseEvent setType(String type) {
+  public BaseEvent setType(Type type) {
     this.type = type;
     return this;
+  }
+
+  public enum Type {
+    CAR_MANUFACTURED,
+    CAR_SCRAPPED
   }
 }
