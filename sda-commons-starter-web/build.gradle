@@ -9,6 +9,7 @@ dependencies {
   api 'org.springframework.boot:spring-boot-starter-actuator'
   api 'org.springframework.cloud:spring-cloud-starter-openfeign'
   api 'org.springframework.boot:spring-boot-starter-validation'
+  api 'org.springframework.boot:spring-boot-starter-webflux' // the webflux dependency to enable the webClients
   api 'ch.qos.logback.contrib:logback-json-classic'
   api 'ch.qos.logback.contrib:logback-jackson'
 

@@ -13,3 +13,4 @@ org.sdase.commons.spring.boot.web.monitoring.SdaTracingConfiguration
 org.sdase.commons.spring.boot.web.monitoring.RegisterHealthStatusAsMetricConfiguration
 org.sdase.commons.spring.boot.web.tracing.TraceTokenConfiguration
 org.sdase.commons.spring.boot.web.security.SdaWebSecurityConfiguration
+org.sdase.commons.spring.boot.web.client.MyService
