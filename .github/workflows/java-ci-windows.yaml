@@ -22,7 +22,7 @@ jobs:
 
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
         with:
           fetch-depth: 0 # fetch commit log so that Sonar is able to assign committers to issues
 
