@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../s3/">
+        <link rel="prev" href="../starter-kafka/">
       
       
-        <link rel="next" href="../kafka/">
+        <link rel="next" href="../security/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.1.3">
     
     
       
-        <title>MongoDB - sda-spring-boot-commons</title>
+        <title>Starter S3 - sda-spring-boot-commons</title>
       
     
     
@@ -61,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sda-commons-mongodb-starter" class="md-skip">
+        <a href="#starter-s3" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              MongoDB
+              Starter S3
             
           </span>
         </div>
@@ -168,8 +168,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../web/" class="md-nav__link">
-        Web
+      <a href="../migration-2-to-3/" class="md-nav__link">
+        Migrate to v3
       </a>
     </li>
   
@@ -183,8 +183,38 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3/" class="md-nav__link">
-        S3
+      <a href="../starter-web/" class="md-nav__link">
+        Starter Web
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starter-mongodb/" class="md-nav__link">
+        Starter MongoDB
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starter-kafka/" class="md-nav__link">
+        Starter Kafka
       </a>
     </li>
   
@@ -208,12 +238,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          MongoDB
+          Starter S3
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        MongoDB
+        Starter S3
       </a>
       
         
@@ -232,29 +262,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#main-configuration" class="md-nav__link">
-    Main Configuration
+  <a href="#configuration" class="md-nav__link">
+    Configuration
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-properties" class="md-nav__link">
-    Configuration properties
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration properties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ssl-support" class="md-nav__link">
-    SSL support
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -274,8 +284,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../kafka/" class="md-nav__link">
-        Kafka
+      <a href="../security/" class="md-nav__link">
+        Security Hardening
       </a>
     </li>
   
@@ -289,8 +299,38 @@
   
   
     <li class="md-nav__item">
-      <a href="../security/" class="md-nav__link">
-        Security Hardening
+      <a href="../asyncapi/" class="md-nav__link">
+        AsyncAPI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudevents/" class="md-nav__link">
+        Cloud Events
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metadata-context/" class="md-nav__link">
+        Metadata Context
       </a>
     </li>
   
@@ -323,29 +363,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#main-configuration" class="md-nav__link">
-    Main Configuration
+  <a href="#configuration" class="md-nav__link">
+    Configuration
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-properties" class="md-nav__link">
-    Configuration properties
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration properties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ssl-support" class="md-nav__link">
-    SSL support
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -364,59 +384,59 @@
                   
 
 
-<h1 id="sda-commons-mongodb-starter">sda-commons-mongodb-starter<a class="headerlink" href="#sda-commons-mongodb-starter" title="Permanent link">&para;</a></h1>
-<p>The <code>sda-commons-mongodb-starter</code> provides several autoconfigured features including:</p>
-<p>- The Read/Write<code>ZonedDateTime</code> converter
-  - Automatic index creation</p>
+<h1 id="starter-s3">Starter S3<a class="headerlink" href="#starter-s3" title="Permanent link">&para;</a></h1>
+<p>This library provides features for dealing with the Amazon S3 file storage.</p>
 <p>Based on:
-  - <code>org.springframework.boot:spring-boot-starter-data-mongodb</code></p>
-<p>For further documentation please have a look at the Spring Data MongoDB <a href="https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/">reference documentation</a>.</p>
-<h2 id="main-configuration">Main Configuration<a class="headerlink" href="#main-configuration" title="Permanent link">&para;</a></h2>
+  - <code>io.awspring.cloud:spring-cloud-aws-core</code></p>
+<p>The configuration class contains two beans, namely:</p>
+<ul>
+<li><code>AmazonS3Client</code>: Providing an interface for accessing the S3 object storage.</li>
+<li><code>S3BucketRepository</code>: Providing an abstraction for s3 client with simple repository methods.</li>
+</ul>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>The following properties are needed for the configuration.</p>
 <table>
 <thead>
 <tr>
 <th><strong>Property</strong></th>
 <th><strong>Description</strong></th>
-<th><strong>Default</strong></th>
 <th><strong>Example</strong></th>
 <th><strong>Env</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>spring.data.mongodb.uri</code> <em>string</em></td>
-<td>The MongoDB <a href="https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-uri-format">connection string</a>.</td>
-<td></td>
-<td><code>mongodb://localhost:27017/test</code></td>
-<td><code>SPRING_DATA_MONGODB_URI</code></td>
+<td><code>s3.bucketName</code> <em>string</em></td>
+<td>The name of the bucket containing the desired object.</td>
+<td>myphotos</td>
+<td><code>S3_BUCKET_NAME</code></td>
+</tr>
+<tr>
+<td><code>s3.endpoint</code> <em>string</em></td>
+<td>The endpoint either with or without the protocol</td>
+<td><a href="https://s3.eu-west-1.amazonaws.com">https://s3.eu-west-1.amazonaws.com</a> or s3.eu-west-1.amazonaws.com</td>
+<td><code>S3_ENDPOINT</code></td>
+</tr>
+<tr>
+<td><code>s3.region</code> <em>string</em></td>
+<td>The region to use for SigV4 signing of requests</td>
+<td>eu-west-1</td>
+<td><code>S3_REGION</code></td>
+</tr>
+<tr>
+<td><code>s3.secretKey</code> <em>string</em></td>
+<td>The AWS secret access key</td>
+<td>s3cret</td>
+<td><code>S3_SECRET_KEY</code></td>
+</tr>
+<tr>
+<td><code>s3.accessKey</code> <em>string</em></td>
+<td>The AWS access key</td>
+<td>s3cretAccess</td>
+<td><code>S3_ACCESS_KEY</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="configuration-properties">Configuration properties<a class="headerlink" href="#configuration-properties" title="Permanent link">&para;</a></h2>
-<ul>
-<li><code>spring.data.mongodb.uri</code> <em>string</em><ul>
-<li>Mongo database URI.</li>
-<li>Example: <code>mongodb://exampleUser:examplePassword@mongoHost:27017</code>
-*
-Format: <code>mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]</code></li>
-<li>Connection String Options need to be added to the end of the URI e.g.<ul>
-<li><code>?ssl=true</code> to enable SSL</li>
-<li><code>?retryWrites=false</code> to disable retryable writes for the connection.</li>
-<li><code>?readPreference=secondardPreferred</code> In most situations, operations read from secondary
-  members,
-  but in situations where the set consists of a single primary (and no other members),
-  the read operation will use the replica set's primary.</li>
-<li>For further information take a look on
-  <a href="https://docs.mongodb.com/manual/reference/connection-string">Connection String documentation</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="ssl-support">SSL support<a class="headerlink" href="#ssl-support" title="Permanent link">&para;</a></h3>
-<p>The mongodb starter can be configured to use ssl when the option <code>?ssl=true</code> is used. Certificates in PEM format can be mounted
-in the directory <code>/var/trust/certificates</code> they will be used by the mongodb client. All certificates found in sub-directories will also be loaded.</p>
-<p>Note that this directory is also configurable through the property <code>sda.caCertificates.certificatesDir</code>.</p>
 
 
 
@@ -438,7 +458,7 @@ in the directory <code>/var/trust/certificates</code> they will be used by the m
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s3/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S3" rel="prev">
+          <a href="../starter-kafka/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Starter Kafka" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -447,20 +467,20 @@ in the directory <code>/var/trust/certificates</code> they will be used by the m
                 <span class="md-footer__direction">
                   Previous
                 </span>
-                S3
+                Starter Kafka
               </div>
             </div>
           </a>
         
         
           
-          <a href="../kafka/" class="md-footer__link md-footer__link--next" aria-label="Next: Kafka" rel="next">
+          <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Next: Security Hardening" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                Kafka
+                Security Hardening
               </div>
             </div>
             <div class="md-footer__button md-icon">

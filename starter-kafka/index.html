@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../mongodb/">
+        <link rel="prev" href="../starter-mongodb/">
       
       
-        <link rel="next" href="../security/">
+        <link rel="next" href="../starter-s3/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.1.3">
     
     
       
-        <title>Kafka - sda-spring-boot-commons</title>
+        <title>Starter Kafka - sda-spring-boot-commons</title>
       
     
     
@@ -61,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sda-commons-kafka-starter" class="md-skip">
+        <a href="#starter-kafka" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Kafka
+              Starter Kafka
             
           </span>
         </div>
@@ -168,8 +168,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../web/" class="md-nav__link">
-        Web
+      <a href="../migration-2-to-3/" class="md-nav__link">
+        Migrate to v3
       </a>
     </li>
   
@@ -183,8 +183,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3/" class="md-nav__link">
-        S3
+      <a href="../starter-web/" class="md-nav__link">
+        Starter Web
       </a>
     </li>
   
@@ -198,8 +198,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../mongodb/" class="md-nav__link">
-        MongoDB
+      <a href="../starter-mongodb/" class="md-nav__link">
+        Starter MongoDB
       </a>
     </li>
   
@@ -223,12 +223,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Kafka
+          Starter Kafka
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Kafka
+        Starter Kafka
       </a>
       
         
@@ -258,58 +258,12 @@
     Consumer configuration
   </a>
   
-    <nav class="md-nav" aria-label="Consumer configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#defaults" class="md-nav__link">
-    Defaults
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#producer-configuration" class="md-nav__link">
     Producer configuration
   </a>
-  
-    <nav class="md-nav" aria-label="Producer configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#defaults_1" class="md-nav__link">
-    Defaults
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-properties" class="md-nav__link">
-    Configuration properties
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration properties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#consumers" class="md-nav__link">
-    Consumers
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -329,8 +283,68 @@
   
   
     <li class="md-nav__item">
+      <a href="../starter-s3/" class="md-nav__link">
+        Starter S3
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../security/" class="md-nav__link">
         Security Hardening
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asyncapi/" class="md-nav__link">
+        AsyncAPI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudevents/" class="md-nav__link">
+        Cloud Events
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metadata-context/" class="md-nav__link">
+        Metadata Context
       </a>
     </li>
   
@@ -374,58 +388,12 @@
     Consumer configuration
   </a>
   
-    <nav class="md-nav" aria-label="Consumer configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#defaults" class="md-nav__link">
-    Defaults
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#producer-configuration" class="md-nav__link">
     Producer configuration
   </a>
-  
-    <nav class="md-nav" aria-label="Producer configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#defaults_1" class="md-nav__link">
-    Defaults
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-properties" class="md-nav__link">
-    Configuration properties
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration properties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#consumers" class="md-nav__link">
-    Consumers
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -444,12 +412,15 @@
                   
 
 
-<h1 id="sda-commons-kafka-starter">sda-commons-kafka-starter<a class="headerlink" href="#sda-commons-kafka-starter" title="Permanent link">&para;</a></h1>
-<p>The <code>sda-commons-kafka-starter</code> provides autoconfigured Kafka producer and consumer configuration.</p>
-<p>Based on:
-- <code>org.springframework.boot:spring-boot-starter</code>
-- <code>org.springframework.boot:spring-boot-starter-validation</code>
-- <code>org.springframework.kafka:spring-kafka</code></p>
+<h1 id="starter-kafka">Starter Kafka<a class="headerlink" href="#starter-kafka" title="Permanent link">&para;</a></h1>
+<p>The module <code>sda-commons-starter-kafka</code> provides autoconfigured Kafka producer and consumer
+configuration.</p>
+<p>Based on:</p>
+<ul>
+<li><code>org.springframework.boot:spring-boot-starter</code></li>
+<li><code>org.springframework.boot:spring-boot-starter-validation</code></li>
+<li><code>org.springframework.kafka:spring-kafka</code></li>
+</ul>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -464,56 +435,144 @@
 <tbody>
 <tr>
 <td><code>sda.kafka.consumer.retry.initialBackOffInterval</code> <em>int</em></td>
-<td>The initial backoff of the retry in ms</td>
+<td>The initial backoff of the retry in milli seconds.</td>
 <td><code>1000</code></td>
 <td><code>1500</code></td>
 <td><code>SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL</code></td>
 </tr>
 <tr>
 <td><code>sda.kafka.consumer.retry.maxBackOffInterval</code> <em>int</em></td>
-<td>The max backoff interval  in ms</td>
+<td>The max backoff interval  in milli seconds.</td>
 <td><code>4000</code></td>
 <td><code>5000</code></td>
 <td><code>SDA_KAFKA_CONSUMER_RETRY_MAX_BACKOFF_INTERVALL</code></td>
 </tr>
 <tr>
-<td><code>sda.kafka.consumer.retry.backOffMultiplier</code> <em>int</em></td>
-<td>The multiplier beginning with the initial backoff</td>
+<td><code>sda.kafka.consumer.retry.backOffMultiplier</code> <em>double</em></td>
+<td>The multiplier beginning with the initial backoff.</td>
 <td><code>2</code></td>
 <td><code>1.5</code></td>
 <td><code>SDA_KAFKA_CONSUMER_RETRY_INITIAL_BACKOFF_INTERVALL</code></td>
 </tr>
 <tr>
 <td><code>sda.kafka.consumer.retry.maxRetries</code> <em>int</em></td>
-<td>Max retries consuming the offset</td>
+<td>Max retries consuming the offset.</td>
 <td><code>4</code></td>
 <td><code>10</code></td>
 <td><code>SDA_KAFKA_CONSUMER_RETRY_INITIAL_MAXRETRIES</code></td>
 </tr>
 <tr>
 <td><code>sda.kafka.consumer.dlt.pattern</code> <em>string</em></td>
-<td>Pattern of consumer dead letter topic. <code>&lt;topic&gt;</code> will be replaced by topic name</td>
-<td></td>
-<td><code>prefix-&lt;topic&gt;</code></td>
+<td>Pattern of consumer dead letter topic. <code>&lt;topic&gt;</code> will be replaced by topic name. If not set, <code>".DLT"</code> is added to the topic name.</td>
+<td><code>"dlt-&lt;topic&gt;"</code></td>
+<td><code>"prefix-&lt;topic&gt;"</code></td>
 <td><code>SDA_KAFKA_CONSUMER_DLT_PATTERN</code></td>
 </tr>
 <tr>
 <td><code>management.health.kafka.enabled</code> <em>boolean</em></td>
-<td>Flag to enable kafka health check</td>
+<td>Flag to enable kafka health check.</td>
 <td><code>true</code></td>
 <td><code>false</code></td>
 <td><code>MANAGEMENT_HEALTH_KAFKA_ENABLED</code></td>
 </tr>
 <tr>
 <td><code>management.health.kafka.timeout</code> <em>duration</em></td>
-<td>Allowed duration for health check to finish</td>
+<td>Allowed duration for health check to finish.</td>
 <td><code>4s</code></td>
-<td><code>5000ms</code></td>
+<td><code>"5000ms"</code></td>
 <td><code>MANAGEMENT_HEALTH_KAFKA_TIMEOUT</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.bootstrap.servers</code> <em>string</em></td>
+<td>Comma-delimited list of <code>host:port</code> pairs to use for establishing the initial connections to the Kafka cluster.</td>
+<td><code>"localhost:9092"</code></td>
+<td><code>"kafka-broker:9092"</code></td>
+<td><code>SPRING_KAFKA_BOOTSTRAP_SERVERS</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.security.protocol</code> <em>string</em></td>
+<td>The security protocol used by Kafka. Please note that SASL mechanism requires some manual configuration.</td>
+<td><code>"PLAINTEXT"</code></td>
+<td><code>"SSL"</code></td>
+<td><code>SPRING_KAFKA_SECURITY_PROTOCOL</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.ssl.keystore-location</code> <em>url</em></td>
+<td>Location of the SSL keystore file.</td>
+<td></td>
+<td><code>"file:///kafka/kafka.client.keystore.jks"</code></td>
+<td><code>SPRING_KAFKA_SSL_KEYSTORELOCATION</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.ssl.key-store-password</code> <em>string</em></td>
+<td>Password for the SSL keystore file.</td>
+<td></td>
+<td><code>"s3cr3t"</code></td>
+<td><code>SPRING_KAFKA_SSL_KEYSTOREPASSWORD</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.ssl.trust-store-location</code> <em>string</em></td>
+<td>Location of the SSL truststore file.</td>
+<td></td>
+<td><code>"file:/kafka-certs/kafka.client.keystore.jks"</code></td>
+<td><code>SPRING_KAFKA_SSL_TRUSTSTORELOCATION</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.ssl.trust-store-password</code> <em>string</em></td>
+<td>Password for the SSL truststore file.</td>
+<td></td>
+<td><code>"s3cret"</code></td>
+<td><code>SPRING_KAFKA_SSL_TRUSTSTOREPASSWORD</code></td>
+</tr>
+<tr>
+<td><code>spring.kafka.consumer.group-id</code> <em>string</em></td>
+<td>Consumer group name of Kafka Consumer.</td>
+<td><code>"default"</code></td>
+<td><code>"my-service-name"</code></td>
+<td><code>SPRING_KAFKA_CONSUMER_GROUPID</code></td>
 </tr>
 </tbody>
 </table>
+<p><strong>Make sure to overwrite <code>spring.kafka.consumer.group-id</code> in your <code>application.properties</code> otherwise
+you could have conflicts with other services using <code>default</code>.</strong></p>
 <p>For further information have a look to the Spring Kafka <a href="https://docs.spring.io/spring-kafka/reference/html/">reference documentation</a>.</p>
+<details class="info">
+<summary>Default configuration set by this library</summary>
+<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">spring.kafka.consumer.group-id</span><span class="o">=</span><span class="s">default</span>
+<span class="na">spring.kafka.consumer.auto-offset-reset</span><span class="o">=</span><span class="s">earliest</span>
+<span class="na">spring.kafka.consumer.key-deserializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.ErrorHandlingDeserializer</span>
+<span class="na">spring.kafka.consumer.value-deserializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.ErrorHandlingDeserializer</span>
+<span class="na">spring.kafka.consumer.properties.spring.deserializer.key.delegate.class</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
+<span class="na">spring.kafka.consumer.properties.spring.deserializer.value.delegate.class</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.ByteArrayDeserializer</span>
+<span class="na">spring.kafka.consumer.properties.spring.json.trusted.packages</span><span class="o">=</span><span class="s">*</span>
+
+<span class="c1">### SDA SPECIFIC CONFIGURATION</span>
+<span class="na">sda.kafka.consumer.retry.initialBackoffInterval</span><span class="o">=</span><span class="s">1000</span>
+<span class="na">sda.kafka.consumer.retry.maxBackoffInterval</span><span class="o">=</span><span class="s">4000</span>
+<span class="na">sda.kafka.consumer.retry.backoffMultiplier</span><span class="o">=</span><span class="s">2</span>
+<span class="na">sda.kafka.consumer.retry.maxRetries</span><span class="o">=</span><span class="s">4</span>
+<span class="na">sda.kafka.consumer.dlt.pattern</span><span class="o">=</span><span class="s">dlt-&lt;topic&gt;</span>
+
+<span class="na">spring.kafka.producer.key-serializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringSerializer</span>
+<span class="na">spring.kafka.producer.value-serializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.JsonSerializer</span>
+</code></pre></div></td></tr></table></div>
+</details>
 <h2 id="consumer-configuration">Consumer configuration<a class="headerlink" href="#consumer-configuration" title="Permanent link">&para;</a></h2>
 <p>The autoconfigured consumer configuration provides
 several <code>ConcurrentKafkaListenerContainerFactory&lt;String, ?&gt;</code>
@@ -536,7 +595,8 @@ which can be referenced in <code>@KafkaListener</code> annotated methods.</p>
   suffixed with .DLT) and to the same partition as the original record. Therefore, when you use
   the default configuration, <strong>the dead-letter topic must have at least as many partitions as the
   original topic.</strong></li>
-<li>The spring default DLT naming convention can be overwritten using the <code>sda.kafka.consumer.dlt.pattern</code> property.
+<li>The spring default DLT naming convention can be overwritten using the
+  <code>sda.kafka.consumer.dlt.pattern</code> property.
   The pattern must contain <code>&lt;topic&gt;</code>, which will be replaced by the actual topic name.</li>
 </ul>
 </li>
@@ -564,82 +624,10 @@ processed by the listener.</p>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="defaults">Defaults<a class="headerlink" href="#defaults" title="Permanent link">&para;</a></h3>
-<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">spring.kafka.consumer.group-id</span><span class="o">=</span><span class="s">default</span>
-<span class="na">spring.kafka.consumer.auto-offset-reset</span><span class="o">=</span><span class="s">earliest</span>
-<span class="na">spring.kafka.consumer.key-deserializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.ErrorHandlingDeserializer</span>
-<span class="na">spring.kafka.consumer.value-deserializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.ErrorHandlingDeserializer</span>
-<span class="na">spring.kafka.consumer.properties.spring.deserializer.key.delegate.class</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
-<span class="na">spring.kafka.consumer.properties.spring.deserializer.value.delegate.class</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.ByteArrayDeserializer</span>
-<span class="na">spring.kafka.consumer.properties.spring.json.trusted.packages</span><span class="o">=</span><span class="s">*</span>
-</code></pre></div></td></tr></table></div>
-<p><strong>Make sure to overwrite <code>spring.kafka.consumer.group-id</code> in your <code>application.properties</code> otherwise you could have conflicts
-with other services using <code>default</code>.</strong></p>
 <h2 id="producer-configuration">Producer configuration<a class="headerlink" href="#producer-configuration" title="Permanent link">&para;</a></h2>
 <p>The autoconfigured producer configuration provides a preconfigured  <code>KafkaTemplate</code> for producing 
 messages with <code>String</code> key and payload as <code>json</code>.</p>
 <p>You just need to autowire the <code>KafkaTemplate</code> and you are ready to go.</p>
-<h3 id="defaults_1">Defaults<a class="headerlink" href="#defaults_1" title="Permanent link">&para;</a></h3>
-<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">spring.kafka.producer.key-serializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringSerializer</span>
-<span class="na">spring.kafka.producer.value-serializer</span><span class="o">=</span><span class="s">org.springframework.kafka.support.serializer.JsonSerializer</span>
-</code></pre></div></td></tr></table></div>
-<h2 id="configuration-properties">Configuration properties<a class="headerlink" href="#configuration-properties" title="Permanent link">&para;</a></h2>
-<ul>
-<li><code>spring.kafka.bootstrap.servers</code> <em>string</em><ul>
-<li>Comma-delimited list of <code>host:port</code> pairs to use for establishing the initial connections to the
-  Kafka cluster</li>
-<li>Example:  <code>kafka-broker:9092"</code></li>
-<li>Default: <code>localhost:9092</code></li>
-</ul>
-</li>
-<li><code>spring.kafka.security.protocol</code> <em>string</em><ul>
-<li>The security protocol used by Kafka. Please note that SASL mechanism requires some manual
-  configuration.</li>
-<li>Example: <code>PLAINTEXT</code> or <code>SSL</code></li>
-<li>Default: <code>PLAINTEXT</code></li>
-</ul>
-</li>
-<li><code>spring.kafka.ssl.key-store-location</code> <em>string</em><ul>
-<li>Location of the SSL keystore file</li>
-<li>Example: <code>file:/kafka/kafka.client.keystore.jks</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-<li><code>spring.kafka.ssl.key-store-password</code> <em>string</em><ul>
-<li>Password for the SSL keystore file</li>
-<li>Example: <code>s3cret</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-<li><code>spring.kafka.ssl.trust-store-location´</code> <em>string</em><ul>
-<li>Location of the SSL truststore file</li>
-<li>Example: <code>file:/kafka-certs/kafka.client.keystore.jks</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-<li><code>Sspring.kafka.ssl.trust-store-password</code> <em>string</em><ul>
-<li>Password for the SSL truststore file</li>
-<li>Example: <code>s3cret</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-</ul>
-<h4 id="consumers">Consumers<a class="headerlink" href="#consumers" title="Permanent link">&para;</a></h4>
-<ul>
-<li><code>spring.kafka.consumer.group-id</code> <em>string</em><ul>
-<li>Consumer group name of Kafka Consumer</li>
-<li>Example: <code>myConsumer</code></li>
-<li>Default: <code>default</code></li>
-</ul>
-</li>
-</ul>
 
 
 
@@ -661,7 +649,7 @@ messages with <code>String</code> key and payload as <code>json</code>.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../mongodb/" class="md-footer__link md-footer__link--prev" aria-label="Previous: MongoDB" rel="prev">
+          <a href="../starter-mongodb/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Starter MongoDB" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -670,20 +658,20 @@ messages with <code>String</code> key and payload as <code>json</code>.</p>
                 <span class="md-footer__direction">
                   Previous
                 </span>
-                MongoDB
+                Starter MongoDB
               </div>
             </div>
           </a>
         
         
           
-          <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Next: Security Hardening" rel="next">
+          <a href="../starter-s3/" class="md-footer__link md-footer__link--next" aria-label="Next: Starter S3" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                Security Hardening
+                Starter S3
               </div>
             </div>
             <div class="md-footer__button md-icon">

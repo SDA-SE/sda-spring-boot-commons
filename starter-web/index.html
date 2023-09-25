@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../migration-2-to-3/">
       
       
-        <link rel="next" href="../s3/">
+        <link rel="next" href="../starter-mongodb/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.1.3">
     
     
       
-        <title>Web - sda-spring-boot-commons</title>
+        <title>Starter Web - sda-spring-boot-commons</title>
       
     
     
@@ -61,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sda-commons-web-starter" class="md-skip">
+        <a href="#starter-web" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Web
+              Starter Web
             
           </span>
         </div>
@@ -166,6 +166,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../migration-2-to-3/" class="md-nav__link">
+        Migrate to v3
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -178,12 +193,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Web
+          Starter Web
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Web
+        Starter Web
       </a>
       
         
@@ -204,13 +219,6 @@
         <li class="md-nav__item">
   <a href="#configuration" class="md-nav__link">
     Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#web" class="md-nav__link">
-    Web
   </a>
   
 </li>
@@ -240,13 +248,6 @@
           <li class="md-nav__item">
   <a href="#opa" class="md-nav__link">
     OPA
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration-properties" class="md-nav__link">
-    Configuration Properties
   </a>
   
 </li>
@@ -288,13 +289,6 @@
           <li class="md-nav__item">
   <a href="#jax-rs-mapping" class="md-nav__link">
     JAX-RS Mapping
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration-properties_1" class="md-nav__link">
-    Configuration properties
   </a>
   
 </li>
@@ -374,8 +368,29 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#default-properties" class="md-nav__link">
-    Default properties
+  <a href="#sda-specific-metrics" class="md-nav__link">
+    SDA specific metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jvm-and-system-metrics" class="md-nav__link">
+    JVM and System metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-metrics-for-monitoring-kafka" class="md-nav__link">
+    Key Metrics for monitoring Kafka
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mongodb-metrics" class="md-nav__link">
+    MongoDB metrics
   </a>
   
 </li>
@@ -390,38 +405,12 @@
     Tracing
   </a>
   
-    <nav class="md-nav" aria-label="Tracing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#default-properties_1" class="md-nav__link">
-    Default properties
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#health-checks-actuator" class="md-nav__link">
     Health Checks / Actuator
   </a>
-  
-    <nav class="md-nav" aria-label="Health Checks / Actuator">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#default-properties_2" class="md-nav__link">
-    Default properties
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -455,8 +444,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3/" class="md-nav__link">
-        S3
+      <a href="../starter-mongodb/" class="md-nav__link">
+        Starter MongoDB
       </a>
     </li>
   
@@ -470,8 +459,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../mongodb/" class="md-nav__link">
-        MongoDB
+      <a href="../starter-kafka/" class="md-nav__link">
+        Starter Kafka
       </a>
     </li>
   
@@ -485,8 +474,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../kafka/" class="md-nav__link">
-        Kafka
+      <a href="../starter-s3/" class="md-nav__link">
+        Starter S3
       </a>
     </li>
   
@@ -502,6 +491,51 @@
     <li class="md-nav__item">
       <a href="../security/" class="md-nav__link">
         Security Hardening
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asyncapi/" class="md-nav__link">
+        AsyncAPI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudevents/" class="md-nav__link">
+        Cloud Events
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metadata-context/" class="md-nav__link">
+        Metadata Context
       </a>
     </li>
   
@@ -541,13 +575,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#web" class="md-nav__link">
-    Web
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#authentication" class="md-nav__link">
     Authentication
   </a>
@@ -572,13 +599,6 @@
           <li class="md-nav__item">
   <a href="#opa" class="md-nav__link">
     OPA
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration-properties" class="md-nav__link">
-    Configuration Properties
   </a>
   
 </li>
@@ -620,13 +640,6 @@
           <li class="md-nav__item">
   <a href="#jax-rs-mapping" class="md-nav__link">
     JAX-RS Mapping
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration-properties_1" class="md-nav__link">
-    Configuration properties
   </a>
   
 </li>
@@ -706,8 +719,29 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#default-properties" class="md-nav__link">
-    Default properties
+  <a href="#sda-specific-metrics" class="md-nav__link">
+    SDA specific metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jvm-and-system-metrics" class="md-nav__link">
+    JVM and System metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-metrics-for-monitoring-kafka" class="md-nav__link">
+    Key Metrics for monitoring Kafka
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mongodb-metrics" class="md-nav__link">
+    MongoDB metrics
   </a>
   
 </li>
@@ -722,38 +756,12 @@
     Tracing
   </a>
   
-    <nav class="md-nav" aria-label="Tracing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#default-properties_1" class="md-nav__link">
-    Default properties
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#health-checks-actuator" class="md-nav__link">
     Health Checks / Actuator
   </a>
-  
-    <nav class="md-nav" aria-label="Health Checks / Actuator">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#default-properties_2" class="md-nav__link">
-    Default properties
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -786,39 +794,18 @@
                   
 
 
-<h1 id="sda-commons-web-starter">sda-commons-web-starter<a class="headerlink" href="#sda-commons-web-starter" title="Permanent link">&para;</a></h1>
-<p>The <code>sda-commons-web-starter</code> provides several features to provide a service based
-on the SDA core concepts.</p>
-<p>Features:
-  - <a href="#authentication">Authentication</a>
-  - <a href="#authorization">Authorization</a>
-  - <a href="#http-client">Http Client</a>
-  - <a href="#async">Async Request Context</a>
-  - <a href="#jackson">Jackson Object Mapping</a>
-  - <a href="#monitoring">Monitoring</a>
-  - <a href="#tracing">Tracing</a>
-  - <a href="#health-checks--actuator">Health Checks</a>
-  - <a href="#logging">Logging</a>
-  - <a href="#metadata-context">Support for Metadata Context</a></p>
-<p>Based on:
-  - <code>org.springframework.boot:spring-boot-starter-web</code>
-  - <code>org.springframework.boot:spring-boot-starter-oauth2-resource-server</code>
-  - <code>org.springframework.boot:spring-boot-starter-oauth2-client</code>
-  - <code>org.springframework.boot:spring-boot-starter-validation</code>
-  - <code>org.springframework.boot:spring-boot-starter-actuator</code>
-  - <code>org.springframework.cloud:spring-cloud-starter-openfeign</code>
-  - <code>org.springframework.boot:spring-boot-starter-validation</code>
-  - <code>org.springframework.cloud:spring-cloud-starter-sleuth</code>
-  - <code>org.springframework.cloud:spring-cloud-sleuth-zipkin</code></p>
+<h1 id="starter-web">Starter Web<a class="headerlink" href="#starter-web" title="Permanent link">&para;</a></h1>
+<p>The module <code>sda-commons-starter-web</code> provides several features to create a service based on the SDA
+core concepts.</p>
 <h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th><strong>Property</strong></th>
-<th><strong>Description</strong></th>
-<th><strong>Default</strong></th>
-<th><strong>Example</strong></th>
-<th><strong>Env</strong></th>
+<th>Property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Example</th>
+<th>Env</th>
 </tr>
 </thead>
 <tbody>
@@ -838,44 +825,44 @@ on the SDA core concepts.</p>
 </tr>
 <tr>
 <td><code>opa.disable</code> <em>boolean</em></td>
-<td>Disables authorization checks with Open Policy Agent completely.</td>
+<td>Disables authorization checks with Open Policy Agent completely. In this case access to all resources is granted but no constraints are provided.</td>
 <td><code>false</code></td>
 <td><code>true</code></td>
 <td><code>OPA_DISABLE</code></td>
 </tr>
 <tr>
 <td><code>opa.base.url</code> <em>string</em></td>
-<td>The baseUrl of OPA.</td>
-<td><code>http://localhost:8181</code></td>
-<td><code>http://opa-service:8181</code></td>
+<td>The baseUrl of the Open Policy Agent Server.</td>
+<td><code>"http://localhost:8181"</code></td>
+<td><code>"http://opa-service:8181"</code></td>
 <td><code>OPA_BASE_URL</code></td>
 </tr>
 <tr>
 <td><code>opa.policy.package</code> <em>string</em></td>
-<td>The policy package to check for authorization.</td>
-<td>Defaults to package name of <code>@SpringBootApplication</code> annotated class</td>
-<td><code>com.custom.package.name</code></td>
+<td>The policy package to check for authorization. The policy must return the property <code>allow</code> as <em>boolean</em> as access decision and may return additional properties as constraints.</td>
+<td>the package of the application class, be aware that moving the class causes a breaking change regarding deployment if the package is not explicitly set.</td>
+<td><code>"com.custom.package.name"</code></td>
 <td><code>OPA_POLICY_PACKAGE</code></td>
 </tr>
 <tr>
 <td><code>opa.exclude.patterns</code> <em>string</em></td>
 <td>Custom excluded paths can be configured as comma separated list of regex.</td>
 <td><code>openapi.json</code> and <code>openapi.yaml</code></td>
-<td><code>/customPathOne,/customPathTwo</code></td>
+<td><code>"/customPathOne,/customPathTwo"</code></td>
 <td><code>OPA_EXCLUDE_PATTERNS</code></td>
 </tr>
 <tr>
 <td><code>opa.client.connection.timeout</code> <em>string</em></td>
 <td>The connection timeout of the client that calls the Open Policy Agent server.</td>
-<td><code>500ms</code></td>
-<td><code>2s</code></td>
+<td><code>"500ms"</code></td>
+<td><code>"2s"</code></td>
 <td><code>OPA_CLIENT_CONNECTION_TIMEOUT</code></td>
 </tr>
 <tr>
 <td><code>opa.client.timeout</code> <em>string</em></td>
 <td>The read timeout of the client that calls the Open Policy Agent server.</td>
-<td><code>500ms</code></td>
-<td><code>2s</code></td>
+<td><code>"500ms"</code></td>
+<td><code>"2s"</code></td>
 <td><code>OPA_CLIENT_TIMEOUT</code></td>
 </tr>
 <tr>
@@ -888,29 +875,29 @@ on the SDA core concepts.</p>
 <tr>
 <td><code>oidc.client.id</code> <em>string</em></td>
 <td>The client ID for the registration.</td>
-<td>``</td>
-<td><code>exampleClient</code></td>
+<td></td>
+<td><code>"exampleClient"</code></td>
 <td><code>OPA_CLIENT_ID</code></td>
 </tr>
 <tr>
 <td><code>oid.client.secret</code> <em>string</em></td>
 <td>The Client secret of the registration.</td>
-<td>``</td>
-<td><code>s3cret</code></td>
+<td></td>
+<td><code>"s3cret"</code></td>
 <td><code>OIDC_CLIENT_SECRET</code></td>
 </tr>
 <tr>
 <td><code>oidc.client.issuer.uri</code> <em>string</em></td>
 <td>URI that can either be an OpenID Connect discovery endpoint or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414.</td>
-<td>``</td>
-<td><code>https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm</code></td>
+<td></td>
+<td><code>"https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm"</code></td>
 <td><code>OIDC_CLIENT_ISSUER_URI</code></td>
 </tr>
 <tr>
 <td><code>cors.allowed-origin-patterns</code> <em>string</em></td>
 <td>Comma separated list of URL patterns for which CORS requests are allowed.</td>
 <td><em>none allowed</em></td>
-<td><code>https://*.all-subdomains.com, https://static-domain.com</code></td>
+<td><code>"https://*.all-subdomains.com, https://static-domain.com"</code></td>
 <td><code>CORS_ALLOWEDORIGINPATTERNS</code></td>
 </tr>
 <tr>
@@ -927,128 +914,68 @@ on the SDA core concepts.</p>
 <td><code>true</code></td>
 <td><code>ENABLE_JSON_LOGGING</code></td>
 </tr>
+<tr>
+<td><code>management.otlp.tracing.endpoint</code> <em>string</em></td>
+<td>Base url to OTLP Collector instance. It applies for http or gRPC, if enabled</td>
+<td><code>http://grafana-agent-traces.monitoring:4317</code></td>
+<td><code>"http://localhost:4318"</code></td>
+<td><code>MANAGEMENT_OTLP_TRACING_ENDPOINT</code></td>
+</tr>
+<tr>
+<td><code>management.tracing.enabled</code> <em>boolean</em></td>
+<td>For testing purposes it's maybe required to disable tracing. It is important to have also the annotation <code>@AutoConfigureObservability</code> on your class and in your tests to enable the tracing.</td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>MANAGEMENT_TRACING_ENABLED</code></td>
+</tr>
+<tr>
+<td><code>management.tracing.sampling.probability</code> <em>number</em></td>
+<td>Probability in the range from 0.0 to 1.0 that a trace will be sampled.</td>
+<td><code>1.0</code></td>
+<td><code>0.2</code></td>
+<td><code>MANAGEMENT_TRACING_SAMPLING_PROBABILITY</code></td>
+</tr>
+<tr>
+<td><code>management.tracing.propagation.type</code> <em>string</em></td>
+<td>Tracing context propagation types produced and consumed by the application. Setting this property overrides the more fine-grained propagation type properties.</td>
+<td><code>"b3,w3c"</code></td>
+<td><code>"b3"</code></td>
+<td><code>MANAGEMENT_TRACING_PROPAGATION_TYPE</code></td>
+</tr>
+<tr>
+<td><code>management.tracing.grpc.enabled</code> <em>boolean</em></td>
+<td>You only need to set this property to true if you want to use grpc (port 4317) vs http (port 4318) channel for span export.</td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>MANAGEMENT_TRACING_GRPC_ENABLED</code></td>
+</tr>
+<tr>
+<td><code>management.otlp.tracing.compression</code> <em>string</em></td>
+<td>Method used to compress the payload. Options: "gzip", "none"</td>
+<td><code>"none"</code></td>
+<td><code>"gzip"</code></td>
+<td><code>MANAGEMENT_OTLP_TRACING_COMPRESSION</code></td>
+</tr>
+<tr>
+<td><code>management.otlp.tracing.timeout</code> <em>string</em></td>
+<td>Call timeout for the OTel Collector to process an exported batch of data. This timeout spans the entire call.</td>
+<td><code>"10s"</code></td>
+<td><code>"20s"</code></td>
+<td><code>MANAGEMENT_OTLP_TRACING_TIMEOUT</code></td>
+</tr>
+<tr>
+<td><code>spring.application.name</code> <em>string</em></td>
+<td>The application name, also used for tracing. For PR deployments, you need to make sure it will have the PR suffix to distinguish tracings.</td>
+<td><code>"application"</code></td>
+<td><code>"my-service-name"</code></td>
+<td><code>SPRING_APPLICATION_NAME</code></td>
+</tr>
 </tbody>
 </table>
 <p>For further information have a look at the <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation">Spring Boot documentation</a>.</p>
-<h2 id="web">Web<a class="headerlink" href="#web" title="Permanent link">&para;</a></h2>
-<p>The list of web configurations: </p>
-<ul>
-<li>The<code>server.servlet.context-path</code> defaults to <code>/api</code></li>
-<li>The<code>server.port</code> defaults to <code>8080</code></li>
-<li>The<code>managment.server.port</code> defaults to <code>8081</code></li>
-<li>The <code>openapi.yaml</code> is available under <code>/api/openapi.yaml</code></li>
-</ul>
-<p><strong>Please make sure to configure <code>spring.application.name</code> for every service</strong></p>
-<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.security">Spring Security Documentation</a></li>
-</ul>
-<p>Enables feature that make a Spring Boot service compliant with the
-<a href="https://sda.dev/core-concepts/security-concept/authentication/">SDA SE Authentication</a> concepts
-using OIDC.</p>
-<p>OIDC Authentication can be configured with <code>auth.issuers</code> to provide a comma separated
-list of trusted issuers. In develop and test environments, the boolean <code>auth.disable</code> may
-be used to disable authentication.</p>
-<p>The JWKS URI of each issuer is updated when an unknown Key ID is received and every 5 minutes. The
-cache of known JWK is invalidated after 15 minutes.</p>
-<p><strong>This setup allows authenticated and anonymous requests! It is the responsibility of policies
-provided by the Open Policy Agent to decide about denying anonymous requests.</strong></p>
-<p>Spring Security is disabled for the Management/Admin Port (default: 8081). Be aware that these port
-should not be accessible out of the deployment context.</p>
-<p>This security implementation lacks some features compared to <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-auth">sda-dropwizard-commons</a>:
-- No configuration of static local public keys to verify the token signature. 
-- No configuration of JWKS URIs to verify the token signature. 
-- The IDP must provide an <code>iss</code> claim that matches the base URI for discovery. 
-- Leeway is not configurable yet. 
-- The client that loads the JWKS is not configurable yet.</p>
-<h2 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">&para;</a></h2>
-<p>Enables feature that make a Spring Boot service compliant with the
-<a href="https://sda.dev/core-concepts/security-concept/authorization/">SDA SE Authorization</a> concepts
-using Open Policy Agent.</p>
-<p>The authorization is done by the <a href="https://www.openpolicyagent.org/">Open Policy Agent</a>. It can be 
-configured as described in
-<a href="sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaAccessDecisionVoter.java">OpaAccessDecisionVoter#OpaAccessDecisionVoter
-(boolean, String, String, OpaRequestBuilder, RestTemplate, ApplicationContext, io.opentracing.Tracer)
-</a>
-and <a href="sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/OpaRestTemplateConfiguration.java">OpaRestTemplateConfiguration#OpaRestTemplateConfiguration(Duration, Duration)
-</a>.</p>
-<p>The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter (
-Access Decision Manager) which is part of the <code>SecurityFilterChain</code> including the OIDC
-Authentication.</p>
-<p>Constraints provided with the Open Policy Agent response can be mapped to a custom POJO. If the
-class extends <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/AbstractConstraints.java"><code>AbstractConstraints</code></a> 
-and is annotated with <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/Constraints.java"><code>@Constraints</code></a> it can be
-<a href="https://javadoc.io/doc/org.springframework/spring-beans/latest/org/springframework/beans/factory/annotation/Autowired.html"><code>@Autowired</code></a> 
-in <a href="https://javadoc.io/doc/org.springframework/spring-webmvc/latest/org/springframework/web/servlet/mvc/Controller.html"><code>@Controllers</code></a> 
-or <a href="https://javadoc.io/doc/org.springframework/spring-web/latest/org/springframework/web/bind/annotation/RestController.html"><code>@RestControllers</code></a>.</p>
-<p><div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@Constraints</span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyConstraints</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractConstraints</span><span class="w"> </span><span class="p">{</span>
-
-<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">admin</span><span class="p">;</span>
-
-<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">MyConstraints</span><span class="w"> </span><span class="nf">setAdmin</span><span class="p">(</span><span class="kt">boolean</span><span class="w"> </span><span class="n">admin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">admin</span><span class="p">;</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isAdmin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">admin</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@RestController</span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AuthTestApp</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nd">@Autowired</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MyConstraints</span><span class="w"> </span><span class="n">myConstraints</span><span class="p">;</span>
-<span class="w">    </span><span class="c1">// ...</span>
-<span class="p">}</span>
-</code></pre></div></td></tr></table></div></p>
-<p>Additional parameters that are needed for the authorization decision may be provided with custom
-<a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/extension/OpaInputExtension.java">OpaInputExtensions</a>.</p>
-<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
-<p>The testing module provides aligned test dependencies including Wiremock for external APIs and 
-JUnit extensions to mock or disable authentication and authorization.</p>
-<h3 id="opa">OPA<a class="headerlink" href="#opa" title="Permanent link">&para;</a></h3>
-<p><img alt="Overview" src="assets/overview_opa.svg" /></p>
-<p>The OPA configuration requests the policy decision providing the following inputs</p>
-<ul>
-<li>HTTP path as Array</li>
-<li>HTTP method as String</li>
-<li>validated JWT (if available)</li>
-<li>all request headers</li>
-</ul>
-<p><em>Remark to HTTP request headers:</em><br />
-The configuration normalizes header names to lower case to simplify handling in OPA since HTTP
-specification defines header names as case-insensitive.
-Multivalued headers are not normalized with respect to the representation as list or single string
-with separator char.
-They are forwarded as parsed by the framework.</p>
-<p><em>Security note:</em>
-Please be aware while a service might only consider one value of a specific header, the OPA is able
-to authorize on a array of those.
-Consider this in your policy when you want to make sure you authorize on the same value that a
-service might use to evaluate the output.</p>
-<p>These <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/auth/opa/model/OpaInput.java">inputs</a>
-can be accessed inside a policy <code>.rego</code>-file in this way:</p>
-<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<details class="info">
+<summary>Default configuration set by this library</summary>
+<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -1078,43 +1005,328 @@ can be accessed inside a policy <code>.rego</code>-file in this way:</p>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code># each policy lies in a package that is referenced in the configuration of the OpaBundle
-package example
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">server.servlet.context-path</span><span class="o">=</span><span class="s">/api</span>
+<span class="na">server.port</span><span class="o">=</span><span class="s">8080</span>
+<span class="na">server.max-http-request-header-size</span><span class="o">=</span><span class="s">8192</span>
+<span class="na">server.error.whitelabel.enabled</span><span class="o">=</span><span class="s">false</span>
 
-# decode the JWT as new variable &#39;token&#39;
-token = {&quot;payload&quot;: payload} {
-    not input.jwt == null
-    io.jwt.decode(input.jwt, [_, payload, _])
-}
+<span class="na">server.tomcat.basedir</span><span class="o">=</span><span class="s">${java.io.tmpdir}/tomcat</span>
 
-# deny by default
-default allow = false
+<span class="na">request.body.max.size</span><span class="o">=</span><span class="s">1 MB</span>
 
-allow {
-    # allow if path match &#39;/contracts/:anyid&#39; 
-    input.path = [&quot;contracts&quot;, _]
+<span class="c1"># Actuator</span>
+<span class="na">management.server.port</span><span class="o">=</span><span class="s">8081</span>
+<span class="na">management.server.base-path</span><span class="o">=</span><span class="s">/</span>
+<span class="na">management.endpoints.web.base-path</span><span class="o">=</span><span class="s">/</span>
+<span class="na">management.endpoints.web.exposure.include</span><span class="o">=</span><span class="s">*</span>
+<span class="na">management.endpoints.enabled-by-default</span><span class="o">=</span><span class="s">false</span>
+<span class="c1"># Healthcheck</span>
+<span class="na">management.endpoint.health.enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="na">management.endpoints.web.path-mapping.health</span><span class="o">=</span><span class="s">healthcheck</span>
+<span class="na">management.endpoint.health.probes.enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="c1"># Add the required auto-configured health indicators which are supported in org.sdase.commons.spring</span>
+<span class="c1"># See https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.health.auto-configured-health-indicators</span>
+<span class="c1"># to see the available indicators. If an included HealthIndicator is not autoconfigured, it will be automatically ignored (see management.endpoint.health.validate-group-membership)</span>
+<span class="na">management.endpoint.health.group.readiness.include</span><span class="o">=</span><span class="s">readinessState, mongo, openPolicyAgent, kafka</span>
+<span class="c1"># since 3.1.0, configured health checks must exist,</span>
+<span class="c1"># see https://github.com/spring-projects/spring-boot/commit/c55d398f95bf1c64a55ea95e1dc8ae20e9ce7561#diff-ecf768cadbb11cdb6a8999f942301ff33662b2b00221188613ab3c4402e1200a</span>
+<span class="na">management.endpoint.health.validate-group-membership</span><span class="o">=</span><span class="s">false</span>
+<span class="na">management.endpoint.health.show-details</span><span class="o">=</span><span class="s">always</span>
+<span class="na">management.endpoint.health.show-components</span><span class="o">=</span><span class="s">always</span>
+<span class="c1"># Metrics</span>
+<span class="na">management.endpoints.web.path-mapping.prometheus</span><span class="o">=</span><span class="s">metrics/prometheus</span>
+<span class="na">management.metrics.web.server.request.autotime.enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="na">management.endpoint.prometheus.enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="na">management.endpoint.metrics.enabled</span><span class="o">=</span><span class="s">true</span>
 
-    # allow if request method &#39;GET&#39; is used
-    input.httpMethod == &quot;GET&quot;
+<span class="na">management.tracing.enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="na">management.tracing.propagation.type</span><span class="o">=</span><span class="s">b3,w3c</span>
+<span class="na">management.tracing.sampling.probability</span><span class="o">=</span><span class="s">1.0</span>
+<span class="na">management.otlp.tracing.endpoint</span><span class="o">=</span><span class="s">http://grafana-agent-traces.monitoring:4317</span>
+<span class="na">management.otlp.tracing.compression</span><span class="o">=</span><span class="s">none</span>
+<span class="na">management.otlp.tracing.timeout</span><span class="o">=</span><span class="s">10s</span>
+<span class="na">management.tracing.grpc.enabled</span><span class="o">=</span><span class="s">true</span>
 
-    # allow if &#39;claim&#39; exists in the JWT payload
-    token.payload.claim
-
-    # allow if a request header &#39;HttpRequestHeaderName&#39; has a certain value 
-    input.headers[&quot;httprequestheadername&quot;][_] == &quot;certain-value&quot;
-}
-
-# set some example constraints 
-constraint1 := true                # always true
-constraint2 := [ &quot;v2.1&quot;, &quot;v2.2&quot; ]  # always an array of &quot;v2.1&quot; and &quot;v2.2&quot;
-constraint3[token.payload.sub]     # always a set that contains the &#39;sub&#39; claim from the token
-                                   # or is empty if no token is present
+<span class="na">feign.metrics.enabled</span><span class="o">=</span><span class="s">true</span>
 </code></pre></div></td></tr></table></div>
-<p>The response consists of two parts: The overall <code>allow</code> decision, and optional rules that represent <em>constraints</em> to limit data access
-within the service. These constraints are fully service dependent and MUST be applied when querying the database or
-filtering received data.</p>
-<p>The following listing presents a sample OPA result with a positive allow decision and two constraints, the first with boolean value and second
-with a list of string values.
+</details>
+<p><strong>Please make sure to configure <code>spring.application.name</code> for every service.</strong></p>
+<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.security">Spring Security Documentation</a></li>
+</ul>
+<p>Enables feature that make a Spring Boot service compliant with the SDA SE Authentication concepts
+using OIDC.</p>
+<p>OIDC Authentication can be configured with <code>auth.issuers</code> to provide a comma separated
+list of trusted issuers. In develop and test environments, the boolean <code>auth.disable</code> may
+be used to disable authentication.</p>
+<p>The JWKS URI of each issuer is updated when an unknown Key ID is received and every 5 minutes. The
+cache of known JWK is invalidated after 15 minutes.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This setup allows authenticated and anonymous requests! It is the responsibility of policies
+provided by the Open Policy Agent to decide about denying anonymous requests.</p>
+</div>
+<p>Spring Security is disabled for the Management/Admin Port (default: 8081). Be aware that these port
+should not be accessible out of the deployment context.</p>
+<p>This security implementation lacks some features compared to <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-auth">sda-dropwizard-commons</a>:
+- No configuration of static local public keys to verify the token signature. 
+- No configuration of JWKS URIs to verify the token signature. 
+- The IDP must provide an <code>iss</code> claim that matches the base URI for discovery. 
+- Leeway is not configurable yet. 
+- The client that loads the JWKS is not configurable yet.</p>
+<h2 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">&para;</a></h2>
+<p>Enables feature that make a Spring Boot service compliant with the SDA SE Authorization concepts
+using Open Policy Agent.</p>
+<p>The authorization is done by the <a href="https://www.openpolicyagent.org/">Open Policy Agent</a>. It can be 
+configured with <a href="#configuration"><code>opa.</code> configuration properties</a>.</p>
+<details class="info">
+<summary>Requests to the Open Policy Agent</summary>
+<p>Requests to the server are determined by the base URL and the policy package.
+Given the default base URL <code>http://localhost:8181</code> and an example package of <code>com.my.service</code>,
+the Open Policy Agent server will be requested for authorization decision at
+<code>http://localhost:8181/v1/data/com/my/service</code>.</p>
+</details>
+<p>The OPA configuration acts as a client to the Open Policy Agent and is hooked in as request filter
+which is part of the <code>SecurityFilterChain</code> including the OIDC Authentication.</p>
+<p>Constraints provided with the Open Policy Agent response can be mapped to a custom POJO.
+The class must extend <code>org.sdase.commons.spring.boot.web.auth.opa.AbstractConstraints</code> and must be
+annotated with <code>org.sdase.commons.spring.boot.web.auth.opa.Constraints</code>.
+It has request scope and can be <a href="https://javadoc.io/doc/org.springframework/spring-beans/latest/org/springframework/beans/factory/annotation/Autowired.html"><code>@Autowired</code></a> 
+in <a href="https://javadoc.io/doc/org.springframework/spring-webmvc/latest/org/springframework/web/servlet/mvc/Controller.html"><code>@Controllers</code></a> 
+or <a href="https://javadoc.io/doc/org.springframework/spring-web/latest/org/springframework/web/bind/annotation/RestController.html"><code>@RestControllers</code></a>.</p>
+<details class="example">
+<summary>Custom Constraint implementation</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">com.example.my.service.rego</label><label for="__tabbed_1_2">MyConstraints.java</label><label for="__tabbed_1_3">MyController.java</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">service</span>
+
+<span class="kn">import</span> <span class="nn">input</span>
+
+<span class="c1"># decode the token</span>
+<span class="n">token</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="n">payload</span><span class="p">}</span> <span class="p">{</span>
+  <span class="ow">not</span> <span class="nb">input</span><span class="o">.</span><span class="n">jwt</span> <span class="o">=</span> <span class="n">null</span>
+  <span class="n">io</span><span class="o">.</span><span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">jwt</span><span class="p">,</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">_</span><span class="p">])</span>
+<span class="p">}</span>
+
+<span class="c1"># deny by default!</span>
+<span class="n">default</span> <span class="n">allow</span> <span class="o">=</span> <span class="n">false</span>
+
+<span class="n">allow</span> <span class="p">{</span>
+  <span class="c1"># your rules</span>
+<span class="p">}</span>
+
+<span class="n">admin</span> <span class="p">{</span>
+  <span class="n">token</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">admin</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@Constraints</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyConstraints</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractConstraints</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">admin</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">MyConstraints</span><span class="w"> </span><span class="nf">setAdmin</span><span class="p">(</span><span class="kt">boolean</span><span class="w"> </span><span class="n">admin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">admin</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isAdmin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">admin</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@RestController</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MyConstraints</span><span class="w"> </span><span class="n">myConstraints</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+</details>
+<p>Additional parameters that are needed for the authorization decision may be provided with custom
+<code>org.sdase.commons.spring.boot.web.auth.opa.extension.OpaInputExtension</code>s.</p>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<p>The testing module provides aligned test dependencies including Wiremock for external APIs and 
+JUnit extensions to mock or disable authentication and authorization.</p>
+<h3 id="opa">OPA<a class="headerlink" href="#opa" title="Permanent link">&para;</a></h3>
+<p><img alt="Overview" src="../assets/overview_opa.svg" /></p>
+<p>The OPA configuration requests the policy decision providing the following inputs</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input.httpMethod</code></td>
+<td>HTTP method as uppercase string.</td>
+<td><code>"GET"</code></td>
+</tr>
+<tr>
+<td><code>input.path</code></td>
+<td>Requested path as array of path segments without context or servlet path.</td>
+<td><code>["myResource", "123-id", "someSubresource"]</code></td>
+</tr>
+<tr>
+<td><code>input.jwt</code></td>
+<td>Validated encoded JWT as string (if available).</td>
+<td><code>"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.Xpk63zUfXiI5f_bdGjqrhx03aGyBn9ETgXbkAgLalPk"</code></td>
+</tr>
+<tr>
+<td><code>input.headers</code></td>
+<td>All HTTP request headers as object with lower-case header names as key and array of headers as value.</td>
+<td><code>{"accept": "text/plain", "accept": "application/json"}</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Security note</p>
+<p>While a service might only consider one value of a specific header, that a policy might
+authorize on an array of those or vice versa.
+Consider this in your policy when you want to make sure you authorize on the same value that a
+service might use to evaluate the output.</p>
+</div>
+<details class="info">
+<summary>Remark to HTTP request headers</summary>
+<p>The configuration normalizes header names to lower case to simplify handling in OPA since HTTP
+specification defines header names as case-insensitive.
+Multivalued headers are not normalized with respect to the representation as list or single string
+with separator char.
+They are forwarded as parsed by the framework.</p>
+</details>
+<details class="example">
+<summary>Example Policy Using Input</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Policy</label><label for="__tabbed_2_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># each policy lies in a package that is referenced in the configuration of the OpaBundle</span>
+<span class="n">package</span> <span class="n">example</span>
+
+<span class="c1"># decode the JWT as new variable &#39;token&#39;</span>
+<span class="n">token</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="n">payload</span><span class="p">}</span> <span class="p">{</span>
+    <span class="ow">not</span> <span class="nb">input</span><span class="o">.</span><span class="n">jwt</span> <span class="o">==</span> <span class="n">null</span>
+    <span class="n">io</span><span class="o">.</span><span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">jwt</span><span class="p">,</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">_</span><span class="p">])</span>
+<span class="p">}</span>
+
+<span class="c1"># deny by default</span>
+<span class="n">default</span> <span class="n">allow</span> <span class="o">=</span> <span class="n">false</span>
+
+<span class="c1"># the allow property is required for authorization</span>
+<span class="n">allow</span> <span class="p">{</span>
+    <span class="c1"># allow if path match &#39;/contracts/:anyid&#39; </span>
+    <span class="nb">input</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;contracts&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">]</span>
+
+    <span class="c1"># allow if request method &#39;GET&#39; is used</span>
+    <span class="nb">input</span><span class="o">.</span><span class="n">httpMethod</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span>
+
+    <span class="c1"># allow if &#39;claim&#39; exists in the JWT payload</span>
+    <span class="n">token</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">claim</span>
+
+    <span class="c1"># allow if a request header &#39;HttpRequestHeaderName&#39; has a certain value </span>
+    <span class="nb">input</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;httprequestheadername&quot;</span><span class="p">][</span><span class="n">_</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;certain-value&quot;</span>
+<span class="p">}</span>
+
+<span class="c1"># set some example constraints</span>
+<span class="c1"># constraints are always service dependent and the structure, if any, is defined in each service</span>
+<span class="n">constraint1</span> <span class="o">:=</span> <span class="n">true</span>                <span class="c1"># always true</span>
+<span class="n">constraint2</span> <span class="o">:=</span> <span class="p">[</span> <span class="s2">&quot;v2.1&quot;</span><span class="p">,</span> <span class="s2">&quot;v2.2&quot;</span> <span class="p">]</span>  <span class="c1"># always an array of &quot;v2.1&quot; and &quot;v2.2&quot;</span>
+<span class="n">constraint3</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">sub</span><span class="p">]</span>     <span class="c1"># always a set that contains the &#39;sub&#39; claim from the token</span>
+                                   <span class="c1"># or is empty if no token is present</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
 <div class="language-json highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1130,49 +1342,11 @@ with a list of string values.
 <span class="w">    </span><span class="nt">&quot;constraint3&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;my-sub&quot;</span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div></td></tr></table></div></p>
-<h3 id="configuration-properties">Configuration Properties<a class="headerlink" href="#configuration-properties" title="Permanent link">&para;</a></h3>
-<ul>
-<li><code>opa.disable</code> <em>boolean</em><ul>
-<li>Disables authorization checks with Open Policy Agent completely. In this case access to all
-  resources is granted but no constraints are provided.</li>
-</ul>
-</li>
-<li><code>opa.base.url</code> <em>string</em><ul>
-<li>The base url of the Open Policy Agent Server. Defaults to <code>http://localhost:8181</code>.
-  Requests to the server are determined by the base URL and the policy package. Given the default
-  base URL <code>http://localhost:8181</code> and an example package of <code>com.my.service</code>, the Open Policy Agent
-  server will be requested for authorization decision
-  at <code>http://localhost:8181/v1/data/com/my/package</code></li>
-</ul>
-</li>
-<li><code>opa.policy.package</code> <em>string</em><ul>
-<li>The policy package to check for authorization. It will be reformatted to a URL path to request
-  the authorization form the Open Policy Agent server. Example: <code>com.my.service</code>. If the policy
-  package is blank, the package of the application class (the first bean found that is annotated
-  with <code>@SpringBootApplication</code>) is used as a default. Be aware that moving the class causes a
-  breaking change regarding deployment if the package is not explicitly set.
-  Requests to the server are determined by the base URL and the policy package. Given the default
-  base URL <code>http://localhost:8181</code> and an example package of <code>com.my.service</code>, the Open Policy Agent
-  server will be requested for authorization decision
-  at <code>http://localhost:8181/v1/data/com/my/package</code></li>
-</ul>
-</li>
-<li><code>opa.exclude.patterns</code> <em>string</em><ul>
-<li><code>/openapi.yaml</code> and <code>/openapi.json</code> are excluded from authorization requirements. Custom excluded
-  paths can be configured as comma separated list of regex. This will overwrite the default
-  excludes of the OpenAPI documentation paths.</li>
-</ul>
-</li>
-<li><code>opa.client.timeout</code> <em>string</em><ul>
-<li>The read timeout of the client that calls the Open Policy Agent server. Defaults to 500ms.</li>
-</ul>
-</li>
-<li><code>opa.client.connection.timeout</code> <em>string</em><ul>
-<li>The connection timeout of the client that calls the Open Policy Agent server. Defaults to 500ms.</li>
-</ul>
-</li>
-</ul>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+</details>
 <h2 id="http-client">Http Client<a class="headerlink" href="#http-client" title="Permanent link">&para;</a></h2>
 <p>Enables support for <a href="https://javadoc.io/doc/org.springframework.cloud/spring-cloud-openfeign-core/3.1.6/index.html"><code>org.springframework.cloud.openfeign.FeignClients</code></a> 
 that support SDA Platform features like:</p>
@@ -1228,9 +1402,9 @@ adding a configuration:
 <span class="w">  </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Partner</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getPartners</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div></p>
-<p><a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/client/AuthenticationPassThroughClientConfiguration.java"><code>AuthenticationPassThroughClientConfiguration</code></a> 
-will take the <strong>Authorization</strong> header from the current request context of the servlet and 
-adds its value to the client request.</p>
+<p><code>org.sdase.commons.spring.boot.web.client.AuthenticationPassThroughClientConfiguration</code> will take
+the <strong>Authorization</strong> header from the current request context of the servlet and adds its value to
+the client request.</p>
 <h3 id="trace-token">Trace-Token<a class="headerlink" href="#trace-token" title="Permanent link">&para;</a></h3>
 <p>The client can be used within the SDA Platform to pass through the received <code>Trace-Token</code> header by adding a configuration:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1251,17 +1425,20 @@ adds its value to the client request.</p>
 <span class="w">  </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Partner</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getPartners</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java">SdaTraceTokenClientConfiguration</a>
-will take the <code>Trace-Token</code> header from the current request context of the servlet and adds its value to the client request.</p>
-<p>If no <code>Trace-Token</code> header is present in the current request context, the <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/tracing/SdaTraceTokenClientConfiguration.java">SdaTraceTokenClientConfiguration</a>
-will generate a new Trace-Token and pass it to the following requests.</p>
+<p><code>org.sdase.commons.spring.boot.web.tracing.SdaTraceTokenClientConfiguration</code> will take the
+<code>Trace-Token</code> header from the current request context of the servlet and adds its value to the
+client request.</p>
+<p>If no <code>Trace-Token</code> header is present in the current request context, the
+<code>SdaTraceTokenClientConfiguration</code> will generate a new Trace-Token and pass it to the following
+requests.</p>
 <h3 id="oidc-client">OIDC Client<a class="headerlink" href="#oidc-client" title="Permanent link">&para;</a></h3>
 <p>If the request context is not always existing, e.g. in cases where a technical user for
-service-to-service communication is required, the <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/client/OidcClientRequestConfiguration.java"><code>OidcClientRequestConfiguration</code></a> 
-will request the required OIDC authentication token with the client credentials flow using the 
-configured <code>"oidc.client.issuer.uri"</code>, <code>"oidc.client.id"</code> and <code>"oidc.client.secret"</code>.</p>
-<p>If the current request context contains the <strong>Authorization</strong> header, the authentication pass-through
-will be applied instead.</p>
+service-to-service communication is required, the
+<code>.org.sdase.commons.spring.boot.web.client.OidcClientRequestConfiguration</code> will request the required
+OIDC authentication token with the client credentials flow using the configured
+<code>"oidc.client.issuer.uri"</code>, <code>"oidc.client.id"</code> and <code>"oidc.client.secret"</code>.</p>
+<p>If the current request context contains the <strong>Authorization</strong> header, the authentication
+pass-through will be applied instead.</p>
 <h3 id="jax-rs-mapping">JAX-RS Mapping<a class="headerlink" href="#jax-rs-mapping" title="Permanent link">&para;</a></h3>
 <p>If you would like to use JAX-RS based web annotations, you just need to apply
 the <code>feign.jaxrs2.JAXRS2Contract.class</code> to configurations.</p>
@@ -1293,37 +1470,8 @@ the <code>feign.jaxrs2.JAXRS2Contract.class</code> to configurations.</p>
 <span class="w">      </span><span class="n">Contract</span><span class="w"> </span><span class="n">contract</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="configuration-properties_1">Configuration properties<a class="headerlink" href="#configuration-properties_1" title="Permanent link">&para;</a></h3>
-<ul>
-<li><code>oidc.client.enabled</code> <em>boolean</em><ul>
-<li>Enables OIDC Authentication (Client Credentials Flow) for the configured clients.
-  If enabled, provide a client id, secret and an issuer url.</li>
-<li>Example: <code>true</code></li>
-<li>Default: <code>false</code></li>
-</ul>
-</li>
-<li><code>oidc.client.id</code> <em>string</em><ul>
-<li>Client ID for the registration</li>
-<li>Example: <code>oidcClient</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-<li><code>oid.client.secret</code> <em>string</em><ul>
-<li>Client secret of the registration.</li>
-<li>Example: <code>s3cret</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-<li><code>oidc.client.issuer.uri</code> <em>string</em><ul>
-<li>URI that can either be an OpenID Connect discovery endpoint
-  or an OAuth 2.0 Authorization Server Metadata endpoint defined by RFC 8414.</li>
-<li>Example: <code>https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm</code></li>
-<li>Default: ``</li>
-</ul>
-</li>
-</ul>
 <h3 id="platform-client">Platform Client<a class="headerlink" href="#platform-client" title="Permanent link">&para;</a></h3>
-<p>The Platform Client combines the authentication forwarding, trace token and OIDC configuration
+<p>The <code>PlatformClient</code> combines the authentication forwarding, trace token and OIDC configuration
 without the need to configure each individually.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1341,10 +1489,10 @@ without the need to configure each individually.</p>
 </code></pre></div></td></tr></table></div>
 <p>It abstracts some configuration of the FeignClient and is then available as bean as well.</p>
 <h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
-<p>The <code>sda-commons-web-starter</code> provides a shared <code>ApiError</code> model, to provide a common
+<p>The module <code>sda-commons-starter-web</code> provides a shared <code>ApiError</code> model, to provide a common
 response error structure for SDA-restful services.</p>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
-<p>Per default, the <code>sda-commons-web-starter</code> autoconfigures a
+<p>Per default, the module <code>sda-commons-starter-web</code> autoconfigures a
 global <code>@ExceptionHandler(ApiException.class)</code> as <code>@ControllerAdvice</code>. As a result, the
 exception handler is per default provided to every <code>@Controller</code>.</p>
 <h4 id="referencing-in-openapi">Referencing in OpenAPI<a class="headerlink" href="#referencing-in-openapi" title="Permanent link">&para;</a></h4>
@@ -1401,8 +1549,7 @@ code and the nested <code>ApiError</code>.</p>
 task executor is autoconfigured to transfer the request attributes of the 
 current request to the <strong>Thread</strong> running the asynchronous method.</p>
 <h2 id="jackson">Jackson<a class="headerlink" href="#jackson" title="Permanent link">&para;</a></h2>
-<p>Enables feature that make a Spring Boot service compliant with
-the <a href="https://sda.dev/core-concepts/communication/restful-api-guide/">SDA SE RESTful API Guide</a> .
+<p>Enables feature that makes a Spring Boot service compliant with the REST guide of SDA SE.
 So far this covers:
 - the tolerant reader pattern
 - consistent serialization of <code>java.time.ZonedDateTime</code> compatible to the <a href="https://json-schema.org/understanding-json-schema/reference/string.html#dates-and-times">type <code>date-time</code> of JSON-Schema</a>.
@@ -1423,36 +1570,304 @@ be serialized with milliseconds, it must be annotated with
 <p><strong>Differences to the known <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-jackson">SDA Dropwizard Commons configuration</a></strong>
 - <code>java.time.ZonedDateTime</code> fields are serialized with seconds by default.
   There is no other global configuration for <strong>java.time.ZonedDateTime</strong> serialization available.
-- <strong>Less modules are activated for foreign frameworks</strong>. Compared to SDA Dropwizard Commons,
-  <strong>GuavaExtrasModule, JodaModule, and CaffeineModule</strong> are not registered anymore. 
-- No documented customization of the global <strong>com.fasterxml.jackson.databind.ObjectMapper</strong> is available right now. 
-- Support for <strong>HAL Links and embedding linked resources</strong> is not implemented. 
-- Support for <strong>YAML</strong> is not implemented. 
-- There is <strong>no support for <a href="https://sda.dev/core-concepts/communication/restful-api-guide/#RESTfulAPIGuide-MAY%3AProvidefieldfilteringtoretrievepartialresources">field filters</a></strong>.
+- <strong>Fewer modules are activated for foreign frameworks</strong>. Compared to SDA Dropwizard Commons,
+  <strong>GuavaExtrasModule, JodaModule, and CaffeineModule</strong> are not registered anymore.
+- No documented customization of the global <strong>com.fasterxml.jackson.databind.ObjectMapper</strong> is available right now.
+- Support for <strong>HAL Links and embedding linked resources</strong> is not implemented.
+- Support for <strong>YAML</strong> is not implemented.
+- There is <strong>no support for field filters</strong>.
   Such filters have been barely used in the SDA SE.</p>
 <h2 id="monitoring">Monitoring<a class="headerlink" href="#monitoring" title="Permanent link">&para;</a></h2>
-<p>TODO PROMETHEUS</p>
-<p>Prometheus Metrics: <code>http://{serviceURL}:{adminPort}/metrics/prometheus</code></p>
-<h3 id="default-properties">Default properties<a class="headerlink" href="#default-properties" title="Permanent link">&para;</a></h3>
-<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Metrics</span>
-<span class="na">management.endpoints.web.path-mapping.prometheus</span><span class="o">=</span><span class="s">metrics/prometheus</span>
-<span class="na">management.metrics.web.server.request.autotime.enabled</span><span class="o">=</span><span class="s">true</span>
-<span class="na">management.endpoint.prometheus.enabled</span><span class="o">=</span><span class="s">true</span>
-<span class="na">management.endpoint.metrics.enabled</span><span class="o">=</span><span class="s">true</span>
+<p>Services use Prometheus to scrape and store metrics.</p>
+<p>An actuator exposing metrics in prometheus format is available using the following endpoint</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>http://{serviceURL}:{adminPort}/metrics/prometheus
 </code></pre></div></td></tr></table></div>
+<p>Spring Boot is using <a href="https://micrometer.io/">micrometer</a> to instrument code using out-of-the-box bindings for common libraries.</p>
+<h3 id="sda-specific-metrics">SDA specific metrics<a class="headerlink" href="#sda-specific-metrics" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Metric Name</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>healthcheck_status</code></td>
+<td><code>name</code></td>
+<td>Exposes healthcheck as metric for multiple indicators</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jvm-and-system-metrics">JVM and System metrics<a class="headerlink" href="#jvm-and-system-metrics" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Metric Name</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jvm_classes_loaded_classes</code></td>
+<td></td>
+<td>The number of classes that are currently loaded in the Java virtual machine.</td>
+</tr>
+<tr>
+<td><code>jvm_classes_unloaded_classes</code></td>
+<td></td>
+<td>The total number of classes unloaded since the Java virtual machine has started execution.</td>
+</tr>
+<tr>
+<td><code>jvm_buffer_count_buffers</code></td>
+<td><code>id</code></td>
+<td>An estimate of the number of buffers in the pool.</td>
+</tr>
+<tr>
+<td><code>jvm_buffer_memory_used_bytes</code></td>
+<td><code>id</code></td>
+<td>An estimate of the memory that the Java virtual machine is using for this buffer pool.</td>
+</tr>
+<tr>
+<td><code>jvm_buffer_total_capacity_bytes</code></td>
+<td><code>id</code></td>
+<td>An estimate of the total capacity of the buffers in this pool.</td>
+</tr>
+<tr>
+<td><code>jvm_memory_used_bytes</code></td>
+<td><code>id</code>, <code>area</code></td>
+<td>The amount of used memory.</td>
+</tr>
+<tr>
+<td><code>jvm_memory_committed_bytes</code></td>
+<td><code>id</code>, <code>area</code></td>
+<td>The amount of memory in bytes that is committed for the Java virtual machine to use.</td>
+</tr>
+<tr>
+<td><code>jvm_memory_max_bytes</code></td>
+<td><code>id</code>, <code>area</code></td>
+<td>The maximum amount of memory in bytes that can be used for memory management.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_max_data_size_bytes</code></td>
+<td></td>
+<td>Max size of long-lived heap memory pool.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_live_data_size_bytes</code></td>
+<td></td>
+<td>Size of long-lived heap memory pool after reclamation.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_memory_allocated_bytes_total</code></td>
+<td></td>
+<td>Incremented for an increase in the size of the (young) heap memory pool after one GC to before the next.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_memory_promoted_bytes_total</code></td>
+<td></td>
+<td>Count of positive increases in the size of the old generation memory pool before GC to after GC.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_concurrent_phase_time_seconds_count</code></td>
+<td><code>gc</code>, <code>action</code>, <code>cause</code></td>
+<td>Time spent in concurrent phase.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_concurrent_phase_time_seconds_sum</code></td>
+<td><code>gc</code>, <code>action</code>, <code>cause</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>jvm_gc_concurrent_phase_time_seconds_max</code></td>
+<td><code>gc</code>, <code>action</code>, <code>cause</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>jvm_gc_pause_seconds_count</code></td>
+<td><code>gc</code>, <code>action</code>, <code>cause</code></td>
+<td>Time spent in GC pause.</td>
+</tr>
+<tr>
+<td><code>jvm_gc_pause_seconds_sum</code></td>
+<td><code>gc</code>, <code>action</code>, <code>cause</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>jvm_gc_pause_seconds_max</code></td>
+<td><code>gc</code>, <code>action</code>, <code>cause</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>system_cpu_count</code></td>
+<td></td>
+<td>The number of processors available to the Java virtual machine.</td>
+</tr>
+<tr>
+<td><code>system_load_average_1m</code></td>
+<td></td>
+<td>The sum of the number of runnable entities queued to available processors and the number of runnable entities running on the available processors averaged over a period of time.</td>
+</tr>
+<tr>
+<td><code>system_cpu_usage</code></td>
+<td></td>
+<td>The "recent cpu usage" of the system the application is running in.</td>
+</tr>
+<tr>
+<td><code>process_cpu_usage</code></td>
+<td></td>
+<td>The "recent cpu usage" for the Java Virtual Machine process.</td>
+</tr>
+<tr>
+<td><code>jvm_threads_peak_threads</code></td>
+<td></td>
+<td>The peak live thread count since the Java virtual machine started or peak was reset.</td>
+</tr>
+<tr>
+<td><code>jvm_threads_daemon_threads</code></td>
+<td></td>
+<td>The current number of live daemon threads.</td>
+</tr>
+<tr>
+<td><code>jvm_threads_live</code></td>
+<td></td>
+<td>The current number of live threads including both daemon and non-daemon threads.</td>
+</tr>
+<tr>
+<td><code>jvm_threads_started_threads_total</code></td>
+<td></td>
+<td>The total number of application threads started in the JVM.</td>
+</tr>
+<tr>
+<td><code>jvm_threads_states_threads</code></td>
+<td><code>state</code></td>
+<td>The current number of threads.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-metrics-for-monitoring-kafka">Key Metrics for monitoring Kafka<a class="headerlink" href="#key-metrics-for-monitoring-kafka" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Metric name</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kafka_producer_compression_rate_avg</code></td>
+<td><code>client.id</code></td>
+<td>The average compression rate of record batches, defined as the average ratio of the compressed batch size over the uncompressed size.</td>
+</tr>
+<tr>
+<td><code>kafka_producer_response_rate</code></td>
+<td><code>client.id</code></td>
+<td>The number of responses received per second</td>
+</tr>
+<tr>
+<td><code>kafka_producer_request_rate</code></td>
+<td><code>client.id</code></td>
+<td>The number of requests sent per second</td>
+</tr>
+<tr>
+<td><code>kafka_producer_request_latency_avg</code></td>
+<td><code>client.id</code></td>
+<td>The average request latency in ms</td>
+</tr>
+<tr>
+<td><code>kafka_producer_outgoing_byte_rate</code></td>
+<td><code>client.id</code></td>
+<td>The number of outgoing bytes sent to all servers per second</td>
+</tr>
+<tr>
+<td><code>kafka_producer_io_wait_time_ns_avg</code></td>
+<td><code>client.id</code></td>
+<td>The average length of time the I/O thread spent waiting for a socket ready for reads or writes in nanoseconds.</td>
+</tr>
+<tr>
+<td><code>kafka_producer_batch_size_avg</code></td>
+<td><code>client.id</code></td>
+<td>The average number of bytes sent per partition per-request.</td>
+</tr>
+<tr>
+<td><code>kafka_consumer_records_lag</code></td>
+<td><code>client.id</code></td>
+<td>Number of messages consumer is behind producer on this partition</td>
+</tr>
+<tr>
+<td><code>kafka_consumer_records_lag_max</code></td>
+<td><code>client.id</code></td>
+<td>Maximum number of messages consumer is behind producer, either for a specific partition or across all partitions on this client</td>
+</tr>
+<tr>
+<td><code>kafka_consumer_bytes_consumed_rate</code></td>
+<td><code>client.id</code></td>
+<td>Average number of bytes consumed per second for a specific topic or across all topics.</td>
+</tr>
+<tr>
+<td><code>kafka_consumer_records_consumed_rate</code></td>
+<td><code>client.id</code></td>
+<td>Average number of records consumed per second for a specific topic or across all topics</td>
+</tr>
+<tr>
+<td><code>kafka_consumer_fetch_rate</code></td>
+<td><code>client.id</code></td>
+<td>Number of fetch requests per second from the consumer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mongodb-metrics">MongoDB metrics<a class="headerlink" href="#mongodb-metrics" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Metric name</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mongodb_driver_pool_waitqueuesize</code></td>
+<td><code>cluster_id</code>, <code>server_address</code></td>
+<td>The current size of the wait queue for a connection from the pool</td>
+</tr>
+<tr>
+<td><code>mongodb_driver_pool_checkedout</code></td>
+<td><code>cluster_id</code>, <code>server_address</code></td>
+<td>The count of connections that are currently in use</td>
+</tr>
+<tr>
+<td><code>mongodb_driver_pool_size</code></td>
+<td><code>cluster_id</code>, <code>server_address</code></td>
+<td>The current size of the connection pool, including idle and and in-use members</td>
+</tr>
+<tr>
+<td><code>mongodb_driver_commands_seconds_max</code></td>
+<td><code>cluster_id</code>, <code>server_address</code>, <code>collection</code>, <code>command</code>, <code>status</code></td>
+<td>Timer of mongodb commands</td>
+</tr>
+<tr>
+<td><code>mongodb_driver_commands_seconds_count</code></td>
+<td><code>cluster_id</code>, <code>server_address</code>, <code>collection</code>, <code>command</code>, <code>status</code></td>
+<td>Timer of mongodb commands</td>
+</tr>
+<tr>
+<td><code>mongodb_driver_commands_seconds_sum</code></td>
+<td><code>cluster_id</code>, <code>server_address</code>, <code>collection</code>, <code>command</code>, <code>status</code></td>
+<td>Timer of mongodb commands</td>
+</tr>
+</tbody>
+</table>
 <h2 id="tracing">Tracing<a class="headerlink" href="#tracing" title="Permanent link">&para;</a></h2>
-<p>Currently, tracing is leveraged by Sleuth in the Spring context. Spring Cloud Sleuth provides Spring
-Boot autoconfiguration for distributed tracing. Sleuth was built around Zipkin traces and so only
-supports forwarding them to Zipkin (Thrift via Brave) format for now. But since Jaeger supports
-Zipkin traces and the OpenTracing Jaeger Spring support is not heavily maintained, there is a need
-to stick with Sleuth. However, Spring Sleuth is compatible with OpenTracing, so we can use the
-standardized interfaces, hence the OpenTracing <a href="https://javadoc.io/doc/io.opentracing/opentracing-api/0.32.0/io/opentracing/Tracer.html">io.opentracing.Tracer</a> is on classpath.</p>
-<p>Even if Jaeger supports the Zipkin B3 propagation format, Sleuth is forced to just use per default
-the <a href="https://www.w3.org/TR/trace-context">W3C context propagation</a></p>
+<p>Currently, tracing is leveraged by Micrometer Tracing rand OpenTelemetry in the Spring context.
+OpenTelemetry (OTEL) is a collection of standardized vendor-agnostic tools, APIs, and SDKs. It's a
+CNCF incubating project and is a merger of the OpenTracing and OpenCensus projects.
+OpenTracing is a vendor-neutral API for sending telemetry data over to an observability backend.
+It uses Micrometer for code instrumentation &amp; provide tracing bridge to OpenTelemetry and 
+OpenTelemetry for tools to collect and send telemetry data to the reporter/collector.</p>
 <p>Default features are:</p>
 <ul>
 <li>Adds trace and span ids to the Slf4J MDC, so you can extract all the logs from a given trace or
@@ -1460,33 +1875,14 @@ the <a href="https://www.w3.org/TR/trace-context">W3C context propagation</a></p
 <li>Instruments common ingress and egress points from Spring applications (servlet filter, rest
   template, scheduled actions, message channels, feign client).</li>
 <li>The service name is derived from <code>spring.application.name</code></li>
-<li>Generate and report Jaeger-compatible traces via HTTP. By default, it sends them to a Zipkin
-  collector on localhost (port 9411). Configure the location of the service using <code>spring.zipkin.base-url</code>.</li>
+<li>Generate and report OTLP traces via HTTP or gRPC. By default, it sends them to a OTLP compatible
+  collector (e.g. Jaeger) on localhost (http port 4317, gRPC port 4318). Configure the location of
+  the service using <code>management.otlp.tracing.endpoint</code>.</li>
+<li>See <a href="#configuration">above</a> for more common options.</li>
+<li>You can check all the possible values on <a href="https://docs.spring.io/spring-boot/docs/current/api//org/springframework/boot/actuate/autoconfigure/metrics/export/otlp/OtlpProperties.html">OtlpProperties</a>
+  and <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html">TracingProperties</a></li>
 </ul>
-<ul>
-<li><code>spring.zipkin.base.url</code> <em>string</em><ul>
-<li>Base url to Zipkin or Zipkin Collector of Jaeger instance.
-  In case of Jaeger, the Zipkin collector
-  must be enabled manually.</li>
-<li>Example: <code>http://jaeger:9411</code></li>
-<li>Default: <code>http://localhost:9411</code></li>
-</ul>
-</li>
-<li><code>spring.zipkin.enabled</code> <em>boolean</em><ul>
-<li>For testing purposes it's may required to disable tracing.</li>
-<li>Example: <code>false</code></li>
-<li>Default: <code>true</code></li>
-</ul>
-</li>
-</ul>
-<h3 id="default-properties_1">Default properties<a class="headerlink" href="#default-properties_1" title="Permanent link">&para;</a></h3>
-<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">spring.sleuth.propagation.type</span><span class="o">=</span><span class="s">W3C, B3</span>
-<span class="na">spring.sleuth.opentracing.enabled</span><span class="o">=</span><span class="s">true</span>
-</code></pre></div></td></tr></table></div>
 <h2 id="health-checks-actuator">Health Checks / Actuator<a class="headerlink" href="#health-checks-actuator" title="Permanent link">&para;</a></h2>
-<p>Enable features that make a Spring Boot service compliant with
-the <a href="https://sda.dev/developer-guide/deployment/health-checks/">SDA SE Health Checks</a>.</p>
 <p>Configures the Spring Boot Actuator to be accessible on root path <code>/</code> at default management
 port <code>8081</code>.</p>
 <p>The following endpoints are provided at the admin management endpoint:</p>
@@ -1522,39 +1918,6 @@ source:</p>
 <p>The custom health indicator will be available under <code>/healthcheck/custom</code> which is resolved by the
 prefix of the <a href="https://javadoc.io/doc/org.springframework.boot/spring-boot-actuator/latest/org/springframework/boot/actuate/health/HealthIndicator.html">HealthIndicator</a>
 implementing component.</p>
-<h3 id="default-properties_2">Default properties<a class="headerlink" href="#default-properties_2" title="Permanent link">&para;</a></h3>
-<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Actuator</span>
-<span class="na">management.server.port</span><span class="o">=</span><span class="s">8081</span>
-<span class="na">management.server.servlet.context-path</span><span class="o">=</span><span class="s">/</span>
-<span class="na">management.endpoints.web.base-path</span><span class="o">=</span><span class="s">/</span>
-<span class="na">management.endpoints.web.exposure.include</span><span class="o">=</span><span class="s">*</span>
-<span class="na">management.endpoints.enabled-by-default</span><span class="o">=</span><span class="s">false</span>
-<span class="c1"># Healthcheck</span>
-<span class="na">management.endpoint.health.enabled</span><span class="o">=</span><span class="s">true</span>
-<span class="na">management.endpoints.web.path-mapping.health</span><span class="o">=</span><span class="s">healthcheck</span>
-<span class="na">management.endpoint.health.probes.enabled</span><span class="o">=</span><span class="s">true</span>
-<span class="c1"># Add the required auto configured health indicators which are supported in org.sdase.commons.spring</span>
-<span class="c1"># See https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.health.auto-configured-health-indicators</span>
-<span class="c1"># to see the available indicators. If an included HealthIndicator is not autoconfigured, it will be automatically ignored</span>
-<span class="na">management.endpoint.health.group.readiness.include</span><span class="o">=</span><span class="s">readinessState, mongo</span>
-<span class="na">management.endpoint.health.show-details</span><span class="o">=</span><span class="s">always</span>
-<span class="na">management.endpoint.health.show-components</span><span class="o">=</span><span class="s">always</span>
-</code></pre></div></td></tr></table></div>
 <h2 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h2>
 <p>The Spring Boot default logging is enabled.
 Logs are printed to standard out.
@@ -1563,41 +1926,65 @@ enables output as JSON for structured logs used in log aggregation tools.
 To enable JSON logging in <code>application.(properties/yaml)</code>,
 <code>logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml</code> may be used. </p>
 <h2 id="metadata-context">Metadata Context<a class="headerlink" href="#metadata-context" title="Permanent link">&para;</a></h2>
-<p>If you want to make use of the data in the metadata context, you should read the <a href="../../sda-commons-web-autoconfigure/docs/metadata-context.md">dedicated documentation</a>.
+<p>If you want to make use of the data in the metadata context, you should read the <a href="../metadata-context/">dedicated documentation</a>.
 If your service is required to support the metadata context but is not interested in the data,
 continue here:</p>
-<p>Services that use the sda-spring-boot-commons:
-- can access the current <a href="../../sda-commons-metadata-context/src/main/java/org/sdase/commons/spring/boot/metadata/context/MetadataContext.java">MetadataContext</a>
-  in their implementation
-- will automatically load the context from incoming HTTP requests into the thread handling the
-  request, if you register <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java">MetadataContextConfiguration</a>
-- will automatically load the context from consumed Kafka messages into the thread handling the
+<p>Services that use the sda-spring-boot-commons:</p>
+<ul>
+<li>can access the current <code>org.sdase.commons.spring.boot.metadata.context.MetadataContext</code> in their
+  implementation</li>
+<li>will automatically load the context from incoming HTTP requests into the thread, handling the
+  request, if you register <code>org.sdase.commons.spring.boot.web.metadata.MetadataContextConfiguration</code></li>
+<li>will automatically load the context from consumed Kafka messages into the thread handling the
   message and the error when handling the message fails when the consumer is configured with one of
-  the
-  provided <a href="../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaConsumerConfiguration.java">SdaKafkaConsumerConfiguration</a>
-- will automatically propagate the context to other services via HTTP when using a platform client
-  that uses
-  the <a href="../../sda-commons-web-autoconfigure/src/main/java/org/sdase/commons/spring/boot/web/metadata/MetadataContextConfiguration.java">MetadataContextClientConfiguration</a>
-  configuration, e.g:
-  - ```java
-    @FeignClient(
-    value = "name",
-    url = "<a href="http://your-api-url">http://your-api-url</a>",
-    configuration = {
-      MetadataContextClientConfiguration.class
-    })
-    public interface ClientWithMetadataConfiguration {</p>
-<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+  the provided <code>org.sdase.commons.spring.boot.kafka.SdaKafkaConsumerConfiguration</code></li>
+<li>will automatically propagate the context to other services via HTTP when using
+  a <code>org.sdase.commons.spring.boot.web.client.PlatformClient</code>:
+  <div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>@GetMapping(&quot;/metadata-hello&quot;)
-Object getSomething();
-}
-```
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@PlatformClient</span><span class="p">(</span>
+<span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://your-api-url&quot;</span>
+<span class="p">})</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ClientWithMetadataConfiguration</span><span class="w"> </span><span class="p">{</span>
+<span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/metadata-hello&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">Object</span><span class="w"> </span><span class="nf">getSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div></li>
+<li>
+<p>when using a FeignClient, that behaviour can be achieved by using
+  the <code>org.sdase.commons.spring.boot.web.metadata.MetadataContextClientConfiguration</code>
+  configuration.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@FeignClient</span><span class="p">(</span>
+<span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://your-api-url&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">MetadataContextClientConfiguration</span><span class="p">.</span><span class="na">class</span>
+<span class="p">})</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ClientWithMetadataConfiguration</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/metadata-hello&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">Object</span><span class="w"> </span><span class="nf">getSomething</span><span class="p">();</span>
+<span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+</li>
+</ul>
 <ul>
 <li>will automatically propagate the context in produced Kafka messages when the producer is created
-  with <a href="../../sda-commons-starter-kafka/src/main/java/org/sdase/commons/spring/boot/kafka/SdaKafkaProducerConfiguration.java">SdaKafkaProducerConfiguration</a></li>
+  with <code>org.sdase.commons.spring.boot.kafka.SdaKafkaProducerConfiguration</code></li>
 <li>are configurable by the property or environment variable <code>METADATA_FIELDS</code> to be aware of the
   metadata used in a specific environment</li>
 </ul>
@@ -1634,7 +2021,7 @@ be automatically transferred to the new threads, if <code>@Async</code> is used.
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
+          <a href="../migration-2-to-3/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Migrate to v3" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1643,20 +2030,20 @@ be automatically transferred to the new threads, if <code>@Async</code> is used.
                 <span class="md-footer__direction">
                   Previous
                 </span>
-                Overview
+                Migrate to v3
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s3/" class="md-footer__link md-footer__link--next" aria-label="Next: S3" rel="next">
+          <a href="../starter-mongodb/" class="md-footer__link md-footer__link--next" aria-label="Next: Starter MongoDB" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                S3
+                Starter MongoDB
               </div>
             </div>
             <div class="md-footer__button md-icon">

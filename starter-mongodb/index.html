@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../web/">
+        <link rel="prev" href="../starter-web/">
       
       
-        <link rel="next" href="../mongodb/">
+        <link rel="next" href="../starter-kafka/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.1.3">
     
     
       
-        <title>S3 - sda-spring-boot-commons</title>
+        <title>Starter MongoDB - sda-spring-boot-commons</title>
       
     
     
@@ -61,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sda-commons-s3-starter" class="md-skip">
+        <a href="#starter-mongodb" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S3
+              Starter MongoDB
             
           </span>
         </div>
@@ -168,8 +168,23 @@
   
   
     <li class="md-nav__item">
-      <a href="../web/" class="md-nav__link">
-        Web
+      <a href="../migration-2-to-3/" class="md-nav__link">
+        Migrate to v3
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starter-web/" class="md-nav__link">
+        Starter Web
       </a>
     </li>
   
@@ -193,12 +208,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          S3
+          Starter MongoDB
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        S3
+        Starter MongoDB
       </a>
       
         
@@ -217,8 +232,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
+  <a href="#main-configuration" class="md-nav__link">
+    Main Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-properties" class="md-nav__link">
+    Configuration properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssl-support" class="md-nav__link">
+    SSL support
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
   </a>
   
 </li>
@@ -239,8 +281,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../mongodb/" class="md-nav__link">
-        MongoDB
+      <a href="../starter-kafka/" class="md-nav__link">
+        Starter Kafka
       </a>
     </li>
   
@@ -254,8 +296,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../kafka/" class="md-nav__link">
-        Kafka
+      <a href="../starter-s3/" class="md-nav__link">
+        Starter S3
       </a>
     </li>
   
@@ -271,6 +313,51 @@
     <li class="md-nav__item">
       <a href="../security/" class="md-nav__link">
         Security Hardening
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asyncapi/" class="md-nav__link">
+        AsyncAPI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudevents/" class="md-nav__link">
+        Cloud Events
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metadata-context/" class="md-nav__link">
+        Metadata Context
       </a>
     </li>
   
@@ -303,8 +390,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
+  <a href="#main-configuration" class="md-nav__link">
+    Main Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-properties" class="md-nav__link">
+    Configuration properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssl-support" class="md-nav__link">
+    SSL support
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
   </a>
   
 </li>
@@ -324,59 +438,99 @@
                   
 
 
-<h1 id="sda-commons-s3-starter">sda-commons-s3-starter<a class="headerlink" href="#sda-commons-s3-starter" title="Permanent link">&para;</a></h1>
-<p>This library provides features for dealing with the Amazon S3 file storage.</p>
+<h1 id="starter-mongodb">Starter MongoDB<a class="headerlink" href="#starter-mongodb" title="Permanent link">&para;</a></h1>
+<p>The module <code>sda-commons-starter-mongodb</code> provides several autoconfigured features including:</p>
+<p>- The Read/Write<code>ZonedDateTime</code> converter
+  - Automatic index creation</p>
 <p>Based on:
-  - <code>io.awspring.cloud:spring-cloud-aws-core</code></p>
-<p>The configuration class contains two beans, namely:</p>
-<ul>
-<li><code>AmazonS3Client</code>: Providing an interface for accessing the S3 object storage.</li>
-<li><code>S3BucketRepository</code>: Providing an abstraction for s3 client with simple repository methods.</li>
-</ul>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>The following properties are needed for the configuration.</p>
+  - <code>org.springframework.boot:spring-boot-starter-data-mongodb</code></p>
+<p>For further documentation please have a look at the Spring Data MongoDB <a href="https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/">reference documentation</a>.</p>
+<h2 id="main-configuration">Main Configuration<a class="headerlink" href="#main-configuration" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th><strong>Property</strong></th>
 <th><strong>Description</strong></th>
+<th><strong>Default</strong></th>
 <th><strong>Example</strong></th>
 <th><strong>Env</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>s3.bucketName</code> <em>string</em></td>
-<td>The name of the bucket containing the desired object.</td>
-<td>myphotos</td>
-<td><code>S3_BUCKET_NAME</code></td>
+<td><code>spring.data.mongodb.uri</code> <em>string</em></td>
+<td>The MongoDB <a href="https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-uri-format">connection string</a>.</td>
+<td></td>
+<td><code>mongodb://localhost:27017/test</code></td>
+<td><code>SPRING_DATA_MONGODB_URI</code></td>
 </tr>
 <tr>
-<td><code>s3.endpoint</code> <em>string</em></td>
-<td>The endpoint either with or without the protocol</td>
-<td><a href="https://s3.eu-west-1.amazonaws.com">https://s3.eu-west-1.amazonaws.com</a> or s3.eu-west-1.amazonaws.com</td>
-<td><code>S3_ENDPOINT</code></td>
-</tr>
-<tr>
-<td><code>s3.region</code> <em>string</em></td>
-<td>The region to use for SigV4 signing of requests</td>
-<td>eu-west-1</td>
-<td><code>S3_REGION</code></td>
-</tr>
-<tr>
-<td><code>s3.secretKey</code> <em>string</em></td>
-<td>The AWS secret access key</td>
-<td>s3cret</td>
-<td><code>S3_SECRET_KEY</code></td>
-</tr>
-<tr>
-<td><code>s3.accessKey</code> <em>string</em></td>
-<td>The AWS access key</td>
-<td>s3cretAccess</td>
-<td><code>S3_ACCESS_KEY</code></td>
+<td><code>sda.caCertificates.certificatesDir</code> <em>string</em></td>
+<td>A directory with CA certificates in PEM format that will be picked up to trust the connection to the database.</td>
+<td><code>"/var/trust/certificates"</code></td>
+<td><code>"/my-certs"</code></td>
+<td><code>SDA_CACERTIFICATES_CERTIFICATESDIR</code></td>
 </tr>
 </tbody>
 </table>
+<h2 id="configuration-properties">Configuration properties<a class="headerlink" href="#configuration-properties" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>spring.data.mongodb.uri</code> <em>string</em><ul>
+<li>Mongo database URI.</li>
+<li>Example: <code>mongodb://exampleUser:examplePassword@mongoHost:27017</code></li>
+<li>Format: <code>mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]</code></li>
+<li>Connection String Options need to be added to the end of the URI e.g.<ul>
+<li><code>?ssl=true</code> to enable SSL</li>
+<li><code>?retryWrites=false</code> to disable retryable writes for the connection.</li>
+<li><code>?readPreference=secondaryPreferred</code> In most situations, operations read from secondary
+  members, but in situations where the set consists of a single primary (and no other members),
+  the read operation will use the replica set's primary.</li>
+</ul>
+</li>
+<li>For further information take a look on
+  <a href="https://docs.mongodb.com/manual/reference/connection-string">Connection String documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="ssl-support">SSL support<a class="headerlink" href="#ssl-support" title="Permanent link">&para;</a></h3>
+<p>The mongodb starter can be configured to use ssl when the option <code>?ssl=true</code> is used.
+Certificates in PEM format can be mounted in the directory <code>/var/trust/certificates</code> they will be
+used by the mongodb client.
+All certificates found in subdirectories will also be loaded.</p>
+<p>Note that this directory is also configurable through the property <code>sda.caCertificates.certificatesDir</code>.</p>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<p>It is recommended to test with an embedded MongoDB using Flapdoodle's Spring Boot module and the
+SDA Spring Boot Commons testing module:</p>
+<div class="language-groovy highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">testImplementation</span><span class="w"> </span><span class="s1">&#39;de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x&#39;</span>
+<span class="w">  </span><span class="n">testImplementation</span><span class="w"> </span><span class="s1">&#39;org.sdase.commons.spring.boot:sda-commons-web-testing&#39;</span>
+<span class="o">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Flapdoodle will start a MongoDB server and configures the connection for Spring Boot tests.
+The MongoDB version can be selected with (test) application properties:</p>
+<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">de.flapdoodle.mongodb.embedded.version</span><span class="o">=</span><span class="s">4.4.1</span>
+</code></pre></div></td></tr></table></div>
+<p><code>MongoOperations</code> can be used to clean the database between tests:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="w">  </span><span class="nd">@Autowired</span><span class="w"> </span><span class="n">MongoOperations</span><span class="w"> </span><span class="n">mongoOperations</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nd">@BeforeEach</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">beforeEach</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mongoOperations</span><span class="p">.</span><span class="na">dropCollection</span><span class="p">(</span><span class="s">&quot;collectionUnderTest&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>To skip Flapdoodle's autoconfiguration and use a provided database (e.g. an AWS DocumentDB), the
+property <code>test.mongodb.connection.string</code> (or environment variable <code>TEST_MONGODB_CONNECTION_STRING</code>)
+can be used to provide a complete <a href="https://docs.mongodb.com/manual/reference/connection-string/">MongoDB Connection String</a>.
+This feature is provided by the SDA Spring Boot Commons testing module and is only activated when
+Flapdoodle's autoconfiguration is available for the test setup.</p>
 
 
 
@@ -398,7 +552,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../web/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Web" rel="prev">
+          <a href="../starter-web/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Starter Web" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -407,20 +561,20 @@
                 <span class="md-footer__direction">
                   Previous
                 </span>
-                Web
+                Starter Web
               </div>
             </div>
           </a>
         
         
           
-          <a href="../mongodb/" class="md-footer__link md-footer__link--next" aria-label="Next: MongoDB" rel="next">
+          <a href="../starter-kafka/" class="md-footer__link md-footer__link--next" aria-label="Next: Starter Kafka" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                MongoDB
+                Starter Kafka
               </div>
             </div>
             <div class="md-footer__button md-icon">
