@@ -10,14 +10,23 @@ site_name: sda-spring-boot-commons
 
 nav:
   - Overview: index.md
-  - Web: web/index.md
-  - S3: s3/index.md
-  - MongoDB: mongodb/index.md
-  - Kafka: kafka/index.md
-  - Security Hardening: security/index.md
+  - Migrate to v3: migration-2-to-3.md
+  - Starter Web: starter-web.md
+  - Starter MongoDB: starter-mongodb.md
+  - Starter Kafka: starter-kafka.md
+  - Starter S3: starter-s3.md
+  - Security Hardening: security.md
+  - AsyncAPI: asyncapi.md
+  - Cloud Events: cloudevents.md
+  - Metadata Context: metadata-context.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins
 
 plugins:
   - techdocs-core
+
+markdown_extensions:
+  # Add support for the `--8<--` feature to import files. Remove this as soon as it is
+  # part of the techdocs-core plugin: https://github.com/backstage/mkdocs-techdocs-core/issues/20
+  - pymdownx.snippets

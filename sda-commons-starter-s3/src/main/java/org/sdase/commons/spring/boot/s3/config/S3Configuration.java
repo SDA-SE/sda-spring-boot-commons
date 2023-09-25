@@ -7,70 +7,61 @@
  */
 package org.sdase.commons.spring.boot.s3.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.endpoints.S3EndpointProvider;
+import software.amazon.awssdk.utils.StringUtils;
 
 @AutoConfiguration
 public class S3Configuration {
 
-  @Value("${s3.accessKey}")
-  private String accessKeyId;
+  private final String accessKeyId;
+  private final String secretKey;
+  private final String endpoint;
+  private final String region;
+  private final String bucketName;
 
-  @Value("${s3.secretKey}")
-  private String secretKey;
-
-  @Value("${s3.endpoint}")
-  private String endpoint;
-
-  @Value("${s3.region}")
-  private String region;
-
-  @Value("${s3.bucketName}")
-  private String bucketName;
+  public S3Configuration(
+      @Value("${s3.accessKey}") String accessKeyId,
+      @Value("${s3.secretKey}") String secretKey,
+      @Value("${s3.endpoint}") String endpoint,
+      @Value("${s3.region}") String region,
+      @Value("${s3.bucketName}") String bucketName) {
+    this.accessKeyId = accessKeyId;
+    this.secretKey = secretKey;
+    this.endpoint = endpoint;
+    this.region = region;
+    this.bucketName = bucketName;
+  }
 
   @Bean
   @ConditionalOnMissingBean
-  public AmazonS3 getAmazonS3Client() {
-    final AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
-
-    return AmazonS3ClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
-        .withPathStyleAccessEnabled(true)
-        .withCredentials(new AWSStaticCredentialsProvider(credentials))
+  public S3Client getAmazonS3Client() {
+    Region s3EndpointRegion = Region.of(region);
+    return S3Client.builder()
+        .region(s3EndpointRegion)
+        .credentialsProvider(
+            (StringUtils.isBlank(accessKeyId) && StringUtils.isBlank(secretKey))
+                ? AnonymousCredentialsProvider.create()
+                : StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(accessKeyId, secretKey)))
+        .endpointProvider(S3EndpointProvider.defaultProvider())
+        .endpointOverride(URI.create(endpoint))
+        .forcePathStyle(true)
         .build();
   }
 
   @Bean
   @ConditionalOnMissingBean
-  public S3BucketRepository s3BucketRepository(AmazonS3 getAmazonS3Client) {
+  public S3BucketRepository s3BucketRepository(S3Client getAmazonS3Client) {
     return new S3BucketRepository(getAmazonS3Client, bucketName);
-  }
-
-  String getAccessKeyId() {
-    return accessKeyId;
-  }
-
-  String getSecretKey() {
-    return secretKey;
-  }
-
-  String getEndpoint() {
-    return endpoint;
-  }
-
-  String getRegion() {
-    return region;
-  }
-
-  String getBucketName() {
-    return bucketName;
   }
 }

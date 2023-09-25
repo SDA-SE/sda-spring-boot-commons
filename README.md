@@ -9,14 +9,14 @@
 A set of libraries to bootstrap spring boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
-## Features
+> :partying_face: Upgrade to Spring Boot 3 is released with [version 3.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/3.0.0). :partying_face:
+> 
+> Please follow [the migration guide](./docs/migration-2-to-3.md) to upgrade.
 
-| **Starter**                                          | **Description**                                                                                                                                                       |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [sda-commons-starter-web](docs/web/index.md)         | Provides the required features for an SDA-compliant microservice including OIDC authentication, OPA authorization, health checks, OpenTracing and Prometheus metrics. |
-| [sda-commons-starter-mongodb](docs/mongodb/index.md) | Provides default configuration based on the `org.springframework.boot:spring-boot-starter-data-mongodb`                                                               |
-| [sda-commons-starter-kafka](docs/kafka/index.md)     | Provides default producer und consumer configuration based on `org.springframework.kafka:spring-kafka`                                                                |
-| [sda-commons-starter-s3](docs/s3/index.md)           |                                                                                                                                                                       |
+
+## Getting Started
+
+Please have a look in our [documentation](docs/index.md).
 
 
 ## Changelog and Versioning
@@ -25,6 +25,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 See our [changelog](https://github.com/SDA-SE/sda-spring-boot-commons/releases/) for more information about the latest features.
 
-## Getting Started
 
-Have a look in our [documentation](docs/index.md)!
+## Contributing
+
+We are looking forward to contributions.
+Take a look at our [Contribution Guidelines](./CONTRIBUTING.md) before submitting Pull Requests.
+
+
+## Responsible Disclosure and Security
+
+The [SECURITY.md](./SECURITY.md) includes information on responsible disclosure and security related topics like security patches.

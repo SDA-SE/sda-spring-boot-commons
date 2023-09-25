@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+import static org.sdase.commons.spring.boot.kafka.KafkaTestUtil.readValue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -120,7 +120,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
 
     ConsumerRecord<String, String> pollDLT = consumerRecordsDLT.poll(10, TimeUnit.SECONDS);
 
-    KafkaTestModel messageFromDLT = readValue(pollDLT);
+    KafkaTestModel messageFromDLT = readValue(pollDLT, objectMapper);
     assertThat(messageFromDLT.getCheckString()).isEqualTo("CHECK");
 
     Optional<Header> headerExceptionCause =
@@ -144,7 +144,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
 
     ConsumerRecord<String, String> pollDLT = consumerRecordsDLT.poll(10, TimeUnit.SECONDS);
 
-    KafkaTestModel messageFromDLT = readValue(pollDLT);
+    KafkaTestModel messageFromDLT = readValue(pollDLT, objectMapper);
     assertThat(messageFromDLT.getCheckString()).isEqualTo("CHECK");
     assertThat(messageFromDLT.getCheckInt()).isEqualTo(1);
 
@@ -166,7 +166,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
 
     ConsumerRecord<String, String> pollDLT = consumerRecordsDLT.poll(10, TimeUnit.SECONDS);
 
-    KafkaTestModel messageFromDLT = readValue(pollDLT);
+    KafkaTestModel messageFromDLT = readValue(pollDLT, objectMapper);
     assertThat(messageFromDLT.getCheckString()).isEqualTo("CHECK");
     assertThat(messageFromDLT.getCheckInt()).isEqualTo(1);
 
@@ -176,13 +176,5 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
             .findFirst();
     assertThat(new String(headerExceptionCause.get().value()))
         .isEqualTo(RuntimeException.class.getName());
-  }
-
-  private KafkaTestModel readValue(ConsumerRecord<String, ?> nextRecord) {
-    try {
-      return objectMapper.readValue((String) nextRecord.value(), KafkaTestModel.class);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
   }
 }

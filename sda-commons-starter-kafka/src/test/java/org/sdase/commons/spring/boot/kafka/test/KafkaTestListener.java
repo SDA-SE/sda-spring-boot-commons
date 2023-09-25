@@ -7,20 +7,16 @@
  */
 package org.sdase.commons.spring.boot.kafka.test;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.sdase.commons.spring.boot.kafka.NotRetryableKafkaException;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaTestListener {
-
-  private static final Logger LOG = LoggerFactory.getLogger(KafkaTestListener.class);
   private final ListenerCheck listenerCheck;
   private final MetadataCollector metadataCollector;
 
@@ -64,7 +60,7 @@ public class KafkaTestListener {
   public static class ListenerCheck {
 
     public void check(String checkString) {
-      // DO NOTING
+      // DO NOTHING
     }
   }
 

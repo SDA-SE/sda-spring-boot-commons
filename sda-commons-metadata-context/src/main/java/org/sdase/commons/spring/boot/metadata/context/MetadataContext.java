@@ -129,15 +129,9 @@ public interface MetadataContext {
     var current = detachedCurrent();
     var newNonNull = Optional.ofNullable(newContextData).orElse(new DetachedMetadataContext());
     switch (mergeStrategy) {
-      case EXTEND:
-        createContext(MetadataContextUtil.merge(current, newNonNull));
-        break;
-      case REPLACE:
-        createContext(MetadataContextUtil.mergeWithPreference(newNonNull, current));
-        break;
-      case KEEP:
-        createContext(MetadataContextUtil.mergeWithPreference(current, newNonNull));
-        break;
+      case EXTEND -> createContext(MetadataContextUtil.merge(current, newNonNull));
+      case REPLACE -> createContext(MetadataContextUtil.mergeWithPreference(newNonNull, current));
+      case KEEP -> createContext(MetadataContextUtil.mergeWithPreference(current, newNonNull));
     }
   }
 
@@ -156,6 +150,7 @@ public interface MetadataContext {
    * Transfers the current metadata context to the callable when executed in a new thread.
    *
    * @param callable The runnable to wrap with the current metadata context.
+   * @param <V> the type of the return value
    * @return The original callable wrapped with code to transfer the metadata context when executed
    *     in a new thread.
    */

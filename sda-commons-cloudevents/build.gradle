@@ -1,12 +1,17 @@
 dependencies {
 
   api ('jakarta.validation:jakarta.validation-api')
-  api ('com.kjetland:mbknor-jackson-jsonschema_2.13') {
-    exclude group: "javax.validation", module: "validation-api"
-  }
+  api ('io.swagger.core.v3:swagger-annotations-jakarta')
+  api ('com.fasterxml.jackson.core:jackson-annotations')
 
+  testImplementation project(':sda-commons-starter-web')
   testImplementation project(':sda-commons-starter-kafka')
   testImplementation project(':sda-commons-asyncapi')
   testImplementation project(':sda-commons-web-testing')
-  testImplementation ('org.springframework.kafka:spring-kafka-test')
+  testImplementation ('org.springframework.kafka:spring-kafka-test') {
+    // version conflicts
+    exclude group: 'com.fasterxml.jackson.module'
+    exclude group: 'com.fasterxml.jackson.dataformat'
+    exclude group: 'com.fasterxml.jackson.datatype'
+  }
 }

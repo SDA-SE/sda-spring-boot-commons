@@ -29,9 +29,15 @@ public class AuthMock {
 
   private static final Logger LOG = LoggerFactory.getLogger(AuthMock.class);
 
+  @SuppressWarnings("java:S1075") // hardcoded URL
   private static final String DISCOVERY_PATH = "/issuer/.well-known/openid-configuration";
+
+  @SuppressWarnings("java:S1075") // hardcoded URL
   private static final String JWKS_PATH = "/issuer/keys";
+
+  @SuppressWarnings("java:S1075") // hardcoded URL
   private static final String TOKEN_PATH = "/issuer/token";
+
   private static final String DEFAULT_SUBJECT = "john_doe";
   private static final String CLIENT_ID = "oidcClient";
   private static final String CLIENT_SECRET = "s3cret";
@@ -146,7 +152,9 @@ public class AuthMock {
             .build());
   }
 
-  /** Returns the provided access token when requesting the token endpoint. */
+  /**
+   * @return the provided access token when requesting the token endpoint.
+   */
   public String providedAccessToken() {
     return this.accessToken;
   }

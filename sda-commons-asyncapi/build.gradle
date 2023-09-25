@@ -1,11 +1,19 @@
 dependencies {
-  api ('com.kjetland:mbknor-jackson-jsonschema_2.13') {
-    exclude group: 'javax.validation', module: 'validation-api'
-  }
-  api ('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-  api ('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
+  api 'com.github.victools:jsonschema-generator'
+  api 'com.github.victools:jsonschema-module-jackson'
+  api 'com.github.victools:jsonschema-module-jakarta-validation'
+  api 'com.github.victools:jsonschema-module-swagger-2'
 
-  api project (':sda-commons-web-testing')
+  // all external dependencies in victools are declared as provided
 
-  testImplementation ('org.springframework.boot:spring-boot-starter-validation')
+  api "jakarta.validation:jakarta.validation-api"
+
+  api 'io.swagger.core.v3:swagger-annotations-jakarta'
+  api 'io.swagger.core.v3:swagger-models-jakarta'
+
+  api 'com.fasterxml.jackson.core:jackson-core'
+  api 'com.fasterxml.jackson.core:jackson-databind'
+  api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+
+  testImplementation project (':sda-commons-web-testing')
 }

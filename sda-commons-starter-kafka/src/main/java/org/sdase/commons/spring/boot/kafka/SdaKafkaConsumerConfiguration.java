@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.sdase.commons.spring.boot.kafka.config.KafkaConsumerConfig;
@@ -123,6 +124,9 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
    * original topic name suffixed with .DLT) and to the same partition as the original record.
    * Therefore, when you use the default resolver, the dead-letter topic must have at least as many
    * partitions as the original topic.
+   *
+   * @return the default error handler that retries according to the {@link
+   *     KafkaConsumerConfig#retry()} before producing an error message
    */
   @Bean("retryDeadLetterErrorHandler")
   public DefaultErrorHandler retryDeadLetterErrorHandler() {
@@ -138,7 +142,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   protected TopicPartition getDeadLetterTopicName(
       ConsumerRecord<?, ?> consumerRecord, Exception exception) {
 
-    if (consumerConfig.dlt() != null && consumerConfig.dlt().pattern() != null) {
+    if (consumerConfig.dlt() != null && StringUtils.isNotBlank(consumerConfig.dlt().pattern())) {
 
       try {
 
@@ -170,12 +174,12 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(
         new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties()));
-    factory.setMessageConverter(new ByteArrayJsonMessageConverter(objectMapper));
+    factory.setRecordMessageConverter(new ByteArrayJsonMessageConverter(objectMapper));
     factory.getContainerProperties().setAckMode(AckMode.RECORD);
     // Please note that ConversionExceptions like mapping exception won't be retried and directly
     // logged to error. We may add some specific handling like DeadLetter topics etc.
     factory.setCommonErrorHandler(errorHandler);
-    factory.setRecordInterceptor(new MetadataContextRecordInterceptor());
+    factory.setRecordInterceptor(new MetadataContextRecordInterceptor<>());
     return factory;
   }
 }
