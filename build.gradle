@@ -161,9 +161,7 @@ subprojects {
       repositories {
         maven {
           name = "sdaIntern"
-          def releasesRepoUrl = "https://nexus.sda-se.io/repository/sda-se-releases/"
-          def snapshotsRepoUrl = "https://nexus.sda-se.io/repository/sda-se-snapshots/"
-          url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+          url = "https://nexus.sda-se.io/repository/sda-se-snapshots/"
 
           credentials {
             username System.getenv('SDA_NEXUS_USER')
