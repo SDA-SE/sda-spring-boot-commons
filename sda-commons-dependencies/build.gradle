@@ -62,7 +62,7 @@ dependencies {
     api 'org.yaml:snakeyaml:2.0', {
       because 'Temporary: this version is used to solve CVE-2022-1471'
     }
-    api 'org.xerial.snappy:snappy-java:1.1.10.1', {
+    api 'org.xerial.snappy:snappy-java:1.1.10.4', {
       because 'fix CVE-2023-34455'
     }
 
