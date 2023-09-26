@@ -63,7 +63,7 @@ dependencies {
       because 'Temporary: this version is used to solve CVE-2022-1471'
     }
     api 'org.xerial.snappy:snappy-java:1.1.10.4', {
-      because 'fix CVE-2023-34455'
+      because 'fix CVE-2023-34455, CVE-2023-43642'
     }
 
     // sda-commons-web-testing
