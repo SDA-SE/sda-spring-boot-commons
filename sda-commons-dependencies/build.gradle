@@ -37,7 +37,7 @@ dependencies {
     }
 
     // sda-commons-starter-web
-    api 'org.bouncycastle:bcpkix-jdk18on:1.74', {
+    api 'org.bouncycastle:bcpkix-jdk18on:1.76', {
       because 'fix CVE-2023-33201'
     }
     api 'org.bouncycastle:bcprov-jdk18on:1.74', {
