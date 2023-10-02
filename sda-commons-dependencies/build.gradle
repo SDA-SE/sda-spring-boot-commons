@@ -13,6 +13,7 @@ ext {
   springBootVersion = '3.1.4'
   springCloudVersion = '2022.0.4'
   scalaVersion = '2.13.12'
+  swaggerCoreVersion = '2.2.16'
   victoolsVersion = '4.31.1'
 }
 
@@ -54,9 +55,9 @@ dependencies {
     }
 
     // should align with transitive dependency of org.springdoc:springdoc-openapi-webmvc-core:
-    api 'io.swagger.core.v3:swagger-core-jakarta:2.2.9'
-    api 'io.swagger.core.v3:swagger-models-jakarta:2.2.9'
-    api 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.9'
+    api "io.swagger.core.v3:swagger-core-jakarta:${swaggerCoreVersion}"
+    api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
+    api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
     api 'io.github.classgraph:classgraph:4.8.162'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
