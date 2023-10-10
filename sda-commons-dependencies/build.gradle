@@ -24,6 +24,7 @@ dependencies {
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.yaml', module: 'snakeyaml' // 1.x CVE-2022-1471
+    exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone' // 2.35.0 / CVE-2023-41329
   }
 
   // asyncapi generation
