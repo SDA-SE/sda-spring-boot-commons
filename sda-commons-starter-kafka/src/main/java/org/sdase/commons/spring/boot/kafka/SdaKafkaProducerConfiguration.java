@@ -33,6 +33,13 @@ public class SdaKafkaProducerConfiguration {
     return new KafkaTemplate<>(producerFactory, commonProperties);
   }
 
+  /* DLT Producer is using a value ByteArraySerializer
+   * to be more flexible and allow teams
+   * to choose the serializer for the original message
+   * configured in this property 'spring.kafka.producer.value-serializer'
+   *
+   * The DLT consumer can use a deserializer that matches 'spring.kafka.producer.value-serializer'
+   */
   @Bean
   @SuppressWarnings("java:S1452")
   public KafkaTemplate<Object, Object> kafkaDltTemplate(
