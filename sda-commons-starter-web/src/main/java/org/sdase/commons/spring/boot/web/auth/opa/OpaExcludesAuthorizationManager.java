@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa;
 
-import static org.springdoc.core.utils.Constants.API_DOCS_URL;
+import static org.springdoc.core.utils.Constants.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,10 +30,9 @@ public class OpaExcludesAuthorizationManager
 
   public OpaExcludesAuthorizationManager(
       @Value("${opa.exclude.patterns:}") String excludedPathPatterns,
-      @Value(API_DOCS_URL) String apiDocsUrl) {
-    if (excludedPathPatterns.isEmpty()) {
-      this.excludedPathPatterns.add(Pattern.compile(apiDocsUrl + "\\.(json|yaml)"));
-    } else {
+      @Value(API_DOCS_URL) String apiDocsUrl,
+      @Value(DEFAULT_API_DOCS_URL_YAML) String apiDocsUrlYaml) {
+    if (!excludedPathPatterns.isEmpty()) {
       Stream.of(excludedPathPatterns.split(","))
           .filter(Objects::nonNull)
           .filter(p -> !p.isBlank())
@@ -41,6 +40,10 @@ public class OpaExcludesAuthorizationManager
           .map(Pattern::compile)
           .forEach(this.excludedPathPatterns::add);
     }
+
+    // Always exclude the apiDocsUrls
+    this.excludedPathPatterns.add(Pattern.compile(apiDocsUrl));
+    this.excludedPathPatterns.add(Pattern.compile(apiDocsUrlYaml));
   }
 
   @Override
