@@ -41,15 +41,6 @@ class OpaExcludesAuthorizationManagerIT {
   }
 
   @Test
-  void shouldNotAllowOpenApiAnyMore() {
-    var responseEntity =
-        client.getForEntity(
-            String.format("http://localhost:%d/api/openapi.yaml", port), Object.class);
-
-    assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isFalse();
-  }
-
-  @Test
   void shouldAllowPingWithoutAuthentication() {
     var responseEntity =
         client.getForEntity(String.format("http://localhost:%d/api/ping", port), Object.class);
@@ -62,6 +53,23 @@ class OpaExcludesAuthorizationManagerIT {
     var responseEntity =
         client.getForEntity(
             String.format("http://localhost:%d/api/ping/hello", port), Object.class);
+
+    assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
+  }
+
+  @Test
+  void shouldAllowOpenapiJsonWithoutAuthentication() {
+    var responseEntity =
+        client.getForEntity(String.format("http://localhost:%d/api/openapi", port), Object.class);
+
+    assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
+  }
+
+  @Test
+  void shouldAllowOpenapiYamlWithoutAuthentication() {
+    var responseEntity =
+        client.getForEntity(
+            String.format("http://localhost:%d/api/openapi.yaml", port), String.class);
 
     assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
   }
