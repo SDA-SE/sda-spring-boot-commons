@@ -9,7 +9,9 @@ package org.sdase.commons.spring.boot.web.app.example;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -57,6 +59,18 @@ class OpenApiDocumentationTest {
     var filePath = Paths.get("openapi.yaml").toAbsolutePath();
 
     GoldenFileAssertions.assertThat(filePath).hasYamlContentAndUpdateGolden(expected);
+  }
+
+  @Test
+  void shouldProvideOpenApiAsJson() throws JsonProcessingException {
+    var objectMapper = new ObjectMapper(new JsonFactory());
+    var expected =
+        client.getForObject(String.format("http://localhost:%s/api/openapi", port), String.class);
+
+    assertThat(expected).isNotNull();
+
+    // verify JSON format
+    assertThat(objectMapper.readTree(expected).get("openapi").asText()).isEqualTo("3.0.1");
   }
 
   // integration testing of the OpenAPI customisation
