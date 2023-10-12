@@ -8,10 +8,14 @@
 package org.sdase.commons.spring.boot.web.auth.opa;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sdase.commons.spring.boot.web.auth.AuthTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
@@ -40,36 +44,21 @@ class OpaExcludesAuthorizationManagerIT {
     authMock.authorizeAnyRequest().deny();
   }
 
-  @Test
-  void shouldAllowPingWithoutAuthentication() {
-    var responseEntity =
-        client.getForEntity(String.format("http://localhost:%d/api/ping", port), Object.class);
+  static Stream<Arguments> shouldAllowWithoutAuthentication() {
+    return Stream.of(
+        // custom
+        of("http://localhost:%d/api/ping", Object.class),
+        of("http://localhost:%d/api/ping/hello", Object.class),
 
-    assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
+        // should always exclude
+        of("http://localhost:%d/api/openapi", Object.class),
+        of("http://localhost:%d/api/openapi.yaml", String.class));
   }
 
-  @Test
-  void shouldAllowPingDetailWithoutAuthentication() {
-    var responseEntity =
-        client.getForEntity(
-            String.format("http://localhost:%d/api/ping/hello", port), Object.class);
-
-    assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
-  }
-
-  @Test
-  void shouldAllowOpenapiJsonWithoutAuthentication() {
-    var responseEntity =
-        client.getForEntity(String.format("http://localhost:%d/api/openapi", port), Object.class);
-
-    assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
-  }
-
-  @Test
-  void shouldAllowOpenapiYamlWithoutAuthentication() {
-    var responseEntity =
-        client.getForEntity(
-            String.format("http://localhost:%d/api/openapi.yaml", port), String.class);
+  @ParameterizedTest
+  @MethodSource
+  void shouldAllowWithoutAuthentication(String path, Class responseType) {
+    var responseEntity = client.getForEntity(String.format(path, port), responseType);
 
     assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
   }
