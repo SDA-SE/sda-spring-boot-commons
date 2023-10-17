@@ -66,6 +66,14 @@ dependency management of Spring Boot as mentioned in [the migration guide](https
 Please note that Wiremock repackaged `javax` classes.
 They will be available in tests but should not be used in your code.
 
+## Feign Clients with JAX-RS
+
+If Feign Clients are declared with JAX-RS annotations like `@POST` and the
+`feign.jaxrs2.JAXRS2Contract` configuration, it must be changed
+
+- to Jakarta annotations and the `feign.jaxrs.JakartaContract` configuration
+- or to Spring Boot annotations.
+
 
 ## Tracing
 
