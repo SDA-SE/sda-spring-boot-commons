@@ -216,6 +216,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#feign-clients-with-jax-rs" class="md-nav__link">
+    Feign Clients with JAX-RS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tracing" class="md-nav__link">
     Tracing
   </a>
@@ -426,6 +433,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#feign-clients-with-jax-rs" class="md-nav__link">
+    Feign Clients with JAX-RS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tracing" class="md-nav__link">
     Tracing
   </a>
@@ -558,6 +572,13 @@ The provided dependency management should take care about all dependencies by re
 dependency management of Spring Boot as mentioned in <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide#jakarta-ee">the migration guide</a>.</p>
 <p>Please note that Wiremock repackaged <code>javax</code> classes.
 They will be available in tests but should not be used in your code.</p>
+<h2 id="feign-clients-with-jax-rs">Feign Clients with JAX-RS<a class="headerlink" href="#feign-clients-with-jax-rs" title="Permanent link">&para;</a></h2>
+<p>If Feign Clients are declared with JAX-RS annotations like <code>@POST</code> and the
+<code>feign.jaxrs2.JAXRS2Contract</code> configuration, it must be changed</p>
+<ul>
+<li>to Jakarta annotations and the <code>feign.jaxrs.JakartaContract</code> configuration</li>
+<li>or to Spring Boot annotations.</li>
+</ul>
 <h2 id="tracing">Tracing<a class="headerlink" href="#tracing" title="Permanent link">&para;</a></h2>
 <p>Tracing uses OpenTelemetry now.
 Any configuration that references <code>zipkin</code> or <code>sleuth</code> is not considered anymore, such as

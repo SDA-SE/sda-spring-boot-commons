@@ -1441,7 +1441,7 @@ OIDC authentication token with the client credentials flow using the configured
 pass-through will be applied instead.</p>
 <h3 id="jax-rs-mapping">JAX-RS Mapping<a class="headerlink" href="#jax-rs-mapping" title="Permanent link">&para;</a></h3>
 <p>If you would like to use JAX-RS based web annotations, you just need to apply
-the <code>feign.jaxrs2.JAXRS2Contract.class</code> to configurations.</p>
+the <code>feign.jaxrs.JakartaContract.class</code> to configurations.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1459,7 +1459,7 @@ the <code>feign.jaxrs2.JAXRS2Contract.class</code> to configurations.</p>
 <span class="nd">@FeignClient</span><span class="p">(</span>
 <span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;customerService&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;${customer.api.base.url}&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">OidcClientRequestConfiguration</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">feign</span><span class="p">.</span><span class="na">jaxrs2</span><span class="p">.</span><span class="na">JAXRS2Contract</span><span class="p">.</span><span class="na">class</span><span class="p">})</span>
+<span class="w">    </span><span class="n">configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">OidcClientRequestConfiguration</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">feign</span><span class="p">.</span><span class="na">jaxrs</span><span class="p">.</span><span class="na">JakartaContract</span><span class="p">.</span><span class="na">class</span><span class="p">})</span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">CustomerServiceApi</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">  </span><span class="nd">@POST</span>
