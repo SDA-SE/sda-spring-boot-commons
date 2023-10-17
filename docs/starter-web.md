@@ -330,14 +330,14 @@ pass-through will be applied instead.
 ### JAX-RS Mapping
 
 If you would like to use JAX-RS based web annotations, you just need to apply
-the `feign.jaxrs2.JAXRS2Contract.class` to configurations.
+the `feign.jaxrs.JakartaContract.class` to configurations.
 
 ```java
 @Path("customers")
 @FeignClient(
     value = "customerService",
     url = "${customer.api.base.url}",
-    configuration = {OidcClientRequestConfiguration.class, feign.jaxrs2.JAXRS2Contract.class})
+    configuration = {OidcClientRequestConfiguration.class, feign.jaxrs.JakartaContract.class})
 public interface CustomerServiceApi {
 
   @POST
