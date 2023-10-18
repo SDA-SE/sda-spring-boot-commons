@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.kafka.test;
 
 import jakarta.validation.Valid;
+import java.time.OffsetDateTime;
 import org.sdase.commons.spring.boot.kafka.NotRetryableKafkaException;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
@@ -46,6 +47,7 @@ public class KafkaTestListener {
       containerFactory = SdaKafkaListenerContainerFactory.LOG_ON_FAILURE)
   public void logOnFailure(@Payload @Valid KafkaTestModel kafkaTestModel) {
     listenerCheck.check(kafkaTestModel.getCheckString());
+    listenerCheck.checkDate(kafkaTestModel.getOffsetDateTime());
     throwExceptionIfDesired(kafkaTestModel);
   }
 
@@ -60,6 +62,10 @@ public class KafkaTestListener {
   public static class ListenerCheck {
 
     public void check(String checkString) {
+      // DO NOTHING
+    }
+
+    public void checkDate(OffsetDateTime offsetDateTime) {
       // DO NOTHING
     }
   }

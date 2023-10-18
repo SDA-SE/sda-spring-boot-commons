@@ -9,13 +9,13 @@ package org.sdase.commons.spring.boot.kafka.test;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
 
 public class KafkaTestModel {
 
   @NotBlank private String checkString;
-
   @NotNull private Integer checkInt;
-
+  private OffsetDateTime offsetDateTime;
   private boolean throwNotRetryableException;
   private boolean throwRuntimeException;
 
@@ -34,6 +34,15 @@ public class KafkaTestModel {
 
   public KafkaTestModel setCheckInt(Integer checkInt) {
     this.checkInt = checkInt;
+    return this;
+  }
+
+  public OffsetDateTime getOffsetDateTime() {
+    return offsetDateTime;
+  }
+
+  public KafkaTestModel setOffsetDateTime(OffsetDateTime offsetDateTime) {
+    this.offsetDateTime = offsetDateTime;
     return this;
   }
 

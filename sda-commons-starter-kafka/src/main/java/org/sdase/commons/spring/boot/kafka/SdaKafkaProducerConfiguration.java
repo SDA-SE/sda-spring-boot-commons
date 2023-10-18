@@ -7,6 +7,7 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -15,8 +16,10 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @AutoConfiguration
 @PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/producer.properties")
@@ -27,9 +30,17 @@ public class SdaKafkaProducerConfiguration {
           ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
           MetadataContextProducerInterceptor.class.getName());
 
+  private final ObjectMapper objectMapper;
+
+  public SdaKafkaProducerConfiguration(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
+
   @Bean
   @SuppressWarnings("java:S1452")
   public KafkaTemplate<String, ?> kafkaTemplate(ProducerFactory<String, ?> producerFactory) {
+    ((DefaultKafkaProducerFactory<?, ?>) producerFactory)
+        .setValueSerializer(new JsonSerializer<>(objectMapper));
     return new KafkaTemplate<>(producerFactory, commonProperties);
   }
 

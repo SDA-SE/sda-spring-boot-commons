@@ -12,6 +12,7 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.OffsetDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -55,8 +56,16 @@ class KafkaLogConsumerTest {
 
   @Test
   void shouldReceiveAndDeserializeToJson() {
-    kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(1));
+    var offsetDateTime = OffsetDateTime.parse("2023-10-10T12:00:00.123Z");
+
+    kafkaTemplate.send(
+        topic,
+        new KafkaTestModel()
+            .setCheckString("CHECK")
+            .setCheckInt(1)
+            .setOffsetDateTime(offsetDateTime));
     verify(listenerCheck, timeout(DEFAULT_TIMEOUT)).check("CHECK");
+    verify(listenerCheck, timeout(DEFAULT_TIMEOUT)).checkDate(offsetDateTime);
   }
 
   @Test
