@@ -8,9 +8,7 @@
 package org.sdase.commons.spring.boot.kafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 
-import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -60,19 +58,14 @@ class ProducerObjectMapperTest {
             .setCheckString("CHECK")
             .setOffsetDateTime(OffsetDateTime.parse(dateString));
     testee.send(expectedMessage);
-    await()
-        .atMost(Duration.ofSeconds(10))
-        .pollDelay(Duration.ofMillis(1000))
-        .pollInterval(Duration.ofMillis(100))
-        .untilAsserted(
-            () ->
-                assertThat(
-                        KafkaTestUtil.getNextRecord(
-                                topic,
-                                KafkaTestUtil.createTestConsumer(
-                                    topic, embeddedKafkaBroker, new StringDeserializer()))
-                            .value()
-                            .toString())
-                    .contains(dateString));
+
+    var kafkaMessage =
+        KafkaTestUtil.getNextRecord(
+                topic,
+                KafkaTestUtil.createTestConsumer(
+                    topic, embeddedKafkaBroker, new StringDeserializer()))
+            .value();
+
+    assertThat(kafkaMessage.toString()).contains(dateString);
   }
 }
