@@ -923,8 +923,8 @@ core concepts.</p>
 </tr>
 <tr>
 <td><code>management.tracing.enabled</code> <em>boolean</em></td>
-<td>For testing purposes it's maybe required to disable tracing. It is important to have also the annotation <code>@AutoConfigureObservability</code> on your class and in your tests to enable the tracing.</td>
-<td><code>true</code></td>
+<td>If tracing should be unit-tested, it is important to have the annotation <code>@AutoConfigureObservability</code> on your test class to enable tracing.</td>
+<td><code>true</code> (<code>false</code> in test contexts)</td>
 <td><code>false</code></td>
 <td><code>MANAGEMENT_TRACING_ENABLED</code></td>
 </tr>
