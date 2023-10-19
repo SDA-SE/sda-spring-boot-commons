@@ -9,6 +9,7 @@ package org.sdase.commons.spring.boot.asyncapi.jsonschema.victools;
 
 import java.util.Set;
 import org.sdase.commons.spring.boot.asyncapi.jsonschema.AbstractJsonSchemaBuilderTest;
+import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Required.JakartaNotBlank;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Required.SwaggerRequiredMode;
 
 class VictoolsJsonSchemaBuilderTest extends AbstractJsonSchemaBuilderTest {
@@ -18,9 +19,11 @@ class VictoolsJsonSchemaBuilderTest extends AbstractJsonSchemaBuilderTest {
   }
 
   @Override
-  protected Set<Class<?>> disableSpecificFieldTests() {
+  protected Set<DisabledSpec> disableSpecificFieldTests() {
     return Set.of(
         // Schema.requiredMode() not supported, but Schema.required() is
-        SwaggerRequiredMode.class);
+        disable(SwaggerRequiredMode.class, "/required"),
+        // pattern not set, schema would allow " ", but validation does not
+        disable(JakartaNotBlank.class, "/properties/notBlankProperty/pattern"));
   }
 }

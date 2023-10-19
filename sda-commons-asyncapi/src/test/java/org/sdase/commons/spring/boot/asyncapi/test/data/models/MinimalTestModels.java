@@ -10,6 +10,7 @@ package org.sdase.commons.spring.boot.asyncapi.test.data.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.Instant;
@@ -23,6 +24,19 @@ import java.util.Date;
 public interface MinimalTestModels {
 
   interface Required {
+
+    class JakartaNotBlank {
+      @NotBlank private String notBlankProperty;
+
+      public String getNotBlankProperty() {
+        return notBlankProperty;
+      }
+
+      public JakartaNotBlank setNotBlankProperty(String notBlankProperty) {
+        this.notBlankProperty = notBlankProperty;
+        return this;
+      }
+    }
 
     class JakartaNotNull {
       @NotNull private String requiredProperty;
