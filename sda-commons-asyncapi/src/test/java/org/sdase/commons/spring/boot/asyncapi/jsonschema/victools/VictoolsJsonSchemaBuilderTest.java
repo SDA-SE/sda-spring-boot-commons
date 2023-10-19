@@ -24,6 +24,7 @@ class VictoolsJsonSchemaBuilderTest extends AbstractJsonSchemaBuilderTest {
         // Schema.requiredMode() not supported, but Schema.required() is
         disable(SwaggerRequiredMode.class, "/required"),
         // pattern not set, schema would allow " ", but validation does not
+        // work around: @Pattern(regexp = "^.*\\S+.*$") @NotBlank
         disable(JakartaNotBlank.class, "/properties/notBlankProperty/pattern"));
   }
 }
