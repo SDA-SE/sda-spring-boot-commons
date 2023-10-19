@@ -14,14 +14,17 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,6 +33,7 @@ import org.sdase.commons.spring.boot.asyncapi.test.data.models.CarScrapped;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Description.DescriptionSwaggerSchema;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Enums.EnumJackson;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Enums.EnumPlain;
+import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Required.JakartaNotBlank;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Required.JakartaNotNull;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Required.JsonPropertyRequired;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Required.SwaggerRequired;
@@ -70,7 +74,9 @@ public abstract class AbstractJsonSchemaBuilderTest {
   void shouldSetSpecificFieldsOfDefinition(
       Class<?> givenBaseClass, String checkedPropertyPointer, JsonNode expectedValue) {
 
-    assumeThat(disableSpecificFieldTests()).doesNotContain(givenBaseClass);
+    assumeThat(disableSpecificFieldTests())
+        .doesNotContain(new DisabledSpec(givenBaseClass, checkedPropertyPointer))
+        .doesNotContain(new DisabledSpec(givenBaseClass, null));
 
     var actualDefinitions = jsonSchemaBuilder.toJsonSchema(givenBaseClass);
     var actualSchema = schemaFromDefinitions(actualDefinitions, givenBaseClass);
@@ -101,6 +107,9 @@ public abstract class AbstractJsonSchemaBuilderTest {
 
   static Stream<Arguments> shouldSetSpecificFieldsOfDefinition() {
     return Stream.of(
+        of(JakartaNotBlank.class, "/required", array(text("notBlankProperty"))),
+        of(JakartaNotBlank.class, "/properties/notBlankProperty/minLength", number(1)),
+        of(JakartaNotBlank.class, "/properties/notBlankProperty/pattern", text("^.*\\S+.*$")),
         of(JsonPropertyRequired.class, "/required", array(text("requiredProperty"))),
         of(JakartaNotNull.class, "/required", array(text("requiredProperty"))),
         of(SwaggerRequired.class, "/required", array(text("requiredProperty"))),
@@ -132,11 +141,19 @@ public abstract class AbstractJsonSchemaBuilderTest {
     return new TextNode(text);
   }
 
+  static IntNode number(int number) {
+    return new IntNode(number);
+  }
+
   static ArrayNode array(JsonNode... items) {
     ObjectMapper om = new ObjectMapper();
     var arrayNode = om.createArrayNode();
     Stream.of(items).forEach(arrayNode::add);
     return arrayNode;
+  }
+
+  protected DisabledSpec disable(Class<?> disabledTestClass, String disabledFieldPath) {
+    return new DisabledSpec(disabledTestClass, disabledFieldPath);
   }
 
   /**
@@ -146,5 +163,33 @@ public abstract class AbstractJsonSchemaBuilderTest {
    * @return all classes of tests defined in {@link #shouldSetSpecificFieldsOfDefinition()} that are
    *     not supported by the {@link JsonSchemaBuilder} implementation under test.
    */
-  protected abstract Set<Class<?>> disableSpecificFieldTests();
+  protected abstract Set<DisabledSpec> disableSpecificFieldTests();
+
+  protected static class DisabledSpec {
+    private final Class<?> disabledClass;
+    private final String disabledPath;
+
+    private DisabledSpec(Class<?> disabledClass, @Nullable String disabledPath) {
+      this.disabledClass = disabledClass;
+      this.disabledPath = disabledPath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      DisabledSpec that = (DisabledSpec) o;
+
+      if (!Objects.equals(disabledClass, that.disabledClass)) return false;
+      return Objects.equals(disabledPath, that.disabledPath);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = disabledClass != null ? disabledClass.hashCode() : 0;
+      result = 31 * result + (disabledPath != null ? disabledPath.hashCode() : 0);
+      return result;
+    }
+  }
 }
