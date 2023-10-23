@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -218,6 +219,29 @@ public interface MinimalTestModels {
         this.described = described;
         return this;
       }
+    }
+  }
+
+  class UriProperties {
+    private URI notRequiredUri;
+    @NotBlank private URI notBlankUri;
+
+    public URI getNotRequiredUri() {
+      return notRequiredUri;
+    }
+
+    public UriProperties setNotRequiredUri(URI notRequiredUri) {
+      this.notRequiredUri = notRequiredUri;
+      return this;
+    }
+
+    public URI getNotBlankUri() {
+      return notBlankUri;
+    }
+
+    public UriProperties setNotBlankUri(URI notBlankUri) {
+      this.notBlankUri = notBlankUri;
+      return this;
     }
   }
 

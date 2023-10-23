@@ -38,6 +38,7 @@ components:
         name:
           type: "string"
           minLength: 1
+          pattern: "^.*\\S+.*$"
       required:
       - "id"
       - "name"

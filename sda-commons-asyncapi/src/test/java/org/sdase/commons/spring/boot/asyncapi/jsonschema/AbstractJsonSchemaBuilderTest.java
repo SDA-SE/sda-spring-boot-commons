@@ -45,6 +45,7 @@ import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Temporal.TemporalOffsetDateTime;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Temporal.TemporalPeriod;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Temporal.TemporalZonedDateTime;
+import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.UriProperties;
 import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
 
 public abstract class AbstractJsonSchemaBuilderTest {
@@ -81,7 +82,10 @@ public abstract class AbstractJsonSchemaBuilderTest {
     var actualDefinitions = jsonSchemaBuilder.toJsonSchema(givenBaseClass);
     var actualSchema = schemaFromDefinitions(actualDefinitions, givenBaseClass);
 
-    assertThat(actualSchema.at(checkedPropertyPointer)).isEqualTo(expectedValue);
+    assertThat(actualSchema.at(checkedPropertyPointer))
+        .describedAs(
+            "Testing actual schema\n%s\nat path %s\n", actualSchema, checkedPropertyPointer)
+        .isEqualTo(expectedValue);
   }
 
   protected JsonNode schemaFromDefinitions(Map<String, JsonNode> definitions, Class<?> baseClass) {
@@ -129,6 +133,13 @@ public abstract class AbstractJsonSchemaBuilderTest {
         of(TemporalPeriod.class, "/properties/duration/type", text("string")),
         of(TemporalPeriod.class, "/properties/duration/format", text("duration")),
         of(DescriptionSwaggerSchema.class, "/properties/described/description", text("A property")),
+        of(UriProperties.class, "/properties/notRequiredUri/type", text("string")),
+        of(UriProperties.class, "/properties/notRequiredUri/format", text("uri")),
+        of(UriProperties.class, "/properties/notBlankUri/type", text("string")),
+        of(UriProperties.class, "/properties/notBlankUri/format", text("uri")),
+        of(UriProperties.class, "/properties/notBlankUri/minLength", number(1)),
+        of(UriProperties.class, "/properties/notBlankUri/pattern", text("^.*\\S+.*$")),
+        of(UriProperties.class, "/required", array(text("notBlankUri"))),
         of(EnumPlain.class, "/type", text("string")),
         of(EnumPlain.class, "/enum", array(text("ONE"), text("TWO"))),
         of(EnumJackson.class, "/type", text("string")),
