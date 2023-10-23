@@ -9,8 +9,9 @@ CarManufactured:
     properties:
       id:
         type: "string"
-        description: "The id of the message"
         minLength: 1
+        pattern: "^.*\\S+.*$"
+        description: "The id of the message"
         examples:
         - "626A0F21-D940-4B44-BD36-23F0F567B0D0"
       type:
@@ -19,8 +20,9 @@ CarManufactured:
         - description: "The type of message"
       vehicleRegistration:
         type: "string"
-        description: "The registration of the vehicle"
         minLength: 1
+        pattern: "^.*\\S+.*$"
+        description: "The registration of the vehicle"
         examples:
         - "BB324A81"
       date:
@@ -54,8 +56,9 @@ CarScrapped:
     properties:
       id:
         type: "string"
-        description: "The id of the message"
         minLength: 1
+        pattern: "^.*\\S+.*$"
+        description: "The id of the message"
         examples:
         - "626A0F21-D940-4B44-BD36-23F0F567B0D0"
       type:
@@ -64,8 +67,9 @@ CarScrapped:
         - description: "The type of message"
       vehicleRegistration:
         type: "string"
-        description: "The registration of the vehicle"
         minLength: 1
+        pattern: "^.*\\S+.*$"
+        description: "The registration of the vehicle"
         examples:
         - "BB324A81"
       date:
