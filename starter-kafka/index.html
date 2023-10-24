@@ -627,6 +627,25 @@ processed by the listener.</p>
 <h2 id="producer-configuration">Producer configuration<a class="headerlink" href="#producer-configuration" title="Permanent link">&para;</a></h2>
 <p>The autoconfigured producer configuration provides a preconfigured  <code>KafkaTemplate</code> for producing 
 messages with <code>String</code> key and payload as <code>json</code>.</p>
+<p>To configure different serializers, create a custom kafkaTemplate Bean e.g.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="w">  </span><span class="nd">@Bean</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">KafkaTemplate</span><span class="o">&lt;</span><span class="n">Object</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">customKafkaTemplate</span><span class="p">(</span>
+<span class="w">      </span><span class="n">ProducerFactory</span><span class="o">&lt;</span><span class="n">Object</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">producerFactory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">(</span>
+<span class="w">      </span><span class="n">ProducerConfig</span><span class="p">.</span><span class="na">KEY_SERIALIZER_CLASS_CONFIG</span><span class="p">,</span><span class="w"> </span><span class="n">StringSerializer</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<span class="w">      </span><span class="n">ProducerConfig</span><span class="p">.</span><span class="na">VALUE_SERIALIZER_CLASS_CONFIG</span><span class="p">,</span><span class="w"> </span><span class="n">ByteArraySerializer</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">KafkaTemplate</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">producerFactory</span><span class="p">,</span><span class="w"> </span><span class="n">props</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
 <p>You just need to autowire the <code>KafkaTemplate</code> and you are ready to go.</p>
 
 
