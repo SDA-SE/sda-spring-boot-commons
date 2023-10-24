@@ -88,4 +88,18 @@ public void retryAndLog(@Payload @Valid Message message) {
 The autoconfigured producer configuration provides a preconfigured  `KafkaTemplate` for producing 
 messages with `String` key and payload as `json`.
 
+To configure different serializers, create a custom kafkaTemplate Bean e.g.
+
+```java
+  @Bean
+  public KafkaTemplate<Object, Object> customKafkaTemplate(
+      ProducerFactory<Object, Object> producerFactory) {
+    var props = Map.of(
+      ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+      ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
+    
+    return new KafkaTemplate<>(producerFactory, props);
+  }
+```
+
 You just need to autowire the `KafkaTemplate` and you are ready to go.
