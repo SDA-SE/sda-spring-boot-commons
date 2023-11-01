@@ -53,7 +53,7 @@ dependencies {
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
-    api 'io.github.springwolf:springwolf-core:0.15.1'
+    api 'io.github.springwolf:springwolf-core:0.16.0'
     api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.2.0'
 
     api 'com.squareup.okio:okio:3.6.0', {
