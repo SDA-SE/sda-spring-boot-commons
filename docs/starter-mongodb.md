@@ -12,11 +12,7 @@ For further documentation please have a look at the Spring Data MongoDB [referen
 
 ## Main Configuration
 
-| **Property**                                  | **Description**                                                                                                                 | **Default**                  | **Example**                      | **Env**                              |
-|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|------------------------------|----------------------------------|--------------------------------------|
-| `spring.data.mongodb.uri` _string_            | The MongoDB [connection string](https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-uri-format). |                              | `mongodb://localhost:27017/test` | `SPRING_DATA_MONGODB_URI`            |
-| `sda.caCertificates.certificatesDir` _string_ | A directory with CA certificates in PEM format that will be picked up to trust the connection to the database.                  | `"/var/trust/certificates"`  | `"/my-certs"`                    | `SDA_CACERTIFICATES_CERTIFICATESDIR` |
-
+--8<-- "doc-snippets/config-starter-mongodb.md"
 
 ## Configuration properties
 * `spring.data.mongodb.uri` _string_
