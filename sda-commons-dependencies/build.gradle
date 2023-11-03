@@ -64,7 +64,7 @@ dependencies {
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
-    api 'io.github.classgraph:classgraph:4.8.163'
+    api 'io.github.classgraph:classgraph:4.8.164'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'org.yaml:snakeyaml:2.0', {
       because 'Temporary: this version is used to solve CVE-2022-1471'
