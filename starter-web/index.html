@@ -970,6 +970,13 @@ core concepts.</p>
 <td><code>"my-service-name"</code></td>
 <td><code>SPRING_APPLICATION_NAME</code></td>
 </tr>
+<tr>
+<td><em>only as environment variable</em></td>
+<td>Field names as comma separated String in communication (e.g. HTTP headers), that are included in the metadata context of a process.</td>
+<td></td>
+<td><code>"ab-variant,landing-page"</code></td>
+<td><code>METADATA_FIELDS</code></td>
+</tr>
 </tbody>
 </table>
 <p>For further information have a look at the <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#documentation">Spring Boot documentation</a>.</p>
@@ -1950,7 +1957,7 @@ continue here:</p>
 <span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@PlatformClient</span><span class="p">(</span>
 <span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span>
 <span class="w">  </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://your-api-url&quot;</span>
-<span class="p">})</span>
+<span class="p">)</span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ClientWithMetadataConfiguration</span><span class="w"> </span><span class="p">{</span>
 <span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/metadata-hello&quot;</span><span class="p">)</span>
 <span class="w">  </span><span class="n">Object</span><span class="w"> </span><span class="nf">getSomething</span><span class="p">();</span>
@@ -1960,21 +1967,19 @@ continue here:</p>
 <p>when using a FeignClient, that behaviour can be achieved by using
   the <code>org.sdase.commons.spring.boot.web.metadata.MetadataContextClientConfiguration</code>
   configuration.</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@FeignClient</span><span class="p">(</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@FeignClient</span><span class="p">(</span>
 <span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span>
 <span class="w">  </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://your-api-url&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="n">configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">MetadataContextClientConfiguration</span><span class="p">.</span><span class="na">class</span>
-<span class="p">})</span>
+<span class="w">  </span><span class="n">configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">MetadataContextClientConfiguration</span><span class="p">.</span><span class="na">class</span><span class="w"> </span><span class="p">}</span>
+<span class="p">)</span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ClientWithMetadataConfiguration</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/metadata-hello&quot;</span><span class="p">)</span>
 <span class="w">  </span><span class="n">Object</span><span class="w"> </span><span class="nf">getSomething</span><span class="p">();</span>
