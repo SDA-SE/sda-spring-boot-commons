@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Special assertions for {@link Path} objects to check if a file matches the expected contents and
@@ -24,11 +26,15 @@ import org.assertj.core.api.Assertions;
  * OpenAPI or AsyncApi).
  */
 public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, Path> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(GoldenFileAssertions.class);
   private static final String ASSERTION_TEXT =
       "The current %s file is not up-to-date. If this "
           + "happens locally, just run the test again. The %s file is updated automatically after "
           + "running this test. If this happens in the CI, make sure that you have committed the "
           + "latest %s file!";
+
+  private CiUtil ciUtil = new CiUtil();
 
   /**
    * Constructor
@@ -37,6 +43,11 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
    */
   private GoldenFileAssertions(Path actual) {
     super(actual, GoldenFileAssertions.class);
+  }
+
+  GoldenFileAssertions withCiUtil(CiUtil ciUtil) {
+    this.ciUtil = ciUtil;
+    return this;
   }
 
   /**
@@ -98,8 +109,13 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
           .hasContent(expected);
 
     } finally {
-      // always update the file content
-      Files.writeString(actual, expected);
+      // eventually update the file content
+      if (ciUtil.isRunningInCiPipeline()) {
+        LOG.info("Not updating file {} when running in CI pipeline", actual);
+      } else {
+        // always update the file content
+        Files.writeString(actual, expected);
+      }
     }
 
     return this;
@@ -149,8 +165,13 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
           .as(ASSERTION_TEXT, fileName, fileName, fileName)
           .isEqualTo(objectMapper.readTree(expected));
     } finally {
-      // always update the file content
-      Files.writeString(actual, expected);
+      // eventually update the file content
+      if (ciUtil.isRunningInCiPipeline()) {
+        LOG.info("Not updating file {} when running in CI pipeline", actual);
+      } else {
+        // always update the file content
+        Files.writeString(actual, expected);
+      }
     }
 
     return this;
