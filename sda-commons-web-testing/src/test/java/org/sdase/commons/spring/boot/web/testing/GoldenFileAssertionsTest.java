@@ -10,6 +10,8 @@ package org.sdase.commons.spring.boot.web.testing;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,8 +27,14 @@ class GoldenFileAssertionsTest {
 
   private Path tempFile;
 
+  private CiUtil ciUtilMockTrue = mock(CiUtil.class);
+  private CiUtil ciUtilMockFalse = mock(CiUtil.class);
+
   @BeforeEach
   void setUp() {
+
+    when(ciUtilMockTrue.isRunningInCiPipeline()).thenReturn(true);
+    when(ciUtilMockFalse.isRunningInCiPipeline()).thenReturn(false);
     tempFile = tempDir.resolve("file");
   }
 
@@ -39,6 +47,7 @@ class GoldenFileAssertionsTest {
     assertThatCode(
             () ->
                 GoldenFileAssertions.assertThat(tempFile)
+                    .withCiUtil(ciUtilMockFalse)
                     .hasContentAndUpdateGolden("expected-content"))
         .doesNotThrowAnyException();
 
@@ -55,6 +64,7 @@ class GoldenFileAssertionsTest {
     assertThatCode(
             () ->
                 GoldenFileAssertions.assertThat(tempFile)
+                    .withCiUtil(ciUtilMockFalse)
                     .hasContentAndUpdateGolden("expected-content-ö"))
         .doesNotThrowAnyException();
 
@@ -68,7 +78,8 @@ class GoldenFileAssertionsTest {
     Files.write(tempFile, "unexpected-content".getBytes());
 
     // should throw and update the file
-    GoldenFileAssertions goldenFileAssertions = GoldenFileAssertions.assertThat(tempFile);
+    GoldenFileAssertions goldenFileAssertions =
+        GoldenFileAssertions.assertThat(tempFile).withCiUtil(ciUtilMockFalse);
     assertThatThrownBy(() -> goldenFileAssertions.hasContentAndUpdateGolden("expected-content"))
         .isInstanceOf(AssertionError.class)
         .hasMessageContaining(
@@ -85,7 +96,8 @@ class GoldenFileAssertionsTest {
     Path path = tempDir.resolve("non-existing-file.yaml");
 
     // should throw and update the file
-    GoldenFileAssertions goldenFileAssertions = GoldenFileAssertions.assertThat(path);
+    GoldenFileAssertions goldenFileAssertions =
+        GoldenFileAssertions.assertThat(path).withCiUtil(ciUtilMockFalse);
     assertThatThrownBy(() -> goldenFileAssertions.hasContentAndUpdateGolden("expected-content"))
         .isInstanceOf(AssertionError.class)
         .hasMessageContaining(
@@ -105,6 +117,7 @@ class GoldenFileAssertionsTest {
     assertThatCode(
             () ->
                 GoldenFileAssertions.assertThat(tempFile)
+                    .withCiUtil(ciUtilMockFalse)
                     .hasYamlContentAndUpdateGolden(
                         "key0: v\nkey2:\n  nested2: b\n  nested1: a\nkey1: w"))
         .doesNotThrowAnyException();
@@ -122,6 +135,7 @@ class GoldenFileAssertionsTest {
     assertThatCode(
             () ->
                 GoldenFileAssertions.assertThat(tempFile)
+                    .withCiUtil(ciUtilMockFalse)
                     .hasYamlContentAndUpdateGolden(
                         "key0: v\nkey2:\n  nested2: ö\n  nested1: a\nkey1: w"))
         .doesNotThrowAnyException();
@@ -139,7 +153,8 @@ class GoldenFileAssertionsTest {
     Files.write(tempFile, "key0: v\nkey1: w\nkey2:\n  nested1: a\n  nested2: b".getBytes());
 
     // should throw and update the file
-    GoldenFileAssertions goldenFileAssertions = GoldenFileAssertions.assertThat(tempFile);
+    GoldenFileAssertions goldenFileAssertions =
+        GoldenFileAssertions.assertThat(tempFile).withCiUtil(ciUtilMockFalse);
     assertThatThrownBy(
             () ->
                 goldenFileAssertions.hasYamlContentAndUpdateGolden(
@@ -165,6 +180,7 @@ class GoldenFileAssertionsTest {
     assertThatCode(
             () ->
                 GoldenFileAssertions.assertThat(tempFile)
+                    .withCiUtil(ciUtilMockFalse)
                     .hasYamlContentAndUpdateGolden(
                         "{\"key0\": \"v\",\"key2\":{\"nested2\":\"b\",\"nested1\": \"a\"},\"key1\": \"w\"}"))
         .doesNotThrowAnyException();
@@ -184,7 +200,8 @@ class GoldenFileAssertionsTest {
             .getBytes());
 
     // should throw and update the file
-    GoldenFileAssertions goldenFileAssertions = GoldenFileAssertions.assertThat(tempFile);
+    GoldenFileAssertions goldenFileAssertions =
+        GoldenFileAssertions.assertThat(tempFile).withCiUtil(ciUtilMockFalse);
     assertThatThrownBy(
             () ->
                 goldenFileAssertions.hasYamlContentAndUpdateGolden(
@@ -206,7 +223,8 @@ class GoldenFileAssertionsTest {
     Path path = tempDir.resolve("non-existing-file.yaml");
 
     // should throw and update the file
-    GoldenFileAssertions goldenFileAssertions = GoldenFileAssertions.assertThat(path);
+    GoldenFileAssertions goldenFileAssertions =
+        GoldenFileAssertions.assertThat(path).withCiUtil(ciUtilMockFalse);
     assertThatThrownBy(() -> goldenFileAssertions.hasYamlContentAndUpdateGolden("expected-content"))
         .isInstanceOf(AssertionError.class)
         .hasMessageContaining(
@@ -215,5 +233,65 @@ class GoldenFileAssertionsTest {
 
     // content should now be expected-content
     assertThat(path).exists().hasContent("expected-content");
+  }
+
+  @Test
+  void hasYamlContentAndUpdateGoldenShouldNeverUpdateContentInCi() throws IOException {
+    var path = tempDir.resolve("file.yaml");
+    var oldContent = "foo";
+    Files.write(path, oldContent.getBytes());
+
+    var goldenFileAssertions = GoldenFileAssertions.assertThat(path).withCiUtil(ciUtilMockTrue);
+    var newContent = "bar";
+    assertThatThrownBy(() -> goldenFileAssertions.hasYamlContentAndUpdateGolden(newContent))
+        .isInstanceOf(AssertionError.class);
+
+    // content should never change
+    assertThat(path).hasContent(oldContent);
+  }
+
+  @Test
+  void hasContentAndUpdateGoldenShouldNeverUpdateContentInCi() throws IOException {
+    var path = tempDir.resolve("file.yaml");
+    var oldContent = "foo";
+    Files.write(path, oldContent.getBytes());
+
+    var goldenFileAssertions = GoldenFileAssertions.assertThat(path).withCiUtil(ciUtilMockTrue);
+    var newContent = "bar";
+    assertThatThrownBy(() -> goldenFileAssertions.hasContentAndUpdateGolden(newContent))
+        .isInstanceOf(AssertionError.class);
+
+    // content should never change
+    assertThat(path).hasContent(oldContent);
+  }
+
+  @Test
+  void hasYamlContentAndUpdateGoldenShouldAlwaysUpdateContent() throws IOException {
+    var path = tempDir.resolve("file.yaml");
+    var oldContent = "foo";
+    Files.write(path, oldContent.getBytes());
+
+    var goldenFileAssertions = GoldenFileAssertions.assertThat(path).withCiUtil(ciUtilMockFalse);
+    var newContent = "bar";
+    assertThatThrownBy(() -> goldenFileAssertions.hasYamlContentAndUpdateGolden(newContent))
+        .isInstanceOf(AssertionError.class);
+
+    // content should never change
+    assertThat(path).hasContent(newContent);
+  }
+
+  @Test
+  void hasContentAndUpdateGoldenShouldAlwaysUpdateContent() throws IOException {
+    var path = tempDir.resolve("file.yaml");
+    var oldContent = "foo";
+    Files.write(path, oldContent.getBytes());
+
+    var goldenFileAssertions = GoldenFileAssertions.assertThat(path).withCiUtil(ciUtilMockFalse);
+    var newContent = "bar";
+    assertThatThrownBy(() -> goldenFileAssertions.hasContentAndUpdateGolden(newContent))
+        .isInstanceOf(AssertionError.class);
+
+    // content should never change
+    assertThat(path).hasContent(newContent);
   }
 }
