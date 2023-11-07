@@ -81,6 +81,7 @@ components:
             - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
           source:
             type: "string"
+            format: "uri"
             description: "Identifies the context in which an event happened.\nOften\
               \ this will include information such as the type of the event source,\
               \ the organization\npublishing the event or the process that produced\
@@ -225,6 +226,7 @@ components:
             - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
           source:
             type: "string"
+            format: "uri"
             description: "Identifies the context in which an event happened.\nOften\
               \ this will include information such as the type of the event source,\
               \ the organization\npublishing the event or the process that produced\
@@ -366,6 +368,7 @@ components:
           - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
         source:
           type: "string"
+          format: "uri"
           description: "Identifies the context in which an event happened.\nOften\
             \ this will include information such as the type of the event source,\
             \ the organization\npublishing the event or the process that produced\
@@ -505,6 +508,7 @@ components:
           - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
         source:
           type: "string"
+          format: "uri"
           description: "Identifies the context in which an event happened.\nOften\
             \ this will include information such as the type of the event source,\
             \ the organization\npublishing the event or the process that produced\
@@ -644,6 +648,7 @@ components:
           - "57d67827-3f4f-46e8-a126-fa6a6b724ae2"
         source:
           type: "string"
+          format: "uri"
           description: "Identifies the context in which an event happened.\nOften\
             \ this will include information such as the type of the event source,\
             \ the organization\npublishing the event or the process that produced\
