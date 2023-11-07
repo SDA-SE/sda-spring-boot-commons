@@ -79,7 +79,7 @@ dependencies {
     api 'net.minidev:json-smart:2.5.0', {
       because 'Temporary: this version is used to solve CVE-2023-1370'
     }
-    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.9.3'
+    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.10.0'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
