@@ -208,6 +208,15 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
     options.encoding = 'UTF-8'
   }
 
+  jacoco {
+    // Gradle still uses 0.8.9
+    // Jacoco 0.8.11 brings Java 21 support and Java 22 experimental support
+    // Compare
+    // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:configuring_the_jacoco_plugin
+    // https://github.com/jacoco/jacoco/releases/tag/v0.8.11
+    toolVersion = "0.8.11"
+  }
+
   // output XML reports for SonarCloud
   jacocoTestReport {
     reports {
