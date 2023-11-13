@@ -13,7 +13,7 @@ ext {
   springBootVersion = '3.1.5'
   springCloudVersion = '2022.0.4'
   scalaVersion = '2.13.12'
-  swaggerCoreVersion = '2.2.18'
+  swaggerCoreVersion = '2.2.19'
   victoolsVersion = '4.32.0'
 }
 
