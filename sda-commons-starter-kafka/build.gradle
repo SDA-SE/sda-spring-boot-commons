@@ -15,7 +15,7 @@ dependencies {
     exclude group: 'com.fasterxml.jackson.dataformat'
     exclude group: 'com.fasterxml.jackson.datatype'
   }
-  testImplementation 'org.junit-pioneer:junit-pioneer:2.1.0', {
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0', {
     exclude group: 'org.junit'
   }
 }
