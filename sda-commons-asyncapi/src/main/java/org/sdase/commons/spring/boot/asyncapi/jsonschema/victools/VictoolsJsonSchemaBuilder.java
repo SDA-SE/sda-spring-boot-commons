@@ -67,9 +67,7 @@ public class VictoolsJsonSchemaBuilder implements JsonSchemaBuilder {
             .with(jakartaValidationModule)
             .with(swagger2Module)
             .with(new SwaggerExampleModule())
-            .with(new NotBlankModule())
-            .with(new UriFormatModule())
-            .with(new TemporalFormatModule());
+            .with(new NotBlankModule());
     // see https://github.com/victools/jsonschema-generator/issues/125#issuecomment-657014858
     configBuilder.forTypesInGeneral().withPropertySorter((o1, o2) -> 0);
 

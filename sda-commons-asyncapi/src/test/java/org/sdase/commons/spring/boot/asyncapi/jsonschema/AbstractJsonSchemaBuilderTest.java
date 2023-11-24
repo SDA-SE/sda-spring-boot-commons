@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
@@ -114,6 +115,7 @@ public abstract class AbstractJsonSchemaBuilderTest {
         of(JakartaNotBlank.class, "/required", array(text("notBlankProperty"))),
         of(JakartaNotBlank.class, "/properties/notBlankProperty/minLength", number(1)),
         of(JakartaNotBlank.class, "/properties/notBlankProperty/pattern", text("^.*\\S+.*$")),
+        of(JakartaNotBlank.class, "/properties/notBlankProperty/format", MissingNode.getInstance()),
         of(JsonPropertyRequired.class, "/required", array(text("requiredProperty"))),
         of(JakartaNotNull.class, "/required", array(text("requiredProperty"))),
         of(SwaggerRequired.class, "/required", array(text("requiredProperty"))),
@@ -141,6 +143,7 @@ public abstract class AbstractJsonSchemaBuilderTest {
         of(UriProperties.class, "/properties/notBlankUri/pattern", text("^.*\\S+.*$")),
         of(UriProperties.class, "/required", array(text("notBlankUri"))),
         of(EnumPlain.class, "/type", text("string")),
+        of(EnumPlain.class, "/format", MissingNode.getInstance()),
         of(EnumPlain.class, "/enum", array(text("ONE"), text("TWO"))),
         of(EnumJackson.class, "/type", text("string")),
         of(EnumJackson.class, "/enum", array(text("1"), text("2")))
