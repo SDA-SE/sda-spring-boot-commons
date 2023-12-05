@@ -10,7 +10,9 @@ ignore_cves := {
   # Sources
   # - https://github.com/jeremylong/DependencyCheck/issues/5912
   # - https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration.html
-  "CVE-2023-4586"
+  "CVE-2023-4586",
+  # Logback CVE; Spring Boot is not affected. See https://github.com/spring-projects/spring-boot/issues/38643
+  "CVE-2023-6378"
 }
 
 ignore {
