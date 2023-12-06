@@ -113,6 +113,17 @@ class MetricsIT {
   }
 
   @Test
+  void shouldProduceHttpServerMetricWithPathVariable() {
+    String metrics = getForEntity("metrics/prometheus", String.class).getBody();
+
+    assertThat(metrics)
+        .contains(
+            "http_server_requests_seconds_count{error=\"none\",exception=\"none\",method=\"GET\",outcome=\"SUCCESS\",status=\"200\",uri=\"/add-custom-metrics/{name}\",} ")
+        .contains(
+            "http_server_requests_seconds_sum{error=\"none\",exception=\"none\",method=\"GET\",outcome=\"SUCCESS\",status=\"200\",uri=\"/add-custom-metrics/{name}\",} ");
+  }
+
+  @Test
   void shouldProduceErrorCounterMetric() {
     String metrics = getForEntity("metrics/prometheus", String.class).getBody();
 
@@ -132,6 +143,16 @@ class MetricsIT {
       mockMvc
           .perform(
               MockMvcRequestBuilders.request(HttpMethod.GET, "/add-custom-metrics")
+                  .accept(APPLICATION_JSON))
+          .andExpect(MockMvcResultMatchers.status().isOk());
+      mockMvc
+          .perform(
+              MockMvcRequestBuilders.request(HttpMethod.GET, "/add-custom-metrics/John")
+                  .accept(APPLICATION_JSON))
+          .andExpect(MockMvcResultMatchers.status().isOk());
+      mockMvc
+          .perform(
+              MockMvcRequestBuilders.request(HttpMethod.GET, "/add-custom-metrics/Jane")
                   .accept(APPLICATION_JSON))
           .andExpect(MockMvcResultMatchers.status().isOk());
     }

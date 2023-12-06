@@ -11,6 +11,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.util.Random;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,6 +44,14 @@ public class CustomMetricsTestController {
       doSomeOperationWithCounting();
     }
     return "Hello World!";
+  }
+
+  @GetMapping("/add-custom-metrics/{name}")
+  public String index(@PathVariable("name") String name) {
+    for (int i = 0; i < 10; i++) {
+      doSomeOperationWithCounting();
+    }
+    return String.format("Hello %s!", name);
   }
 
   public void doSomeOperationWithCounting() {
