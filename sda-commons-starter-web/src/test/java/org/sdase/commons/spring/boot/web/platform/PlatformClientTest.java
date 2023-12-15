@@ -50,7 +50,7 @@ import org.springframework.test.context.ContextConfiguration;
     })
 @AutoConfigureWireMock(port = 0)
 @ContextConfiguration(initializers = {EnableSdaOidcClientMockInitializer.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class PlatformClientTest {
   @LocalServerPort private int port;
   @Autowired ObjectMapper objectMapper;
@@ -92,7 +92,8 @@ class PlatformClientTest {
 
   // AuthenticationPassThroughClientConfiguration
   @Test
-  void authenticationPassThroughEnabled() {
+  @SetSystemProperty(key = "oidc.client.token-pass-through.enabled", value = "true")
+  void oidcClientEnabledWithTokenPassThrough() {
     WireMock.stubFor(
         WireMock.get(WireMock.urlPathEqualTo("/api/hello"))
             .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
@@ -110,7 +111,8 @@ class PlatformClientTest {
 
   // OidcClientRequestConfiguration
   @Test
-  void oidcClientEnabled() {
+  @SetSystemProperty(key = "oidc.client.token-pass-through.enabled", value = "false")
+  void oidcClientEnabledWithoutTokenPassThrough() {
     // given
     WireMock.stubFor(
         WireMock.get(WireMock.urlPathEqualTo("/api/hello"))
