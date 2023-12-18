@@ -23,6 +23,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
+import org.sdase.commons.spring.boot.web.platform.test.ExternalClientService;
 import org.sdase.commons.spring.boot.web.platform.test.PlatformClientService;
 import org.sdase.commons.spring.boot.web.platform.test.PlatformClientTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
@@ -45,7 +46,8 @@ import org.springframework.test.context.ContextConfiguration;
     classes = PlatformClientTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
-      "platformClient.baseUrl=http://localhost:${wiremock.server.port}/api",
+      "platformClient.baseUrl=http://localhost:${wiremock.server.port}/platform/api",
+      "externalClient.baseUrl=http://localhost:${wiremock.server.port}/external/api",
       "oidc.client.enabled=true"
     })
 @AutoConfigureWireMock(port = 0)
@@ -56,6 +58,7 @@ class PlatformClientTest {
   @Autowired ObjectMapper objectMapper;
   @Autowired private AuthMock authMock;
   @Autowired private PlatformClientService platformClientService;
+  @Autowired private ExternalClientService externalClientService;
 
   private static final String DISCOVERY_PATH = "/issuer/.well-known/openid-configuration";
   private static final String JWKS_PATH = "/issuer/keys";
@@ -73,7 +76,7 @@ class PlatformClientTest {
   void traceTokenEnabled() {
     // given
     WireMock.stubFor(
-        WireMock.get(WireMock.urlPathEqualTo("/api/hello"))
+        WireMock.get(WireMock.urlPathEqualTo("/platform/api/hello"))
             .withHeader("Trace-Token", equalTo("pre-defined-trace-token"))
             .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
 
@@ -95,7 +98,7 @@ class PlatformClientTest {
   @SetSystemProperty(key = "oidc.client.token-pass-through.enabled", value = "true")
   void oidcClientEnabledWithTokenPassThrough() {
     WireMock.stubFor(
-        WireMock.get(WireMock.urlPathEqualTo("/api/hello"))
+        WireMock.get(WireMock.urlPathEqualTo("/platform/api/hello"))
             .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
 
     var authentication = authMock.authentication();
@@ -115,7 +118,7 @@ class PlatformClientTest {
   void oidcClientEnabledWithoutTokenPassThrough() {
     // given
     WireMock.stubFor(
-        WireMock.get(WireMock.urlPathEqualTo("/api/hello"))
+        WireMock.get(WireMock.urlPathEqualTo("/platform/api/hello"))
             .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
 
     // when
@@ -125,12 +128,34 @@ class PlatformClientTest {
     assertThat(response).isNotNull();
 
     WireMock.verify(
-        WireMock.getRequestedFor(WireMock.urlPathEqualTo("/api/hello"))
+        WireMock.getRequestedFor(WireMock.urlPathEqualTo("/platform/api/hello"))
             .withHeader("Authorization", matching(".*")));
 
     authMock
         .wireMockServer()
         .verify(1, WireMock.postRequestedFor(WireMock.urlPathEqualTo(TOKEN_PATH)));
+  }
+
+  @Test
+  void externalClientsShouldNotTryToRetrieveToken() {
+    // given
+    WireMock.stubFor(
+        WireMock.get(WireMock.urlPathEqualTo("/external/api/hello"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(Map.of("hello", "world"))));
+
+    // when
+    var response = externalClientService.getSomething();
+
+    // then
+    assertThat(response).isNotNull();
+
+    WireMock.verify(
+        WireMock.getRequestedFor(WireMock.urlPathEqualTo("/external/api/hello"))
+            .withoutHeader("Authorization"));
+
+    authMock
+        .wireMockServer()
+        .verify(0, WireMock.postRequestedFor(WireMock.urlPathEqualTo(TOKEN_PATH)));
   }
 
   private ResponseEntity<String> executeRequestWithHeader(
