@@ -31,8 +31,8 @@ public class OidcClientRequestConfiguration {
   @Lazy
   @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
   public RequestInterceptor getOidcRequestInterceptor(
-      @Value("${oidc.client.token-pass-through.enabled:true}") boolean tokenPassThroughEnabled) {
-    return new OidcClientRequestInterceptor(applicationContext, tokenPassThroughEnabled);
+      @Value("${oidc.client.token-pass-through.enabled:true}") boolean authenticationPassthrough) {
+    return new OidcClientRequestInterceptor(applicationContext, authenticationPassthrough);
   }
 
   public static class OidcClientRequestInterceptor extends AuthHeaderClientInterceptor {
@@ -40,18 +40,18 @@ public class OidcClientRequestConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(OidcClientRequestInterceptor.class);
 
     private final ApplicationContext applicationContext;
-    private final boolean tokenPassThroughEnabled;
+    private final boolean authenticationPassthrough;
 
     public OidcClientRequestInterceptor(
-        ApplicationContext applicationContext, boolean tokenPassThroughEnabled) {
+        ApplicationContext applicationContext, boolean authenticationPassthrough) {
       this.applicationContext = applicationContext;
-      this.tokenPassThroughEnabled = tokenPassThroughEnabled;
+      this.authenticationPassthrough = authenticationPassthrough;
     }
 
     @Override
     public void apply(RequestTemplate template) {
       Optional<String> token = Optional.empty();
-      if (tokenPassThroughEnabled) {
+      if (authenticationPassthrough) {
         token = firstAuthHeaderFromServletRequest();
       }
       if (token.isEmpty()) {
