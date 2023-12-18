@@ -926,7 +926,7 @@ core concepts.</p>
 <td><code>OPA_CLIENT_ID</code></td>
 </tr>
 <tr>
-<td><code>oid.client.secret</code> <em>string</em></td>
+<td><code>oidc.client.secret</code> <em>string</em></td>
 <td>The Client secret of the registration.</td>
 <td></td>
 <td><code>"s3cret"</code></td>
@@ -938,6 +938,13 @@ core concepts.</p>
 <td></td>
 <td><code>"https://keycloak.sdadev.sda-se.io/auth/realms/exampleRealm"</code></td>
 <td><code>OIDC_CLIENT_ISSUER_URI</code></td>
+</tr>
+<tr>
+<td><code>oidc.client.authentication-passthrough.enabled</code> <em>string</em></td>
+<td>Flag indicating whether the token from the existing request context should be used, if exists, before attempting to generate new one</td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>OIDC_CLIENT_AUTHENTICATION_PASSTHROUGH_ENABLED</code></td>
 </tr>
 <tr>
 <td><code>cors.allowed-origin-patterns</code> <em>string</em></td>
@@ -1491,7 +1498,7 @@ service-to-service communication is required, the
 OIDC authentication token with the client credentials flow using the configured
 <code>"oidc.client.issuer.uri"</code>, <code>"oidc.client.id"</code> and <code>"oidc.client.secret"</code>.</p>
 <p>If the current request context contains the <strong>Authorization</strong> header, the authentication
-pass-through will be applied instead.</p>
+pass-through will be applied instead, in case <code>"oidc.client.authentication-passthrough.enabled"</code> flag is enabled.</p>
 <h3 id="jax-rs-mapping">JAX-RS Mapping<a class="headerlink" href="#jax-rs-mapping" title="Permanent link">&para;</a></h3>
 <p>If you would like to use JAX-RS based web annotations, you just need to apply
 the <code>feign.jaxrs.JakartaContract.class</code> to configurations.</p>
