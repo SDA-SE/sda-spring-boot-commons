@@ -301,7 +301,7 @@ OIDC authentication token with the client credentials flow using the configured
 `"oidc.client.issuer.uri"`, `"oidc.client.id"` and `"oidc.client.secret"`.
 
 If the current request context contains the **Authorization** header, the authentication
-pass-through will be applied instead.
+pass-through will be applied instead, in case `"oidc.client.authentication-passthrough.enabled"` flag is enabled.
 
 ### JAX-RS Mapping
 

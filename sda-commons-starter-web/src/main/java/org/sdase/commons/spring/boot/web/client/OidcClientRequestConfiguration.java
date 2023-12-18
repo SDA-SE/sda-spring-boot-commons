@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -29,8 +30,10 @@ public class OidcClientRequestConfiguration {
   @Bean
   @Lazy
   @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
-  public RequestInterceptor getOidcRequestInterceptor() {
-    return new OidcClientRequestInterceptor(applicationContext);
+  public RequestInterceptor getOidcRequestInterceptor(
+      @Value("${oidc.client.authentication-passthrough.enabled:true}")
+          boolean authenticationPassthrough) {
+    return new OidcClientRequestInterceptor(applicationContext, authenticationPassthrough);
   }
 
   public static class OidcClientRequestInterceptor extends AuthHeaderClientInterceptor {
@@ -38,26 +41,34 @@ public class OidcClientRequestConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(OidcClientRequestInterceptor.class);
 
     private final ApplicationContext applicationContext;
+    private final boolean authenticationPassthrough;
 
-    public OidcClientRequestInterceptor(ApplicationContext applicationContext) {
+    public OidcClientRequestInterceptor(
+        ApplicationContext applicationContext, boolean authenticationPassthrough) {
       this.applicationContext = applicationContext;
+      this.authenticationPassthrough = authenticationPassthrough;
     }
 
     @Override
     public void apply(RequestTemplate template) {
-      firstAuthHeaderFromServletRequest()
-          .or(
-              () -> {
-                try {
-                  var bean =
-                      applicationContext.getBean("oAuth2Provider", OAuth2TokenProvider.class);
-                  return bean.getAuthenticationTokenForTechnicalUser("oidc");
-                } catch (Exception e) {
-                  LOG.error("Error retrieving OAuth 2 provider", e.getCause());
-                }
-                return Optional.empty();
-              })
-          .ifPresent(token -> template.header(HttpHeaders.AUTHORIZATION, token));
+      Optional<String> token = Optional.empty();
+      if (authenticationPassthrough) {
+        token = firstAuthHeaderFromServletRequest();
+      }
+      if (token.isEmpty()) {
+        token = generateNewToken();
+      }
+      token.ifPresent(t -> template.header(HttpHeaders.AUTHORIZATION, t));
+    }
+
+    private Optional<String> generateNewToken() {
+      try {
+        var bean = applicationContext.getBean("oAuth2Provider", OAuth2TokenProvider.class);
+        return bean.getAuthenticationTokenForTechnicalUser("oidc");
+      } catch (Exception e) {
+        LOG.error("Error retrieving OAuth 2 provider", e.getCause());
+      }
+      return Optional.empty();
     }
   }
 }

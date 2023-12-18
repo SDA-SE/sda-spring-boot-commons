@@ -13,15 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ClientTestController {
 
-  PlatformClientService platformClientService;
+  private final PlatformClientService platformClientService;
 
-  public ClientTestController(PlatformClientService platformClientService) {
+  private final ExternalClientService externalClientService;
+
+  public ClientTestController(
+      PlatformClientService platformClientService, ExternalClientService externalClientService) {
     this.platformClientService = platformClientService;
+    this.externalClientService = externalClientService;
   }
 
   @GetMapping("/proxy")
   public Object getSomethingFromOtherService() {
     return platformClientService.getSomething();
+  }
+
+  @GetMapping("/proxy-external")
+  public Object getSomethingFromExternalService() {
+    return externalClientService.getSomething();
   }
 
   @GetMapping("/static")
