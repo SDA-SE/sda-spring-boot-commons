@@ -95,7 +95,7 @@ class PlatformClientTest {
 
   // AuthenticationPassThroughClientConfiguration
   @Test
-  @SetSystemProperty(key = "oidc.client.token-pass-through.enabled", value = "true")
+  @SetSystemProperty(key = "oidc.client.authentication-passthrough.enabled", value = "true")
   void oidcClientEnabledWithAuthenticationPassThrough() {
     WireMock.stubFor(
         WireMock.get(WireMock.urlPathEqualTo("/platform/api/hello"))
@@ -114,7 +114,7 @@ class PlatformClientTest {
 
   // OidcClientRequestConfiguration
   @Test
-  @SetSystemProperty(key = "oidc.client.token-pass-through.enabled", value = "false")
+  @SetSystemProperty(key = "oidc.client.authentication-passthrough.enabled", value = "false")
   void oidcClientEnabledWithoutAuthenticationPassThrough() {
     // given
     WireMock.stubFor(

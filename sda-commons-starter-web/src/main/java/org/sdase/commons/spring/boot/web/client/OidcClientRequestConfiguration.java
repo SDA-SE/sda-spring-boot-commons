@@ -31,7 +31,8 @@ public class OidcClientRequestConfiguration {
   @Lazy
   @ConditionalOnProperty(value = "oidc.client.enabled", havingValue = "true")
   public RequestInterceptor getOidcRequestInterceptor(
-      @Value("${oidc.client.token-pass-through.enabled:true}") boolean authenticationPassthrough) {
+      @Value("${oidc.client.authentication-passthrough.enabled:true}")
+          boolean authenticationPassthrough) {
     return new OidcClientRequestInterceptor(applicationContext, authenticationPassthrough);
   }
 
