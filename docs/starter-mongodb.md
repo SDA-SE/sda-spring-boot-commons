@@ -45,7 +45,7 @@ SDA Spring Boot Commons testing module:
 
 ```groovy
 dependencies {
-  testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x'
+  testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x'
   testImplementation 'org.sdase.commons.spring.boot:sda-commons-web-testing'
 }
 ```
