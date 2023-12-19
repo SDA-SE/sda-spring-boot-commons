@@ -28,7 +28,7 @@ dependencies {
     exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone' // 2.35.0 / CVE-2023-41329
   }
 
-  api enforcedPlatform("io.netty:netty-bom:4.1.103.Final"), {
+  api enforcedPlatform("io.netty:netty-bom:4.1.104.Final"), {
     because 'managed version in spring-boot-dependencies (4.1.97.Final) is affected by https://github.com/advisories/GHSA-xpw8-rcwv-8f8p'
   }
 
