@@ -119,7 +119,7 @@ important can't be expressed.
 ## MongoDB
 
 If you use `de.flapdoodle.embed:de.flapdoodle.embed.mongo` for testing, change to
-`de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x`.
+`de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x`.
 To define the database version used for tests, use the property
 `de.flapdoodle.mongodb.embedded.version` instead of `spring.mongodb.embedded.version`
 
