@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.web.security.test.CreateSomethingResource;
@@ -31,6 +32,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(
@@ -42,6 +44,14 @@ class LimitRequestBodyFilterSizeTest {
   @LocalServerPort private int port;
 
   @Autowired private TestRestTemplate client;
+
+  @BeforeEach
+  void setupBufferedClient() {
+    client
+        .getRestTemplate()
+        .setRequestFactory(
+            new BufferingClientHttpRequestFactory(client.getRestTemplate().getRequestFactory()));
+  }
 
   @Test
   void shouldNotAcceptLargePostRequests() {

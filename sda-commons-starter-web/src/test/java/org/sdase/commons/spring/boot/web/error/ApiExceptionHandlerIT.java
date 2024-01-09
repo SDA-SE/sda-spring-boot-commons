@@ -12,6 +12,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import java.util.List;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(classes = ApiExceptionTestApp.class, webEnvironment = RANDOM_PORT)
@@ -34,6 +36,14 @@ class ApiExceptionHandlerIT {
   @Autowired TestRestTemplate client;
 
   @LocalServerPort private int port;
+
+  @BeforeEach
+  void setupBufferedClient() {
+    client
+        .getRestTemplate()
+        .setRequestFactory(
+            new BufferingClientHttpRequestFactory(client.getRestTemplate().getRequestFactory()));
+  }
 
   @ParameterizedTest(name = "{0}")
   @ArgumentsSource(CustomArgumentProvider.class)
