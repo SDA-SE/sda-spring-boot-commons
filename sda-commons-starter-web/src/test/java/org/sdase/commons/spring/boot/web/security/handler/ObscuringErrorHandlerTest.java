@@ -9,6 +9,7 @@ package org.sdase.commons.spring.boot.web.security.handler;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.web.security.test.SecurityTestApp;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(
@@ -35,6 +37,14 @@ class ObscuringErrorHandlerTest {
   @LocalServerPort private int port;
 
   @Autowired private TestRestTemplate client;
+
+  @BeforeEach
+  void setupBufferedClient() {
+    client
+        .getRestTemplate()
+        .setRequestFactory(
+            new BufferingClientHttpRequestFactory(client.getRestTemplate().getRequestFactory()));
+  }
 
   @Test
   void shouldTransformToStandardErrors() {
