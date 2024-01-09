@@ -49,7 +49,7 @@ import org.springframework.test.context.ContextConfiguration;
       "oidc.client.enabled=true"
     })
 @ContextConfiguration(initializers = EnableSdaOidcClientMockInitializer.class)
-@AutoConfigureWireMock
+@AutoConfigureWireMock(port = 0)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class ClientCredentialsFlowIT {
 

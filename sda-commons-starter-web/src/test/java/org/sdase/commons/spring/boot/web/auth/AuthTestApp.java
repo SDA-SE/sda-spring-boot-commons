@@ -61,7 +61,7 @@ public class AuthTestApp {
   }
 
   @GetMapping("/ping/{pingParam}")
-  public Object getSpecificPing(Principal principal, @PathVariable String pingParam) {
+  public Object getSpecificPing(Principal principal, @PathVariable("pingParam") String pingParam) {
     if (principal == null) {
       LOG.info("Principal is null");
     } else {
