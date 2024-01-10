@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
+import org.apache.commons.io.input.CountingInputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,12 +36,22 @@ public class LimitRequestBodySizeFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    if (request.getContentLengthLong() > requestBodyMaxSize.toBytes()) {
+
+    CachedBodyHttpServletRequest cachedBodyHttpServletRequest =
+        new CachedBodyHttpServletRequest(request);
+
+    var countingInputStream =
+        new CountingInputStream(cachedBodyHttpServletRequest.getInputStream());
+
+    countingInputStream.readAllBytes();
+    var requestSize = countingInputStream.getByteCount();
+
+    if (requestSize > requestBodyMaxSize.toBytes()) {
       response.sendError(HttpStatus.PAYLOAD_TOO_LARGE.value()); // 413
     } else if (isChunkedEncoding(request.getHeaders(HttpHeaders.TRANSFER_ENCODING))) {
       response.sendError(HttpStatus.LENGTH_REQUIRED.value()); // 411
     } else {
-      filterChain.doFilter(request, response);
+      filterChain.doFilter(cachedBodyHttpServletRequest, response);
     }
   }
 
