@@ -8,10 +8,13 @@ javaPlatform {
 
 ext {
   awaitalityVersion = '4.2.0'
+
+  // Version 1.74 works without conflicts
+  //bouncycastleVersion = '1.74'
   bouncycastleVersion = '1.77'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '3.1.6'
-  springCloudVersion = '2022.0.4'
+  springBootVersion = '3.2.1'
+  springCloudVersion = '2023.0.0'
   scalaVersion = '2.13.12'
   swaggerCoreVersion = '2.2.20'
   victoolsVersion = '4.33.1'
@@ -75,6 +78,9 @@ dependencies {
 
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:9.37.3'
+
+    // match (major) Wiremock version from spring-cloud
+    // see https://github.com/spring-cloud/spring-cloud-contract/blob/v4.1.0/spring-cloud-contract-dependencies/pom.xml#L18
     api 'com.github.tomakehurst:wiremock-jre8-standalone:2.35.1'
     api 'net.minidev:json-smart:2.5.0', {
       because 'Temporary: this version is used to solve CVE-2023-1370'
