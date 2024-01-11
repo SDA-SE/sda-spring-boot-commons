@@ -21,7 +21,7 @@ assessment), we will respond within one week.
 
 # Supported versions and update policy
 
-Please be aware that only the most recent version in master will be subject of security patches.
+Please be aware that only the most recent version in main will be subject of security patches.
 The [changelog](https://github.com/SDA-SE/sda-spring-boot-commons/releases/) provides information
 about feature and security related fixes like patches.
 

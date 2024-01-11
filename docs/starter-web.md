@@ -46,7 +46,7 @@ cache of known JWK is invalidated after 15 minutes.
 Spring Security is disabled for the Management/Admin Port (default: 8081). Be aware that these port
 should not be accessible out of the deployment context.
 
-This security implementation lacks some features compared to [sda-dropwizard-commons](https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-auth):
+This security implementation lacks some features compared to [sda-dropwizard-commons](https://github.com/SDA-SE/sda-dropwizard-commons/tree/main/sda-commons-server-auth):
 - No configuration of static local public keys to verify the token signature. 
 - No configuration of JWKS URIs to verify the token signature. 
 - The IDP must provide an `iss` claim that matches the base URI for discovery. 
@@ -425,7 +425,7 @@ be serialized with milliseconds, it must be annotated with
 . If a specific field should be serialized with nanoseconds, it must be annotated with
 `@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithNanos.class)`
 
-**Differences to the known [SDA Dropwizard Commons configuration](https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-jackson)**
+**Differences to the known [SDA Dropwizard Commons configuration](https://github.com/SDA-SE/sda-dropwizard-commons/tree/main/sda-commons-server-jackson)**
 - `java.time.ZonedDateTime` fields are serialized with seconds by default.
   There is no other global configuration for **java.time.ZonedDateTime** serialization available.
 - **Fewer modules are activated for foreign frameworks**. Compared to SDA Dropwizard Commons,
