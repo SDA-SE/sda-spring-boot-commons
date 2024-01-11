@@ -55,7 +55,7 @@ class JsonLoggingMdcTest {
       log.info("Hello from the test.");
       var actual =
           toStructuredLogs(capturedOutput).stream()
-              .filter(l -> getClass().getName().equals(l.get("logger")))
+              .filter(l -> "Hello from the test.".equals(l.get("message")))
               .findFirst();
 
       assertThat(actual)
