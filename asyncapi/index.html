@@ -475,7 +475,7 @@
 <p class="admonition-title">Experimental</p>
 <p>Please be aware that SDA SE is likely to change or remove this artifact in the future</p>
 </div>
-<p>This module contains the <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/master/sda-commons-asyncapi/src/main/java/org/sdase/commons/spring/boot/asyncapi/AsyncApiGenerator.java"><code>AsyncApiGenerator</code></a>
+<p>This module contains the <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/main/sda-commons-asyncapi/src/main/java/org/sdase/commons/spring/boot/asyncapi/AsyncApiGenerator.java"><code>AsyncApiGenerator</code></a>
 to generate <a href="https://www.asyncapi.com/">AsyncAPI</a> specs from a template and model classes in a
 code first approach.
 The AsyncAPI specification is the industry standard for defining asynchronous APIs.</p>
@@ -491,7 +491,7 @@ The suggested way to use this module is:</p>
   Jackson, Jakarta Validation and Swagger 2 annotations can be used for documentation.</li>
 <li>The root classes of messages are referenced in <code>components.messages.YourMessage.payload.$ref</code> as
   <code>class://your.package.MessageModel</code>.</li>
-<li>The <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/master/sda-commons-asyncapi/src/main/java/org/sdase/commons/spring/boot/asyncapi/AsyncApiGenerator.java"><code>AsyncApiGenerator</code></a>
+<li>The <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/main/sda-commons-asyncapi/src/main/java/org/sdase/commons/spring/boot/asyncapi/AsyncApiGenerator.java"><code>AsyncApiGenerator</code></a>
   is used to combine the template and the generated Json Schema of the models to a self-contained
   spec file.</li>
 <li>The generated AsyncAPI spec is committed into source control.
@@ -501,7 +501,7 @@ The suggested way to use this module is:</p>
 </ul>
 <p>It is suggested to use it as a test dependency, build the AsyncAPI in a unit test and verify that it
 is up-to-date.
-The <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/master/sda-commons-web-testing/src/main/java/org/sdase/commons/spring/boot/web/testing/GoldenFileAssertions.java"><code>GoldenFileAssertions</code></a>
+The <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/main/sda-commons-web-testing/src/main/java/org/sdase/commons/spring/boot/web/testing/GoldenFileAssertions.java"><code>GoldenFileAssertions</code></a>
 from the test module help here.</p>
 <div class="admonition example">
 <p class="admonition-title">Example: Build AsyncAPI for Cars</p>
@@ -1488,7 +1488,7 @@ diverge over time.</p>
 <h3 id="generating-schema-files">Generating Schema Files<a class="headerlink" href="#generating-schema-files" title="Permanent link">&para;</a></h3>
 <p>If desired, the module also allows to generate the JSON schema files, for example to use them to
 validate test data.
-Please take a look at <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/master/sda-commons-asyncapi/src/main/java/org/sdase/commons/spring/boot/asyncapi/jsonschema/JsonSchemaBuilder.java"><code>JsonSchemaBuilder</code></a>
+Please take a look at <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/main/sda-commons-asyncapi/src/main/java/org/sdase/commons/spring/boot/asyncapi/jsonschema/JsonSchemaBuilder.java"><code>JsonSchemaBuilder</code></a>
 and it's implementations.</p>
 
 

@@ -1141,7 +1141,7 @@ provided by the Open Policy Agent to decide about denying anonymous requests.</p
 </div>
 <p>Spring Security is disabled for the Management/Admin Port (default: 8081). Be aware that these port
 should not be accessible out of the deployment context.</p>
-<p>This security implementation lacks some features compared to <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-auth">sda-dropwizard-commons</a>:
+<p>This security implementation lacks some features compared to <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/main/sda-commons-server-auth">sda-dropwizard-commons</a>:
 - No configuration of static local public keys to verify the token signature. 
 - No configuration of JWKS URIs to verify the token signature. 
 - The IDP must provide an <code>iss</code> claim that matches the base URI for discovery. 
@@ -1627,7 +1627,7 @@ be serialized with milliseconds, it must be annotated with
 <code>@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithMillis.class)</code>
 . If a specific field should be serialized with nanoseconds, it must be annotated with
 <code>@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithNanos.class)</code></p>
-<p><strong>Differences to the known <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/master/sda-commons-server-jackson">SDA Dropwizard Commons configuration</a></strong>
+<p><strong>Differences to the known <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/main/sda-commons-server-jackson">SDA Dropwizard Commons configuration</a></strong>
 - <code>java.time.ZonedDateTime</code> fields are serialized with seconds by default.
   There is no other global configuration for <strong>java.time.ZonedDateTime</strong> serialization available.
 - <strong>Fewer modules are activated for foreign frameworks</strong>. Compared to SDA Dropwizard Commons,
