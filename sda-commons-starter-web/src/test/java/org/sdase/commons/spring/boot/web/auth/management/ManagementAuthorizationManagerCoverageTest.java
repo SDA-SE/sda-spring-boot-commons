@@ -21,9 +21,8 @@ class ManagementAuthorizationManagerCoverageTest {
   @Test
   void shouldNotDecideOnSamePort() {
     assertThat(createTestContext(ActuatorSamePortApp.class))
-        .hasSingleBean(
-            ManagementAuthorizationManager.IgnoreSamePortManagementAccessDecisionVoter.class)
-        .getBean(ManagementAuthorizationManager.IgnoreSamePortManagementAccessDecisionVoter.class)
+        .hasSingleBean(ManagementAuthorizationManager.class)
+        .getBean(ManagementAuthorizationManager.class)
         .returns(
             new AuthorizationDecision(false).isGranted(), dv -> dv.check(null, null).isGranted());
   }
@@ -31,8 +30,8 @@ class ManagementAuthorizationManagerCoverageTest {
   @Test
   void shouldNotDecideOnDisabledPort() {
     assertThat(createTestContext(ActuatorDisabledPortApp.class))
-        .hasSingleBean(ManagementAuthorizationManager.DisabledManagementAccessDecisionVoter.class)
-        .getBean(ManagementAuthorizationManager.DisabledManagementAccessDecisionVoter.class)
+        .hasSingleBean(ManagementAuthorizationManager.class)
+        .getBean(ManagementAuthorizationManager.class)
         .returns(
             new AuthorizationDecision(false).isGranted(), dv -> dv.check(null, null).isGranted());
   }
