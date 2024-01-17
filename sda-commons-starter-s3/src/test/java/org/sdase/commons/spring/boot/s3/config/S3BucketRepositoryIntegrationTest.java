@@ -211,7 +211,7 @@ class S3BucketRepositoryIntegrationTest {
         s3Client.getObject(
             GetObjectRequest.builder().bucket(TEST_BUCKET).key("test-utf8-file").build())) {
       assertThat(responseInputStream.readAllBytes())
-          .asString()
+          .asString(StandardCharsets.UTF_8)
           .isEqualTo(Files.readString(testFile.toPath(), StandardCharsets.UTF_8));
     }
   }
