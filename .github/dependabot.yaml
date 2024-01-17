@@ -7,13 +7,17 @@ updates:
       time: "08:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
-    target-branch: master
+    target-branch: main
     commit-message:
       prefix: fix
       prefix-development: chore
       include: scope
     labels:
       - 'dependencies'
+    ignore:
+      - dependency-name: "com.github.tomakehurst:wiremock-jre8-standalone"
+        # Major version should be in-sync with the version used by Spring Cloud Contract
+        update-types: [ "version-update:semver-major" ]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -21,7 +25,7 @@ updates:
       time: "08:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
-    target-branch: master
+    target-branch: main
     commit-message:
       prefix: chore
       prefix-development: chore
