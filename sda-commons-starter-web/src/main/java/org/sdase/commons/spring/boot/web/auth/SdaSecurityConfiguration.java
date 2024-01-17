@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.sdase.commons.spring.boot.web.monitoring.SdaMonitoringConfiguration;
 import org.sdase.commons.spring.boot.web.security.headers.SdaSecurityHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.util.StringUtils;
 
 @EnableWebSecurity
-@AutoConfiguration
+@AutoConfiguration(after = SdaMonitoringConfiguration.class)
 @ComponentScan
 @Order(1)
 public class SdaSecurityConfiguration {
