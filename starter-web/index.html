@@ -954,13 +954,6 @@ core concepts.</p>
 <td><code>CORS_ALLOWEDORIGINPATTERNS</code></td>
 </tr>
 <tr>
-<td><code>request.body.max.size</code> <em>size</em></td>
-<td>The maximum size allowed for request body data sent by a client.</td>
-<td><em>1 MB</em></td>
-<td><code>100 KB</code>, <code>10MB</code></td>
-<td><code>REQUEST_BODY_MAX_SIZE</code></td>
-</tr>
-<tr>
 <td><code>enable.json.logging</code> <em>boolean</em></td>
 <td>If logs should be printed as JSON. <em>Note: This config param is not available for application.properties or application.yaml</em></td>
 <td><em>false</em></td>
@@ -1075,16 +1068,12 @@ core concepts.</p>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">server.servlet.context-path</span><span class="o">=</span><span class="s">/api</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">server.servlet.context-path</span><span class="o">=</span><span class="s">/api</span>
 <span class="na">server.port</span><span class="o">=</span><span class="s">8080</span>
 <span class="na">server.max-http-request-header-size</span><span class="o">=</span><span class="s">8192</span>
 <span class="na">server.error.whitelabel.enabled</span><span class="o">=</span><span class="s">false</span>
 
 <span class="na">server.tomcat.basedir</span><span class="o">=</span><span class="s">${java.io.tmpdir}/tomcat</span>
-
-<span class="na">request.body.max.size</span><span class="o">=</span><span class="s">1 MB</span>
 
 <span class="c1"># Actuator</span>
 <span class="na">management.server.port</span><span class="o">=</span><span class="s">8081</span>

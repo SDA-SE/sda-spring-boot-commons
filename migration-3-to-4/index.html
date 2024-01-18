@@ -9,10 +9,6 @@
       
       
       
-        <link rel="prev" href="../starter-kafka/">
-      
-      
-        <link rel="next" href="../security/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +16,7 @@
     
     
       
-        <title>Starter S3 - sda-spring-boot-commons</title>
+        <title>Migration Guide for Upgrading from 3.x.x to 4.x.x - sda-spring-boot-commons</title>
       
     
     
@@ -63,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#starter-s3" class="md-skip">
+        <a href="#migration-guide-for-upgrading-from-3xx-to-4xx" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Starter S3
+              Migration Guide for Upgrading from 3.x.x to 4.x.x
             
           </span>
         </div>
@@ -244,29 +240,9 @@
       
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Starter S3
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../starter-s3/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -275,40 +251,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    Testing
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -409,28 +351,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    Testing
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -444,62 +364,28 @@
                   
 
 
-<h1 id="starter-s3">Starter S3<a class="headerlink" href="#starter-s3" title="Permanent link">&para;</a></h1>
-<p>This library provides features for dealing with the Amazon S3 file storage.</p>
-<p>Based on:
-  - <code>io.awspring.cloud:spring-cloud-aws-core</code></p>
-<p>The configuration class contains two beans, namely:</p>
+<h1 id="migration-guide-for-upgrading-from-3xx-to-4xx">Migration Guide for Upgrading from 3.x.x to 4.x.x<a class="headerlink" href="#migration-guide-for-upgrading-from-3xx-to-4xx" title="Permanent link">&para;</a></h1>
+<p>SDA Spring Boot Commons 4 updates </p>
 <ul>
-<li><code>AmazonS3Client</code>: Providing an interface for accessing the S3 object storage.</li>
-<li><code>S3BucketRepository</code>: Providing an abstraction for s3 client with simple repository methods.</li>
+<li>Spring Boot from 3.1.x to 3.2.x and </li>
+<li>Spring Cloud from 2022.x.x to 2023.x.x.</li>
 </ul>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>The following properties are needed for the configuration.</p>
-<table>
-<thead>
-<tr>
-<th><strong>Property</strong></th>
-<th><strong>Description</strong></th>
-<th><strong>Example</strong></th>
-<th><strong>Env</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>s3.bucketName</code> <em>string</em></td>
-<td>The name of the bucket containing the desired object.</td>
-<td>myphotos</td>
-<td><code>S3_BUCKET_NAME</code></td>
-</tr>
-<tr>
-<td><code>s3.endpoint</code> <em>string</em></td>
-<td>The endpoint either with or without the protocol</td>
-<td><a href="https://s3.eu-west-1.amazonaws.com">https://s3.eu-west-1.amazonaws.com</a> or s3.eu-west-1.amazonaws.com</td>
-<td><code>S3_ENDPOINT</code></td>
-</tr>
-<tr>
-<td><code>s3.region</code> <em>string</em></td>
-<td>The region to use for SigV4 signing of requests</td>
-<td>eu-west-1</td>
-<td><code>S3_REGION</code></td>
-</tr>
-<tr>
-<td><code>s3.secretKey</code> <em>string</em></td>
-<td>The AWS secret access key</td>
-<td>s3cret</td>
-<td><code>S3_SECRET_KEY</code></td>
-</tr>
-<tr>
-<td><code>s3.accessKey</code> <em>string</em></td>
-<td>The AWS access key</td>
-<td>s3cretAccess</td>
-<td><code>S3_ACCESS_KEY</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
-<p>We recommend to use <a href="https://github.com/Robothy/local-s3">Robothy's local-s3</a> JUnit 5 extension
-for testing.</p>
+<p>This comes with some breaking changes introduced by Spring and some from SDA Spring Boot Commons as
+well.
+Other libraries are upgraded or replaced as well.</p>
+<p>In addition to this migration guide, the <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.2-Release-Notes">official release notes of Spring Boot</a>
+should be consulted.</p>
+<p>Summary of noticeable changes:</p>
+<ul>
+<li>Migrate to AWS SDK v2</li>
+<li>Replace S3Mock with <a href="https://github.com/Robothy/local-s3">Robothy's local-s3</a> JUnit 5 extension</li>
+<li>Springs <code>RestClient</code> and <code>RestTemplate</code> no longer buffer request bodies by default. As a result,
+  for certain content types such as JSON, the contents size is no longer known and a Content-Length
+  header is no longer set</li>
+<li>Http request body size is no longer limited by the server by default and can no longer be
+  controlled by <code>request.body.max.size</code>. Control over the request body size should be delegated to
+  the underlying infrastructure</li>
+</ul>
 
 
 
@@ -516,44 +402,6 @@ for testing.</p>
       
         <footer class="md-footer">
   
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-          
-          <a href="../starter-kafka/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Starter Kafka" rel="prev">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              <div class="md-ellipsis">
-                Starter Kafka
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Next: Security Hardening" rel="next">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Security Hardening
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
     
   
   <div class="md-footer-meta md-typeset">
