@@ -56,8 +56,9 @@ Prometheus metrics are exposed as expected by SDA environments.
 ## Risk: Buffer Overflow
 
 - The size of request and response headers is limited to 8KiB.
-- The size of a request body is limited to 1 MB by default, chunked encoding is not accepted and the
-  `Content-Length` request header is required. The limit [can be changed](starter-web.md#configuration).
+- Ideally, the size of a request body should be limited by the infrastructure to mitigate DDoS attacks.
+  Please refer for the official documentation of common tools like [Istio](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody)
+  or [NGINX](https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size).
 
 ## Header
 

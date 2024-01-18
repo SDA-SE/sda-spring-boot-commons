@@ -15,3 +15,8 @@ The configuration class contains two beans, namely:
 The following properties are needed for the configuration.
 
 --8<-- "doc-snippets/config-starter-s3.md"
+
+## Testing
+
+We recommend to use [Robothy's local-s3](https://github.com/Robothy/local-s3) JUnit 5 extension
+for testing.
