@@ -3,7 +3,7 @@ dependencies {
   implementation "io.awspring.cloud:spring-cloud-aws-s3"
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'io.github.robothy:local-s3-jupiter:1.13', {
+  testImplementation 'io.github.robothy:local-s3-jupiter:1.14', {
     exclude group: 'software.amazon.awssdk'
     exclude group: 'com.amazonaws', module: 'aws-java-sdk'
     exclude group: 'org.slf4j', module: 'slf4j-api'
