@@ -46,7 +46,7 @@ jobs:
         if: always()
         run: ./gradlew -x test testReport codeCoverageReport
 
-      - uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # tag=v3
+      - uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # tag=v3
         if: always()
         with:
           name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
