@@ -14,24 +14,18 @@ import com.robothy.s3.jupiter.LocalS3;
 import com.robothy.s3.jupiter.LocalS3Endpoint;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
-import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
@@ -44,50 +38,21 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 @LocalS3
 class S3BucketRepositoryIntegrationTest {
 
-  private static final Logger LOG =
-      LoggerFactory.getLogger(S3BucketRepositoryIntegrationTest.class);
-
   static final String TEST_BUCKET = "test-bucket";
 
-  private S3Client createS3ClientAndDeleteTestBucket(LocalS3Endpoint endpoint) {
-    var s3Client =
-        S3Client.builder()
-            .region(Region.of(endpoint.region()))
-            .endpointOverride(URI.create(endpoint.endpoint()))
-            .serviceConfiguration(
-                software.amazon.awssdk.services.s3.S3Configuration.builder()
-                    .pathStyleAccessEnabled(true)
-                    .build())
-            .credentialsProvider(AnonymousCredentialsProvider.create())
-            .build();
-    deleteTestBucket(s3Client);
-    return s3Client;
-  }
+  private LocalS3Endpoint endpoint;
+  private S3Client s3Client;
 
-  private void deleteTestBucket(S3Client s3Client) {
-    try {
-      deleteAllObjects(s3Client);
-      s3Client.deleteBucket(DeleteBucketRequest.builder().bucket(TEST_BUCKET).build());
-    } catch (NoSuchBucketException e) {
-      // ignore
-    }
-  }
-
-  void deleteAllObjects(S3Client client) {
-    var response = client.listObjects(ListObjectsRequest.builder().bucket(TEST_BUCKET).build());
-    response.contents().stream()
-        .map(
-            s3Object ->
-                DeleteObjectRequest.builder().bucket(TEST_BUCKET).key(s3Object.key()).build())
-        .forEach(client::deleteObject);
-    if (!response.sdkHttpResponse().isSuccessful()) {
-      LOG.info("Could not delete objects in bucket: {}", TEST_BUCKET);
-    }
+  @BeforeEach
+  void beforeEach(S3Client s3Client, LocalS3Endpoint endpoint) {
+    this.s3Client = s3Client;
+    this.endpoint = endpoint;
+    new S3TestHelper(TEST_BUCKET, s3Client).deleteTestBucket();
   }
 
   @Test
-  void shouldListObjects(LocalS3Endpoint endpoint) {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldListObjects() {
+
     createObjects(s3Client, Map.of("file-1", "content-1", "file-2", "content-2"));
     S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
 
@@ -96,8 +61,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldFindOutIfObjectExists(LocalS3Endpoint endpoint) {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldFindOutIfObjectExists() {
+
     createObjects(s3Client, Map.of("file-1", "content-1", "file-2", "content-2"));
     S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
 
@@ -111,8 +76,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldDeleteFile(LocalS3Endpoint endpoint) {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldDeleteFile() {
+
     createObjects(s3Client, Map.of("file-1", "content-1", "file-2", "content-2"));
     S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
 
@@ -124,8 +89,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldGetObject(LocalS3Endpoint endpoint) {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldGetObject() {
+
     createObjects(s3Client, Map.of("file-1", "content-1"));
     S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
 
@@ -134,8 +99,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldGetUtf8Object(LocalS3Endpoint endpoint) {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldGetUtf8Object() {
+
     createObjects(s3Client, Map.of("file-1", "content-1 with ä"));
     S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
 
@@ -144,8 +109,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldNotSaveNullContent(LocalS3Endpoint endpoint) {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldNotSaveNullContent() {
+
     createObjects(s3Client, Map.of());
     S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
 
@@ -154,8 +119,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldSaveContent(LocalS3Endpoint endpoint) throws Exception {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldSaveContent() throws Exception {
+
     createObjects(s3Client, Map.of());
     // precondition
     ListObjectsResponse response =
@@ -174,8 +139,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldSaveUtf8Content(LocalS3Endpoint endpoint) throws IOException {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldSaveUtf8Content() throws IOException {
+
     createObjects(s3Client, Map.of());
     // precondition
     ListObjectsResponse response =
@@ -194,8 +159,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldSaveUtf8File(LocalS3Endpoint endpoint) throws IOException, URISyntaxException {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldSaveUtf8File() throws IOException, URISyntaxException {
+
     File testFile =
         new File(Objects.requireNonNull(getClass().getResource("/test-data/some-text.md")).toURI());
     createObjects(s3Client, Map.of());
@@ -217,8 +182,8 @@ class S3BucketRepositoryIntegrationTest {
   }
 
   @Test
-  void shouldSaveBinaryFile(LocalS3Endpoint endpoint) throws IOException, URISyntaxException {
-    var s3Client = createS3ClientAndDeleteTestBucket(endpoint);
+  void shouldSaveBinaryFile() throws IOException, URISyntaxException {
+
     File testFile =
         new File(
             Objects.requireNonNull(getClass().getResource("/test-data/some-text.md.zip")).toURI());
