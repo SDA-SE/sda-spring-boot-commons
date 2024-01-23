@@ -98,7 +98,7 @@ public class SecurityTestApp {
 
   @PostMapping(value = "/validate")
   public ResponseEntity<String> validateTestResource(
-      @Valid @NumericString @RequestBody TestResource testResource) {
+      @Valid @RequestBody TestResource testResource) {
     LOGGER.info(
         "Received valid value {} and postcode {} ",
         testResource.getValue(),
