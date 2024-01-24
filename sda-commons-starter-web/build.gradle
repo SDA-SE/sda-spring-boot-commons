@@ -29,6 +29,7 @@ dependencies {
   api 'io.github.openfeign:feign-micrometer'
   api 'io.micrometer:micrometer-registry-prometheus'
   api 'org.glassfish.jersey.core:jersey-common'
+  api 'org.springframework.boot:spring-boot-starter-webflux'
 
   api project(':sda-commons-metadata-context')
   api project(':sda-commons-error')
