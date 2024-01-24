@@ -8,7 +8,7 @@ dependencies {
     exclude group: 'com.amazonaws', module: 'aws-java-sdk'
     exclude group: 'org.slf4j', module: 'slf4j-api'
   }
-  testImplementation 'com.amazonaws:aws-java-sdk-s3:1.12.642', {
+  testImplementation 'com.amazonaws:aws-java-sdk-s3:1.12.643', {
     // only for pinning the version, don't use in code!
     exclude group: 'commons-logging', module: 'commons-logging'
   }
