@@ -10,12 +10,17 @@ package org.sdase.commons.spring.boot.web.security.handler;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.error.ApiInvalidParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 /**
  * This handler addresses risks identified in the security guide as:
@@ -25,9 +30,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *       messages."
  * </ul>
  */
-@RestControllerAdvice
+@RestControllerAdvice()
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class MethodArgumentExceptionHandler {
+@ConditionalOnProperty(
+    prefix = "security",
+    name = "validation-exception-handler-enabled",
+    havingValue = "true",
+    matchIfMissing = true)
+public class ValidationExceptionHandler {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ValidationExceptionHandler.class);
+
   private static final String ERROR_MESSAGE = "Validation error";
 
   private static final PropertyNamingStrategies.UpperSnakeCaseStrategy ERROR_CODE_TRANSLATOR =
@@ -48,6 +61,22 @@ public class MethodArgumentExceptionHandler {
                             camelToUpperSnakeCase(fieldError.getCode())))
                 .toList());
     return ResponseEntity.unprocessableEntity().body(response);
+  }
+
+  @ExceptionHandler({HandlerMethodValidationException.class})
+  public ResponseEntity<ApiError> validationErrorJakartaAnnotation(
+      HandlerMethodValidationException ex) {
+
+    LOG.error(ex.getMessage(), ex);
+    return ResponseEntity.unprocessableEntity().body(new ApiError(ERROR_MESSAGE));
+  }
+
+  @ExceptionHandler({HttpMessageNotReadableException.class})
+  public ResponseEntity<ApiError> validationErrorResponseBodyNull(
+      HttpMessageNotReadableException ex) {
+
+    LOG.error(ex.getMessage(), ex);
+    return ResponseEntity.unprocessableEntity().body(new ApiError(ERROR_MESSAGE));
   }
 
   static String camelToUpperSnakeCase(String camelCase) {

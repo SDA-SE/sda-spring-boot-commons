@@ -22,19 +22,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class MethodArgumentExceptionHandlerTest {
+class ValidationExceptionHandlerResponseTest {
 
   @ParameterizedTest
   @MethodSource("testData")
   void shouldConvertCustomDataToSnakeCase(String given, String expected) {
-    String actual = MethodArgumentExceptionHandler.camelToUpperSnakeCase(given);
+    String actual = ValidationExceptionHandler.camelToUpperSnakeCase(given);
     assertThat(actual).isEqualTo(expected);
   }
 
   @ParameterizedTest
   @MethodSource("realTestData")
   void shouldConvertValidationClassesToSnakeCase(String given) {
-    String actual = MethodArgumentExceptionHandler.camelToUpperSnakeCase(given);
+    String actual = ValidationExceptionHandler.camelToUpperSnakeCase(given);
     String expected = new PropertyNamingStrategies.UpperSnakeCaseStrategy().translate(given);
     // would fail on: EAN, ISBN, URL, CNPJ, CPF, NIP, PESEL, REGON, INN
     assumeThat(actual).isEqualTo(expected);
