@@ -55,6 +55,10 @@ public class ApiError {
     return invalidParams;
   }
 
+  public void addInvalidParams(List<ApiInvalidParam> invalidParams) {
+    this.invalidParams.addAll(invalidParams);
+  }
+
   public void addInvalidParameter(ApiInvalidParam parameter) {
     invalidParams.add(parameter);
   }

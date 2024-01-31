@@ -10,6 +10,7 @@ package org.sdase.commons.spring.boot.web.security.handler;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.web.security.handler.app.ValidationExceptionBook;
 import org.sdase.commons.spring.boot.web.security.handler.app.ValidationExceptionHandlerTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
@@ -78,10 +79,12 @@ class ValidationExceptionHandlerTest {
             .authenticatedClient()
             .postForEntity(
                 "http://localhost:" + port + "/api/bookJakarta",
-                new ValidationExceptionBook("title", null),
-                String.class);
+                new ValidationExceptionBook(null, null),
+                ApiError.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    assertThat(response.getBody().getTitle()).isEqualTo(ValidationExceptionHandler.ERROR_MESSAGE);
+    assertThat(response.getBody().getInvalidParams()).hasSize(2);
   }
 
   @Test
@@ -99,7 +102,7 @@ class ValidationExceptionHandlerTest {
   }
 
   @Test
-  void testValidationString() {
+  void testStringAsRequestBody() {
 
     authMock.authorizeAnyRequest().allow();
 
