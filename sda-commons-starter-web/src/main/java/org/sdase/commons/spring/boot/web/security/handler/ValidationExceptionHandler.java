@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.web.security.handler;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import java.util.List;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.error.ApiInvalidParam;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,7 +43,8 @@ public class ValidationExceptionHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(ValidationExceptionHandler.class);
 
-  private static final String ERROR_MESSAGE = "Validation error";
+  public static final String ERROR_MESSAGE = "Validation error";
+  private static final String MESSAGE_NOT_READABLE = "Request Body not readable";
 
   private static final PropertyNamingStrategies.UpperSnakeCaseStrategy ERROR_CODE_TRANSLATOR =
       new PropertyNamingStrategies.UpperSnakeCaseStrategy();
@@ -60,6 +63,8 @@ public class ValidationExceptionHandler {
                             fieldError.getDefaultMessage(),
                             camelToUpperSnakeCase(fieldError.getCode())))
                 .toList());
+
+    LOG.error(ex.getMessage(), ex);
     return ResponseEntity.unprocessableEntity().body(response);
   }
 
@@ -67,8 +72,27 @@ public class ValidationExceptionHandler {
   public ResponseEntity<ApiError> validationErrorJakartaAnnotation(
       HandlerMethodValidationException ex) {
 
+    ApiError apiError = new ApiError(ERROR_MESSAGE);
+
+    //    If MessageSourceResolvable is instance of FieldError, then add additional information.
+    List<ApiInvalidParam> invalidParams =
+        ex.getAllValidationResults().stream()
+            .flatMap(
+                parameterValidationResult ->
+                    parameterValidationResult.getResolvableErrors().stream())
+            .filter(FieldError.class::isInstance)
+            .map(FieldError.class::cast)
+            .map(
+                fieldError ->
+                    new ApiInvalidParam(
+                        fieldError.getField(),
+                        fieldError.getDefaultMessage(),
+                        camelToUpperSnakeCase(fieldError.getCode())))
+            .toList();
+    apiError.addInvalidParams(invalidParams);
+
     LOG.error(ex.getMessage(), ex);
-    return ResponseEntity.unprocessableEntity().body(new ApiError(ERROR_MESSAGE));
+    return ResponseEntity.unprocessableEntity().body(apiError);
   }
 
   @ExceptionHandler({HttpMessageNotReadableException.class})
@@ -76,7 +100,7 @@ public class ValidationExceptionHandler {
       HttpMessageNotReadableException ex) {
 
     LOG.error(ex.getMessage(), ex);
-    return ResponseEntity.unprocessableEntity().body(new ApiError(ERROR_MESSAGE));
+    return ResponseEntity.unprocessableEntity().body(new ApiError(MESSAGE_NOT_READABLE));
   }
 
   static String camelToUpperSnakeCase(String camelCase) {

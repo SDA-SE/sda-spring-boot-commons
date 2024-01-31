@@ -100,7 +100,7 @@ class ValidationExceptionHandlerMissingTest {
   }
 
   @Test
-  void testValidationString() {
+  void testStringAsRequestBody() {
 
     authMock.authorizeAnyRequest().allow();
 
