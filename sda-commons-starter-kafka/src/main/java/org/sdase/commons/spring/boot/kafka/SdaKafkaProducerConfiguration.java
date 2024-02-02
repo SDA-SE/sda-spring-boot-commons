@@ -40,7 +40,7 @@ public class SdaKafkaProducerConfiguration {
   @SuppressWarnings("java:S1452")
   public KafkaTemplate<String, ?> kafkaTemplate(ProducerFactory<String, ?> producerFactory) {
     ((DefaultKafkaProducerFactory<?, ?>) producerFactory)
-        .setValueSerializer(new JsonSerializer<>(objectMapper));
+        .setValueSerializer(new SmartSerializer<>(objectMapper));
     return new KafkaTemplate<>(producerFactory, commonProperties);
   }
 
