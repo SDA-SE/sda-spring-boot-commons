@@ -155,6 +155,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
    */
   @Bean
   @Lazy
+  @SuppressWarnings("java:S1452")
   public Map<Class<?>, KafkaOperations<?, ?>> dltTemplates() {
     Map<Class<?>, KafkaOperations<?, ?>> templates = new LinkedHashMap<>();
     templates.put(byte[].class, recoverTemplate);

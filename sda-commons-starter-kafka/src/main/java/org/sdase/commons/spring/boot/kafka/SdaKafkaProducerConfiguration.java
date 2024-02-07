@@ -49,16 +49,14 @@ public class SdaKafkaProducerConfiguration {
         producerFactory.copyWithConfigurationOverride(props);
 
     //    only set the JsonSerializer including the ObjectMapper if set as value.serializer in
-    // configuration
-    //    otherwise allow different serializers to be set
+    //    configuration otherwise allow different serializers to be set
     Object valueSerializerClass =
         producerFactory
             .getConfigurationProperties()
             .get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
 
-    if (valueSerializerClass instanceof Class
-        && "org.springframework.kafka.support.serializer.JsonSerializer"
-            .equals(((Class<?>) valueSerializerClass).getName())) {
+    if (valueSerializerClass instanceof Class<?> clazz
+        && clazz.isAssignableFrom(JsonSerializer.class)) {
       ((DefaultKafkaProducerFactory<?, ?>) producerFactoryCustom)
           .setValueSerializer(new JsonSerializer<>(objectMapper));
     }
@@ -86,9 +84,12 @@ public class SdaKafkaProducerConfiguration {
     return new KafkaTemplate<>(producerFactoryByte, props);
   }
 
-  //  Keep Bean to not introduce breaking changes
-  //  superseded by kafkaByteArrayDltTemplate
-  //  should be removed with next major update
+  /**
+   * Keep Bean to not introduce breaking changes superseded by kafkaByteArrayDltTemplate should be
+   * removed with next major update
+   *
+   * @deprecated (uses default producerFactory which can have side effects on other templates)
+   */
   @Deprecated(since = "4.1.0", forRemoval = true)
   @Bean
   @SuppressWarnings("java:S1452")
