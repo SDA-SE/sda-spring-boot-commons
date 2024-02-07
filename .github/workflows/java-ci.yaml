@@ -32,7 +32,7 @@ jobs:
           cache: 'gradle'
 
       - name: Test with Gradle
-        uses: nick-fields/retry@v2.9.0
+        uses: nick-fields/retry@v3.0.0
         with:
           timeout_minutes: 30
           max_attempts: 5
@@ -44,7 +44,7 @@ jobs:
         if: always()
         run: ./gradlew -x test testReport codeCoverageReport
 
-      - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # tag=v3
+      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # tag=v3
         if: always()
         with:
           name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
@@ -62,12 +62,12 @@ jobs:
     if: (success() || failure()) && !(github.event.pull_request && github.event.pull_request.head.repo.fork) && github.actor != 'dependabot[bot]'
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # tag=v3
+        uses: actions/download-artifact@eaceaf801fd36c7dee90939fad912460b18a1ffe # tag=v3
         with:
           path: artifacts
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@e780361cd1fc1b1a170624547b3ffda64787d365 # tag=v2.12.0
+        uses: EnricoMi/publish-unit-test-result-action@8885e273a4343cd7b48eaa72428dea0c3067ea98 # tag=v2.14.0
         with:
           junit_files: "**/build/test-results/**/*.xml"
 
@@ -101,7 +101,7 @@ jobs:
       - name: sda-spring-boot-commons-app token
         if: "!(github.event.pull_request && github.event.pull_request.head.repo.fork) && github.actor != 'dependabot[bot]'"
         id: app-token
-        uses: getsentry/action-github-app-token@97c9e23528286821f97fba885c1b1123284b29cc # tag=v2.0.0
+        uses: getsentry/action-github-app-token@d4b5da6c5e37703f8c3b3e43abb5705b46e159cc # tag=v3.0.0
         with:
           app_id: ${{ secrets.GH_PUBLISH_APP_ID }}
           private_key: ${{ secrets.GH_PUBLISH_APP_PRIVATE_KEY }}
