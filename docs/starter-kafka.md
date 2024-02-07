@@ -67,23 +67,67 @@ public void retryAndLog(@Payload @Valid Message message) {
 }
 ```
 
+### DLT Error Handling
+
+To allow handling of serialization exceptions, the DLT KafkaTemplate is using a ByteArraySerializer.
+You can add additional templates used for uploading messages to the dead-letter-topic for records
+that were deserialized successfully, by overwriting the `dltTemplates` bean. 
+see [spring-kafka documentation](https://docs.spring.io/spring-kafka/reference/kafka/annotation-error-handling.html#dead-letters).
+
+```java
+@Configuration
+@Import({SdaKafkaConsumerConfiguration.class})
+public class DltConfiguration {
+
+  @Autowired
+  @Qualifier("kafkaByteArrayDltTemplate")
+  private KafkaTemplate<String, ?> recoverTemplate;
+
+  @Autowired
+  private KafkaTemplate<String, ?> myCustomTemplate;
+
+
+  @Bean
+  public Map<Class<?>, KafkaOperations<?, ?>> dltTemplates() {
+    Map<Class<?>, KafkaOperations<?, ?>> templates = new LinkedHashMap<>();
+    templates.put(MyCustomClass.class, myCustomTemplate);
+    templates.put(byte[].class, recoverTemplate);
+    return templates;
+  }
+}
+```
+
 ## Producer configuration
 
 The autoconfigured producer configuration provides a preconfigured  `KafkaTemplate` for producing 
 messages with `String` key and payload as `json`.
 
-To configure different serializers, create a custom kafkaTemplate Bean e.g.
+To configure different serializers, use `spring.kafka.producer.key-serializer` and 
+`spring.kafka.producer.value-serializer` properties
+
+!!! warning "ProducerFactory"
+    Do not hard code `((DefaultKafkaProducerFactory<?, ?>) producerFactory)
+    .setValueSerializer(new JsonSerializer<>(objectMapper));` of the default spring producer factory. 
+    It will affect other configurations, we recommend to use a copy of the producer factory as in the example below.
 
 ```java
-  @Bean
-  public KafkaTemplate<Object, Object> customKafkaTemplate(
-      ProducerFactory<Object, Object> producerFactory) {
-    var props = Map.of(
-      ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
-      ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
-    
-    return new KafkaTemplate<>(producerFactory, props);
-  }
+@Bean("kafkaByteArrayDltTemplate")  
+public KafkaTemplate<String, ?> kafkaByteArrayDltTemplate(ProducerFactory<String, ?> producerFactory) {
+
+  Map<String, Object> props = new HashMap<>(commonProperties);
+  props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+  props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
+  ProducerFactory<String, ?> producerFactoryByte =
+      producerFactory.copyWithConfigurationOverride(props);
+
+
+  return new KafkaTemplate<>(producerFactoryByte, props);
+}
 ```
 
-You just need to autowire the `KafkaTemplate` and you are ready to go.
+You need to autowire the KafkaTemplate using a Qualifier.
+
+```java
+@Qualifier("kafkaByteArrayDltTemplate") KafkaTemplate<String, ?> recoverTemplate,
+```
+

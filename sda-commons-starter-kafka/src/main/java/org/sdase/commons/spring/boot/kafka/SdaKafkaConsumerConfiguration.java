@@ -8,6 +8,8 @@
 package org.sdase.commons.spring.boot.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
@@ -21,11 +23,13 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.kafka.annotation.KafkaListenerConfigurer;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistrar;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaOperations;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.CommonContainerStoppingErrorHandler;
 import org.springframework.kafka.listener.CommonErrorHandler;
@@ -48,14 +52,14 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   public static final String DLT_REGEX = "<topic>";
 
   private final KafkaProperties kafkaProperties;
-  private final KafkaTemplate<Object, Object> recoverTemplate;
+  private final KafkaTemplate<String, ?> recoverTemplate;
   private final LocalValidatorFactoryBean validator;
   private final ObjectMapper objectMapper;
   private final KafkaConsumerConfig consumerConfig;
 
   public SdaKafkaConsumerConfiguration(
       KafkaProperties kafkaProperties,
-      KafkaTemplate<Object, Object> recoverTemplate,
+      @Qualifier("kafkaByteArrayDltTemplate") KafkaTemplate<String, ?> recoverTemplate,
       LocalValidatorFactoryBean validator,
       ObjectMapper objectMapper,
       KafkaConsumerConfig consumerConfig) {
@@ -129,14 +133,32 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
    *     KafkaConsumerConfig#retry()} before producing an error message
    */
   @Bean("retryDeadLetterErrorHandler")
-  public DefaultErrorHandler retryDeadLetterErrorHandler() {
+  public DefaultErrorHandler retryDeadLetterErrorHandler(
+      Map<Class<?>, KafkaOperations<?, ?>> dltTemplates) {
     // Will result into 1s, 2s, 4s, 4s retry backoff
     ExponentialBackOffWithMaxRetries backOff = createDefaultRetryBackOff();
     DeadLetterPublishingRecoverer recoverer =
-        new DeadLetterPublishingRecoverer(recoverTemplate, this::getDeadLetterTopicName);
+        new DeadLetterPublishingRecoverer(dltTemplates, this::getDeadLetterTopicName);
     DefaultErrorHandler handler = new DefaultErrorHandler(recoverer, backOff);
     handler.addNotRetryableExceptions(NotRetryableKafkaException.class);
     return handler;
+  }
+
+  /**
+   * DLT templates used serialize recods after exception is thrown in KafkaListener. Recover
+   * template uses ByteArraySerializer to allow serialization of any type of record.
+   *
+   * <p>Can be overridden to provide custom templates, to provide different serializer from records
+   * that were deserialized successfully
+   *
+   * <p>https://docs.spring.io/spring-kafka/reference/kafka/annotation-error-handling.html#dead-letters
+   */
+  @Bean
+  @Lazy
+  public Map<Class<?>, KafkaOperations<?, ?>> dltTemplates() {
+    Map<Class<?>, KafkaOperations<?, ?>> templates = new LinkedHashMap<>();
+    templates.put(byte[].class, recoverTemplate);
+    return templates;
   }
 
   protected TopicPartition getDeadLetterTopicName(
