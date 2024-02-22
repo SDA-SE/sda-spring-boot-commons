@@ -12,7 +12,7 @@ ext {
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.2.2'
   springCloudVersion = '2023.0.0'
-  scalaVersion = '2.13.12'
+  scalaVersion = '2.13.13'
   swaggerCoreVersion = '2.2.20'
   victoolsVersion = '4.33.1'
 }
