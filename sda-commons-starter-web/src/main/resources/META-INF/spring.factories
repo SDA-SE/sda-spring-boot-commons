@@ -1,1 +1,1 @@
-org.springframework.boot.BootstrapRegistryInitializer=org.sdase.commons.spring.boot.web.logging.DisableBannerBootstrapRegistryInitializer,org.sdase.commons.spring.boot.web.logging.JsonLoggingConfigurationBootstrapRegistryInitializer
+org.springframework.boot.BootstrapRegistryInitializer=org.sdase.commons.spring.boot.web.logging.DisableReadOnlyFilesystemWarnLogsBootstrapRegistryInitializer,org.sdase.commons.spring.boot.web.logging.DisableBannerBootstrapRegistryInitializer,org.sdase.commons.spring.boot.web.logging.JsonLoggingConfigurationBootstrapRegistryInitializer
