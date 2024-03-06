@@ -561,7 +561,7 @@ configuration.</p>
 </tr>
 <tr>
 <td><code>sda.kafka.consumer.dlt.pattern</code> <em>string</em></td>
-<td>Pattern of consumer dead letter topic. <code>&lt;topic&gt;</code> will be replaced by topic name. If not set, <code>".DLT"</code> is added to the topic name.</td>
+<td>Pattern of consumer dead letter topic. <code>&lt;topic&gt;</code> will be replaced by topic name. If not set, <code>"dlt-"</code> is added to the topic name as prefix. If set to empty the spring-boot fallback of <code>&lt;topic&gt;.DLT</code> is used.</td>
 <td><code>"dlt-&lt;topic&gt;"</code></td>
 <td><code>"prefix-&lt;topic&gt;"</code></td>
 <td><code>SDA_KAFKA_CONSUMER_DLT_PATTERN</code></td>
@@ -688,14 +688,20 @@ which can be referenced in <code>@KafkaListener</code> annotated methods.</p>
 </li>
 <li><code>SdaKafkaListenerContainerFactory.RETRY_AND_DLT</code><ul>
 <li>Skips record that keeps failing after <code>sda.kafka.consumer.retry.maxRetries</code> (default: 4) and
-  produces failed record to topic with <code>.DLT</code> suffix.</li>
-<li>By default, the dead-letter record is sent to a topic named .DLT (the original topic name
-  suffixed with .DLT) and to the same partition as the original record. Therefore, when you use
-  the default configuration, <strong>the dead-letter topic must have at least as many partitions as the
-  original topic.</strong></li>
-<li>The spring default DLT naming convention can be overwritten using the
+  produces failed record to the configured dlt topic.</li>
+<li>
+<p>The spring DLT naming convention can be configured using the
   <code>sda.kafka.consumer.dlt.pattern</code> property.
-  The pattern must contain <code>&lt;topic&gt;</code>, which will be replaced by the actual topic name.</li>
+  The pattern must contain <code>&lt;topic&gt;</code>, which will be replaced by the actual topic name.
+  If not configured, it defaults to <code>dtl-&lt;topic&gt;</code>.
+  As mentioned in the <a href="../migration-2-to-3/#kafka">migration guide</a>, the <code>sda.kafka.consumer.dlt.pattern</code>
+  property can also be configured as empty to force the spring boot default implementation of <code>&lt;topic&gt;.DLT</code>
+  as a fallback to not break older implementations.</p>
+<p>So there are three possible configurations:
+  - <code>sda.kafka.consumer.dlt.pattern</code> not configured, fallback to sda default and resulting dlt topic: <code>dlt-example</code>
+  - <code>sda.kafka.consumer.dlt.pattern</code> configured as empty, fallback to spring default and resulting dlt topic: <code>example.DLT</code>
+  - <code>sda.kafka.consumer.dlt.pattern</code> configured with <code>&lt;topic&gt;-customSuffix</code>, resulting dlt topic: <code>example-customSuffix</code></p>
+</li>
 </ul>
 </li>
 </ul>
