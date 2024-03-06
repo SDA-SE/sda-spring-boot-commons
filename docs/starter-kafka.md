@@ -39,14 +39,19 @@ which can be referenced in `@KafkaListener` annotated methods.
     log exception.
 - `SdaKafkaListenerContainerFactory.RETRY_AND_DLT`
   - Skips record that keeps failing after `sda.kafka.consumer.retry.maxRetries` (default: 4) and
-    produces failed record to topic with `.DLT` suffix.
-  - By default, the dead-letter record is sent to a topic named .DLT (the original topic name
-    suffixed with .DLT) and to the same partition as the original record. Therefore, when you use
-    the default configuration, **the dead-letter topic must have at least as many partitions as the
-    original topic.**
-  - The spring default DLT naming convention can be overwritten using the
+    produces failed record to the configured dlt topic.
+  - The spring DLT naming convention can be configured using the
     `sda.kafka.consumer.dlt.pattern` property.
     The pattern must contain `<topic>`, which will be replaced by the actual topic name.
+    If not configured, it defaults to `dtl-<topic>`.
+    As mentioned in the [migration guide](migration-2-to-3.md#kafka), the `sda.kafka.consumer.dlt.pattern`
+    property can also be configured as empty to force the spring boot default implementation of `<topic>.DLT`
+    as a fallback to not break older implementations.
+
+    So there are three possible configurations:
+  - `sda.kafka.consumer.dlt.pattern` not configured, fallback to sda default and resulting dlt topic: `dlt-example`
+  - `sda.kafka.consumer.dlt.pattern` configured as empty, fallback to spring default and resulting dlt topic: `example.DLT`
+  - `sda.kafka.consumer.dlt.pattern` configured with `<topic>-customSuffix`, resulting dlt topic: `example-customSuffix`
 
 To skip retry for specific business errors, you can throw the custom `NotRetryableKafkaException`.
 

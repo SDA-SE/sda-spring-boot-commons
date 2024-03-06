@@ -48,9 +48,13 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
 
   private static final Logger LOG = LoggerFactory.getLogger(SdaKafkaConsumerConfiguration.class);
 
+  /**
+   * Only used if {@code sda.kafka.consumer.dlt.pattern} is actively set to empty as a fallback to
+   * the spring-boot default pattern.
+   */
   public static final String DLT_SUFFIX = ".DLT";
-  public static final String DLT_REGEX = "<topic>";
 
+  public static final String DLT_REGEX = "<topic>";
   private final KafkaProperties kafkaProperties;
   private final KafkaTemplate<String, ?> recoverTemplate;
   private final LocalValidatorFactoryBean validator;
