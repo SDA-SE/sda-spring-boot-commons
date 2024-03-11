@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,6 +43,7 @@ class ContextCopyTaskDecoratorTest {
   void cleanup() {
     MetadataContext.createContext(new DetachedMetadataContext());
     RequestContextHolder.resetRequestAttributes();
+    MDC.clear();
   }
 
   @Test
@@ -65,6 +67,20 @@ class ContextCopyTaskDecoratorTest {
     var actual = callAsyncAndVerify(asyncProcessor::process);
 
     assertThat(actual.get("request-attributes")).isSameAs(requestAttributes);
+  }
+
+  @Test
+  void shouldRunInNewThreadAndKeepMDC() throws Exception {
+    var requestAttributes = mock(RequestAttributes.class);
+    RequestContextHolder.setRequestAttributes(requestAttributes);
+
+    MDC.put("test-key", "test-value");
+
+    var actual = callAsyncAndVerify(asyncProcessor::process);
+
+    assertThat(actual.get("mdcCopyOfContextMap")).isInstanceOf(Map.class);
+    assertThat((Map<String, String>) actual.get("mdcCopyOfContextMap"))
+        .containsEntry("test-key", "test-value");
   }
 
   @Test
@@ -99,6 +115,8 @@ class ContextCopyTaskDecoratorTest {
       await().pollDelay(1, TimeUnit.SECONDS).until(() -> true);
       var threadId = Thread.currentThread().getId();
       var metadataContext = MetadataContext.detachedCurrent();
+      Map<String, String> mdcCopyOfContextMap =
+          MDC.getCopyOfContextMap() == null ? Map.of() : MDC.getCopyOfContextMap();
       try {
         return new AsyncResult<>(
             Map.of(
@@ -107,7 +125,9 @@ class ContextCopyTaskDecoratorTest {
                 "metadata-context",
                 metadataContext,
                 "request-attributes",
-                RequestContextHolder.currentRequestAttributes()));
+                RequestContextHolder.currentRequestAttributes(),
+                "mdcCopyOfContextMap",
+                mdcCopyOfContextMap));
       } catch (IllegalStateException ignored) {
         return new AsyncResult<>(
             Map.of("thread-id", threadId, "metadata-context", metadataContext));

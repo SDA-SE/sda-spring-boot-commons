@@ -518,7 +518,7 @@ Spring Boot is using [micrometer](https://micrometer.io/) to instrument code usi
 
 ## Tracing
 
-Currently, tracing is leveraged by Micrometer Tracing rand OpenTelemetry in the Spring context.
+Currently, tracing is leveraged by Micrometer Tracing and OpenTelemetry in the Spring context.
 OpenTelemetry (OTEL) is a collection of standardized vendor-agnostic tools, APIs, and SDKs. It's a
 CNCF incubating project and is a merger of the OpenTracing and OpenCensus projects.
 OpenTracing is a vendor-neutral API for sending telemetry data over to an observability backend.
@@ -587,7 +587,17 @@ Logs are printed to standard out.
 `ENABLE_JSON_LOGGING=true` as environment variable or `-Denable.json.logging=true` as JVM parameter
 enables output as JSON for structured logs used in log aggregation tools.
 To enable JSON logging in `application.(properties/yaml)`,
-`logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used. 
+`logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used.
+
+### Correlation of Logs in Distributed Systems
+
+To allow correlation of logs in distributed systems a `Parent-Trace-Token` header is added to a 
+Kafka message if a `Trace-Token` is present in the MDC of the producer.
+A Kafka RecordInterceptor is used to read out the header and add the `Parent-Trace-Token` to the MDC
+of the consumer service.
+This allows the consumer service to log the `Parent-Trace-Token` and the current `Trace-Token`
+to trace the origin.
+**This only happens automatically if the used Listener is not a BatchListener**
 
 ## Metadata Context
 If you want to make use of the data in the metadata context, you should read the [dedicated documentation](metadata-context.md).

@@ -7,10 +7,12 @@
  */
 package org.sdase.commons.spring.boot.web.async;
 
+import java.util.Map;
 import org.sdase.commons.spring.boot.metadata.context.DetachedMetadataContext;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -27,7 +29,10 @@ public class ContextCopyTaskDecorator implements TaskDecorator {
   @Override
   public Runnable decorate(Runnable runnable) {
     return new ContextAwareRunnable(
-        runnable, currentRequestAttributesOrNull(), MetadataContext.detachedCurrent());
+        runnable,
+        currentRequestAttributesOrNull(),
+        MetadataContext.detachedCurrent(),
+        MDC.getCopyOfContextMap());
   }
 
   private RequestAttributes currentRequestAttributesOrNull() {
@@ -42,7 +47,8 @@ public class ContextCopyTaskDecorator implements TaskDecorator {
   private record ContextAwareRunnable(
       Runnable task,
       RequestAttributes requestAttributes,
-      DetachedMetadataContext detachedMetadataContext)
+      DetachedMetadataContext detachedMetadataContext,
+      Map<String, String> copyOfMDCContextMap)
       implements Runnable {
 
     @Override
@@ -53,11 +59,17 @@ public class ContextCopyTaskDecorator implements TaskDecorator {
         RequestContextHolder.resetRequestAttributes();
       }
       MetadataContext.createContext(detachedMetadataContext);
+
+      if (copyOfMDCContextMap != null) {
+        MDC.setContextMap(copyOfMDCContextMap);
+      }
+
       try {
         this.task.run();
       } finally {
         RequestContextHolder.resetRequestAttributes();
         MetadataContext.createContext(new DetachedMetadataContext());
+        MDC.clear();
       }
     }
   }

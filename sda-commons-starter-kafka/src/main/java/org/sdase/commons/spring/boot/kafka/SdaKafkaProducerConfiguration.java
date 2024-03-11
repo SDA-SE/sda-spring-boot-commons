@@ -30,7 +30,9 @@ public class SdaKafkaProducerConfiguration {
   public final Map<String, Object> commonProperties =
       Map.of(
           ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
-          MetadataContextProducerInterceptor.class.getName());
+          MetadataContextProducerInterceptor.class.getName()
+              + ","
+              + TraceTokenProducerInterceptor.class.getName());
 
   private final ObjectMapper objectMapper;
 

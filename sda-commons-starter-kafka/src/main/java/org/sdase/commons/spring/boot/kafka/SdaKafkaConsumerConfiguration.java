@@ -34,6 +34,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.CommonContainerStoppingErrorHandler;
 import org.springframework.kafka.listener.CommonErrorHandler;
 import org.springframework.kafka.listener.CommonLoggingErrorHandler;
+import org.springframework.kafka.listener.CompositeRecordInterceptor;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -206,7 +207,9 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     // Please note that ConversionExceptions like mapping exception won't be retried and directly
     // logged to error. We may add some specific handling like DeadLetter topics etc.
     factory.setCommonErrorHandler(errorHandler);
-    factory.setRecordInterceptor(new MetadataContextRecordInterceptor<>());
+    factory.setRecordInterceptor(
+        new CompositeRecordInterceptor<>(
+            new MetadataContextRecordInterceptor<>(), new TraceTokenRecordInterceptor<>()));
     return factory;
   }
 }
