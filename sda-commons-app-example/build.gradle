@@ -13,6 +13,13 @@ dependencies {
   implementation project(':sda-commons-starter-mongodb')
 
   testImplementation project(':sda-commons-web-testing')
+  testImplementation project(':sda-commons-starter-kafka')
+
+  testImplementation 'org.springframework.kafka:spring-kafka-test', {
+    exclude group: 'com.fasterxml.jackson.module'
+    exclude group: 'com.fasterxml.jackson.dataformat'
+    exclude group: 'com.fasterxml.jackson.datatype'
+  }
 }
 
 test {
