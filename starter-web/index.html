@@ -490,6 +490,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#correlation-of-logs-in-distributed-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Correlation of Logs in Distributed Systems
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -927,6 +942,21 @@
       Logging
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#correlation-of-logs-in-distributed-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Correlation of Logs in Distributed Systems
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2032,7 +2062,7 @@ be serialized with milliseconds, it must be annotated with
 </tbody>
 </table>
 <h2 id="tracing">Tracing<a class="headerlink" href="#tracing" title="Permanent link">&para;</a></h2>
-<p>Currently, tracing is leveraged by Micrometer Tracing rand OpenTelemetry in the Spring context.
+<p>Currently, tracing is leveraged by Micrometer Tracing and OpenTelemetry in the Spring context.
 OpenTelemetry (OTEL) is a collection of standardized vendor-agnostic tools, APIs, and SDKs. It's a
 CNCF incubating project and is a merger of the OpenTracing and OpenCensus projects.
 OpenTracing is a vendor-neutral API for sending telemetry data over to an observability backend.
@@ -2094,7 +2124,15 @@ Logs are printed to standard out.
 <code>ENABLE_JSON_LOGGING=true</code> as environment variable or <code>-Denable.json.logging=true</code> as JVM parameter
 enables output as JSON for structured logs used in log aggregation tools.
 To enable JSON logging in <code>application.(properties/yaml)</code>,
-<code>logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml</code> may be used. </p>
+<code>logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml</code> may be used.</p>
+<h3 id="correlation-of-logs-in-distributed-systems">Correlation of Logs in Distributed Systems<a class="headerlink" href="#correlation-of-logs-in-distributed-systems" title="Permanent link">&para;</a></h3>
+<p>To allow correlation of logs in distributed systems a <code>Parent-Trace-Token</code> header is added to a 
+Kafka message if a <code>Trace-Token</code> is present in the MDC of the producer.
+A Kafka RecordInterceptor is used to read out the header and add the <code>Parent-Trace-Token</code> to the MDC
+of the consumer service.
+This allows the consumer service to log the <code>Parent-Trace-Token</code> and the current <code>Trace-Token</code>
+to trace the origin.
+<strong>This only happens automatically if the used Listener is not a BatchListener</strong></p>
 <h2 id="metadata-context">Metadata Context<a class="headerlink" href="#metadata-context" title="Permanent link">&para;</a></h2>
 <p>If you want to make use of the data in the metadata context, you should read the <a href="../metadata-context/">dedicated documentation</a>.
 If your service is required to support the metadata context but is not interested in the data,
