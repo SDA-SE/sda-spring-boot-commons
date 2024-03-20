@@ -19,6 +19,7 @@ nav:
   - AsyncAPI: asyncapi.md
   - Cloud Events: cloudevents.md
   - Metadata Context: metadata-context.md
+  - Testing: web-testing.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins
