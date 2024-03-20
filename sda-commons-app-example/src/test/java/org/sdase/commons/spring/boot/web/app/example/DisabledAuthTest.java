@@ -9,36 +9,34 @@ package org.sdase.commons.spring.boot.web.app.example;
 
 // ATTENTION: The source of this class is included in the public documentation.
 
-import java.io.IOException;
-import java.nio.file.Paths;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
-import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
+import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {
-      "springdoc.packagesToScan=org.sdase.commons.spring.boot.web.app.example",
-      "management.server.port=0"
-    })
-class OpenApiDocumentationTest {
-
+    properties = "management.server.port=0")
+@ContextConfiguration(initializers = {DisableSdaAuthInitializer.class})
+class DisabledAuthTest {
   @LocalServerPort private int port;
 
-  @Autowired private TestRestTemplate client;
+  @Autowired TestRestTemplate restTemplate;
 
   @Test
-  void shouldHaveSameOpenApiInRepository() throws IOException {
-    var expectedOpenApi =
-        client.getForObject(
-            String.format("http://localhost:%s/api/openapi.yaml", port), String.class);
+  void shouldGetResourceWithoutAuthentication() {
+    var response = restTemplate.getForEntity(carsApiUrl(), Cars.class);
 
-    var actualOpenApiInRepository = Paths.get("openapi.yaml").toAbsolutePath();
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
 
-    GoldenFileAssertions.assertThat(actualOpenApiInRepository)
-        .hasYamlContentAndUpdateGolden(expectedOpenApi);
+  private String carsApiUrl() {
+    return "http://localhost:%s/api/cars".formatted(port);
   }
 }
