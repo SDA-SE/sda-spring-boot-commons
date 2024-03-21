@@ -427,6 +427,26 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -571,38 +591,7 @@ used by the mongodb client.
 All certificates found in subdirectories will also be loaded.</p>
 <p>Note that this directory is also configurable through the property <code>sda.caCertificates.certificatesDir</code>.</p>
 <h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
-<p>It is recommended to test with an embedded MongoDB using Flapdoodle's Spring Boot module and the
-SDA Spring Boot Commons testing module:</p>
-<div class="language-groovy highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="n">testImplementation</span><span class="w"> </span><span class="s1">&#39;de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x&#39;</span>
-<span class="w">  </span><span class="n">testImplementation</span><span class="w"> </span><span class="s1">&#39;org.sdase.commons.spring.boot:sda-commons-web-testing&#39;</span>
-<span class="o">}</span>
-</code></pre></div></td></tr></table></div>
-<p>Flapdoodle will start a MongoDB server and configures the connection for Spring Boot tests.
-The MongoDB version can be selected with (test) application properties:</p>
-<div class="language-properties highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">de.flapdoodle.mongodb.embedded.version</span><span class="o">=</span><span class="s">4.4.1</span>
-</code></pre></div></td></tr></table></div>
-<p><code>MongoOperations</code> can be used to clean the database between tests:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="w">  </span><span class="nd">@Autowired</span><span class="w"> </span><span class="n">MongoOperations</span><span class="w"> </span><span class="n">mongoOperations</span><span class="p">;</span>
-
-<span class="w">  </span><span class="nd">@BeforeEach</span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">beforeEach</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">mongoOperations</span><span class="p">.</span><span class="na">dropCollection</span><span class="p">(</span><span class="s">&quot;collectionUnderTest&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p>To skip Flapdoodle's autoconfiguration and use a provided database (e.g. an AWS DocumentDB), the
-property <code>test.mongodb.connection.string</code> (or environment variable <code>TEST_MONGODB_CONNECTION_STRING</code>)
-can be used to provide a complete <a href="https://docs.mongodb.com/manual/reference/connection-string/">MongoDB Connection String</a>.
-This feature is provided by the SDA Spring Boot Commons testing module and is only activated when
-Flapdoodle's autoconfiguration is available for the test setup.</p>
+<p>Testing services with MongoDB is <a href="../web-testing/#mongodb">covered in the testing documentation</a>.</p>
 
 
 
