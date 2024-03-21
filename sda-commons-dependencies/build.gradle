@@ -96,7 +96,7 @@ dependencies {
     // match (major) Wiremock version from spring-cloud-contract
     // see https://github.com/spring-cloud/spring-cloud-contract/blob/v4.0.4/spring-cloud-contract-dependencies/pom.xml#L18
     api 'com.github.tomakehurst:wiremock-jre8-standalone:2.35.2'
-    api 'net.minidev:json-smart:2.5.0', {
+    api 'net.minidev:json-smart:2.5.1', {
       because 'Temporary: this version is used to solve CVE-2023-1370'
     }
     api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.12.2'
