@@ -2,14 +2,16 @@ dependencies {
   // We want to make sure that all bouncycastle modules that we import use the same version.
   components.all(BouncycastleAlignmentRule)
 
+  api project(":sda-commons-asyncapi")
   api project(":sda-commons-cacertificates")
+  api project(":sda-commons-cloudevents")
+  api project(":sda-commons-error")
+  api project(":sda-commons-metadata-context")
   api project(":sda-commons-starter-kafka")
   api project(":sda-commons-starter-mongodb")
   api project(":sda-commons-starter-s3")
   api project(":sda-commons-starter-web")
   api project(":sda-commons-web-testing")
-  api project(":sda-commons-cloudevents")
-  api project(":sda-commons-asyncapi")
 
   testImplementation "io.github.classgraph:classgraph"
 }
