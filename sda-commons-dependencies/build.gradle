@@ -37,24 +37,12 @@ dependencies {
     because 'managed version in spring-boot-dependencies (4.1.97.Final) is affected by https://github.com/advisories/GHSA-xpw8-rcwv-8f8p'
   }
 
-  // temporarily overwrite spring-boot dependencies to mitigate CVEs
-  // remove once managed by org.springframework.boot:spring-boot-dependencies
-  api enforcedPlatform("org.springframework:spring-framework-bom:6.1.5"), {
-    because 'CVE-2024-22259'
-  }
-
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
   constraints {
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.2.1'
-
-    // temporarily overwrite spring-boot dependencies to mitigate CVEs
-    // remove once managed by org.springframework.boot:spring-boot-dependencies
-    api 'org.springframework.security:spring-security-core:6.2.3', {
-      because 'CVE-2024-22257'
-    }
 
     // spring cloud
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
