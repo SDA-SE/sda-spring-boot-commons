@@ -9,6 +9,7 @@ package org.sdase.commons.spring.boot.kafka.test;
 
 import jakarta.validation.Valid;
 import java.time.OffsetDateTime;
+import java.util.Map;
 import org.sdase.commons.spring.boot.kafka.NotRetryableKafkaException;
 import org.sdase.commons.spring.boot.kafka.config.SdaKafkaListenerContainerFactory;
 import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
@@ -20,10 +21,13 @@ import org.springframework.stereotype.Component;
 public class KafkaTestListener {
   private final ListenerCheck listenerCheck;
   private final MetadataCollector metadataCollector;
+  private final SomeService someService;
 
-  public KafkaTestListener(ListenerCheck listenerCheck, MetadataCollector metadataCollector) {
+  public KafkaTestListener(
+      ListenerCheck listenerCheck, MetadataCollector metadataCollector, SomeService someService) {
     this.listenerCheck = listenerCheck;
     this.metadataCollector = metadataCollector;
+    this.someService = someService;
   }
 
   @KafkaListener(
@@ -56,6 +60,13 @@ public class KafkaTestListener {
       containerFactory = SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
   public void consumeMetadata(@Payload @Valid KafkaTestModel kafkaTestModel) {
     metadataCollector.setLastCollectedContext(MetadataContext.detachedCurrent());
+  }
+
+  @KafkaListener(
+      topics = "${app.kafka.consumer.topic}",
+      containerFactory = SdaKafkaListenerContainerFactory.RETRY_AND_LOG)
+  public void consumeSomeMessage(@Payload Map<String, Object> message) {
+    someService.didTheJob(message);
   }
 
   @Component
