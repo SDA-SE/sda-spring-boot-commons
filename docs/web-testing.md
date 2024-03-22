@@ -109,15 +109,10 @@ documentation is up-to-date and updates it when run locally.
 
 ## MongoDB
 
-It is recommended to test with an embedded MongoDB using Flapdoodle's Spring Boot module and the
-SDA Spring Boot Commons testing module:
-
-```groovy
-dependencies {
-  testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x'
-  testImplementation 'org.sdase.commons.spring.boot:sda-commons-web-testing'
-}
-```
+It is recommended to test with an embedded MongoDB using Flapdoodle's Spring Boot module
+`de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x`and the SDA Spring Boot Commons testing
+module.
+The version is managed by the library as described [above](#dependencies).
 
 Flapdoodle will start a MongoDB server and configures the connection for Spring Boot tests.
 The MongoDB version can be selected with (test) application properties:
@@ -144,3 +139,18 @@ database framework, asserting with a bare `MongoClient` removes influence of map
     ```
 
 
+## Kafka
+
+It is recommended to test with an embedded Kafka using the Spring Boot module
+`org.springframework.kafka:spring-kafka-test` and the SDA Spring Boot Commons testing module.
+The version is managed by the library as described [above](#dependencies).
+
+??? example "Integration Test for Kafka Consumer"
+    ```java
+    --8<-- "sda-commons-starter-kafka/src/test/java/org/sdase/commons/spring/boot/kafka/KafkaConsumerIntegrationTest.java:12"
+    ```
+
+??? example "Integration Test for Kafka Producer"
+    ```java
+    --8<-- "sda-commons-starter-kafka/src/test/java/org/sdase/commons/spring/boot/kafka/KafkaProducerIntegrationTest.java:12"
+    ```
