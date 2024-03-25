@@ -10,8 +10,6 @@ package org.sdase.commons.spring.boot.s3.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.robothy.s3.jupiter.LocalS3;
-import com.robothy.s3.jupiter.LocalS3Endpoint;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,6 +20,8 @@ import java.util.Map;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sdase.commons.spring.boot.web.testing.s3.LocalS3Configuration;
+import org.sdase.commons.spring.boot.web.testing.s3.S3Test;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -35,18 +35,18 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
-@LocalS3
+@S3Test
 class S3BucketRepositoryIntegrationTest {
 
   static final String TEST_BUCKET = "test-bucket";
 
-  private LocalS3Endpoint endpoint;
+  private LocalS3Configuration configuration;
   private S3Client s3Client;
 
   @BeforeEach
-  void beforeEach(S3Client s3Client, LocalS3Endpoint endpoint) {
+  void beforeEach(S3Client s3Client, LocalS3Configuration configuration) {
     this.s3Client = s3Client;
-    this.endpoint = endpoint;
+    this.configuration = configuration;
     new S3TestHelper(TEST_BUCKET, s3Client).deleteTestBucket();
   }
 
@@ -54,7 +54,7 @@ class S3BucketRepositoryIntegrationTest {
   void shouldListObjects() {
 
     createObjects(s3Client, Map.of("file-1", "content-1", "file-2", "content-2"));
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     var actual = s3BucketRepository.listings();
     assertThat(actual).containsExactlyInAnyOrder("file-1", "file-2");
@@ -64,7 +64,7 @@ class S3BucketRepositoryIntegrationTest {
   void shouldFindOutIfObjectExists() {
 
     createObjects(s3Client, Map.of("file-1", "content-1", "file-2", "content-2"));
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     var actual =
         List.of(
@@ -79,7 +79,7 @@ class S3BucketRepositoryIntegrationTest {
   void shouldDeleteFile() {
 
     createObjects(s3Client, Map.of("file-1", "content-1", "file-2", "content-2"));
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     s3BucketRepository.deleteFile("file-1");
 
@@ -92,7 +92,7 @@ class S3BucketRepositoryIntegrationTest {
   void shouldGetObject() {
 
     createObjects(s3Client, Map.of("file-1", "content-1"));
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     var actual = s3BucketRepository.findByName("file-1");
     assertThat(actual).asString().isEqualTo("content-1");
@@ -102,7 +102,7 @@ class S3BucketRepositoryIntegrationTest {
   void shouldGetUtf8Object() {
 
     createObjects(s3Client, Map.of("file-1", "content-1 with ä"));
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     var actual = s3BucketRepository.findByName("file-1");
     assertThat(actual).contains("content-1 with ä".getBytes(StandardCharsets.UTF_8));
@@ -112,7 +112,7 @@ class S3BucketRepositoryIntegrationTest {
   void shouldNotSaveNullContent() {
 
     createObjects(s3Client, Map.of());
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     assertThatExceptionOfType(IOException.class)
         .isThrownBy(() -> s3BucketRepository.save("test-object", null));
@@ -126,7 +126,7 @@ class S3BucketRepositoryIntegrationTest {
     ListObjectsResponse response =
         s3Client.listObjects(ListObjectsRequest.builder().bucket(TEST_BUCKET).build());
     assertThat(response.contents()).isEmpty();
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     s3BucketRepository.save("test-object", "test-content");
 
@@ -146,7 +146,7 @@ class S3BucketRepositoryIntegrationTest {
     ListObjectsResponse response =
         s3Client.listObjects(ListObjectsRequest.builder().bucket(TEST_BUCKET).build());
     assertThat(response.contents()).isEmpty();
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     s3BucketRepository.save("test-utf8-object", "test-content with ä");
 
@@ -168,7 +168,7 @@ class S3BucketRepositoryIntegrationTest {
     ListObjectsResponse response =
         s3Client.listObjects(ListObjectsRequest.builder().bucket(TEST_BUCKET).build());
     assertThat(response.contents()).isEmpty();
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     s3BucketRepository.saveFile("test-utf8-file", testFile);
 
@@ -192,7 +192,7 @@ class S3BucketRepositoryIntegrationTest {
     ListObjectsResponse response =
         s3Client.listObjects(ListObjectsRequest.builder().bucket(TEST_BUCKET).build());
     assertThat(response.contents()).isEmpty();
-    S3BucketRepository s3BucketRepository = createS3BucketRepository(endpoint);
+    S3BucketRepository s3BucketRepository = createS3BucketRepository(configuration);
 
     s3BucketRepository.saveFile("test-binary-file", testFile);
 
@@ -204,9 +204,14 @@ class S3BucketRepositoryIntegrationTest {
     }
   }
 
-  private S3BucketRepository createS3BucketRepository(LocalS3Endpoint endpoint) {
+  private S3BucketRepository createS3BucketRepository(LocalS3Configuration configuration) {
     S3Configuration s3Configuration =
-        new S3Configuration("", "", endpoint.endpoint(), endpoint.region(), TEST_BUCKET);
+        new S3Configuration(
+            configuration.accessKey(),
+            configuration.secretKey(),
+            configuration.endpoint(),
+            configuration.region(),
+            configuration.bucketName());
     return s3Configuration.s3BucketRepository(s3Configuration.getAmazonS3Client());
   }
 
