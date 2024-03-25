@@ -35,6 +35,9 @@ dependencies {
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
       because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
     }
+    api 'commons-io:commons-io:2.13.0', {
+      because 'conflict robothy, spring cloud, zookeeper'
+    }
 
     // sda-commons-starter-web
     api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}", {
@@ -76,6 +79,7 @@ dependencies {
 
     // sda-commons-starter-s3
     api "io.awspring.cloud:spring-cloud-aws-s3:3.1.1"
+    api "io.github.robothy:local-s3-rest:1.14"
 
   }
 }

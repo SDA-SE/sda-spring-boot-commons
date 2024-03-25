@@ -14,5 +14,12 @@ dependencies {
   implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
   implementation 'com.nimbusds:nimbus-jose-jwt'
 
+  // Do not add the compileOnly dependencies as test dependencies to avoid passing tests that will
+  // not work for consumers!
+  compileOnly 'io.github.robothy:local-s3-rest'
+  // spring-cloud-aws-s3 manages and provides required software.amazon.awssdk:s3
+  // spring-cloud-aws-s3 is part of the api of sda-commons-starter-s3
+  compileOnly 'io.awspring.cloud:spring-cloud-aws-s3'
+
   testImplementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
 }

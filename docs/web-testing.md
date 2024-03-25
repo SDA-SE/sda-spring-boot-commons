@@ -154,3 +154,26 @@ The version is managed by the library as described [above](#dependencies).
     ```java
     --8<-- "sda-commons-starter-kafka/src/test/java/org/sdase/commons/spring/boot/kafka/KafkaProducerIntegrationTest.java:12"
     ```
+
+
+## S3
+
+`sda-commons-web-testing` provides the annotation `S3Test` to start a local S3 mock with
+[Robothy local-s3](https://github.com/Robothy/local-s3) and configure Spring Boot as needed for
+`sda-commons-starter-s3`.
+`@S3Test` must be placed before `@SpringBootTest` if used for a full integration test with an
+application context.
+The dependency `io.github.robothy:local-s3-rest` must be added as test dependency to the project.
+`software.amazon.awssdk:s3` is needed as well and comes with `io.awspring.cloud:spring-cloud-aws-s3`
+via `sda-commons-starter-s3`.
+The versions are managed by the library as described [above](#dependencies).
+
+??? example "Test S3 Clients in Spring Boot Application"
+    ```java
+    --8<-- "sda-commons-app-example/src/test/java/org/sdase/commons/spring/boot/web/app/example/S3FileRepositoryIntegrationTest.java:12"
+    ```
+
+!!! info "Test S3 Clients without Spring Context"
+    `S3Test` can also be used in tests without a Spring Context.
+    Test, set up and tear down methods can request `S3Client` and `LocalS3Configuration` as
+    method parameter to interact with the S3 mock or set up the tested services.

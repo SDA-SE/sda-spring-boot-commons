@@ -11,11 +11,13 @@ repositories {
 dependencies {
   implementation project(':sda-commons-starter-web')
   implementation project(':sda-commons-starter-mongodb')
+  implementation project(':sda-commons-starter-s3')
 
   testImplementation project(':sda-commons-web-testing')
   testImplementation project(':sda-commons-starter-kafka')
 
   testImplementation 'org.springframework.kafka:spring-kafka-test'
+  testImplementation 'io.github.robothy:local-s3-rest'
 }
 
 test {

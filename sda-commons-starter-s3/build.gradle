@@ -3,15 +3,6 @@ dependencies {
   api "io.awspring.cloud:spring-cloud-aws-s3"
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'io.github.robothy:local-s3-jupiter:1.14', {
-    exclude group: 'software.amazon.awssdk'
-    exclude group: 'com.amazonaws', module: 'aws-java-sdk'
-    exclude group: 'org.slf4j', module: 'slf4j-api'
-  }
-  testImplementation 'com.amazonaws:aws-java-sdk-s3:1.12.688', {
-    // only for pinning the version, don't use in code!
-    exclude group: 'commons-logging', module: 'commons-logging'
-  }
-
-  testImplementation 'software.amazon.awssdk:s3' // use version defined in spring-cloud-aws-s3
+  testImplementation project(':sda-commons-web-testing')
+  testImplementation 'io.github.robothy:local-s3-rest'
 }
