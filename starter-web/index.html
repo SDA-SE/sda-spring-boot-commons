@@ -397,6 +397,30 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#actuator-endpoints-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actuator endpoints (Tasks)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actuator endpoints (Tasks)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementing-custom-actuator-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementing custom actuator endpoints
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#async" class="md-nav__link">
     <span class="md-ellipsis">
       Async
@@ -861,6 +885,30 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actuator-endpoints-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actuator endpoints (Tasks)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actuator endpoints (Tasks)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementing-custom-actuator-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementing custom actuator endpoints
+    </span>
+  </a>
   
 </li>
         
@@ -1765,6 +1813,73 @@ code and the nested <code>ApiError</code>.</p>
 <span class="w">  </span><span class="p">]</span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<h2 id="actuator-endpoints-tasks">Actuator endpoints (Tasks)<a class="headerlink" href="#actuator-endpoints-tasks" title="Permanent link">&para;</a></h2>
+<p>Similar to dropwizards tasks, spring-boot provides <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints">actuators</a> to expose endpoints on the management
+port to monitor or interact with the application on an administrative level. The most basic example
+for this is the <code>/health</code> endpoint which provides information about the status of the service.</p>
+<h3 id="implementing-custom-actuator-endpoints">Implementing custom actuator endpoints<a class="headerlink" href="#implementing-custom-actuator-endpoints" title="Permanent link">&para;</a></h3>
+<p>Custom actuator endpoints can be registered with with the <code>@Endpoint</code> annotation:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@Endpoint</span><span class="p">(</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;custom&quot;</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CustomActuatorEndpoint</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>This will expose the endpoint under <code>http://{SERVICE}:{MANAGEMENT_PORT}/custom</code>, where the
+id of the endpoint correlates with the path.</p>
+<p><strong>NOTE:</strong>
+The default path for actuator endpoints in spring-boot is <code>/actuator/</code>. However, in sda-spring-boot-commons
+it is configured to just <code>/</code>. See configuration of <a href="https://github.com/SDA-SE/sda-spring-boot-commons/blob/2138dc57b33f954dd68c514f2e13957efa37b514/sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/monitoring/monitoring.properties#L4">management.endpoints.web.base-path</a></p>
+<p><code>GET</code>, <code>POST</code> and <code>DELETE</code> methods can then be implemented with the according <code>@ReadOperation</code>, <code>@WriteOperation</code>
+and <code>@DeleteOperation</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="w">  </span><span class="c1">// Responds to a GET request to /actuator/custom</span>
+<span class="w">  </span><span class="nd">@ReadOperation</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">readSomeData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">someRepository</span><span class="p">.</span><span class="na">getData</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Responds to a POST request to /actuator/custom</span>
+<span class="w">  </span><span class="nd">@WriteOperation</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">writeSomeData</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">someRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// return HttpStatus.OK</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Responds to a DELETE request to /actuator/custom</span>
+<span class="w">  </span><span class="nd">@DeleteOperation</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">deleteSomeData</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">someRepository</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// return HttpStatus.OK</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Actuators can then be enabled or disabled through the application properties
+<div class="language-yaml highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">management.endpoint.custom.enabled=true</span>
+</code></pre></div></td></tr></table></div></p>
+<p>See the <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.implementing-custom">official spring-boot documentation</a> for further details.</p>
 <h2 id="async">Async<a class="headerlink" href="#async" title="Permanent link">&para;</a></h2>
 <p>The default Spring <a href="https://javadoc.io/doc/org.springframework/spring-context/latest/org/springframework/scheduling/annotation/Async.html">async</a> 
 task executor is autoconfigured to transfer the request attributes of the 
