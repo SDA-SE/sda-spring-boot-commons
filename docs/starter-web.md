@@ -397,6 +397,65 @@ In this example the controller would return with http status `422` and body:
 }
 ```
 
+## Actuator endpoints (Tasks)
+Similar to dropwizards tasks, spring-boot provides [actuators](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints) to expose endpoints on the management
+port to monitor or interact with the application on an administrative level. The most basic example
+for this is the `/health` endpoint which provides information about the status of the service.
+
+### Implementing custom actuator endpoints
+Custom actuator endpoints can be registered with with the `@Endpoint` annotation:
+
+```java
+@Endpoint(id="custom")
+public class CustomActuatorEndpoint {
+  ...
+}
+```
+
+This will expose the endpoint under `http://{SERVICE}:{MANAGEMENT_PORT}/custom`, where the
+id of the endpoint correlates with the path.
+
+**NOTE:**
+The default path for actuator endpoints in spring-boot is `/actuator/`. However, in sda-spring-boot-commons
+it is configured to just `/`. See configuration of [management.endpoints.web.base-path](https://github.com/SDA-SE/sda-spring-boot-commons/blob/2138dc57b33f954dd68c514f2e13957efa37b514/sda-commons-starter-web/src/main/resources/org/sdase/commons/spring/boot/web/monitoring/monitoring.properties#L4)
+
+
+`GET`, `POST` and `DELETE` methods can then be implemented with the according `@ReadOperation`, `@WriteOperation`
+and `@DeleteOperation`:
+
+```java
+
+  // Responds to a GET request to /actuator/custom
+  @ReadOperation
+  public Object readSomeData() {
+    return someRepository.getData();
+  }
+
+  // Responds to a POST request to /actuator/custom
+  @WriteOperation
+  public void writeSomeData(String data) {
+    someRepository.save(data);
+    
+    // return HttpStatus.OK
+  }
+
+  // Responds to a DELETE request to /actuator/custom
+  @DeleteOperation
+  public void deleteSomeData(String id) {
+    someRepository.delete(id);
+
+    // return HttpStatus.OK
+  }
+
+```
+
+Actuators can then be enabled or disabled through the application properties
+```yaml
+management.endpoint.custom.enabled=true
+```
+
+See the [official spring-boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.implementing-custom) for further details.
+
 ## Async
 
 The default Spring [async](https://javadoc.io/doc/org.springframework/spring-context/latest/org/springframework/scheduling/annotation/Async.html) 
