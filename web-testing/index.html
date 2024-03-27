@@ -473,6 +473,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#s3" class="md-nav__link">
+    <span class="md-ellipsis">
+      S3
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -580,6 +589,15 @@
   <a href="#kafka" class="md-nav__link">
     <span class="md-ellipsis">
       Kafka
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s3" class="md-nav__link">
+    <span class="md-ellipsis">
+      S3
     </span>
   </a>
   
@@ -1601,6 +1619,129 @@ The version is managed by the library as described <a href="#dependencies">above
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 </details>
+<h2 id="s3">S3<a class="headerlink" href="#s3" title="Permanent link">&para;</a></h2>
+<p><code>sda-commons-web-testing</code> provides the annotation <code>S3Test</code> to start a local S3 mock with
+<a href="https://github.com/Robothy/local-s3">Robothy local-s3</a> and configure Spring Boot as needed for
+<code>sda-commons-starter-s3</code>.
+<code>@S3Test</code> must be placed before <code>@SpringBootTest</code> if used for a full integration test with an
+application context.
+The dependency <code>io.github.robothy:local-s3-rest</code> must be added as test dependency to the project.
+<code>software.amazon.awssdk:s3</code> is needed as well and comes with <code>io.awspring.cloud:spring-cloud-aws-s3</code>
+via <code>sda-commons-starter-s3</code>.
+The versions are managed by the library as described <a href="#dependencies">above</a>.</p>
+<details class="example">
+<summary>Test S3 Clients in Spring Boot Application</summary>
+<div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import static</span><span class="w"> </span><span class="nn">org.assertj.core.api.Assertions.assertThat</span><span class="p">;</span>
+<span class="kn">import static</span><span class="w"> </span><span class="nn">org.assertj.core.api.InstanceOfAssertFactories.INPUT_STREAM</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.nio.charset.StandardCharsets</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.sdase.commons.spring.boot.web.testing.s3.LocalS3Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.sdase.commons.spring.boot.web.testing.s3.S3Test</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">software.amazon.awssdk.core.sync.RequestBody</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">software.amazon.awssdk.services.s3.S3Client</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">software.amazon.awssdk.services.s3.model.S3Object</span><span class="p">;</span>
+
+<span class="nd">@S3Test</span>
+<span class="nd">@SpringBootTest</span><span class="p">(</span>
+<span class="w">    </span><span class="n">webEnvironment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpringBootTest</span><span class="p">.</span><span class="na">WebEnvironment</span><span class="p">.</span><span class="na">MOCK</span><span class="p">,</span>
+<span class="w">    </span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;management.server.port=0&quot;</span><span class="p">})</span>
+<span class="kd">class</span> <span class="nc">S3FileRepositoryIntegrationTest</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Autowired</span><span class="w"> </span><span class="n">S3FileRepository</span><span class="w"> </span><span class="n">s3FileRepository</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nd">@Test</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">shouldUploadTextFile</span><span class="p">(</span><span class="n">S3Client</span><span class="w"> </span><span class="n">s3Client</span><span class="p">,</span><span class="w"> </span><span class="n">LocalS3Configuration</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">givenKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;test-file.txt&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">givenText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello World!&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">s3FileRepository</span><span class="p">.</span><span class="na">uploadTextFile</span><span class="p">(</span><span class="n">givenKey</span><span class="p">,</span><span class="w"> </span><span class="n">givenText</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">actualContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s3Client</span><span class="p">.</span><span class="na">listObjects</span><span class="p">(</span><span class="n">l</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="na">bucket</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="na">bucketName</span><span class="p">()));</span>
+<span class="w">    </span><span class="n">assertThat</span><span class="p">(</span><span class="n">actualContent</span><span class="p">.</span><span class="na">contents</span><span class="p">())</span>
+<span class="w">        </span><span class="p">.</span><span class="na">hasSize</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">first</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="na">extracting</span><span class="p">(</span><span class="n">S3Object</span><span class="p">::</span><span class="n">key</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">isEqualTo</span><span class="p">(</span><span class="s">&quot;test-file.txt&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">extracting</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">s3Client</span><span class="p">.</span><span class="na">getObject</span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="na">bucket</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="na">bucketName</span><span class="p">()).</span><span class="na">key</span><span class="p">(</span><span class="n">k</span><span class="p">)))</span>
+<span class="w">        </span><span class="p">.</span><span class="na">asInstanceOf</span><span class="p">(</span><span class="n">INPUT_STREAM</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">hasContent</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nd">@Test</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">shouldDownloadTextFile</span><span class="p">(</span><span class="n">S3Client</span><span class="w"> </span><span class="n">s3Client</span><span class="p">,</span><span class="w"> </span><span class="n">LocalS3Configuration</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">givenKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;existing-test-file.txt&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">givenText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello World!&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">s3Client</span><span class="p">.</span><span class="na">putObject</span><span class="p">(</span>
+<span class="w">        </span><span class="n">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="na">bucket</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="na">bucketName</span><span class="p">()).</span><span class="na">key</span><span class="p">(</span><span class="n">givenKey</span><span class="p">),</span>
+<span class="w">        </span><span class="n">RequestBody</span><span class="p">.</span><span class="na">fromBytes</span><span class="p">(</span><span class="n">givenText</span><span class="p">.</span><span class="na">getBytes</span><span class="p">(</span><span class="n">StandardCharsets</span><span class="p">.</span><span class="na">UTF_8</span><span class="p">)));</span>
+
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">actualText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s3FileRepository</span><span class="p">.</span><span class="na">downloadText</span><span class="p">(</span><span class="n">givenKey</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">assertThat</span><span class="p">(</span><span class="n">actualText</span><span class="p">).</span><span class="na">isEqualTo</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+</details>
+<div class="admonition info">
+<p class="admonition-title">Test S3 Clients without Spring Context</p>
+<p><code>S3Test</code> can also be used in tests without a Spring Context.
+Test, set up and tear down methods can request <code>S3Client</code> and <code>LocalS3Configuration</code> as
+method parameter to interact with the S3 mock or set up the tested services.</p>
+</div>
 
 
 
