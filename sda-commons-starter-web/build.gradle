@@ -25,7 +25,7 @@ dependencies {
   api 'io.opentelemetry:opentelemetry-exporter-otlp'
   api 'org.springdoc:springdoc-openapi-starter-webmvc-api'
   api 'org.bouncycastle:bcpkix-jdk18on'
-  api 'io.github.openfeign:feign-jakarta'
+  api 'io.github.openfeign:feign-jaxrs3'
   api 'io.github.openfeign:feign-micrometer'
   api 'io.micrometer:micrometer-registry-prometheus'
   api 'org.glassfish.jersey.core:jersey-common'
