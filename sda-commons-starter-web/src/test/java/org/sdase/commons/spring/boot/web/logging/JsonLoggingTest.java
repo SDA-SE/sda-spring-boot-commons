@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.web.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -57,6 +58,20 @@ class JsonLoggingTest {
         .asList()
         .isNotEmpty()
         .allMatch(l -> l.toString().startsWith("{"));
+  }
+
+  @Test
+  @SetSystemProperty(key = "enable.json.logging", value = "true")
+  void shouldLogJsonWithUtcTimestamp(CapturedOutput output) throws JsonProcessingException {
+    assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
+    assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
+    for (String json : jsonLines(output)) {
+      assertThat(new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {}))
+          .asInstanceOf(MAP)
+          .extracting("timestamp")
+          .asString()
+          .matches("^\\d{4}-\\d{2}-\\d{2}T.*$");
+    }
   }
 
   private List<String> nonTestLogLines(CapturedOutput capturedOutput) {
