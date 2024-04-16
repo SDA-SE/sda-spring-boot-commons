@@ -25,7 +25,7 @@ dependencies {
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
   // fix CVE-2024-29025
-  api enforcedPlatform("io.netty:netty-bom:4.1.108.Final")
+  api enforcedPlatform("io.netty:netty-bom:4.1.109.Final")
 
   constraints {
     // overall testing dependencies
