@@ -1,3 +1,10 @@
+/*
+ * Copyright 2022- SDA SE Open Industry Solutions (https://www.sda.se)
+ *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ */
 package org.sdase.commons.spring.boot.web.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +36,8 @@ class SdaLoggingJsonEncoderTest {
 
     byte[] encode = encoder.encode(loggingEvent);
 
-    String expected = "{\"timestamp\":123456789,\"level\":\"INFO\",\"thread\":\"threadName\",\"logger\":\"loggerName\",\"context\":null,\"mdc\": {\"keyMDC\":\"valueMDC\"},\"message\":\"message\",\"throwable\":null}\n";
+    String expected =
+        "{\"timestamp\":123456789,\"level\":\"INFO\",\"thread\":\"threadName\",\"logger\":\"loggerName\",\"context\":null,\"mdc\": {\"keyMDC\":\"valueMDC\"},\"message\":\"message\",\"throwable\":null}\n";
     assertThat(new String(encode)).isEqualTo(expected);
   }
-
 }
