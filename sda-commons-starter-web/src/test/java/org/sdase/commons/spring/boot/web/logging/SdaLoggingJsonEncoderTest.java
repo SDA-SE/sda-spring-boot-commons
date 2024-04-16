@@ -36,8 +36,10 @@ class SdaLoggingJsonEncoderTest {
 
     byte[] encode = encoder.encode(loggingEvent);
 
+    System.out.println(new String(encode));
+
     String expected =
-        "{\"timestamp\":123456789,\"level\":\"INFO\",\"thread\":\"threadName\",\"logger\":\"loggerName\",\"context\":null,\"mdc\": {\"keyMDC\":\"valueMDC\"},\"message\":\"message\",\"throwable\":null}\n";
+        "{\"sequenceNumber\":0,\"timestamp\":123456789,\"nanoseconds\":789000000,\"level\":\"INFO\",\"thread\":\"threadName\",\"logger\":\"loggerName\",\"context\":null,\"mdc\": {\"keyMDC\":\"valueMDC\"},\"message\":\"message\",\"throwable\":null}\n";
     assertThat(new String(encode)).isEqualTo(expected);
   }
 }
