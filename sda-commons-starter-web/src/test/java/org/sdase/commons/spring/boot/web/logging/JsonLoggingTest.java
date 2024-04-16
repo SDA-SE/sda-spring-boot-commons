@@ -59,6 +59,26 @@ class JsonLoggingTest {
         .allMatch(l -> l.toString().startsWith("{"));
   }
 
+  @Test
+  @SetSystemProperty(key = "enable.json.logging", value = "true")
+  @SetSystemProperty(key = "enable.json.logging.sda.format", value = "true")
+  void shouldLogJsonUsingSdaFormat(CapturedOutput output) throws JsonProcessingException {
+    assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
+    assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
+    for (String json : jsonLines(output)) {
+      Map<String, Object> jsonObjectMap =
+          new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
+      assertThat(jsonObjectMap).containsKeys("level", "logger", "timestamp", "message");
+
+      assertThat(jsonObjectMap.get("timestamp")).isInstanceOf(Long.class);
+    }
+    assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
+        .as("Log contains JSON:\n{}", output.toString())
+        .asList()
+        .isNotEmpty()
+        .allMatch(l -> l.toString().startsWith("{"));
+  }
+
   private List<String> nonTestLogLines(CapturedOutput capturedOutput) {
     return capturedOutput.toString().lines().filter(l -> !l.contains(".test.context.")).toList();
   }
