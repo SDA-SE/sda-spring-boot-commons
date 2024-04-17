@@ -21,6 +21,10 @@ dependencies {
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
 
+  // Mitigate CVE-2024-22262
+  // TODO: Remove once spring-boot updates their dependencies
+  api enforcedPlatform("org.springframework:spring-framework-bom:6.1.6")
+
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
