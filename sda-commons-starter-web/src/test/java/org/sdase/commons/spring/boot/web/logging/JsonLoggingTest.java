@@ -68,9 +68,32 @@ class JsonLoggingTest {
     for (String json : jsonLines(output)) {
       Map<String, Object> jsonObjectMap =
           new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
-      assertThat(jsonObjectMap).containsKeys("level", "logger", "timestamp", "message");
+      assertThat(jsonObjectMap).containsKeys("level", "loggerName", "timestamp", "message");
 
       assertThat(jsonObjectMap.get("timestamp")).isInstanceOf(Long.class);
+    }
+    assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
+        .as("Log contains JSON:\n{}", output.toString())
+        .asList()
+        .isNotEmpty()
+        .allMatch(l -> l.toString().startsWith("{"));
+  }
+
+  @Test
+  @SetSystemProperty(key = "enable.json.logging", value = "true")
+  @SetSystemProperty(key = "log.json.timestamp.format", value = "HH:mm:ss.SSS - yyyy-MM-dd")
+  void shouldLogJsonUsingDifferentTimeStampFormat(CapturedOutput output)
+      throws JsonProcessingException {
+    assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
+    assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
+    for (String json : jsonLines(output)) {
+      Map<String, Object> jsonObjectMap =
+          new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
+      assertThat(jsonObjectMap).containsKeys("level", "logger", "timestamp", "message");
+
+      assertThat(jsonObjectMap.get("timestamp"))
+          .matches(
+              s -> s.toString().matches("\\d{2}:\\d{2}:\\d{2}\\.\\d{3} - \\d{4}-\\d{2}-\\d{2}"));
     }
     assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
         .as("Log contains JSON:\n{}", output.toString())
@@ -84,7 +107,7 @@ class JsonLoggingTest {
   }
 
   private List<String> jsonLines(CapturedOutput capturedOutput) {
-    return capturedOutput.toString().lines().filter(l -> l.startsWith("{")).toList();
+    return capturedOutput.toString().lines().filter(l -> l.startsWith("{")).skip(3).toList();
   }
 
   private List<String> onlyConfigurableLogLines(List<String> logLines) {
