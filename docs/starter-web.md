@@ -654,6 +654,8 @@ The timestamp format of the json log can be configured with the environment vari
 
 The [timezone](https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html) 
 of the log timestamp can be changed using the `TZ` environment variable e.g. `TZ=America/Belize`.
+**This will change the timezone of the whole service**. In general our recommendation is to make the 
+timezone part of the timestamp format and let log aggregation tools handle the timezone conversion.
 
 ### Correlation of Logs in Distributed Systems
 
