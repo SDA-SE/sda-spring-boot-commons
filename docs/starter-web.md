@@ -652,9 +652,8 @@ To enable JSON logging in `application.(properties/yaml)`,
 The timestamp format of the json log can be configured with the environment variable 
 `LOG_JSON_TIMESTAMP_FORMAT`, the default value is `yyyy-MM-dd HH:mm:ss.SSS`.
 
-The timestamp [timezone id](https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html) 
-of the json log can be configured with the environment variable
-'LOG_JSON_TIMESTAMP_FORMAT_TIMEZONE_ID', the default value is `UTC`.
+The [timezone](https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html) 
+of the log timestamp can be changed using the `TZ` environment variable e.g. `TZ=America/Belize`.
 
 ### Correlation of Logs in Distributed Systems
 

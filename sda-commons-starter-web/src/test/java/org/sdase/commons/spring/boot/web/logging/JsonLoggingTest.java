@@ -73,31 +73,10 @@ class JsonLoggingTest {
 
       assertThat(jsonObjectMap.get("timestamp"))
           .matches(
-              s -> s.toString().matches("\\d{2}:\\d{2}:\\d{2}\\.\\d{3} - \\d{4}-\\d{2}-\\d{2} \\+0000 - UTC"));
-    }
-    assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
-        .as("Log contains JSON:\n{}", output.toString())
-        .asList()
-        .isNotEmpty()
-        .allMatch(l -> l.toString().startsWith("{"));
-  }
-
-  @Test
-  @SetSystemProperty(key = "enable.json.logging", value = "true")
-  @SetSystemProperty(key = "log.json.timestamp.format", value = "HH:mm:ss.SSS - yyyy-MM-dd Z - z")
-  @SetSystemProperty(key = "log.json.timestamp.format.timezone.id", value = "GMT-5")
-  void shouldLogJsonUsingDifferentTimeStampFormatAndTimeZone(CapturedOutput output)
-      throws JsonProcessingException {
-    assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
-    assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
-    for (String json : jsonLines(output)) {
-      Map<String, Object> jsonObjectMap =
-          new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
-      assertThat(jsonObjectMap).containsKeys("level", "logger", "timestamp", "message");
-
-        assertThat(jsonObjectMap.get("timestamp"))
-          .matches(
-              s -> s.toString().matches("\\d{2}:\\d{2}:\\d{2}\\.\\d{3} - \\d{4}-\\d{2}-\\d{2} -0500 - GMT-05:00"));
+              s ->
+                  s.toString()
+                      .matches(
+                          "\\d{2}:\\d{2}:\\d{2}\\.\\d{3} - \\d{4}-\\d{2}-\\d{2} \\+0000 - UTC"));
     }
     assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
         .as("Log contains JSON:\n{}", output.toString())
