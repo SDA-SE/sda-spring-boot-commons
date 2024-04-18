@@ -22,31 +22,19 @@ public class JsonLoggingConfigurationBootstrapRegistryInitializer
 
   private static final String ENABLE_JSON_LOGGING_ENV_NAME = "ENABLE_JSON_LOGGING";
   private static final String ENABLE_JSON_LOGGING_PROPERTY_NAME = "enable.json.logging";
-  private static final String ENABLE_JSON_LOGGING_ENV_NAME_SDA_FORMAT =
-      "ENABLE_JSON_LOGGING_SDA_FORMAT";
-  private static final String ENABLE_JSON_LOGGING_PROPERTY_NAME_SDA_FORMAT =
-      "enable.json.logging.sda.format";
   private static final String LOGGING_CONFIG_PROPERTY_NAME = "logging.config";
   private static final String JSON_LOGGING_CONFIG_RESOURCE =
       "classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml";
-  private static final String JSON_LOGGING_CONFIG_RESOURCE_SDA_FORMAT =
-      "classpath:org/sdase/commons/spring/boot/web/logging/logback-json-sda-format.xml";
 
   @Override
   public void initialize(BootstrapRegistry registry) {
     if (isJsonLoggingEnabled()) {
-
-      if (isJsonLoggingSdaFormatEnabled()) {
-        configureJsonLogging(JSON_LOGGING_CONFIG_RESOURCE_SDA_FORMAT);
-        return;
-      }
-
-      configureJsonLogging(JSON_LOGGING_CONFIG_RESOURCE);
+      configureJsonLogging();
     }
   }
 
-  private void configureJsonLogging(String resourceLocation) {
-    System.setProperty(LOGGING_CONFIG_PROPERTY_NAME, resourceLocation);
+  private void configureJsonLogging() {
+    System.setProperty(LOGGING_CONFIG_PROPERTY_NAME, JSON_LOGGING_CONFIG_RESOURCE);
   }
 
   private boolean isJsonLoggingEnabled() {
@@ -59,18 +47,6 @@ public class JsonLoggingConfigurationBootstrapRegistryInitializer
 
   private boolean isJsonLoggingEnabledByProperty() {
     return isTrue(System.getProperty(ENABLE_JSON_LOGGING_PROPERTY_NAME));
-  }
-
-  private boolean isJsonLoggingSdaFormatEnabled() {
-    return isJsonLoggingSdaFormatEnabledByEnv() || isJsonLoggingSdaFormatEnabledByProperty();
-  }
-
-  private boolean isJsonLoggingSdaFormatEnabledByEnv() {
-    return isTrue(System.getenv(ENABLE_JSON_LOGGING_ENV_NAME_SDA_FORMAT));
-  }
-
-  private boolean isJsonLoggingSdaFormatEnabledByProperty() {
-    return isTrue(System.getProperty(ENABLE_JSON_LOGGING_PROPERTY_NAME_SDA_FORMAT));
   }
 
   private boolean isTrue(String value) {

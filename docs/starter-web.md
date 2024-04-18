@@ -649,11 +649,12 @@ enables output as JSON for structured logs used in log aggregation tools.
 To enable JSON logging in `application.(properties/yaml)`,
 `logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml` may be used.
 
-To align the json format with other SDA libraries, the following environment variables can be set:
-`ENABLE_JSON_LOGGING_SDA_FORMAT=true`
-
 The timestamp format of the json log can be configured with the environment variable 
 `LOG_JSON_TIMESTAMP_FORMAT`, the default value is `yyyy-MM-dd HH:mm:ss.SSS`.
+
+The timestamp [timezone id](https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html) 
+of the json log can be configured with the environment variable
+'LOG_JSON_TIMESTAMP_FORMAT_TIMEZONE_ID', the default value is `UTC`.
 
 ### Correlation of Logs in Distributed Systems
 

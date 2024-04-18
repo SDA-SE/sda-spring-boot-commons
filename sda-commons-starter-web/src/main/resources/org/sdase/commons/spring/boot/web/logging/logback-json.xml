@@ -2,11 +2,13 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <springProperty scope="context" name="LOG_JSON_TIMESTAMP_FORMAT" source="log.json.timestamp.format" defaultValue="yyyy-MM-dd HH:mm:ss.SSS"/>
+  <springProperty scope="context" name="LOG_JSON_TIMESTAMP_FORMAT_TIMEZONE_ID" source="log.json.timestamp.format.timezone.id" defaultValue="UTC"/>
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
       <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
         <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
         <timestampFormat>${LOG_JSON_TIMESTAMP_FORMAT}</timestampFormat>
+        <timestampFormatTimezoneId>${LOG_JSON_TIMESTAMP_FORMAT_TIMEZONE_ID}</timestampFormatTimezoneId>
         <appendLineSeparator>true</appendLineSeparator>
       </layout>
     </encoder>
