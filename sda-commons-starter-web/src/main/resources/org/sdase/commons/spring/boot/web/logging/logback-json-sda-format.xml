@@ -2,7 +2,7 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder class="org.sdase.commons.spring.boot.web.logging.SdaLoggingJsonEncoder">
+    <encoder class="ch.qos.logback.classic.encoder.JsonEncoder">
     </encoder>
   </appender>
   <root level="info">
