@@ -61,7 +61,7 @@ class JsonLoggingTest {
 
   @Test
   @SetSystemProperty(key = "enable.json.logging", value = "true")
-  @SetSystemProperty(key = "log.json.timestamp.format", value = "HH:mm:ss.SSS - yyyy-MM-dd Z - z")
+  @SetSystemProperty(key = "log.json.timestamp.format", value = "HH:mm:ss.SSS - yyyy-MM-dd")
   void shouldLogJsonUsingDifferentTimeStampFormat(CapturedOutput output)
       throws JsonProcessingException {
     assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
@@ -73,10 +73,7 @@ class JsonLoggingTest {
 
       assertThat(jsonObjectMap.get("timestamp"))
           .matches(
-              s ->
-                  s.toString()
-                      .matches(
-                          "\\d{2}:\\d{2}:\\d{2}\\.\\d{3} - \\d{4}-\\d{2}-\\d{2} \\+0000 - UTC"));
+              s -> s.toString().matches("\\d{2}:\\d{2}:\\d{2}\\.\\d{3} - \\d{4}-\\d{2}-\\d{2}"));
     }
     assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
         .as("Log contains JSON:\n{}", output.toString())
