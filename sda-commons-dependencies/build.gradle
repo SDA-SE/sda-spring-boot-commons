@@ -8,9 +8,9 @@ javaPlatform {
 
 ext {
   awaitalityVersion = '4.2.0'
-  bouncycastleVersion = '1.78'
+  bouncycastleVersion = '1.78.1'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '3.2.4'
+  springBootVersion = '3.2.5'
   springCloudVersion = '2023.0.1'
   scalaVersion = '2.13.13'
   swaggerCoreVersion = '2.2.21'
@@ -59,7 +59,7 @@ dependencies {
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
-    api 'io.github.classgraph:classgraph:4.8.170'
+    api 'io.github.classgraph:classgraph:4.8.171'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'org.xerial.snappy:snappy-java:1.1.10.5', {
       because 'fix CVE-2023-34455, CVE-2023-43642'
