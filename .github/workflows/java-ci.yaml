@@ -20,7 +20,7 @@ jobs:
 
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
         with:
           fetch-depth: 0 # fetch commit log so that Sonar is able to assign committers to issues
 
@@ -77,7 +77,7 @@ jobs:
     timeout-minutes: 60
     needs: build
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
