@@ -2261,6 +2261,12 @@ Logs are printed to standard out.
 enables output as JSON for structured logs used in log aggregation tools.
 To enable JSON logging in <code>application.(properties/yaml)</code>,
 <code>logging.config=classpath:org/sdase/commons/spring/boot/web/logging/logback-json.xml</code> may be used.</p>
+<p>The timestamp format of the json log can be configured with the environment variable 
+<code>LOG_JSON_TIMESTAMP_FORMAT</code>, the default value is <code>yyyy-MM-dd HH:mm:ss.SSS</code>.</p>
+<p>The <a href="https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html">timezone</a> 
+of the log timestamp can be changed using the <code>TZ</code> environment variable e.g. <code>TZ=America/Belize</code>.
+<strong>This will change the timezone of the whole service</strong>. In general our recommendation is to make the 
+timezone part of the timestamp format and let log aggregation tools handle the timezone conversion.</p>
 <h3 id="correlation-of-logs-in-distributed-systems">Correlation of Logs in Distributed Systems<a class="headerlink" href="#correlation-of-logs-in-distributed-systems" title="Permanent link">&para;</a></h3>
 <p>To allow correlation of logs in distributed systems a <code>Parent-Trace-Token</code> header is added to a 
 Kafka message if a <code>Trace-Token</code> is present in the MDC of the producer.
