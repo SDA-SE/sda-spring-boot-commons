@@ -68,7 +68,7 @@ dependencies {
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:9.37.3'
 
-    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.12.6'
+    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.13.0'
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
