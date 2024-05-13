@@ -136,3 +136,21 @@ You need to autowire the KafkaTemplate using a Qualifier.
 @Qualifier("kafkaByteArrayDltTemplate") KafkaTemplate<String, ?> recoverTemplate,
 ```
 
+## Health Indicator
+
+`KafkaHealthIndicator` is used to determine if connection to the Kafka broker is possible. 
+In case the library is used to consume messages, and the 
+[Message Listener Container](https://docs.spring.io/spring-kafka/reference/kafka/receiving-messages/message-listener-container.html)
+has stopped, the health indicator can be updated using the `SdaKafkaHealthEvent`.
+
+```java
+
+@Autowired
+private ApplicationEventPublisher applicationEventPublisher;
+
+@EventListener
+public void eventHandlerContainerStopped(ContainerStoppedEvent event) {
+  applicationEventPublisher.publishEvent(new SdaKafkaHealthEvent(event.getSource(), false, "Container stopped due to error"));
+}
+
+```

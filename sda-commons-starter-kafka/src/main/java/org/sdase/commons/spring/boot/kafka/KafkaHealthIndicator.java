@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.ListTopicsOptions;
+import org.sdase.commons.spring.boot.kafka.events.SdaKafkaHealthEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import org.springframework.boot.actuate.autoconfigure.health.ConditionalOnEnable
 import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +37,9 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator implements Ope
   private final AdminClient kafkaAdminClient;
   private final Duration kafkaCommandTimeout;
 
+  private boolean eventIsHealthy = true;
+  private String eventMessage;
+
   public KafkaHealthIndicator(
       @Value("${management.health.kafka.timeout:4s}") Duration kafkaCommandTimeout,
       KafkaAdmin kafkaAdmin) {
@@ -48,6 +53,12 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator implements Ope
 
   @Override
   protected void doHealthCheck(Health.Builder builder) throws Exception {
+
+    if (!eventIsHealthy) {
+      builder.down().withDetails(Map.of("info", eventMessage)).build();
+      return;
+    }
+
     kafkaAdminClient
         .listTopics(
             new ListTopicsOptions()
@@ -56,5 +67,11 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator implements Ope
         .get();
 
     builder.up().withDetails(Map.of("info", "Kafka health check operation succeeded")).build();
+  }
+
+  @EventListener
+  public void onKafkaHealthEvent(SdaKafkaHealthEvent event) {
+    eventIsHealthy = event.isHealthy();
+    eventMessage = event.getMessage();
   }
 }
