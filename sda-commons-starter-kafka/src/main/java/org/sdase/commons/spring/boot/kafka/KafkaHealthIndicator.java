@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.kafka;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -19,7 +20,9 @@ import org.springframework.boot.actuate.autoconfigure.health.ConditionalOnEnable
 import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.core.KafkaAdmin;
+import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,19 +38,29 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator implements Ope
   private final AdminClient kafkaAdminClient;
   private final Duration kafkaCommandTimeout;
 
+  private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
+
   public KafkaHealthIndicator(
       @Value("${management.health.kafka.timeout:4s}") Duration kafkaCommandTimeout,
-      KafkaAdmin kafkaAdmin) {
+      KafkaAdmin kafkaAdmin,
+      KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry) {
     super("Kafka health check operation failed");
 
     this.kafkaCommandTimeout = kafkaCommandTimeout;
     this.kafkaAdminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties());
+    this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
 
     LOG.info("Kafka health check is initialized with timeout duration {}", kafkaCommandTimeout);
   }
 
   @Override
   protected void doHealthCheck(Health.Builder builder) throws Exception {
+
+    if (!isAnyMessageListenerContainersRunning()) {
+      builder.down().withDetails(Map.of("error", "No MessageListenerContainers running")).build();
+      return;
+    }
+
     kafkaAdminClient
         .listTopics(
             new ListTopicsOptions()
@@ -56,5 +69,18 @@ public class KafkaHealthIndicator extends AbstractHealthIndicator implements Ope
         .get();
 
     builder.up().withDetails(Map.of("info", "Kafka health check operation succeeded")).build();
+  }
+
+  private boolean isAnyMessageListenerContainersRunning() {
+
+    Collection<MessageListenerContainer> listenerContainers =
+        kafkaListenerEndpointRegistry.getListenerContainers();
+
+    //    only producers are used
+    if (listenerContainers.isEmpty()) {
+      return true;
+    }
+
+    return listenerContainers.stream().anyMatch(MessageListenerContainer::isRunning);
   }
 }
