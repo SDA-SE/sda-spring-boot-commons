@@ -23,6 +23,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -49,6 +50,8 @@ class KafkaHealthIndicatorIntegrationTest {
 
   @SpyBean private KafkaHealthIndicator kafkaHealthIndicator;
 
+  @Autowired private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
+
   @Test
   void checkThatKafkaHealthCheckIsEnabledAndUp() {
     // given
@@ -61,6 +64,34 @@ class KafkaHealthIndicatorIntegrationTest {
     assertThat(response.getBody().status()).isEqualTo("UP");
     assertThat(kafkaInfo.status()).isEqualTo("UP");
     assertThat(kafkaInfo.details().info()).isEqualTo("Kafka health check operation succeeded");
+  }
+
+  @Test
+  void checkThatKafkaHealthCheckIsEnabledAndUpAndTheDown() {
+    // given
+    // when
+    var response = getHealthCheckInfoData();
+    var kafkaInfo = response.getBody().components().kafka();
+
+    // then
+    assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+    assertThat(response.getBody().status()).isEqualTo("UP");
+    assertThat(kafkaInfo.status()).isEqualTo("UP");
+    assertThat(kafkaInfo.details().info()).isEqualTo("Kafka health check operation succeeded");
+
+    // In case of fatal consumer exception KafkaMessageListenerContainer is executing emergency
+    // stop which will call stopAbnormally method
+    kafkaListenerEndpointRegistry
+        .getListenerContainers()
+        .forEach(container -> container.stopAbnormally(() -> {}));
+
+    var response2 = getHealthCheckInfoData();
+    var kafkaInfo2 = response2.getBody().components().kafka();
+
+    // then
+    assertThat(response2.getStatusCode().is2xxSuccessful()).isFalse();
+    assertThat(response2.getBody().status()).isEqualTo("DOWN");
+    assertThat(kafkaInfo2.status()).isEqualTo("DOWN");
   }
 
   @Test
