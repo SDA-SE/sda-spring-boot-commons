@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.ClearSystemProperty;
 import org.junitpioneer.jupiter.SetSystemProperty;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
+import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -67,7 +69,43 @@ class KafkaHealthIndicatorIntegrationTest {
   }
 
   @Test
-  void checkThatKafkaHealthCheckIsEnabledAndUpAndTheDown() {
+  void checkKafkaHealthOnlyProducerRunning() {
+
+    List<String> listenerIds =
+        kafkaListenerEndpointRegistry.getListenerContainers().stream()
+            .map(MessageListenerContainer::getListenerId)
+            .toList();
+    listenerIds.forEach(id -> kafkaListenerEndpointRegistry.unregisterListenerContainer(id));
+
+    var response = getHealthCheckInfoData();
+    var kafkaInfo = response.getBody().components().kafka();
+
+    // then
+    assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+    assertThat(response.getBody().status()).isEqualTo("UP");
+    assertThat(kafkaInfo.status()).isEqualTo("UP");
+    assertThat(kafkaInfo.details().info()).isEqualTo("Kafka health check operation succeeded");
+  }
+
+  @Test
+  void checkKafkaHealthOnlyOneListenerRunning() {
+
+    kafkaListenerEndpointRegistry.getListenerContainers().stream()
+        .skip(1)
+        .forEach(container -> container.stopAbnormally(() -> {}));
+
+    var response = getHealthCheckInfoData();
+    var kafkaInfo = response.getBody().components().kafka();
+
+    // then
+    assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+    assertThat(response.getBody().status()).isEqualTo("UP");
+    assertThat(kafkaInfo.status()).isEqualTo("UP");
+    assertThat(kafkaInfo.details().info()).isEqualTo("Kafka health check operation succeeded");
+  }
+
+  @Test
+  void checkKafkaHealthCheckAllListenersNotRunning() {
     // given
     // when
     var response = getHealthCheckInfoData();

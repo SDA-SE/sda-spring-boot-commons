@@ -26,8 +26,8 @@ import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.stereotype.Component;
 
 /**
- * Simple implementation of a HealthIndicator returning kafka cluster identifier and number of kafka
- * nodes.
+ * HealthIndicator testing if a client is able to connect to Kafka and if there are any
+ * ListenerContainers running.
  */
 @Component("kafka")
 @ConditionalOnEnabledHealthIndicator("kafka")
