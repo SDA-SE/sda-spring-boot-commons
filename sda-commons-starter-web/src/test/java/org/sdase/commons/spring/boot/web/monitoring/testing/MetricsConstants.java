@@ -17,7 +17,7 @@ public final class MetricsConstants {
   public static final List<String> PROMETHEUS_METRICS_NAMES =
       List.of(
           "tomcat_sessions_created_sessions_total",
-          "jvm_memory_usage_after_gc_percent",
+          "jvm_memory_usage_after_gc",
           "http_client_requests_seconds_count",
           "http_client_requests_seconds_sum",
           "http_client_requests_seconds_max",
@@ -51,7 +51,7 @@ public final class MetricsConstants {
           "jvm_buffer_count_buffers",
           "jvm_memory_used_bytes",
           "executor_queue_remaining_tasks",
-          "jvm_gc_overhead_percent",
+          "jvm_gc_overhead",
           "disk_free_bytes",
           "tomcat_sessions_active_max_sessions",
           "disk_total_bytes",
