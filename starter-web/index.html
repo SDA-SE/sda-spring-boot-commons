@@ -1987,6 +1987,11 @@ be serialized with milliseconds, it must be annotated with
 <td>The maximum amount of memory in bytes that can be used for memory management.</td>
 </tr>
 <tr>
+<td><code>jvm_memory_usage_after_gc</code></td>
+<td></td>
+<td>The amount of memory used by the JVM after garbage collection (GC) has occurred.</td>
+</tr>
+<tr>
 <td><code>jvm_gc_max_data_size_bytes</code></td>
 <td></td>
 <td>Max size of long-lived heap memory pool.</td>
@@ -2035,6 +2040,11 @@ be serialized with milliseconds, it must be annotated with
 <td><code>jvm_gc_pause_seconds_max</code></td>
 <td><code>gc</code>, <code>action</code>, <code>cause</code></td>
 <td></td>
+</tr>
+<tr>
+<td><code>jvm_gc_overhead</code></td>
+<td></td>
+<td>The percentage of total CPU time that is spent in garbage collection activities.</td>
 </tr>
 <tr>
 <td><code>system_cpu_count</code></td>
