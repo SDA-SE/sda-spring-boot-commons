@@ -118,9 +118,9 @@ class MetricsIT {
 
     assertThat(metrics)
         .contains(
-            "http_server_requests_seconds_count{error=\"none\",exception=\"none\",method=\"GET\",outcome=\"SUCCESS\",status=\"200\",uri=\"/add-custom-metrics/{name}\",} ")
+            "http_server_requests_seconds_count{error=\"none\",exception=\"none\",method=\"GET\",outcome=\"SUCCESS\",status=\"200\",uri=\"/add-custom-metrics/{name}\"} ")
         .contains(
-            "http_server_requests_seconds_sum{error=\"none\",exception=\"none\",method=\"GET\",outcome=\"SUCCESS\",status=\"200\",uri=\"/add-custom-metrics/{name}\",} ");
+            "http_server_requests_seconds_sum{error=\"none\",exception=\"none\",method=\"GET\",outcome=\"SUCCESS\",status=\"200\",uri=\"/add-custom-metrics/{name}\"} ");
   }
 
   @Test
