@@ -50,7 +50,7 @@ This security implementation lacks some features compared to [sda-dropwizard-com
 - No configuration of static local public keys to verify the token signature. 
 - No configuration of JWKS URIs to verify the token signature. 
 - The IDP must provide an `iss` claim that matches the base URI for discovery. 
-- Leeway is not configurable yet. 
+- Clock skew is fixed to 60 seconds. 
 - The client that loads the JWKS is not configurable yet.
 
 ## Authorization
