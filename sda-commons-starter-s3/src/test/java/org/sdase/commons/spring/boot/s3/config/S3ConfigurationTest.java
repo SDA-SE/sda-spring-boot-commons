@@ -13,8 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.s3.S3TestApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
-@SpringBootTest(classes = S3TestApp.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(
+    classes = S3TestApp.class,
+    webEnvironment = WebEnvironment.RANDOM_PORT,
+    properties = {"auth.disable=true", "opa.disable=true"})
 class S3ConfigurationTest {
 
   @Autowired private S3Configuration s3Configuration;
