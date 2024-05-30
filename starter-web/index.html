@@ -1353,7 +1353,7 @@ should not be accessible out of the deployment context.</p>
 - No configuration of static local public keys to verify the token signature. 
 - No configuration of JWKS URIs to verify the token signature. 
 - The IDP must provide an <code>iss</code> claim that matches the base URI for discovery. 
-- Leeway is not configurable yet. 
+- Clock skew is fixed to 60 seconds. 
 - The client that loads the JWKS is not configurable yet.</p>
 <h2 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">&para;</a></h2>
 <p>Enables feature that make a Spring Boot service compliant with the SDA SE Authorization concepts
