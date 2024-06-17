@@ -71,3 +71,55 @@ ignore {
 ignore {
   licenseMapping[input.Name] == permissive[_]
 }
+
+# false identification, it's Apache 2, see https://github.com/facebook/rocksdb/blob/main/LICENSE.Apache
+ignore {
+  input.PkgName == "org.rocksdb:rocksdbjni"
+  input.Name == "GNU General Public License, version 2"
+}
+
+# MIT-0 is even more permissive than MIT, see https://github.com/aws/mit-0
+ignore {
+  input.PkgName == "org.reactivestreams:reactive-streams"
+  input.Name == "MIT-0"
+}
+
+# ch.qos.logback:logback-classic is dual licensed as LGPL 2.1 or Eclipse Public License v1.0
+# see https://github.com/qos-ch/logback/blob/master/LICENSE.txt
+# cyclonedx identifies GNU Lesser General Public License
+ignore {
+  input.PkgName == "ch.qos.logback:logback-classic"
+  input.Name == "GNU Lesser General Public License"
+}
+
+# ch.qos.logback:logback-core is dual licensed as LGPL 2.1 or Eclipse Public License v1.0
+# see https://github.com/qos-ch/logback/blob/master/LICENSE.txt
+# cyclonedx identifies GNU Lesser General Public License
+ignore {
+  input.PkgName == "ch.qos.logback:logback-core"
+  input.Name == "GNU Lesser General Public License"
+}
+
+# ch.qos.logback.contrib:logback-jackson is dual licensed as LGPL 2.1 or Eclipse Public License v1.0
+# see https://github.com/qos-ch/logback-contrib/blob/master/license-template.txt
+# cyclonedx identifies GNU Lesser General Public License
+ignore {
+  input.PkgName == "ch.qos.logback.contrib:logback-jackson"
+  input.Name == "GNU Lesser General Public License"
+}
+
+# ch.qos.logback.contrib:logback-json-classic is dual licensed as LGPL 2.1 or Eclipse Public License v1.0
+# see https://github.com/qos-ch/logback-contrib/blob/master/license-template.txt
+# cyclonedx identifies GNU Lesser General Public License
+ignore {
+  input.PkgName == "ch.qos.logback.contrib:logback-json-classic"
+  input.Name == "GNU Lesser General Public License"
+}
+
+# ch.qos.logback.contrib:logback-json-core is dual licensed as LGPL 2.1 or Eclipse Public License v1.0
+# see https://github.com/qos-ch/logback-contrib/blob/master/license-template.txt
+# cyclonedx identifies GNU Lesser General Public License
+ignore {
+  input.PkgName == "ch.qos.logback.contrib:logback-json-core"
+  input.Name == "GNU Lesser General Public License"
+}
