@@ -9,7 +9,7 @@ name: License Check
 # $ ./gradlew clean cyclonedxBom
 #
 # Check for licenses
-# $ trivy sbom --scanners license --severity UNKNOWN,HIGH,CRITICAL --format table --ignore-policy .github/trivy/license-policy.rego build/reports/bom.json
+# $ trivy sbom --scanners license --format table --ignore-policy .github/trivy/license-policy.rego build/reports/bom.json
 
 on:
   pull_request: {}
@@ -50,7 +50,7 @@ jobs:
           docker run --rm
           -v "${PWD}:/project"
           aquasec/trivy:0.51.1
-          sbom --scanners license --severity UNKNOWN,HIGH,CRITICAL
+          sbom --scanners license
           --format json
           --ignore-policy /project/.github/trivy/license-policy.rego
           --exit-code 1
