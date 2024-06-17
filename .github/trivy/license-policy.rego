@@ -49,7 +49,25 @@ default permissive := {
     "Zlib", # Permissive license which is perfectly safe to use provided proper attribution is given and retained.
   }
 
+# mapping of licenses identified by cyclonedx to known license keys
+default licenseMapping := {
+    "Unicode/ICU License": "ICU",
+    "Bouncy Castle Licence": "BouncyCastle",
+    # both licenses are permissive, we pick one
+    "(CDDL-1.0 OR GPL-2.0-with-classpath-exception)": "GPL-2.0-with-classpath-exception",
+    "Apache License, 2.0": "Apache-2.0",
+    "The GNU General Public License (GPL), Version 2, With Classpath Exception": "GPL-2.0-with-classpath-exception",
+    "Public Domain": "public-domain",
+    "Eclipse Public License (EPL) 2.0": "EPL-2.0",
+    "GNU Lesser General Public License": "LGPL",
+  }
+
 # default: allow everything defined in the list of permissive licenses
 ignore {
   input.Name == permissive[_]
+}
+
+# allow licenses that are only named different due to the used tooling
+ignore {
+  licenseMapping[input.Name] == permissive[_]
 }
