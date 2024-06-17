@@ -13,7 +13,9 @@ name: License Check
 
 on:
   pull_request: {}
-# TODO release published and attach full report
+  release:
+    types:
+      - created
 
 jobs:
   trivy-license-check:
@@ -34,7 +36,16 @@ jobs:
       - name: Create SBOM
         run: ./gradlew clean cyclonedxBom
 
+      - name: Attach SBOM to Release
+        if: github.event.release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" "./build/reports/bom.json#CycloneDX generated JSON SBOM"
+          gh release upload "${{ github.event.release.tag_name }}" "./build/reports/bom.xml#CycloneDX generated XML SBOM"
+
       - name: Check for forbidden licenses
+        if: github.event.pull_request
         run: >
           docker run --rm
           -v "$PWD:/project"
@@ -60,12 +71,3 @@ jobs:
         if: success() && github.event.pull_request
         run: |
           echo 'All dependencies have allowed licenses.' >> $GITHUB_STEP_SUMMARY
-
-#      - name: Read to env
-#        id: licenses
-#        if: always() && github.event. TODO release
-#        uses: guibranco/github-file-reader-action-v2@a19627ed0e64d536a7db4b936799e66383557c01 # v2.0.486
-#        with:
-#          path: trivy-licenses.md
-
-# TODO always() add file to release
