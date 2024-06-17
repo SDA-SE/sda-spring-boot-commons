@@ -48,7 +48,7 @@ jobs:
         if: github.event.pull_request
         run: >
           docker run --rm
-          -v "$PWD:/project"
+          -v "${PWD}:/project"
           aquasec/trivy:0.51.1
           sbom --scanners license --severity UNKNOWN,HIGH,CRITICAL
           --format json
