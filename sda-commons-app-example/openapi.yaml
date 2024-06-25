@@ -14,13 +14,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Cars'
+                $ref: "#/components/schemas/Cars"
         "404":
           description: Resource not found
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: "#/components/schemas/ApiError"
   /trees:
     get:
       tags:
@@ -32,13 +32,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Trees'
+                $ref: "#/components/schemas/Trees"
         "404":
           description: Resource not found
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: "#/components/schemas/ApiError"
 components:
   schemas:
     ApiError:
@@ -51,7 +51,7 @@ components:
             the request body or query params.
           example: []
           items:
-            $ref: '#/components/schemas/ApiInvalidParam'
+            $ref: "#/components/schemas/ApiInvalidParam"
         title:
           type: string
           description: The human readable description of the error.
@@ -92,7 +92,7 @@ components:
           type: array
           description: The cars
           items:
-            $ref: '#/components/schemas/Car'
+            $ref: "#/components/schemas/Car"
       description: A list of cars
     Tree:
       type: object
@@ -108,5 +108,5 @@ components:
           type: array
           description: The trees
           items:
-            $ref: '#/components/schemas/Tree'
+            $ref: "#/components/schemas/Tree"
       description: A list of trees
