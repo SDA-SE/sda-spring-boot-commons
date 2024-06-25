@@ -24,7 +24,7 @@ class SecureMethodsAdviceTest {
     Assertions.assertThat(ContextUtils.createTestContext(TraceAllowedApp.class))
         .hasFailed()
         .getFailure()
-        .getRootCause()
+        .rootCause()
         .isInstanceOfSatisfying(
             InsecureConfigurationException.class,
             e -> assertThat(e.getMessage()).isEqualTo("The server accepts insecure methods."));

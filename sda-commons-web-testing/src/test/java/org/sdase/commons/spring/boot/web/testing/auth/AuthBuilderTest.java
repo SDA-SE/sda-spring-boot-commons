@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -70,7 +71,7 @@ class AuthBuilderTest {
     Date testDate = new Date();
     String token = authBuilder.addClaim("testKey", testDate).token();
     JWT claim = decodeJwt(token);
-    assertThat(claim.getJWTClaimsSet().getDateClaim("testKey")).isEqualToIgnoringMillis(testDate);
+    assertThat(claim.getJWTClaimsSet().getDateClaim("testKey")).isCloseTo(testDate, 1_100);
   }
 
   @Test
@@ -78,7 +79,7 @@ class AuthBuilderTest {
     String token = authBuilder.addClaim("testKey", new String[] {"Hello", "World"}).token();
     JWT claim = decodeJwt(token);
     assertThat(claim.getJWTClaimsSet().getClaim("testKey"))
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .containsExactly("Hello", "World");
   }
 
@@ -86,14 +87,18 @@ class AuthBuilderTest {
   void shouldAddLongArrayClaim() throws ParseException {
     String token = authBuilder.addClaim("testKey", new Long[] {1L, 2L}).token();
     JWT claim = decodeJwt(token);
-    assertThat(claim.getJWTClaimsSet().getClaim("testKey")).asList().containsExactly(1L, 2L);
+    assertThat(claim.getJWTClaimsSet().getClaim("testKey"))
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
+        .containsExactly(1L, 2L);
   }
 
   @Test
   void shouldAddIntArrayClaim() throws ParseException {
     String token = authBuilder.addClaim("testKey", new Integer[] {1, 2}).token();
     JWT claim = decodeJwt(token);
-    assertThat(claim.getJWTClaimsSet().getClaim("testKey")).asList().containsExactly(1L, 2L);
+    assertThat(claim.getJWTClaimsSet().getClaim("testKey"))
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
+        .containsExactly(1L, 2L);
   }
 
   @Test
@@ -117,9 +122,13 @@ class AuthBuilderTest {
     assertThat(jwt.getJWTClaimsSet().getDoubleClaim("d")).isEqualTo(3.141D);
     assertThat(jwt.getJWTClaimsSet().getBooleanClaim("b")).isTrue();
     assertThat(jwt.getJWTClaimsSet().getStringListClaim("s[]")).containsExactly("Hello", "World");
-    assertThat(jwt.getJWTClaimsSet().getClaim("i[]")).asList().containsExactly(1L, 2L);
-    assertThat(jwt.getJWTClaimsSet().getClaim("l[]")).asList().containsExactly(1L, 2L);
-    assertThat(jwt.getJWTClaimsSet().getDateClaim("date")).isEqualToIgnoringMillis(dateValue);
+    assertThat(jwt.getJWTClaimsSet().getClaim("i[]"))
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
+        .containsExactly(1L, 2L);
+    assertThat(jwt.getJWTClaimsSet().getClaim("l[]"))
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
+        .containsExactly(1L, 2L);
+    assertThat(jwt.getJWTClaimsSet().getDateClaim("date")).isCloseTo(dateValue, 1_100);
   }
 
   @Test

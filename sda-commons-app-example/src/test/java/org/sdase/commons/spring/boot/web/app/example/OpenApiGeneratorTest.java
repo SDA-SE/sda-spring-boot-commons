@@ -89,7 +89,7 @@ class OpenApiGeneratorTest {
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .extracting(Map::keySet)
         .extracting(ArrayList::new)
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .containsExactly("200", "404");
   }
 

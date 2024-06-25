@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -43,6 +42,6 @@ public class AsyncClientAdapter {
     var time = System.nanoTime();
     var timeAsJsonNode = objectMapper.convertValue(time, JsonNode.class);
     jsonNodes.set("time", timeAsJsonNode);
-    return new AsyncResult<>(objectMapper.convertValue(jsonNodes, Object.class)).completable();
+    return CompletableFuture.completedFuture(objectMapper.convertValue(jsonNodes, Object.class));
   }
 }

@@ -14,7 +14,6 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
@@ -154,7 +153,7 @@ abstract class AbstractSecurityHeadersTest {
                         "Vary",
                         "Trace-Token"),
                     predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
-                .collect(Collectors.toList()));
+                .toList());
   }
 
   /**
@@ -183,7 +182,7 @@ abstract class AbstractSecurityHeadersTest {
                         "Vary",
                         "Trace-Token"),
                     predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
-                .collect(Collectors.toList()));
+                .toList());
   }
 
   @Test
@@ -191,7 +190,7 @@ abstract class AbstractSecurityHeadersTest {
     List<HttpMethod> httpMethods =
         client.optionsForAllow(getServerBaseUrl() + "/api/resource").stream().toList();
     assertThat(httpMethods)
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .containsExactlyInAnyOrder(HttpMethod.GET, HttpMethod.HEAD, HttpMethod.OPTIONS);
   }
 

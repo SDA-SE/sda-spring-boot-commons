@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.ClearSystemProperty;
@@ -39,7 +40,7 @@ class JsonLoggingTest {
     assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
     assertThat(nonTestLogLines(output))
         .as("Log contains no JSON:\n{}", output.toString())
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .noneMatch(l -> l.toString().startsWith("{"));
   }
 
@@ -54,7 +55,7 @@ class JsonLoggingTest {
     }
     assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
         .as("Log contains JSON:\n{}", output.toString())
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .isNotEmpty()
         .allMatch(l -> l.toString().startsWith("{"));
   }
@@ -77,7 +78,7 @@ class JsonLoggingTest {
     }
     assertThat(onlyConfigurableLogLines(nonTestLogLines(output)))
         .as("Log contains JSON:\n{}", output.toString())
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .isNotEmpty()
         .allMatch(l -> l.toString().startsWith("{"));
   }

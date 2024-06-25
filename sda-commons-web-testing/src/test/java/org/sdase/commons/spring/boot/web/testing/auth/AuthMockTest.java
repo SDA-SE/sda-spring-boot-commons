@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.tuple;
 
 import com.nimbusds.jwt.JWTParser;
 import java.text.ParseException;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ class AuthMockTest {
     var keys = client.getForObject(baseUrl + "/issuer/keys", Object.class);
     assertThat(keys)
         .extracting("keys")
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .extracting("kty", "use", "kid")
         .containsExactly(tuple("RSA", "sig", kid));
   }
