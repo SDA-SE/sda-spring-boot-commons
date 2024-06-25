@@ -14,6 +14,7 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -27,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -78,8 +78,9 @@ class ContextCopyTaskDecoratorTest {
 
     var actual = callAsyncAndVerify(asyncProcessor::process);
 
-    assertThat(actual.get("mdcCopyOfContextMap")).isInstanceOf(Map.class);
-    assertThat((Map<String, String>) actual.get("mdcCopyOfContextMap"))
+    assertThat(actual.get("mdcCopyOfContextMap"))
+        .isInstanceOf(Map.class)
+        .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsEntry("test-key", "test-value");
   }
 
@@ -118,7 +119,7 @@ class ContextCopyTaskDecoratorTest {
       Map<String, String> mdcCopyOfContextMap =
           MDC.getCopyOfContextMap() == null ? Map.of() : MDC.getCopyOfContextMap();
       try {
-        return new AsyncResult<>(
+        return CompletableFuture.completedFuture(
             Map.of(
                 "thread-id",
                 threadId,
@@ -129,7 +130,7 @@ class ContextCopyTaskDecoratorTest {
                 "mdcCopyOfContextMap",
                 mdcCopyOfContextMap));
       } catch (IllegalStateException ignored) {
-        return new AsyncResult<>(
+        return CompletableFuture.completedFuture(
             Map.of("thread-id", threadId, "metadata-context", metadataContext));
       }
     }

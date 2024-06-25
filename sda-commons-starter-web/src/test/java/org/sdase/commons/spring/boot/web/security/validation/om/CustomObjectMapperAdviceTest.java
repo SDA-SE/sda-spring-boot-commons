@@ -21,7 +21,7 @@ class CustomObjectMapperAdviceTest {
     assertThat(ContextUtils.createTestContext(NoSdaObjectMapperApp.class))
         .hasFailed()
         .getFailure()
-        .getRootCause()
+        .rootCause()
         .isInstanceOf(InsecureConfigurationException.class)
         .hasMessage(
             "Missing sdaObjectMapperBuilder bean from org.sdase.commons.spring.boot.web.jackson. "

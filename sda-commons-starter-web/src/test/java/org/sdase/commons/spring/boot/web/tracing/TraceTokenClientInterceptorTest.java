@@ -14,6 +14,7 @@ import feign.RequestTemplate;
 import java.util.HashSet;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ class TraceTokenClientInterceptorTest {
     assertThat(given.headers())
         .containsKey("Trace-Token")
         .extracting("Trace-Token")
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .hasSize(1)
         .first()
         .asString()
@@ -78,7 +79,7 @@ class TraceTokenClientInterceptorTest {
     assertThat(given.headers())
         .containsKey("Trace-Token")
         .extracting("Trace-Token")
-        .asList()
+        .asInstanceOf(InstanceOfAssertFactories.LIST)
         .hasSize(1)
         .first()
         .asString()

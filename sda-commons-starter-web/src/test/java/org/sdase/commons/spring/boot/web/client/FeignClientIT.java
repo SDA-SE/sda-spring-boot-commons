@@ -14,6 +14,7 @@ import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.Json;
 import java.util.Map;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.web.client.test.ClientTestApp;
@@ -132,7 +133,11 @@ class FeignClientIT {
 
     boolean sorted = false;
     try {
-      assertThat(actual).asList().hasSize(100).extracting("time").isSorted();
+      assertThat(actual)
+          .asInstanceOf(InstanceOfAssertFactories.LIST)
+          .hasSize(100)
+          .extracting("time")
+          .isSorted();
       sorted = true;
     } catch (AssertionError ignored) {
       // ignore

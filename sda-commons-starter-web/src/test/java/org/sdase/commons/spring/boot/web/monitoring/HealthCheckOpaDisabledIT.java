@@ -65,7 +65,7 @@ class HealthCheckOpaDisabledIT {
         .thenReturn(getAllowedResponse());
     var responseEntity = getHealthCheck();
     assertThat(responseEntity.getStatusCode().is4xxClientError()).isTrue();
-    assertThat(responseEntity.getStatusCodeValue()).isEqualTo(404);
+    assertThat(responseEntity.getStatusCode().value()).isEqualTo(404);
   }
 
   private OpaResponse getAllowedResponse() {
