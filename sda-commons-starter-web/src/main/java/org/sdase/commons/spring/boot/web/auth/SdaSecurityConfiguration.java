@@ -105,7 +105,7 @@ public class SdaSecurityConfiguration {
       LOG.warn("No trusted issuers configured, anonymous requests allowed.");
       return onlyAnonymousAuthenticationManagerResolver();
     } else {
-      return new JwtIssuerAuthenticationManagerResolver(trustedIssuers);
+      return JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(trustedIssuers);
     }
   }
 
