@@ -21,7 +21,7 @@ public class SdaOpenApiCustomizerConfiguration {
 
   @Bean
   public ServerBaseUrlCustomizer removeServerBaseUrl() {
-    return serverBaseUrl -> null;
+    return (serverBaseUrl, httpRequest) -> null;
   }
 
   @Bean
