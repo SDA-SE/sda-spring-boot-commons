@@ -11,7 +11,7 @@ ext {
   bouncycastleVersion = '1.78.1'
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.3.1'
-  springCloudVersion = '2023.0.2'
+  springCloudVersion = '2023.0.3'
   scalaVersion = '2.13.14'
   swaggerCoreVersion = '2.2.22'
   victoolsVersion = '4.35.0'
