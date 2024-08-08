@@ -29,7 +29,7 @@ dependencies {
 
   constraints {
     // overall testing dependencies
-    api 'org.awaitility:awaitility:4.2.1'
+    api 'org.awaitility:awaitility:4.2.2'
 
     // spring cloud
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
