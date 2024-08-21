@@ -58,7 +58,7 @@ dependencies {
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
-    api 'io.github.classgraph:classgraph:4.8.174'
+    api 'io.github.classgraph:classgraph:4.8.175'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'org.xerial.snappy:snappy-java:1.1.10.6', {
       because 'fix CVE-2023-34455, CVE-2023-43642'
