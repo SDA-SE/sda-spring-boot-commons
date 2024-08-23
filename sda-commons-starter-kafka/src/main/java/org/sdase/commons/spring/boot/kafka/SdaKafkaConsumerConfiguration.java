@@ -201,7 +201,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     ConcurrentKafkaListenerContainerFactory<String, ?> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(
-        new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties()));
+        new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(null)));
     factory.setRecordMessageConverter(new ByteArrayJsonMessageConverter(objectMapper));
     factory.getContainerProperties().setAckMode(AckMode.RECORD);
     // Please note that ConversionExceptions like mapping exception won't be retried and directly
