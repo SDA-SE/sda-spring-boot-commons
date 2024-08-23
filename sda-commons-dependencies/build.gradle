@@ -10,7 +10,7 @@ ext {
   awaitalityVersion = '4.2.0'
   bouncycastleVersion = '1.78.1'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '3.3.2'
+  springBootVersion = '3.3.3'
   springCloudVersion = '2023.0.3'
   scalaVersion = '2.13.14'
   swaggerCoreVersion = '2.2.22'
