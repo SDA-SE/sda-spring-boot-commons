@@ -49,7 +49,7 @@ dependencies {
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
     api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0'
-    api "io.opentelemetry:opentelemetry-api-incubator:1.41.0-alpha", {
+    api "io.opentelemetry:opentelemetry-api-incubator:1.42.0-alpha", {
       because "conflict within transitive dependencies of Spring Boot Dependencies"
     }
 
