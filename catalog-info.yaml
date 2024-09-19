@@ -2,19 +2,17 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: sda-spring-boot-commons
+  title: SDA Spring Boot Commons
   annotations:
-    sda.se/summary: |
-      The [sda-spring-boot-commons](https://github.com/SDA-SE/sda-spring-boot-commons) library
-      includes several modules to speed up SDA-compliant microservice development. It is
-      based on the [Spring Boot](https://spring.io/projects/spring-boot) framework. It provides
-      several starter modules for additional functionality. Those starter modules configure the
-      framework with default SDA specific settings and add support for an easy and fast integration
-      of standard technologies such as MongoDB, S3 or Kafka.
     sda.se/federation-scopes: public
     backstage.io/techdocs-ref: .
   description: |
-    SDA Spring Boot Commons is a set of libraries to bootstrap services easily that follow
-    the patterns and specifications promoted by the SDA SE.
+    The [sda-spring-boot-commons](https://github.com/SDA-SE/sda-spring-boot-commons) library
+    includes several modules to speed up SDA-compliant microservice development. It is
+    based on the [Spring Boot](https://spring.io/projects/spring-boot) framework. It provides
+    several starter modules for additional functionality. Those starter modules configure the
+    framework with default SDA specific settings and add support for an easy and fast integration
+    of standard technologies such as MongoDB, S3 or Kafka.
 spec:
   type: library
   lifecycle: production
