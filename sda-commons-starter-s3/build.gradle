@@ -1,7 +1,11 @@
 dependencies {
   implementation "org.springframework.boot:spring-boot-autoconfigure"
   api 'org.springframework.boot:spring-boot-starter-actuator'
-  api "io.awspring.cloud:spring-cloud-aws-s3"
+  api "io.awspring.cloud:spring-cloud-aws-s3", {
+    // conflict with managed version in Spring Boot Dependencies
+    exclude group: "com.fasterxml.jackson.core", module: "jackson-databind"
+  }
+  api "com.fasterxml.jackson.core:jackson-databind"
 
   testImplementation project(":sda-commons-starter-web")
   testImplementation project(':sda-commons-web-testing')
