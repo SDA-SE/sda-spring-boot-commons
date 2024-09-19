@@ -28,6 +28,9 @@ dependencies {
   api enforcedPlatform("io.netty:netty-bom:4.1.113.Final")
 
   constraints {
+    // overall conflicts
+    api 'org.slf4j:slf4j-api:2.0.16'
+
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.2.2'
 
