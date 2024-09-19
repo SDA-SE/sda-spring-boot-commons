@@ -5,7 +5,7 @@ metadata:
   title: SDA Spring Boot Commons
   annotations:
     sda.se/federation-scopes: public
-    backstage.io/techdocs-ref: .
+    backstage.io/techdocs-ref: dir:.
   description: |
     The [sda-spring-boot-commons](https://github.com/SDA-SE/sda-spring-boot-commons) library
     includes several modules to speed up SDA-compliant microservice development. It is
