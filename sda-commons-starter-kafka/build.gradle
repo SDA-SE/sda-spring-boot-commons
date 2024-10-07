@@ -11,7 +11,7 @@ dependencies {
   testImplementation project(":sda-commons-starter-web")
   testImplementation project(":sda-commons-web-testing")
   testImplementation 'org.springframework.kafka:spring-kafka-test'
-  testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0', {
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'
   }
 }
