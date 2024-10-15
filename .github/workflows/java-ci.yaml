@@ -9,6 +9,7 @@ on:
 jobs:
   # build library
   build:
+    name: build (${{ matrix.java_version }}, ubuntu-latest)
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -16,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         java_version: [ '17', '21' ]
-        os: [ 'ubuntu-latest' ]
+        os: [ 'ubuntu-22.04' ]
 
     timeout-minutes: 60
     steps:
@@ -47,7 +48,7 @@ jobs:
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # tag=v3
         if: always()
         with:
-          name: ${{ matrix.os }}-${{ matrix.java_version }}-test-results
+          name: ubuntu-latest-${{ matrix.java_version }}-test-results
           path: |
             build/reports/
             */build/test-results/**/*.xml
