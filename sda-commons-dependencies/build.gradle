@@ -84,7 +84,7 @@ dependencies {
     }
 
     // sda-commons-starter-s3
-    api "io.awspring.cloud:spring-cloud-aws-s3:3.2.0"
+    api "io.awspring.cloud:spring-cloud-aws-s3:3.2.1"
     api "io.github.robothy:local-s3-rest:1.18"
 
   }
