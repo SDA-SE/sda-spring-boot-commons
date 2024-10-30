@@ -17,4 +17,4 @@ spec:
   type: library
   lifecycle: production
   system: backend
-  owner: bedrock
+  owner: "group:default/tachyon"
