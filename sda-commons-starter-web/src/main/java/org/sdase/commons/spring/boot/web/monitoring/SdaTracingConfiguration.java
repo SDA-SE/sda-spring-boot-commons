@@ -12,7 +12,7 @@ import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
 import java.util.Map.Entry;
-import org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpProperties;
+import org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpTracingProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @PropertySource("classpath:/org/sdase/commons/spring/boot/web/monitoring/tracing.properties")
 @AutoConfiguration
-@EnableConfigurationProperties(OtlpProperties.class)
+@EnableConfigurationProperties(OtlpTracingProperties.class)
 public class SdaTracingConfiguration {
 
   @ConditionalOnProperty(value = "management.tracing.enabled", havingValue = "false")
@@ -44,12 +44,12 @@ public class SdaTracingConfiguration {
    * creates the gRPC exporter for Open Telemetry. It will be conditionally enabled on property
    * management.tracing.grpc.enabled=true. It will replace the http exporter.
    *
-   * @param properties the {@link OtlpProperties} configuration properties
+   * @param properties the {@link OtlpTracingProperties} configuration properties
    * @return an instance of {@link OtlpGrpcSpanExporter}
    */
   @Bean
   @ConditionalOnProperty(value = "management.tracing.grpc.enabled", havingValue = "true")
-  public OtlpGrpcSpanExporter otlpGrpcExporter(OtlpProperties properties) {
+  public OtlpGrpcSpanExporter otlpGrpcExporter(OtlpTracingProperties properties) {
     var builder =
         OtlpGrpcSpanExporter.builder()
             .setEndpoint(properties.getEndpoint())
