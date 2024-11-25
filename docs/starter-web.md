@@ -598,7 +598,7 @@ Default features are:
   collector (e.g. Jaeger) on localhost (http port 4317, gRPC port 4318). Configure the location of
   the service using `management.otlp.tracing.endpoint`.
 * See [above](#configuration) for more common options.
-* You can check all the possible values on [OtlpProperties](https://docs.spring.io/spring-boot/docs/current/api//org/springframework/boot/actuate/autoconfigure/metrics/export/otlp/OtlpProperties.html)
+* You can check all the possible values on [OtlpTracingProperties](https://docs.spring.io/spring-boot/api/java/org/springframework/boot/actuate/autoconfigure/tracing/otlp/OtlpTracingProperties.html)
   and [TracingProperties](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html)
 
 
