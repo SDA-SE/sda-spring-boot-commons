@@ -21,14 +21,14 @@ import org.sdase.commons.spring.boot.web.app.constraints.test.SomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest(classes = SomeController.class, webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 class SomeControllerTest {
 
-  @MockBean SomeConstraints mockConstraints;
-  @MockBean SomeService someService;
+  @MockitoBean SomeConstraints mockConstraints;
+  @MockitoBean SomeService someService;
 
   @Autowired SomeController constraintsAwareController;
 

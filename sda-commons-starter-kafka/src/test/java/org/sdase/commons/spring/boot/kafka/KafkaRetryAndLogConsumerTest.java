@@ -22,11 +22,11 @@ import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest(
     classes = KafkaTestApp.class,
@@ -44,7 +44,7 @@ class KafkaRetryAndLogConsumerTest {
 
   @Autowired ObjectMapper objectMapper;
 
-  @MockBean ListenerCheck listenerCheck;
+  @MockitoBean ListenerCheck listenerCheck;
 
   @Value("${app.kafka.consumer.retry-and-log.topic}")
   private String topic;
