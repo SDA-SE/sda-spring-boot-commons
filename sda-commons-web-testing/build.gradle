@@ -5,6 +5,7 @@ dependencies {
   }
   api 'com.github.tomakehurst:wiremock-jre8-standalone'
   api 'org.awaitility:awaitility'
+  api 'org.apache.commons:commons-lang3'
 
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'
