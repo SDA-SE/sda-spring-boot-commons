@@ -18,11 +18,11 @@ import org.sdase.commons.spring.boot.web.testing.s3.S3Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 
@@ -39,7 +39,7 @@ class S3HealthIndicatorIntegrationTest {
 
   @Autowired private TestRestTemplate client;
 
-  @SpyBean private S3Client s3Client;
+  @MockitoSpyBean private S3Client s3Client;
 
   @Test
   void checkThatS3HealthCheckIsEnabledAndUp() {

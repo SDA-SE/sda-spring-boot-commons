@@ -19,9 +19,9 @@ import org.sdase.commons.spring.boot.kafka.test.SomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest(
     classes = KafkaTestApp.class,
@@ -32,7 +32,7 @@ class KafkaConsumerIntegrationTest {
 
   @Autowired KafkaTemplate<String, Object> kafkaTemplate;
 
-  @SpyBean SomeService someService;
+  @MockitoSpyBean SomeService someService;
 
   @Value("${app.kafka.consumer.topic}") // same as configured for the consumer
   private String topic;
