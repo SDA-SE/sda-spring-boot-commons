@@ -7,14 +7,15 @@
  */
 package org.sdase.commons.spring.boot.web.security.test;
 
-import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 
+@Endpoint(id = "tasks")
 @Component
-@RestControllerEndpoint(id = "tasks")
 public class AdminController {
-  @GetMapping(value = "/doSomething")
+
+  @ReadOperation
   public TestResource resource() {
     return new TestResource().setValue("This is from the management server.");
   }
