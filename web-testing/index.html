@@ -918,14 +918,14 @@ In such cases the constraints model can be mocked.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.mock.mockito.MockBean</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.bean.override.mockito.MockitoBean</span><span class="p">;</span>
 
 <span class="nd">@SpringBootTest</span><span class="p">(</span><span class="n">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SomeController</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">webEnvironment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpringBootTest</span><span class="p">.</span><span class="na">WebEnvironment</span><span class="p">.</span><span class="na">MOCK</span><span class="p">)</span>
 <span class="nd">@AutoConfigureMockMvc</span>
 <span class="kd">class</span> <span class="nc">SomeControllerTest</span><span class="w"> </span><span class="p">{</span>
 
-<span class="w">  </span><span class="nd">@MockBean</span><span class="w"> </span><span class="n">SomeConstraints</span><span class="w"> </span><span class="n">mockConstraints</span><span class="p">;</span>
-<span class="w">  </span><span class="nd">@MockBean</span><span class="w"> </span><span class="n">SomeService</span><span class="w"> </span><span class="n">someService</span><span class="p">;</span>
+<span class="w">  </span><span class="nd">@MockitoBean</span><span class="w"> </span><span class="n">SomeConstraints</span><span class="w"> </span><span class="n">mockConstraints</span><span class="p">;</span>
+<span class="w">  </span><span class="nd">@MockitoBean</span><span class="w"> </span><span class="n">SomeService</span><span class="w"> </span><span class="n">someService</span><span class="p">;</span>
 
 <span class="w">  </span><span class="nd">@Autowired</span><span class="w"> </span><span class="n">SomeController</span><span class="w"> </span><span class="n">constraintsAwareController</span><span class="p">;</span>
 
@@ -1450,9 +1450,9 @@ The version is managed by the library as described <a href="#dependencies">above
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.mock.mockito.SpyBean</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.kafka.core.KafkaTemplate</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.kafka.test.context.EmbeddedKafka</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.bean.override.mockito.MockitoSpyBean</span><span class="p">;</span>
 
 <span class="nd">@SpringBootTest</span><span class="p">(</span>
 <span class="w">    </span><span class="n">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KafkaTestApp</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
@@ -1463,7 +1463,7 @@ The version is managed by the library as described <a href="#dependencies">above
 
 <span class="w">  </span><span class="nd">@Autowired</span><span class="w"> </span><span class="n">KafkaTemplate</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">kafkaTemplate</span><span class="p">;</span>
 
-<span class="w">  </span><span class="nd">@SpyBean</span><span class="w"> </span><span class="n">SomeService</span><span class="w"> </span><span class="n">someService</span><span class="p">;</span>
+<span class="w">  </span><span class="nd">@MockitoSpyBean</span><span class="w"> </span><span class="n">SomeService</span><span class="w"> </span><span class="n">someService</span><span class="p">;</span>
 
 <span class="w">  </span><span class="nd">@Value</span><span class="p">(</span><span class="s">&quot;${app.kafka.consumer.topic}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// same as configured for the consumer</span>
 <span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">topic</span><span class="p">;</span>
