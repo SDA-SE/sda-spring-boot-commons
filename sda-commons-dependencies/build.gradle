@@ -8,7 +8,7 @@ javaPlatform {
 
 ext {
   awaitalityVersion = '4.2.0'
-  bouncycastleVersion = '1.79'
+  bouncycastleVersion = '1.80'
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.4.1'
   springCloudVersion = '2024.0.0'
