@@ -17,11 +17,17 @@ plugins {
   id 'org.cyclonedx.bom' version '2.0.0'
 }
 
+cyclonedxBom {
+  schemaVersion = "1.5"
+}
+
 repositories {
   mavenCentral()
 }
 
 group 'org.sdase.commons.spring.boot'
+// the version of the generated jars is based on the SEMANTIC_VERSION environment variable
+version = System.getenv('SEMANTIC_VERSION')
 
 allprojects {
   apply plugin: 'idea'
@@ -68,10 +74,8 @@ subprojects {
     mavenCentral()
   }
 
-  group "org.sdase.commons.spring.boot"
-
-  // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
-  version = System.getenv("SEMANTIC_VERSION")
+  group rootProject.group
+  version = rootProject.version
 
   // Disable publication of Gradle Module Metadata
   tasks.withType(GenerateModuleMetadata) {
