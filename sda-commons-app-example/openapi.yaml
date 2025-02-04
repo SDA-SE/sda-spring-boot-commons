@@ -5,44 +5,46 @@ info:
 paths:
   /cars:
     get:
-      tags:
-      - app
       operationId: getCars
       responses:
         "200":
-          description: A successful response
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/Cars"
+          description: A successful response
         "404":
-          description: Resource not found
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /trees:
-    get:
+          description: Resource not found
       tags:
       - app
+  /trees:
+    get:
       operationId: getTrees
       responses:
         "200":
-          description: A successful response
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/Trees"
+          description: A successful response
         "404":
-          description: Resource not found
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ApiError"
+          description: Resource not found
+      tags:
+      - app
 components:
   schemas:
     ApiError:
       type: object
+      description: Describes an api error object to transfer error information between
+        server and client.
       properties:
         invalidParams:
           type: array
@@ -56,10 +58,10 @@ components:
           type: string
           description: The human readable description of the error.
           example: Request parameters are not valid
-      description: Describes an api error object to transfer error information between
-        server and client.
     ApiInvalidParam:
       type: object
+      description: Defines a validation error for a parameter or field.
+      example: []
       properties:
         errorCode:
           type: string
@@ -76,37 +78,35 @@ components:
             message of the validation. The reason might be in different language due
             to internationalization.
           example: Audi has no Golf GTI model (not found)
-      description: Defines a validation error for a parameter or field.
-      example: []
     Car:
       type: object
+      description: A car
       properties:
         licensePlate:
           type: string
           description: The license plate
-      description: A car
     Cars:
       type: object
+      description: A list of cars
       properties:
         cars:
           type: array
           description: The cars
           items:
             $ref: "#/components/schemas/Car"
-      description: A list of cars
     Tree:
       type: object
+      description: A tree
       properties:
         name:
           type: string
           description: The name
-      description: A tree
     Trees:
       type: object
+      description: A list of trees
       properties:
         trees:
           type: array
           description: The trees
           items:
             $ref: "#/components/schemas/Tree"
-      description: A list of trees
