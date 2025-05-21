@@ -7,7 +7,6 @@ javaPlatform {
 }
 
 ext {
-  awaitalityVersion = '4.2.0'
   bouncycastleVersion = '1.80'
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.4.5'
@@ -37,7 +36,11 @@ dependencies {
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.3.0'
 
-    api "org.junit-pioneer:junit-pioneer:2.3.0"
+    api 'org.junit-pioneer:junit-pioneer:2.3.0'
+
+    api 'org.junit:junit-bom:5.11.4', {
+      because 'conflict junit-pioneer and spring-boot-starter-test'
+    }
 
     // spring cloud
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
@@ -85,7 +88,7 @@ dependencies {
       because 'conflict between com.fasterxml.jackson.module:jackson-module-scala_2.13:2.13.3, com.typesafe.scala-logging:scala-logging_2.13:3.9.3 and org.scala-lang.modules:scala-collection-compat_2.13:2.4.4'
     }
     api "org.apache.zookeeper:zookeeper:3.9.3", {
-      because 'version conflict in transitive managed depedencies'
+      because 'version conflict in transitive managed dependencies'
     }
 
     // sda-commons-starter-s3
