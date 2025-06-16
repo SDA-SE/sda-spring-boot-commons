@@ -9,7 +9,7 @@ javaPlatform {
 ext {
   bouncycastleVersion = '1.81'
   logbackContribVersion = '0.1.5'
-  springBootVersion = '3.4.5'
+  springBootVersion = '3.5.0'
   springCloudVersion = '2024.0.1'
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.33'
