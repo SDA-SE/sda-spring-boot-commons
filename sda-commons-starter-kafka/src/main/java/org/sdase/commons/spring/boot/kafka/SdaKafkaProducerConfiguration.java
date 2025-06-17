@@ -85,21 +85,4 @@ public class SdaKafkaProducerConfiguration {
 
     return new KafkaTemplate<>(producerFactoryByte, props);
   }
-
-  /**
-   * Keep Bean to not introduce breaking changes superseded by kafkaByteArrayDltTemplate should be
-   * removed with next major update
-   *
-   * @deprecated (uses default producerFactory which can have side effects on other templates)
-   */
-  @Deprecated(since = "4.1.0", forRemoval = true)
-  @Bean
-  @SuppressWarnings("java:S1452")
-  public KafkaTemplate<Object, Object> kafkaDltTemplate(
-      ProducerFactory<Object, Object> producerFactory) {
-    Map<String, Object> props = new HashMap<>(commonProperties);
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
-    return new KafkaTemplate<>(producerFactory, props);
-  }
 }
