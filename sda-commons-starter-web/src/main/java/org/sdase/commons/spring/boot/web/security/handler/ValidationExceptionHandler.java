@@ -76,7 +76,7 @@ public class ValidationExceptionHandler {
 
     //    If MessageSourceResolvable is instance of FieldError, then add additional information.
     List<ApiInvalidParam> invalidParams =
-        ex.getAllValidationResults().stream()
+        ex.getParameterValidationResults().stream()
             .flatMap(
                 parameterValidationResult ->
                     parameterValidationResult.getResolvableErrors().stream())

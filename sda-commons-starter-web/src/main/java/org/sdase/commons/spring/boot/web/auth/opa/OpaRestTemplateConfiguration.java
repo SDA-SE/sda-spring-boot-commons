@@ -34,6 +34,6 @@ public class OpaRestTemplateConfiguration {
 
   @Bean("opaRestTemplate")
   public RestTemplate opaRestTemplate(RestTemplateBuilder builder) {
-    return builder.setConnectTimeout(connectionTimeout).setReadTimeout(timeout).build();
+    return builder.connectTimeout(connectionTimeout).readTimeout(timeout).build();
   }
 }
