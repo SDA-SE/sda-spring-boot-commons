@@ -9,7 +9,7 @@ package org.sdase.commons.spring.boot.web.monitoring.testing;
 
 import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
-import feign.jaxrs.JakartaContract;
+import feign.jaxrs3.JAXRS3Contract;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -18,7 +18,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 @FeignClient(
     value = "testClient",
     url = "${test.tracing.client.base.url}",
-    configuration = JakartaContract.class)
+    configuration = JAXRS3Contract.class)
 public interface TracedFeignClient {
 
   @GET
