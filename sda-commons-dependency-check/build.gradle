@@ -14,6 +14,7 @@ dependencies {
   api project(":sda-commons-web-testing")
 
   testImplementation "io.github.classgraph:classgraph"
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 /**
