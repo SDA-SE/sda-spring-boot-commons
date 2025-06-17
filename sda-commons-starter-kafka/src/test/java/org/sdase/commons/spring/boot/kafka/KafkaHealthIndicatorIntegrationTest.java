@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SetSystemProperty(key = "management.health.kafka.enabled", value = "true")
 @SetSystemProperty(key = "management.health.kafka.timeout", value = "8s")
@@ -50,7 +52,10 @@ class KafkaHealthIndicatorIntegrationTest {
 
   @Autowired private TestRestTemplate client;
 
-  @MockitoSpyBean private KafkaHealthIndicator kafkaHealthIndicator;
+  @SuppressWarnings("removal")
+  //The MockitoSpyBean that should replace the SpyBean doesn't work exactly the same. See https://github.com/spring-projects/spring-framework/issues/33934.
+  //It has to be further investigated, what steps are necessary to remove this deprecated reference.
+  @SpyBean private KafkaHealthIndicator kafkaHealthIndicator;
 
   @Autowired private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
 
