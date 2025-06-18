@@ -48,6 +48,11 @@ dependencies {
 }
 ```
 
+With gradle 9 it will be mandatory to define a launcher to run your tests with gradle. SDA Spring Boot Commons uses junit. That's why it is recommended adding the following dependency to your defined dependencies:
+```
+testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+```
+
 Artifacts of SDA Spring Boot Commons are available [at Maven Central](https://search.maven.org/search?q=g:org.sdase.commons.spring.boot)
 since release [0.11.2](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/0.11.2).
 

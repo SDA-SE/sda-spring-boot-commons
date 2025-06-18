@@ -10,7 +10,6 @@ site_name: sda-spring-boot-commons
 
 nav:
   - Overview: index.md
-  - Migrate to v3: migration-2-to-3.md
   - Starter Web: starter-web.md
   - Starter MongoDB: starter-mongodb.md
   - Starter Kafka: starter-kafka.md
@@ -20,6 +19,10 @@ nav:
   - Cloud Events: cloudevents.md
   - Metadata Context: metadata-context.md
   - Testing: web-testing.md
+  - Migration:
+    - Migrate to v3: migration-2-to-3.md
+    - Migrate to v4: migration-3-to-4.md
+    - Migrate to v5: migration-4-to-5.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins
