@@ -1,11 +1,3 @@
-configurations.configureEach {
-  resolutionStrategy {
-    force 'org.springframework.boot:spring-boot-starter-data-mongodb:3.4.7' // the 3.5.x version uses the mongo driver v5.5.x but the driver needs to be 5.4.0 or lower, 5.5.0 is not compatible with document db 4
-    force 'org.springframework.data:spring-data-mongodb:4.4.7' // the 4.5.x version uses the mongo driver v5.5.x but the driver needs to be 5.4.0 or lower, 5.5.0 is not compatible with document db 4
-    force 'org.mongodb:mongodb-driver-sync:5.2.1'
-  }
-}
-
 dependencies {
   api project(':sda-commons-cacertificates')
   api 'org.springframework.boot:spring-boot-starter-data-mongodb'

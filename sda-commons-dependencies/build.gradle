@@ -88,6 +88,10 @@ dependencies {
       because 'version conflict in transitive managed dependencies'
     }
 
+    api "org.mongodb:mongodb-driver-sync:5.4.0", {
+      because '5.4.0 is the last version that is compatible with document db 4'
+    }
+
     // sda-commons-starter-s3
     api "io.awspring.cloud:spring-cloud-aws-s3:3.4.0"
     api "io.github.robothy:local-s3-rest:1.23"
