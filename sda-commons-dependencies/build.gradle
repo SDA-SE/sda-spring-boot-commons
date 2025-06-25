@@ -23,6 +23,11 @@ dependencies {
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
+  api "org.mongodb:mongodb-driver-sync:5.4.0"
+  api "org.mongodb:bson:5.4.0"
+  api "org.mongodb:bson:5.4.0"
+  api "org.mongodb:mongodb-driver-core:5.4.0"
+
   constraints {
     // overall conflicts
     api 'org.slf4j:slf4j-api:2.0.17'
@@ -86,10 +91,6 @@ dependencies {
     }
     api "org.apache.zookeeper:zookeeper:3.9.3", {
       because 'version conflict in transitive managed dependencies'
-    }
-
-    api "org.mongodb:mongodb-driver-sync:5.4.0", {
-      because '5.4.0 is the last version that is compatible with document db 4'
     }
 
     // sda-commons-starter-s3
