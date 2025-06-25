@@ -14,6 +14,7 @@ ext {
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.34'
   victoolsVersion = '4.38.0'
+  mongoDbDriverVersion = '5.4.0'
 }
 
 dependencies {
@@ -23,10 +24,9 @@ dependencies {
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
-  api "org.mongodb:mongodb-driver-sync:5.4.0"
-  api "org.mongodb:bson:5.4.0"
-  api "org.mongodb:bson:5.4.0"
-  api "org.mongodb:mongodb-driver-core:5.4.0"
+  api "org.mongodb:mongodb-driver-sync:${mongoDbDriverVersion}"
+  api "org.mongodb:bson:${mongoDbDriverVersion}"
+  api "org.mongodb:mongodb-driver-core:${mongoDbDriverVersion}"
 
   constraints {
     // overall conflicts
