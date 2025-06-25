@@ -1,3 +1,9 @@
+configurations.configureEach {
+  resolutionStrategy {
+    force 'org.mongodb:mongodb-driver-sync:5.4.0' // needs to be 5.4.0, 5.5.0 is not compatible with document db 4
+  }
+}
+
 dependencies {
   api project(':sda-commons-cacertificates')
   api 'org.springframework.boot:spring-boot-starter-data-mongodb'
