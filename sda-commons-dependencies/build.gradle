@@ -24,6 +24,8 @@ dependencies {
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
+  //Overrides mongoDbDriverVersion. This is the last mongoDbDriverVersion that works with document db 4.
+  //should be removed, when the support is dropped.
   api "org.mongodb:mongodb-driver-sync:${mongoDbDriverVersion}"
   api "org.mongodb:bson:${mongoDbDriverVersion}"
   api "org.mongodb:mongodb-driver-core:${mongoDbDriverVersion}"
