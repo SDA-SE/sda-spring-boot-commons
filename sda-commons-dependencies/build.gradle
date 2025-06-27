@@ -26,7 +26,7 @@ dependencies {
 
   //Overrides mongoDbDriverVersion. This is the last mongoDbDriverVersion that works with document db 4.
   //should be removed, when the support is dropped.
-  //api "org.springframework.data:spring-data-mongodb:4.4.7"
+  api "org.springframework.boot:spring-boot-starter-data-mongodb:3.4.7"
   api "org.mongodb:mongodb-driver-sync:${mongoDbDriverVersion}"
   api "org.mongodb:bson:${mongoDbDriverVersion}"
   api "org.mongodb:mongodb-driver-core:${mongoDbDriverVersion}"
