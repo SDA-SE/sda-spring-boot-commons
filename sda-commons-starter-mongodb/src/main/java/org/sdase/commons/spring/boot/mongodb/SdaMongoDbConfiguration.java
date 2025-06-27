@@ -71,7 +71,7 @@ public class SdaMongoDbConfiguration {
                   .resolveIndexFor(it.getType())
                   .forEach(
                       indexDefinition -> {
-                        indexOps.createIndex(indexDefinition);
+                        indexOps.ensureIndex(indexDefinition);
                         LOG.info("Ensured index '{}'", indexDefinition.getIndexOptions());
                       });
             });
