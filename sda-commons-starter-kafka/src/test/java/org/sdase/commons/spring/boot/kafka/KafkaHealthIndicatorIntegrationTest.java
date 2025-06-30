@@ -38,7 +38,7 @@ import org.springframework.test.annotation.DirtiesContext;
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
       "auth.disable=true",
       "opa.disable=true",
-      "management.server.port=8071"
+      "management.server.port=0"
     })
 @EmbeddedKafka(
     partitions = 1,
