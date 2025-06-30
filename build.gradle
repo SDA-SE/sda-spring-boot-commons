@@ -224,6 +224,11 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
     }
   }
 
+  tasks.withType(Test).configureEach {
+    maxParallelForks = 1
+    forkEvery = 50
+  }
+
   // Configure sonar to use the aggregated global report file
   sonarqube {
     properties {
