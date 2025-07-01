@@ -53,7 +53,7 @@ List<String> javaPlatformModules = Arrays.asList('sda-commons-dependencies', 'sd
 /**
  * There are some additional modules that are excluded from publishing
  */
-List<String> unpublishedModules = javaPlatformModules // + Arrays.asList("sda-commons-dependency-check")
+List<String> unpublishedModules = javaPlatformModules + Arrays.asList('sda-commons-dependency-check')
 project.ext.unpublishedModules = unpublishedModules
 
 spotless {
@@ -253,7 +253,7 @@ tasks.register("codeCoverageReport", JacocoReport) {
 
   executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
-  subprojects.findAll { !unpublishedModules.contains(it.name) }.each {
+  subprojects.findAll { !javaPlatformModules.contains(it.name) }.each {
     // noinspection GroovyAssignabilityCheck
     sourceSets it.sourceSets.main
     codeCoverageReport.dependsOn("${it.path}:spotlessJava")
