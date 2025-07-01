@@ -262,7 +262,7 @@ tasks.register("codeCoverageReport", JacocoReport) {
 
   reports {
     xml.required = true
-    xml.outputLocation = file("${project.layout.buildDirectory}/reports/jacoco/report.xml")
+    xml.outputLocation = project.layout.buildDirectory.file("reports/jacoco/report.xml")
   }
 }
 
