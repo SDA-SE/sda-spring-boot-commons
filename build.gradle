@@ -1,6 +1,7 @@
 buildscript {
   repositories {
-    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url = 'https://plugins.gradle.org/m2/' }
+    mavenCentral()
   }
 }
 
@@ -23,7 +24,7 @@ repositories {
   mavenCentral()
 }
 
-group 'org.sdase.commons.spring.boot'
+group = 'org.sdase.commons.spring.boot'
 // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
 version = System.getenv('SEMANTIC_VERSION')
 
@@ -31,7 +32,7 @@ allprojects {
   apply plugin: 'idea'
 
   // Task for creating gradle.lockfile per module. Needed for Trivy vulnerability scan.
-  task resolveAndLockAll {
+  tasks.register("resolveAndLockAll") {
     doFirst {
       assert gradle.startParameter.writeDependencyLocks
     }
@@ -71,11 +72,11 @@ subprojects {
     mavenCentral()
   }
 
-  group rootProject.group
+  group = rootProject.group
   version = rootProject.version
 
   // Disable publication of Gradle Module Metadata
-  tasks.withType(GenerateModuleMetadata) {
+  tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
   }
 
@@ -98,7 +99,7 @@ subprojects {
 
     apply plugin: "com.vanniktech.maven.publish"
 
-    tasks.withType(Sign) {
+    tasks.withType(Sign).configureEach {
       // skip signing a publication to maven local
       onlyIf { !gradle.taskGraph.hasTask(publishToMavenLocal) }
     }
@@ -163,7 +164,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   java {
     sourceCompatibility = JavaVersion.VERSION_17
   }
-  tasks.withType(JavaCompile) {
+  tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
   }
 
@@ -214,18 +215,9 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
 configure(subprojects.findAll {
   !unpublishedModules.contains(it.name) && !it.name.endsWith("-example")
 }) {
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allJava
-  }
 
   javadoc {
     options.addStringOption('encoding', 'UTF-8')
-  }
-
-  task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
   }
 
   jar {
@@ -244,7 +236,7 @@ configure(subprojects.findAll { javaPlatformModules.contains(it.name) }) {
 }
 
 // Reconfigure the testReport task to display the results of all modules into a single report
-task testReport(type: TestReport) {
+tasks.register("testReport", TestReport) {
   destinationDirectory = project.layout.buildDirectory.dir("reports/allTests")
   // Include the results from the `test` task in all subprojects
   testResults.from(
@@ -253,10 +245,12 @@ task testReport(type: TestReport) {
 }
 
 // Create a combined XML report of all modules in the root project
-task codeCoverageReport(type: JacocoReport, dependsOn: [
-  testReport,
-  spotlessGroovyGradle
-]) {
+tasks.register("codeCoverageReport", JacocoReport) {
+  dependsOn = [
+    testReport,
+    spotlessGroovyGradle
+  ]
+
   executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
   subprojects.findAll { !unpublishedModules.contains(it.name) }.each {
@@ -268,7 +262,7 @@ task codeCoverageReport(type: JacocoReport, dependsOn: [
 
   reports {
     xml.required = true
-    xml.outputLocation = file("${buildDir}/reports/jacoco/report.xml")
+    xml.outputLocation = file("${project.layout.buildDirectory}/reports/jacoco/report.xml")
   }
 }
 
