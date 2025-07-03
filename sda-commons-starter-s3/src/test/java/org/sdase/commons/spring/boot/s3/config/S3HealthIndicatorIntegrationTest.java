@@ -30,7 +30,7 @@ import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 @SpringBootTest(
     classes = S3TestApp.class,
     webEnvironment = WebEnvironment.RANDOM_PORT,
-    properties = {"auth.disable=true", "opa.disable=true", "management.server.port=0"})
+    properties = {"auth.disable=true", "opa.disable=true", "management.server.port=8071"})
 @S3Test
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class S3HealthIndicatorIntegrationTest {
