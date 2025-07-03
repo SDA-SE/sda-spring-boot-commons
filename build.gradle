@@ -1,14 +1,14 @@
 buildscript {
   repositories {
-    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url = 'https://plugins.gradle.org/m2/' }
+    mavenCentral()
   }
 }
 
 plugins {
   id 'jacoco'
   id 'idea'
-  id 'maven-publish'
-  id 'signing'
+  id "com.vanniktech.maven.publish" version "0.33.0"
   id 'com.diffplug.spotless' version '7.0.4'
   id 'org.sonarqube' version '6.2.0.5505'
   id 'project-report'
@@ -24,7 +24,7 @@ repositories {
   mavenCentral()
 }
 
-group 'org.sdase.commons.spring.boot'
+group = 'org.sdase.commons.spring.boot'
 // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
 version = System.getenv('SEMANTIC_VERSION')
 
@@ -32,7 +32,7 @@ allprojects {
   apply plugin: 'idea'
 
   // Task for creating gradle.lockfile per module. Needed for Trivy vulnerability scan.
-  task resolveAndLockAll {
+  tasks.register("resolveAndLockAll") {
     doFirst {
       assert gradle.startParameter.writeDependencyLocks
     }
@@ -53,7 +53,7 @@ List<String> javaPlatformModules = Arrays.asList('sda-commons-dependencies', 'sd
 /**
  * There are some additional modules that are excluded from publishing
  */
-List<String> unpublishedModules = javaPlatformModules // + Arrays.asList("sda-commons-dependency-check")
+List<String> unpublishedModules = javaPlatformModules + Arrays.asList('sda-commons-dependency-check')
 project.ext.unpublishedModules = unpublishedModules
 
 spotless {
@@ -64,7 +64,6 @@ spotless {
 }
 
 subprojects {
-  apply plugin: 'maven-publish'
   apply plugin: 'signing'
   apply plugin: 'com.diffplug.spotless'
   apply plugin: 'project-report'
@@ -73,11 +72,11 @@ subprojects {
     mavenCentral()
   }
 
-  group rootProject.group
+  group = rootProject.group
   version = rootProject.version
 
   // Disable publication of Gradle Module Metadata
-  tasks.withType(GenerateModuleMetadata) {
+  tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
   }
 
@@ -98,95 +97,51 @@ subprojects {
 
   if (!it.name.endsWith("-example") && !it.name.endsWith("-dependency-check")) {
 
-    signing {
-      String signingKey = findProperty("signingKey")
-      String signingPassword = findProperty("signingPassword")
-      useInMemoryPgpKeys(signingKey, signingPassword)
-      sign publishing.publications
-    }
+    apply plugin: "com.vanniktech.maven.publish"
 
-    tasks.withType(Sign) {
+    tasks.withType(Sign).configureEach {
       // skip signing a publication to maven local
-      onlyIf { !gradle.taskGraph.hasTask(publishMavenPublicationToMavenLocal) }
+      onlyIf { !gradle.taskGraph.hasTask(publishToMavenLocal) }
     }
 
-    publishing {
-      publications {
-        maven(MavenPublication) {
-          // https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:resolved_dependencies
-          versionMapping {
-            // https://docs.gradle.org/current/userguide/variant_attributes.html
-            // https://docs.gradle.org/current/javadoc/org/gradle/api/attributes/Usage.html
-            usage('java-api') {
-              fromResolutionResult() // use the default classpath of a variant
-            }
-            usage('java-runtime') {
-              fromResolutionResult() // use the default classpath of a variant
-            }
-          }
+    mavenPublishing {
+      publishToMavenCentral(true)
+      signAllPublications()
 
-          pom {
-            name = project.group + ":" + project.name
-            description = 'A library to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
-            url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
+      pom {
+        name = project.group + ":" + project.name
+        description = 'A library to bootstrap services easily that follow the patterns and specifications promoted by the SDA SE'
+        url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
 
-            licenses {
-              license {
-                name = 'MIT License'
-                url = 'https://raw.githubusercontent.com/SDA-SE/sda-spring-boot-commons/main/LICENSE'
-              }
-            }
-
-            organization {
-              name = 'SDA SE Open Industry Solutions'
-              url = 'https://sda.se'
-            }
-
-            issueManagement {
-              system = 'GitHub'
-              url = 'https://github.com/SDA-SE/sda-spring-boot-commons/issues'
-            }
-
-            developers {
-              developer {
-                id = 'maintainer'
-                name = 'SDA SE Open Industry Solutions Maintainer'
-                email = 'oss@sda-se.com'
-              }
-            }
-
-            scm {
-              connection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
-              developerConnection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
-              url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
-            }
+        licenses {
+          license {
+            name = 'MIT License'
+            url = 'https://raw.githubusercontent.com/SDA-SE/sda-spring-boot-commons/main/LICENSE'
           }
         }
-      }
 
-      repositories {
-        maven {
-          name = "sdaIntern"
-          url = "https://nexus.sda-se.io/repository/sda-se-snapshots/"
+        organization {
+          name = 'SDA SE Open Industry Solutions'
+          url = 'https://sda.se'
+        }
 
-          credentials {
-            username System.getenv('SDA_NEXUS_USER')
-            password System.getenv('SDA_NEXUS_PASSWORD')
+        issueManagement {
+          system = 'GitHub'
+          url = 'https://github.com/SDA-SE/sda-spring-boot-commons/issues'
+        }
+
+        developers {
+          developer {
+            id = 'maintainer'
+            name = 'SDA SE Open Industry Solutions Maintainer'
+            email = 'oss@sda-se.com'
           }
         }
-        maven {
-          name 'mavenCentral'
-          def releasesRepoUrl =
-              System.getenv('SONATYPE_STAGING_REPOSITORY_ID')
-              ? "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${System.getenv('SONATYPE_STAGING_REPOSITORY_ID')}"
-              : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-          def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-          url = version.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
-          credentials {
-            username System.getenv('SDA_SONATYPE_USER')
-            password System.getenv('SDA_SONATYPE_PASSWORD')
-          }
+        scm {
+          connection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+          developerConnection = 'scm:git:https://github.com/SDA-SE/sda-spring-boot-commons.git'
+          url = 'https://github.com/SDA-SE/sda-spring-boot-commons'
         }
       }
     }
@@ -209,7 +164,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   java {
     sourceCompatibility = JavaVersion.VERSION_17
   }
-  tasks.withType(JavaCompile) {
+  tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
   }
 
@@ -260,40 +215,9 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
 configure(subprojects.findAll {
   !unpublishedModules.contains(it.name) && !it.name.endsWith("-example")
 }) {
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allJava
-  }
 
   javadoc {
     options.addStringOption('encoding', 'UTF-8')
-  }
-
-  task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
-  }
-
-  artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-  }
-
-  publishing {
-    publications {
-      maven(MavenPublication) {
-        from components.java
-
-        artifact(sourcesJar) {
-          classifier = 'sources'
-        }
-
-        artifact(javadocJar) {
-          classifier = 'javadoc'
-        }
-      }
-    }
   }
 
   jar {
@@ -309,28 +233,10 @@ configure(subprojects.findAll {
  */
 configure(subprojects.findAll { javaPlatformModules.contains(it.name) }) {
   apply plugin: 'java-platform'
-
-  publishing {
-    publications {
-      maven(MavenPublication) {
-        from components.javaPlatform
-      }
-    }
-  }
-}
-
-// Automatically close and release the staging repository that gets created
-// during the upload to maven central.
-nexusStaging {
-  username System.getenv('SDA_SONATYPE_USER')
-  password System.getenv('SDA_SONATYPE_PASSWORD')
-  packageGroup "org.sdase.commons" // matches the OSSRH profile
-  // Read the stagingRepositoryId from the environment
-  stagingRepositoryId.set(System.getenv('SONATYPE_STAGING_REPOSITORY_ID'))
 }
 
 // Reconfigure the testReport task to display the results of all modules into a single report
-task testReport(type: TestReport) {
+tasks.register("testReport", TestReport) {
   destinationDirectory = project.layout.buildDirectory.dir("reports/allTests")
   // Include the results from the `test` task in all subprojects
   testResults.from(
@@ -339,13 +245,15 @@ task testReport(type: TestReport) {
 }
 
 // Create a combined XML report of all modules in the root project
-task codeCoverageReport(type: JacocoReport, dependsOn: [
-  testReport,
-  spotlessGroovyGradle
-]) {
+tasks.register("codeCoverageReport", JacocoReport) {
+  dependsOn = [
+    testReport,
+    spotlessGroovyGradle
+  ]
+
   executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
-  subprojects.findAll { !unpublishedModules.contains(it.name) }.each {
+  subprojects.findAll { !javaPlatformModules.contains(it.name) }.each {
     // noinspection GroovyAssignabilityCheck
     sourceSets it.sourceSets.main
     codeCoverageReport.dependsOn("${it.path}:spotlessJava")
@@ -354,7 +262,7 @@ task codeCoverageReport(type: JacocoReport, dependsOn: [
 
   reports {
     xml.required = true
-    xml.outputLocation = file("${buildDir}/reports/jacoco/report.xml")
+    xml.outputLocation = project.layout.buildDirectory.file("reports/jacoco/report.xml")
   }
 }
 

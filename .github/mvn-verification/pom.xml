@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.sdase.test</groupId>
+  <artifactId>verify-maven-dependencies</artifactId>
+  <version>0.0.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sda.commons.version>${SEMANTIC_VERSION}</sda.commons.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>snapshots</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.sdase.commons.spring.boot</groupId>
+        <artifactId>sda-commons-dependencies</artifactId>
+        <version>${sda.commons.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.sdase.commons.spring.boot</groupId>
+        <artifactId>sda-commons-bom</artifactId>
+        <version>${sda.commons.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-asyncapi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-cacertificates</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-cloudevents</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-error</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-metadata-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-starter-kafka</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-starter-mongodb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-starter-s3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sdase.commons.spring.boot</groupId>
+      <artifactId>sda-commons-web-testing</artifactId>
+    </dependency>
+  </dependencies>
+</project>
