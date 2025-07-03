@@ -55,8 +55,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
-      "app.kafka.consumer.retry-and-dlt.topic=topic-consumer",
-      "management.server.port=0"
+      "app.kafka.consumer.retry-and-dlt.topic=topic-consumer"
     })
 @EmbeddedKafka(
     partitions = 1,
