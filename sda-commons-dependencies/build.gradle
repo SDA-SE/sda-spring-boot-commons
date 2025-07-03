@@ -14,7 +14,7 @@ ext {
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.34'
   victoolsVersion = '4.38.0'
-  mongoDbDriverVersion = '5.2.1'
+  mongoDbDriverVersion = '5.4.0'
 }
 
 dependencies {
