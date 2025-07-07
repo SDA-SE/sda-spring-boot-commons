@@ -11,14 +11,22 @@ ext {
   logbackContribVersion = '0.1.5'
   springBootVersion = '3.5.3'
   springCloudVersion = '2025.0.0'
+  mongoDbDriverVersion = '5.4.0' // last version supporting AWS DocumentDB 4
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.34'
   victoolsVersion = '4.38.0'
 }
 
 dependencies {
-  api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+  // Spring Boot after MongoDB so that MongoDB overrules
+  api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
+    exclude group: 'org.mongodb'
+  }
+  api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
+    exclude group: 'org.mongodb'
+  }
+  // MongoDB 5.5.x is not compatible with MongoDB 4.0 and AWS DocumentDB 4
+  api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
 
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
@@ -76,6 +84,12 @@ dependencies {
     api 'com.nimbusds:nimbus-jose-jwt:10.3'
 
     api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.20.0'
+
+    // sda-commons-starter-mongodb
+    api "org.mongodb:mongodb-driver-sync:${mongoDbDriverVersion}"
+    api "org.mongodb:bson:${mongoDbDriverVersion}"
+    api "org.mongodb:mongodb-driver-core:${mongoDbDriverVersion}"
+    api "org.mongodb:bson-record-codec:${mongoDbDriverVersion}"
 
     // sda-commons-starter-kafka
     api "org.scala-lang:scala-reflect:${scalaVersion}", {
