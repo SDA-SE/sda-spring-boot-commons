@@ -11,6 +11,7 @@ ext {
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
   springBootVersion = '3.5.3'
+  // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.4.0' // last version supporting AWS DocumentDB 4
   scalaVersion = '2.13.16'
@@ -61,6 +62,14 @@ dependencies {
           Upgrade managed dependency of org.springframework.boot:spring-boot-dependencies:3.5.3
           to fix CVE-2025-48924 in 3.17.0.
           Check for removal on upgrade of io.javaoperatorsdk:operator-framework > 3.5.3
+          '''
+    }
+    api 'commons-fileupload:commons-fileupload:1.6.0', {
+      because '''\
+          Upgrade transitive dependency of io.github.openfeign:feign-form-spring:13.6
+          to fix CVE-2025-48976 in 1.5.
+          Check for removal on upgrade of io.github.openfeign:feign-form-spring > 13.6 via
+          org.springframework.cloud:spring-cloud-dependencies.
           '''
     }
 
