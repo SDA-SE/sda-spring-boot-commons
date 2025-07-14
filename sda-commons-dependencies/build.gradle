@@ -9,6 +9,7 @@ javaPlatform {
 ext {
   bouncycastleVersion = '1.81'
   logbackContribVersion = '0.1.5'
+  // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
   springBootVersion = '3.5.3'
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.4.0' // last version supporting AWS DocumentDB 4
@@ -21,6 +22,7 @@ dependencies {
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'org.mongodb'
+    exclude group: 'org.apache.commons', module: 'commons-lang3'
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
@@ -53,6 +55,13 @@ dependencies {
     }
     api 'commons-io:commons-io:2.19.0', {
       because 'conflict robothy, spring cloud, zookeeper'
+    }
+    api 'org.apache.commons:commons-lang3:3.18.0', {
+      because '''\
+          Upgrade managed dependency of org.springframework.boot:spring-boot-dependencies:3.5.3
+          to fix CVE-2025-48924 in 3.17.0.
+          Check for removal on upgrade of io.javaoperatorsdk:operator-framework > 3.5.3
+          '''
     }
 
     // sda-commons-starter-web
