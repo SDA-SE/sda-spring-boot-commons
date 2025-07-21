@@ -94,7 +94,7 @@ dependencies {
 
     api 'io.github.classgraph:classgraph:4.8.181'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'org.xerial.snappy:snappy-java:1.1.10.7', {
+    api 'org.xerial.snappy:snappy-java:1.1.10.8', {
       because 'fix CVE-2023-34455, CVE-2023-43642'
     }
 
