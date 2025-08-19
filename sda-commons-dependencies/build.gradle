@@ -15,7 +15,7 @@ ext {
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.4.0' // last version supporting AWS DocumentDB 4
   scalaVersion = '2.13.16'
-  swaggerCoreVersion = '2.2.35'
+  swaggerCoreVersion = '2.2.36'
   victoolsVersion = '4.38.0'
 }
 
