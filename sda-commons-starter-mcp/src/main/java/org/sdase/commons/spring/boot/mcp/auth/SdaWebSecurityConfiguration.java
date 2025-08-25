@@ -1,41 +1,32 @@
+/*
+ * Copyright 2022- SDA SE Open Industry Solutions (https://www.sda.se)
+ *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ */
 package org.sdase.commons.spring.boot.mcp.auth;
 
-import static org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer.authorizationServer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.ForwardedHeaderFilter;
 
 @EnableWebSecurity
+@ComponentScan
 @AutoConfiguration
+@Import({SdaSecurityConfiguration.class})
 public class SdaWebSecurityConfiguration {
-
-  private static final Logger LOG = LoggerFactory.getLogger(SdaWebSecurityConfiguration.class);
-
-  private final String issuers;
-  private final boolean disableAuthentication;
-
-  public SdaWebSecurityConfiguration(
-      @Value("${auth.issuers:}") String issuers,
-      @Value("${auth.disable:false}") boolean disableAuthentication) {
-    this.issuers = issuers;
-    this.disableAuthentication = disableAuthentication;
-  }
-
   @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-        .with(authorizationServer(), Customizer.withDefaults())
-        .oauth2ResourceServer(resource -> resource.jwt(Customizer.withDefaults()))
-        .csrf(CsrfConfigurer::disable)
-        .cors(Customizer.withDefaults())
-        .build();
+  public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
+    ForwardedHeaderFilter filter = new ForwardedHeaderFilter();
+    FilterRegistrationBean<ForwardedHeaderFilter> registration =
+        new FilterRegistrationBean<>(filter);
+    registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    return registration;
   }
 }

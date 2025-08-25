@@ -1,1 +1,3 @@
+org.sdase.commons.spring.boot.mcp.auth.SdaSecurityConfiguration
+org.sdase.commons.spring.boot.mcp.auth.opa.OpaRestTemplateConfiguration
 org.sdase.commons.spring.boot.mcp.auth.SdaWebSecurityConfiguration

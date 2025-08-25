@@ -1,5 +1,28 @@
 dependencies {
+  compileOnly 'org.springframework.boot:spring-boot-autoconfigure-processor'
+
   api 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
   api 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-  api 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server' // TODO: Remove later
+  api 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  api 'org.springframework.boot:spring-boot-starter-actuator'
+  api 'org.springframework.boot:spring-boot-starter-validation'
+  api 'org.springframework.cloud:spring-cloud-starter-openfeign', {
+    exclude group: 'org.bouncycastle', module: 'bcpkix-jdk18on'
+    exclude group: 'org.bouncycastle', module: 'bcprov-jdk18on'
+  }
+  api 'org.bouncycastle:bcpkix-jdk18on'
+  api 'org.bouncycastle:bcprov-jdk18on'
+
+  api 'io.micrometer:micrometer-tracing-bridge-otel', {
+    exclude group: 'io.opentelemetry', module: 'opentelemetry-semconv'
+    exclude group: 'aopalliance'
+  }
+  api 'io.opentelemetry:opentelemetry-api'
+  api 'io.opentelemetry:opentelemetry-exporter-otlp'
+  api 'org.springdoc:springdoc-openapi-starter-webmvc-api'
+
+  api project(':sda-commons-metadata-context')
+  api project(':sda-commons-error')
+
+  testImplementation 'io.opentelemetry:opentelemetry-sdk-testing'
 }
