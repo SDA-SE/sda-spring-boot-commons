@@ -13,6 +13,7 @@ ext {
   springBootVersion = '3.5.6'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
+  springAiVersion = '1.0.2'
   mongoDbDriverVersion = '5.6.0'
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.37'
@@ -29,6 +30,8 @@ dependencies {
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
   }
+
+  api enforcedPlatform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
 
   // due to CVE-2025-58057: override netty version (spring-boot-dependencies 3.5.5 has the vulnerable version)

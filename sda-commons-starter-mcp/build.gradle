@@ -1,0 +1,27 @@
+configurations {
+  testRuntimeClasspath {
+    resolutionStrategy {
+      force "com.fasterxml.jackson.module:jackson-module-jsonSchema:2.19.2"
+    }
+  }
+}
+
+dependencies {
+  compileOnly 'org.springframework.boot:spring-boot-autoconfigure-processor'
+
+  api 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+  api 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  api 'org.springframework.security:spring-security-oauth2-jose'
+  api 'org.springframework.boot:spring-boot-starter-actuator'
+  api 'org.springframework.boot:spring-boot-starter-validation'
+
+  api project(':sda-commons-metadata-context')
+  api project(':sda-commons-error')
+
+  testImplementation project(':sda-commons-web-testing')
+  testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
+    exclude group: 'org.junit'
+  }
+  testImplementation 'com.nimbusds:nimbus-jose-jwt'
+  testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+}
