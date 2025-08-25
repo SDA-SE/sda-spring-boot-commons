@@ -1,0 +1,5 @@
+dependencies {
+  api 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+  api 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  api 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server' // TODO: Remove later
+}

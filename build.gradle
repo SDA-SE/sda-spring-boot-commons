@@ -26,7 +26,7 @@ repositories {
 
 group = 'org.sdase.commons.spring.boot'
 // the version of the generated jars is based on the SEMANTIC_VERSION environment variable
-version = System.getenv('SEMANTIC_VERSION')
+version = 'LOCAL-MCP'
 
 allprojects {
   apply plugin: 'idea'

@@ -13,6 +13,7 @@ ext {
   springBootVersion = '3.5.5'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
+  springAiVersion = '1.0.1'
   mongoDbDriverVersion = '5.4.0' // last version supporting AWS DocumentDB 4
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.36'
@@ -28,6 +29,9 @@ dependencies {
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
   }
+
+  api enforcedPlatform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
+
   // MongoDB 5.5.x is not compatible with MongoDB 4.0 and AWS DocumentDB 4
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
 
