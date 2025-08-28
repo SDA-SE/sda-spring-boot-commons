@@ -11,24 +11,18 @@ import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class CachedBodyServletInputStream extends ServletInputStream {
 
-  private final InputStream cachedBodyInputStream;
+  private final ByteArrayInputStream cachedBody;
 
-  public CachedBodyServletInputStream(byte[] cachedBodyInputStream) {
-    this.cachedBodyInputStream = new ByteArrayInputStream(cachedBodyInputStream);
+  public CachedBodyServletInputStream(byte[] cachedBodyBytes) {
+    this.cachedBody = new ByteArrayInputStream(cachedBodyBytes);
   }
 
   @Override
   public boolean isFinished() {
-    try {
-      return cachedBodyInputStream.available() == 0;
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return false;
+    return cachedBody.available() == 0;
   }
 
   @Override
@@ -38,11 +32,27 @@ public class CachedBodyServletInputStream extends ServletInputStream {
 
   @Override
   public void setReadListener(ReadListener listener) {
-    throw new UnsupportedOperationException();
+    // This implementation does not support non-blocking IO
+    throw new UnsupportedOperationException("Async read not supported");
   }
 
   @Override
   public int read() throws IOException {
-    return cachedBodyInputStream.read();
+    return cachedBody.read();
+  }
+
+  @Override
+  public int read(byte[] b, int off, int len) {
+    return cachedBody.read(b, off, len);
+  }
+
+  @Override
+  public int available() {
+    return cachedBody.available();
+  }
+
+  @Override
+  public void close() throws IOException {
+    cachedBody.close();
   }
 }
