@@ -16,10 +16,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import org.sdase.commons.spring.boot.mcp.auth.MultipleReadHttpRequest;
 import org.sdase.commons.spring.boot.mcp.auth.opa.extension.OpaInputExtension;
 import org.sdase.commons.spring.boot.mcp.auth.opa.model.OpaInput;
 import org.sdase.commons.spring.boot.mcp.auth.opa.model.OpaRequest;
+import org.sdase.commons.spring.boot.mcp.filter.MultipleReadHttpRequest;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 

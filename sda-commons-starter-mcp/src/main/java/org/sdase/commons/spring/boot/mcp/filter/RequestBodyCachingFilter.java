@@ -5,25 +5,30 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.mcp.auth;
+package org.sdase.commons.spring.boot.mcp.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * A filter that wraps incoming {@link HttpServletRequest} to allow multiple reads of the request
+ * body. This is useful for scenarios where the request body needs to be accessed by multiple
+ * components, such as logging or authentication filters. The filter caches the request body to
+ * enable repeated access.
+ *
+ * <p>This filter runs with the highest precedence to ensure the body is cached before other
+ * filters, such as Spring Security, process the request.
+ */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE) // Ensure this runs before Spring Security
 public class RequestBodyCachingFilter extends OncePerRequestFilter {
-
-  private static final Logger LOG = LoggerFactory.getLogger(RequestBodyCachingFilter.class);
 
   @Override
   protected void doFilterInternal(

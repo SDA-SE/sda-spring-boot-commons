@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package org.sdase.commons.spring.boot.mcp.auth;
+package org.sdase.commons.spring.boot.mcp.filter;
 
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,10 +22,11 @@ public class MultipleReadHttpRequest extends HttpServletRequestWrapper {
   private final byte[] cachedContent;
 
   /**
-   * Constructs a request object wrapping the given request.
+   * Constructs a {@code MultipleReadHttpRequest} that wraps the given {@link HttpServletRequest}
+   * and caches its input stream content for multiple reads.
    *
-   * @param request The request to wrap
-   * @throws IllegalArgumentException if the request is null
+   * @param request the original {@link HttpServletRequest} to wrap
+   * @throws IOException if an I/O error occurs while reading the request input stream
    */
   public MultipleReadHttpRequest(HttpServletRequest request) throws IOException {
     super(request);
@@ -34,12 +35,12 @@ public class MultipleReadHttpRequest extends HttpServletRequestWrapper {
   }
 
   @Override
-  public ServletInputStream getInputStream() throws IOException {
+  public ServletInputStream getInputStream() {
     return new CachedBodyServletInputStream(this.cachedContent);
   }
 
   @Override
-  public BufferedReader getReader() throws IOException {
+  public BufferedReader getReader() {
     ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.cachedContent);
     return new BufferedReader(new InputStreamReader(byteArrayInputStream));
   }
