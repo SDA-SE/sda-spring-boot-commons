@@ -14,6 +14,7 @@ import org.sdase.commons.spring.boot.mcp.auth.opa.OpaExcludesAuthorizationManage
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
+import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,12 @@ public class SdaAuthorizationManager implements AuthorizationManager<RequestAuth
   @Override
   public AuthorizationDecision check(
       Supplier<Authentication> authentication, RequestAuthorizationContext filterInvocation) {
-    return authorizationManager.check(authentication, filterInvocation);
+    AuthorizationResult result = authorize(authentication, filterInvocation);
+    return result != null ? new AuthorizationDecision(result.isGranted()) : new AuthorizationDecision(false);
+  }
+
+  @Override
+  public AuthorizationResult authorize(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    return authorizationManager.authorize(authentication, object);
   }
 }
