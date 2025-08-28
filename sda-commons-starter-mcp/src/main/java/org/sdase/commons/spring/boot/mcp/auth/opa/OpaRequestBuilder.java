@@ -10,9 +10,13 @@ package org.sdase.commons.spring.boot.mcp.auth.opa;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.sdase.commons.spring.boot.mcp.auth.MultipleReadHttpRequest;
 import org.sdase.commons.spring.boot.mcp.auth.opa.extension.OpaInputExtension;
 import org.sdase.commons.spring.boot.mcp.auth.opa.model.OpaInput;
 import org.sdase.commons.spring.boot.mcp.auth.opa.model.OpaRequest;
@@ -44,7 +48,13 @@ public class OpaRequestBuilder {
     String[] path = extractPathSegments(request);
     String httpMethod = request.getMethod();
     String traceToken = request.getHeader(TRACE_TOKEN_HEADER_NAME);
-    return new OpaInput(jwt, path, httpMethod, traceToken);
+    String body;
+    try {
+      body = extractRequestBody(request);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return new OpaInput(jwt, path, httpMethod, traceToken, body);
   }
 
   private ObjectNode finalizeOpaInputWithExtensions(HttpServletRequest request, OpaInput opaInput) {
@@ -74,5 +84,21 @@ public class OpaRequestBuilder {
       return jwtAuthenticationToken.getToken().getTokenValue();
     }
     return null;
+  }
+
+  private String extractRequestBody(HttpServletRequest request) throws IOException {
+    HttpServletRequest unwrapped = unwrapToCachingRequest(request);
+    return new String(unwrapped.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+  }
+
+  private HttpServletRequest unwrapToCachingRequest(HttpServletRequest request) {
+    HttpServletRequest current = request;
+    while (current instanceof HttpServletRequestWrapper wrapper) {
+      if (current instanceof MultipleReadHttpRequest) {
+        return current;
+      }
+      current = (HttpServletRequest) wrapper.getRequest();
+    }
+    return request; // fallback, if no caching wrapper found
   }
 }

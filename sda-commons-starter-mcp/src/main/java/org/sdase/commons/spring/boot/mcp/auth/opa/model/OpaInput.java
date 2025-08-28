@@ -21,11 +21,15 @@ public class OpaInput {
   /** HTTP Method */
   private final String httpMethod;
 
-  public OpaInput(String jwt, String[] path, String httpMethod, String traceToken) {
+  /** JSON body payload of the request */
+  private final String body;
+
+  public OpaInput(String jwt, String[] path, String httpMethod, String traceToken, String body) {
     this.jwt = jwt;
     this.path = path;
     this.httpMethod = httpMethod;
     this.trace = traceToken;
+    this.body = body;
   }
 
   public String getJwt() {
@@ -42,5 +46,9 @@ public class OpaInput {
 
   public String getTrace() {
     return trace;
+  }
+
+  public String getBody() {
+    return body;
   }
 }
