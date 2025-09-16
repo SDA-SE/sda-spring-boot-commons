@@ -17,6 +17,7 @@ ext {
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.36'
   victoolsVersion = '4.38.0'
+  nettyVersion = '4.1.127.Final' // due to CVE-2025-58057
 }
 
 dependencies {
@@ -30,6 +31,10 @@ dependencies {
   }
   // MongoDB 5.5.x is not compatible with MongoDB 4.0 and AWS DocumentDB 4
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
+
+  // due to CVE-2025-58057: override netty version (spring-boot-dependencies 3.5.5 has the vulnerable version)
+  // Check on upgrade of spring-boot-dependencies, if this is still needed!
+  api enforcedPlatform("io.netty:netty-bom:${nettyVersion}")
 
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
