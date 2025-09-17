@@ -17,7 +17,7 @@ ext {
   scalaVersion = '2.13.16'
   swaggerCoreVersion = '2.2.36'
   victoolsVersion = '4.38.0'
-  nettyVersion = '4.1.127.Final' // due to CVE-2025-58057
+  nettyVersion = '4.2.6.Final' // due to CVE-2025-58057
 }
 
 dependencies {
