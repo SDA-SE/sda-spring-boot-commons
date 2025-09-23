@@ -123,3 +123,9 @@ ignore {
   input.PkgName == "ch.qos.logback.contrib:logback-json-core"
   input.Name == "GNU Lesser General Public License"
 }
+
+# antlr-runtime is BSD-3-Clause (see https://www.antlr.org/license.html), cyclonedx identifies "BSD licence"
+ignore {
+  input.PkgName == "org.antlr:antlr-runtime"
+  input.Name == "BSD licence"
+}
