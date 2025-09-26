@@ -61,7 +61,7 @@ dependencies {
     api 'commons-io:commons-io:2.20.0', {
       because 'conflict robothy, spring cloud, zookeeper'
     }
-    api 'org.apache.commons:commons-lang3:3.18.0', {
+    api 'org.apache.commons:commons-lang3:3.19.0', {
       because '''\
           Upgrade managed dependency of org.springframework.boot:spring-boot-dependencies:3.5.3
           to fix CVE-2025-48924 in 3.17.0.
