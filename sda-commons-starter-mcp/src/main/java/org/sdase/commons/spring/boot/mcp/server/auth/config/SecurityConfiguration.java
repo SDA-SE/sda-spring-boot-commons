@@ -11,6 +11,7 @@ import static org.springframework.security.authorization.AuthenticatedAuthorizat
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Set;
+import org.sdase.commons.spring.boot.mcp.server.auth.management.ManagementAuthorizationManager;
 import org.sdase.commons.spring.boot.mcp.server.auth.opa.OpenPolicyAgentAuthorizationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +37,16 @@ public class SecurityConfiguration {
 
   private final OpenPolicyAgentAuthorizationManager openPolicyAgentAuthorizationManager;
 
+  private final ManagementAuthorizationManager managementAuthorizationManager;
+
   private final AuthProperties authProperties;
 
   public SecurityConfiguration(
       OpenPolicyAgentAuthorizationManager openPolicyAgentAuthorizationManager,
+      ManagementAuthorizationManager managementAuthorizationManager,
       AuthProperties authProperties) {
     this.openPolicyAgentAuthorizationManager = openPolicyAgentAuthorizationManager;
+    this.managementAuthorizationManager = managementAuthorizationManager;
     this.authProperties = authProperties;
   }
 
@@ -59,8 +64,10 @@ public class SecurityConfiguration {
                 authorize
                     .anyRequest()
                     .access(
-                        AuthorizationManagers.allOf(
-                            authenticated(), openPolicyAgentAuthorizationManager)))
+                        AuthorizationManagers.anyOf(
+                            managementAuthorizationManager,
+                            AuthorizationManagers.allOf(
+                                authenticated(), openPolicyAgentAuthorizationManager))))
         .oauth2ResourceServer(
             resourceServer ->
                 resourceServer.authenticationManagerResolver(authenticationManagerResolver()))
@@ -79,7 +86,12 @@ public class SecurityConfiguration {
   @SuppressWarnings("java:S4502")
   SecurityFilterChain authDisabledsecurityFilterChain(HttpSecurity http) throws Exception {
     return http.authorizeHttpRequests(
-            authorize -> authorize.anyRequest().access(openPolicyAgentAuthorizationManager))
+            authorize ->
+                authorize
+                    .anyRequest()
+                    .access(
+                        AuthorizationManagers.anyOf(
+                            managementAuthorizationManager, openPolicyAgentAuthorizationManager)))
         .csrf(CsrfConfigurer::disable)
         .cors(Customizer.withDefaults())
         .build();
