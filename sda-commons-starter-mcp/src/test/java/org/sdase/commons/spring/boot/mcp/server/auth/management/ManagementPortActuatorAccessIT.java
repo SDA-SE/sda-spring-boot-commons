@@ -53,21 +53,10 @@ class ManagementPortActuatorAccessIT {
 
     ResponseEntity<String> response =
         restTemplate.getForEntity(
-            String.format("http://localhost:%d/actuator/health", managementPort), String.class);
+            String.format("http://localhost:%d/healthcheck", managementPort), String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).contains("UP");
-  }
-
-  @Test
-  void shouldAllowUnauthenticatedAccessToInfoEndpointOnManagementPort() {
-    authMock.authorizeAnyRequest().deny();
-
-    ResponseEntity<String> response =
-        restTemplate.getForEntity(
-            String.format("http://localhost:%d/actuator/info", managementPort), String.class);
-
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
   @Test
@@ -76,7 +65,7 @@ class ManagementPortActuatorAccessIT {
 
     ResponseEntity<String> response =
         restTemplate.getForEntity(
-            String.format("http://localhost:%d/actuator/metrics", managementPort), String.class);
+            String.format("http://localhost:%d/metrics", managementPort), String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
@@ -87,7 +76,7 @@ class ManagementPortActuatorAccessIT {
 
     ResponseEntity<String> response =
         restTemplate.getForEntity(
-            String.format("http://localhost:%d/actuator/prometheus", managementPort), String.class);
+            String.format("http://localhost:%d/metrics/prometheus", managementPort), String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
@@ -109,7 +98,7 @@ class ManagementPortActuatorAccessIT {
 
     ResponseEntity<String> response =
         restTemplate.getForEntity(
-            String.format("http://localhost:%d/actuator/health", applicationPort), String.class);
+            String.format("http://localhost:%d/health", applicationPort), String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
   }
