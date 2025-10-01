@@ -183,6 +183,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   sonarqube {
     properties {
       property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/report.xml'
+      property "sonar.cpd.exclusions", "sda-commons-starter-mcp/src/main/java/org/sdase/commons/spring/boot/mcp/server/auth/management/ManagementAuthorizationManager.java"
     }
   }
 
