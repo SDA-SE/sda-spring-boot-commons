@@ -15,7 +15,7 @@ ext {
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.6.0'
   scalaVersion = '2.13.16'
-  swaggerCoreVersion = '2.2.37'
+  swaggerCoreVersion = '2.2.38'
   victoolsVersion = '4.38.0'
   nettyVersion = '4.1.127.Final' // due to CVE-2025-58057
 }
