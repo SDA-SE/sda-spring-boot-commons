@@ -13,12 +13,13 @@ plugins {
   id 'org.sonarqube' version '6.3.1.5724'
   id 'project-report'
   id 'io.codearte.nexus-staging' version '0.30.0'
-  id 'org.cyclonedx.bom' version '2.4.1'
+  id 'org.cyclonedx.bom' version '3.0.1'
 }
 
-cyclonedxBom {
-  schemaVersion = "1.5"
+tasks.cyclonedxBom {
+  schemaVersion = org.cyclonedx.Version.VERSION_15
 }
+
 
 repositories {
   mavenCentral()
