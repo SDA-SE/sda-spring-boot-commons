@@ -1,0 +1,3 @@
+org.sdase.commons.spring.boot.mcp.server.filter.RequestBodyCachingFilterConfiguration
+org.sdase.commons.spring.boot.mcp.server.McpStarterAutoConfiguration
+org.sdase.commons.spring.boot.mcp.server.auth.opa.OpaRestTemplateConfiguration

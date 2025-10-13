@@ -14,6 +14,7 @@ nav:
   - Starter MongoDB: starter-mongodb.md
   - Starter Kafka: starter-kafka.md
   - Starter S3: starter-s3.md
+  - Starter MCP: starter-mcp.md
   - Security Hardening: security.md
   - AsyncAPI: asyncapi.md
   - Cloud Events: cloudevents.md
