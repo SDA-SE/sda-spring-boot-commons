@@ -170,7 +170,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   }
 
   jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.14"
   }
 
   // output XML reports for SonarCloud
