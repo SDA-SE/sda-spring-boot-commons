@@ -15,7 +15,7 @@ ext {
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.6.1'
   scalaVersion = '2.13.17'
-  swaggerCoreVersion = '2.2.39'
+  swaggerCoreVersion = '2.2.40'
   victoolsVersion = '4.38.0'
 }
 
