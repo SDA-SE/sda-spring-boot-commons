@@ -98,7 +98,7 @@ dependencies {
     }
 
     // sda-commons-web-testing
-    api 'com.nimbusds:nimbus-jose-jwt:10.5'
+    api 'com.nimbusds:nimbus-jose-jwt:10.6'
 
     api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.21.0'
 
