@@ -53,7 +53,7 @@ dependencies {
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
       because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
     }
-    api 'commons-io:commons-io:2.20.0', {
+    api 'commons-io:commons-io:2.21.0', {
       because 'conflict robothy, spring cloud, zookeeper'
     }
     api 'org.apache.commons:commons-lang3:3.19.0', {
