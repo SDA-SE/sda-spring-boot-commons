@@ -7,7 +7,7 @@ javaPlatform {
 }
 
 ext {
-  bouncycastleVersion = '1.82'
+  bouncycastleVersion = '1.83'
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
   springBootVersion = '3.5.7'
