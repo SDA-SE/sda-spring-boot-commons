@@ -13,7 +13,7 @@ ext {
   springBootVersion = '3.5.7'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
-  mongoDbDriverVersion = '5.6.1'
+  mongoDbDriverVersion = '5.6.2'
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.41'
   victoolsVersion = '4.38.0'
