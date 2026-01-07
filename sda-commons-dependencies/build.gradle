@@ -45,7 +45,7 @@ dependencies {
 
     api 'org.junit-pioneer:junit-pioneer:2.3.0'
 
-    api 'org.junit:junit-bom:6.0.1', {
+    api 'org.junit:junit-bom:6.0.2', {
       because 'conflict junit-pioneer and spring-boot-starter-test'
     }
 
