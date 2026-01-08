@@ -16,9 +16,10 @@ import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.s3.S3TestApp;
 import org.sdase.commons.spring.boot.web.testing.s3.S3Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -33,6 +34,7 @@ import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
     properties = {"auth.disable=true", "opa.disable=true", "management.server.port=8071"})
 @S3Test
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestRestTemplate
 class S3HealthIndicatorIntegrationTest {
 
   @LocalManagementPort private int managementPort;
