@@ -14,7 +14,6 @@ import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.Json;
@@ -29,10 +28,9 @@ import org.sdase.commons.spring.boot.web.platform.test.PlatformClientTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.client.EnableSdaOidcClientMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,6 +38,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
+import tools.jackson.databind.ObjectMapper;
 
 @SetSystemProperty(key = "enable.json.logging", value = "true")
 @SpringBootTest(
@@ -50,7 +51,7 @@ import org.springframework.test.context.ContextConfiguration;
       "externalClient.baseUrl=http://localhost:${wiremock.server.port}/external/api",
       "oidc.client.enabled=true"
     })
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock({@ConfigureWireMock(port = 0)})
 @ContextConfiguration(initializers = {EnableSdaOidcClientMockInitializer.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class PlatformClientTest {

@@ -13,8 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.web.jackson.test.JacksonTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -22,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
     classes = JacksonTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
+@AutoConfigureTestRestTemplate
 class ObjectMapperIT {
 
   @LocalServerPort private int port;

@@ -1,18 +1,22 @@
 dependencies {
   api 'org.springframework.boot:spring-boot-starter-test'
   api 'org.springframework.cloud:spring-cloud-contract-wiremock', {
-    exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
+    exclude group: 'org.wiremock', module: 'wiremock-standalone'
   }
-  api 'com.github.tomakehurst:wiremock-jre8-standalone'
+  api 'org.wiremock:wiremock-standalone'
   api 'org.awaitility:awaitility'
   api 'org.apache.commons:commons-lang3'
+  api 'org.springframework.boot:spring-boot-restclient'
+  api 'org.springframework.boot:spring-boot-resttestclient'
+  api 'org.wiremock.integrations:wiremock-spring-boot'
 
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'
   }
 
-  implementation 'com.fasterxml.jackson.core:jackson-databind'
-  implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+  implementation 'tools.jackson.core:jackson-databind'
+  implementation 'tools.jackson.core:jackson-core'
+  implementation 'tools.jackson.dataformat:jackson-dataformat-yaml'
   implementation 'com.nimbusds:nimbus-jose-jwt'
 
   // Do not add the compileOnly dependencies as test dependencies to avoid passing tests that will

@@ -8,12 +8,13 @@
 package org.sdase.commons.spring.boot.web.auth;
 
 import java.util.function.Supplier;
+import org.jspecify.annotations.Nullable;
 import org.sdase.commons.spring.boot.web.auth.management.ManagementAuthorizationManager;
 import org.sdase.commons.spring.boot.web.auth.opa.OpaAuthorizationManager;
 import org.sdase.commons.spring.boot.web.auth.opa.OpaExcludesAuthorizationManager;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
+import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
@@ -33,13 +34,15 @@ public class SdaAuthorizationManager implements AuthorizationManager<RequestAuth
 
   @Override
   public void verify(
-      Supplier<Authentication> authentication, RequestAuthorizationContext filterInvocation) {
+      Supplier<? extends @Nullable Authentication> authentication,
+      RequestAuthorizationContext filterInvocation) {
     authorizationManager.verify(authentication, filterInvocation);
   }
 
   @Override
-  public AuthorizationDecision check(
-      Supplier<Authentication> authentication, RequestAuthorizationContext filterInvocation) {
-    return authorizationManager.check(authentication, filterInvocation);
+  public @Nullable AuthorizationResult authorize(
+      Supplier<? extends @Nullable Authentication> authentication,
+      RequestAuthorizationContext filterInvocation) {
+    return authorizationManager.authorize(authentication, filterInvocation);
   }
 }

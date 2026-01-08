@@ -8,6 +8,7 @@
 package org.sdase.commons.spring.boot.web.security.handler;
 
 import org.sdase.commons.spring.boot.error.ApiError;
+import org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ObscuringErrorHandler implements ResponseBodyAdvice<Object> {
   private static final String RESPONSE_ENTITY_TYPE = ResponseEntity.class.getName();
   private static final String ACTUATOR_PACKAGE_NAME =
-      "org.springframework.boot.actuate.endpoint.web.servlet";
+      AbstractWebMvcEndpointHandlerMapping.class.getPackageName();
   private static final String API_ERROR_RESPONSE_ENTITY_TYPE =
       String.format("%s<%s>", ResponseEntity.class.getTypeName(), ApiError.class.getTypeName());
 

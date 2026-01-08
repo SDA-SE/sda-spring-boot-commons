@@ -12,10 +12,13 @@ import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
 import java.util.Map.Entry;
-import org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpTracingProperties;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.otlp.OtlpTracingProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 
@@ -24,7 +27,9 @@ import org.springframework.context.annotation.PropertySource;
 @EnableConfigurationProperties(OtlpTracingProperties.class)
 public class SdaTracingConfiguration {
 
-  @ConditionalOnProperty(value = "management.tracing.enabled", havingValue = "false")
+  private static final Logger LOGGER = LoggerFactory.getLogger(SdaTracingConfiguration.class);
+
+  @ConditionalOnProperty(value = "management.tracing.export.enabled", havingValue = "false")
   @Bean
   public OpenTelemetry openTelemetry() {
     return OpenTelemetry.noop();
@@ -50,6 +55,11 @@ public class SdaTracingConfiguration {
   @Bean
   @ConditionalOnProperty(value = "management.tracing.grpc.enabled", havingValue = "true")
   public OtlpGrpcSpanExporter otlpGrpcExporter(OtlpTracingProperties properties) {
+    if (StringUtils.isBlank(properties.getEndpoint())) {
+      LOGGER.warn(
+          "Missing 'endpoint' property in OtlpTracingProperties, using default values instead.");
+      return OtlpGrpcSpanExporter.getDefault();
+    }
     var builder =
         OtlpGrpcSpanExporter.builder()
             .setEndpoint(properties.getEndpoint())

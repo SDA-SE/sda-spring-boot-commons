@@ -8,7 +8,7 @@
 package org.sdase.commons.spring.boot.web.auth.opa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class OpaResponse {
   private static final String ALLOW = "allow";

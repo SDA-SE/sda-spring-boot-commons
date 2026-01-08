@@ -25,7 +25,8 @@ class ManagementAuthorizationManagerCoverageTest {
             ManagementAuthorizationManager.IgnoreSamePortManagementAccessDecisionVoter.class)
         .getBean(ManagementAuthorizationManager.IgnoreSamePortManagementAccessDecisionVoter.class)
         .returns(
-            new AuthorizationDecision(false).isGranted(), dv -> dv.check(null, null).isGranted());
+            new AuthorizationDecision(false).isGranted(),
+            dv -> dv.authorize(null, null).isGranted());
   }
 
   @Test
@@ -34,7 +35,8 @@ class ManagementAuthorizationManagerCoverageTest {
         .hasSingleBean(ManagementAuthorizationManager.DisabledManagementAccessDecisionVoter.class)
         .getBean(ManagementAuthorizationManager.DisabledManagementAccessDecisionVoter.class)
         .returns(
-            new AuthorizationDecision(false).isGranted(), dv -> dv.check(null, null).isGranted());
+            new AuthorizationDecision(false).isGranted(),
+            dv -> dv.authorize(null, null).isGranted());
   }
 
   @SpringBootApplication

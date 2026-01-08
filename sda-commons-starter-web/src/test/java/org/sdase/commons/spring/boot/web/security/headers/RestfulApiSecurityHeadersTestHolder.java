@@ -17,6 +17,7 @@ import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -26,6 +27,7 @@ abstract class RestfulApiSecurityHeadersTestHolder extends AbstractSecurityHeade
       classes = SecurityTestApp.class,
       webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
   @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
+  @AutoConfigureTestRestTemplate
   static class AuthEnabledTest extends RestfulApiSecurityHeadersTestHolder {
 
     @Autowired AuthMock authMock;
@@ -40,6 +42,7 @@ abstract class RestfulApiSecurityHeadersTestHolder extends AbstractSecurityHeade
       classes = SecurityTestApp.class,
       webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
   @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
+  @AutoConfigureTestRestTemplate
   static class AuthDisabledTest extends RestfulApiSecurityHeadersTestHolder {}
 
   @Override
@@ -47,12 +50,14 @@ abstract class RestfulApiSecurityHeadersTestHolder extends AbstractSecurityHeade
     return AbstractSecurityHeadersTest.predefinedRestfulApiSecurityHeaders();
   }
 
+  @Override
   @ParameterizedTest
   @MethodSource("predefinedRestfulApiSecurityHeaders")
   void shouldAddSecurityHeaders(String predefinedHeaderName, String expectedPredefinedHeaderValue) {
     super.shouldAddSecurityHeaders(predefinedHeaderName, expectedPredefinedHeaderValue);
   }
 
+  @Override
   @ParameterizedTest
   @MethodSource("predefinedRestfulApiSecurityHeaders")
   void shouldAllowOverwritingHeaders(String predefinedHeaderName) {

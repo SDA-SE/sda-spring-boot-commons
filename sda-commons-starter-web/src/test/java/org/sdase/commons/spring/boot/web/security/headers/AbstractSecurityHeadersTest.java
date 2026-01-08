@@ -14,6 +14,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,10 @@ import org.sdase.commons.spring.boot.web.security.test.SecurityTestApp;
 import org.sdase.commons.spring.boot.web.security.test.TestResource;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
     classes = SecurityTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
+@AutoConfigureTestRestTemplate
 abstract class AbstractSecurityHeadersTest {
   @LocalServerPort private int port;
 
@@ -99,10 +101,9 @@ abstract class AbstractSecurityHeadersTest {
         .extracting(ResponseEntity::getStatusCode)
         .isEqualTo(HttpStatus.OK);
 
-    assertThat(actual)
-        .extracting(HttpEntity::getHeaders)
-        .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .containsEntry(predefinedHeaderName, List.of(expectedPredefinedHeaderValue));
+    assertThat(actual.getHeaders().get(predefinedHeaderName))
+        .isNotNull()
+        .isEqualTo(List.of(expectedPredefinedHeaderValue));
   }
 
   @ParameterizedTest
@@ -121,10 +122,9 @@ abstract class AbstractSecurityHeadersTest {
         .extracting(ResponseEntity::getStatusCode)
         .isEqualTo(HttpStatus.OK);
 
-    assertThat(actual)
-        .extracting(HttpEntity::getHeaders)
-        .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .containsEntry(predefinedHeaderName, List.of("CUSTOM_VALUE"));
+    assertThat(actual.getHeaders().get(predefinedHeaderName))
+        .isNotNull()
+        .isEqualTo(List.of("CUSTOM_VALUE"));
   }
 
   /**
@@ -140,9 +140,10 @@ abstract class AbstractSecurityHeadersTest {
         .extracting(ResponseEntity::getStatusCode)
         .isEqualTo(HttpStatus.OK);
     HttpHeaders actualHeaders = actual.getHeaders();
-    assertThat(actualHeaders)
-        .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .containsOnlyKeys(
+    Set<String> headerNames = actualHeaders.headerNames();
+    assertThat(headerNames)
+        .asInstanceOf(InstanceOfAssertFactories.SET)
+        .containsOnly(
             Stream.concat(
                     Stream.of(
                         "Content-Type",
@@ -153,7 +154,7 @@ abstract class AbstractSecurityHeadersTest {
                         "Vary",
                         "Trace-Token"),
                     predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
-                .toList());
+                .toArray());
   }
 
   /**
@@ -169,9 +170,10 @@ abstract class AbstractSecurityHeadersTest {
         .extracting(ResponseEntity::getStatusCode)
         .isEqualTo(HttpStatus.NOT_FOUND);
     HttpHeaders actualHeaders = actual.getHeaders();
-    assertThat(actualHeaders)
-        .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .containsOnlyKeys(
+    Set<String> headerNames = actualHeaders.headerNames();
+    assertThat(headerNames)
+        .asInstanceOf(InstanceOfAssertFactories.SET)
+        .containsOnly(
             Stream.concat(
                     Stream.of(
                         "Content-Type",
@@ -182,7 +184,7 @@ abstract class AbstractSecurityHeadersTest {
                         "Vary",
                         "Trace-Token"),
                     predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
-                .toList());
+                .toArray());
   }
 
   @Test
