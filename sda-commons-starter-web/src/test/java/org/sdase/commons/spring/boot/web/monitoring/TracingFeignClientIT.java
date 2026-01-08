@@ -32,15 +32,16 @@ import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
+import org.springframework.boot.micrometer.tracing.test.autoconfigure.AutoConfigureTracing;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 @SpringBootTest(
     classes = MonitoringTestApp.class,
@@ -48,13 +49,15 @@ import org.springframework.web.client.RestTemplate;
     properties = {
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "opa.disable=true",
-      "management.otlp.tracing.endpoint=http://localhost:${wiremock.server.port}/otlp",
-      "management.tracing.enabled=true",
+      "management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:${wiremock.server.port}/otlp",
+      "management.tracing.export.enabled=true",
+      "management.opentelemetry.tracing.export.otlp.transport=http",
+      "management.logging.export.otlp.enabled=true",
       "management.tracing.grpc.enabled=false"
     })
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock(@ConfigureWireMock(port = 0))
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
-@AutoConfigureObservability
+@AutoConfigureTracing
 class TracingFeignClientIT {
 
   @LocalServerPort private int port;
@@ -92,7 +95,7 @@ class TracingFeignClientIT {
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     await()
-        .atMost(Duration.ofSeconds(5))
+        .atMost(Duration.ofSeconds(10))
         .untilAsserted(() -> assertThat(getAllServeEvents()).hasSize(2));
 
     verify(

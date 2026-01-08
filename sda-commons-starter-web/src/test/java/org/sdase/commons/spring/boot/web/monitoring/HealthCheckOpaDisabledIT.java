@@ -12,8 +12,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +21,17 @@ import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @SpringBootTest(
     classes = MonitoringTestApp.class,
@@ -44,6 +45,7 @@ import org.springframework.web.client.RestTemplate;
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
     })
 @ExtendWith(SpringExtension.class)
+@AutoConfigureTestRestTemplate
 class HealthCheckOpaDisabledIT {
 
   @LocalManagementPort private int managementPort;

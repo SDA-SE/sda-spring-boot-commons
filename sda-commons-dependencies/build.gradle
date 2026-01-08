@@ -7,12 +7,10 @@ javaPlatform {
 }
 
 ext {
-  bouncycastleVersion = '1.83'
+  bouncycastleVersion = '1.83' //check to be aligned with spring cloud
   logbackContribVersion = '0.1.5'
-  // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
-  springBootVersion = '3.5.10'
-  // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
-  springCloudVersion = '2025.0.0'
+  springBootVersion = '4.0.1'
+  springCloudVersion = '2025.1.0'
   mongoDbDriverVersion = '5.6.3'
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.43'
@@ -20,10 +18,13 @@ ext {
 }
 
 dependencies {
+
+  api enforcedPlatform("tools.jackson:jackson-bom:3.0.3")
+  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.19.2") //please check regularly whether it can be removed
+
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'org.mongodb'
-    exclude group: 'org.apache.commons', module: 'commons-lang3'
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
@@ -32,6 +33,9 @@ dependencies {
 
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
+
+  api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.0")
+  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.0")
 
   constraints {
     // overall conflicts
@@ -42,43 +46,16 @@ dependencies {
 
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.3.0'
-
     api 'org.junit-pioneer:junit-pioneer:2.3.0'
-
-    api 'org.junit:junit-bom:6.0.3', {
-      because 'conflict junit-pioneer and spring-boot-starter-test'
-    }
 
     // spring cloud
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
       because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
     }
-    api 'commons-io:commons-io:2.21.0', {
-      because 'conflict robothy, spring cloud, zookeeper'
-    }
-    api 'org.apache.commons:commons-lang3:3.20.0', {
-      because '''\
-          Upgrade managed dependency of org.springframework.boot:spring-boot-dependencies:3.5.3
-          to fix CVE-2025-48924 in 3.17.0.
-          Check for removal on upgrade of io.javaoperatorsdk:operator-framework > 3.5.3
-          '''
-    }
-    api 'commons-fileupload:commons-fileupload:1.6.0', {
-      because '''\
-          Upgrade transitive dependency of io.github.openfeign:feign-form-spring:13.6
-          to fix CVE-2025-48976 in 1.5.
-          Check for removal on upgrade of io.github.openfeign:feign-form-spring > 13.6 via
-          org.springframework.cloud:spring-cloud-dependencies.
-          '''
-    }
 
     // sda-commons-starter-web
-    api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}", {
-      because 'fix CVE-2023-33201'
-    }
-    api "org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}", {
-      because 'fix CVE-2023-33201'
-    }
+    api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}"
+    api "org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}"
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
     api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.14'
@@ -90,9 +67,6 @@ dependencies {
 
     api 'io.github.classgraph:classgraph:4.8.184'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-    api 'org.xerial.snappy:snappy-java:1.1.10.8', {
-      because 'fix CVE-2023-34455, CVE-2023-43642'
-    }
 
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:10.7'
@@ -106,19 +80,17 @@ dependencies {
     api "org.mongodb:bson-record-codec:${mongoDbDriverVersion}"
 
     // sda-commons-starter-kafka
-    api "org.scala-lang:scala-reflect:${scalaVersion}", {
-      because 'conflict between org.apache.kafka:kafka_2.13:3.1.1 and com.typesafe.scala-logging:scala-logging_2.13:3.9.3'
-    }
-    api "org.scala-lang:scala-library:${scalaVersion}", {
-      because 'conflict between com.fasterxml.jackson.module:jackson-module-scala_2.13:2.13.3, com.typesafe.scala-logging:scala-logging_2.13:3.9.3 and org.scala-lang.modules:scala-collection-compat_2.13:2.4.4'
-    }
-    api "org.apache.zookeeper:zookeeper:3.9.4", {
-      because 'version conflict in transitive managed dependencies'
-    }
+    api "org.scala-lang:scala-reflect:${scalaVersion}"
+    api "org.scala-lang:scala-library:${scalaVersion}"
 
     // sda-commons-starter-s3
     api "io.awspring.cloud:spring-cloud-aws-s3:3.4.2"
     api "io.github.robothy:local-s3-rest:2.2"
 
+    api "org.ow2.asm:asm:9.8", {
+      because "conflict between starter-test (minidev) and spring-cloud (eclipse sisu)"
+    }
+
+    api "org.wiremock.integrations:wiremock-spring-boot-standalone:4.0.8"
   }
 }

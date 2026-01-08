@@ -15,6 +15,7 @@ import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.function.Supplier;
+import org.jspecify.annotations.Nullable;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,14 +94,19 @@ public class OpaAuthorizationManager implements AuthorizationManager<RequestAuth
   }
 
   @Override
-  public void verify(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+  public void verify(
+      Supplier<? extends @Nullable Authentication> authentication,
+      RequestAuthorizationContext object) {
     AuthorizationManager.super.verify(authentication, object);
   }
 
   @Override
-  public AuthorizationDecision check(
-      Supplier<Authentication> authentication,
+  public AuthorizationDecision authorize(
+      Supplier<? extends @Nullable Authentication> authentication,
       RequestAuthorizationContext requestAuthorizationContext) {
+    if (requestAuthorizationContext == null) {
+      return new AuthorizationDecision(false);
+    }
     var httpRequest = requestAuthorizationContext.getRequest();
     Span span =
         tracer

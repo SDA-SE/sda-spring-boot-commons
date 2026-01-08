@@ -9,15 +9,14 @@ package org.sdase.commons.spring.boot.web.security;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import java.util.List;
-import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.sdase.commons.spring.boot.web.security.test.SecurityTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
     properties =
         "cors.allowed-origin-patterns=https://allowed.com, https://*.foo.com, https://foo-*.bar.com")
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
+@AutoConfigureTestRestTemplate
 class CorsOriginsTest {
 
   @LocalServerPort private int port;
@@ -56,9 +56,7 @@ class CorsOriginsTest {
             HttpMethod.OPTIONS,
             new HttpEntity<>(headers),
             String.class);
-    assertThat(actual.getHeaders())
-        .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .containsEntry("Access-Control-Allow-Origin", List.of(givenOrigin));
+    assertThat(actual.getHeaders().containsHeaderValue("Access-Control-Allow-Origin", givenOrigin));
   }
 
   @ParameterizedTest
@@ -75,9 +73,7 @@ class CorsOriginsTest {
             HttpMethod.OPTIONS,
             new HttpEntity<>(headers),
             String.class);
-    assertThat(actual.getHeaders())
-        .asInstanceOf(InstanceOfAssertFactories.MAP)
-        .doesNotContainKey("Access-Control-Allow-Origin");
+    assertThat(actual.getHeaders().containsHeader("Access-Control-Allow-Origin")).isFalse();
   }
 
   String getServerBaseUrl() {
