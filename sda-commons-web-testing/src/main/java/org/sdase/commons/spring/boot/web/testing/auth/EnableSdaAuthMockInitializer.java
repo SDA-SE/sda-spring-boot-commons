@@ -7,7 +7,6 @@
  */
 package org.sdase.commons.spring.boot.web.testing.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import java.util.Map;
@@ -17,6 +16,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.test.context.ContextConfiguration;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * To be used on test classes with {@link org.springframework.boot.test.context.SpringBootTest} as *

@@ -21,12 +21,13 @@ import org.sdase.commons.spring.boot.web.monitoring.testing.CustomMetricsTestCon
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.micrometer.metrics.test.autoconfigure.AutoConfigureMetrics;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -46,12 +47,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
       // runtime
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "opa.disable=true",
-      "management.tracing.enabled=true"
+      "management.tracing.export.enabled=true"
     })
-@AutoConfigureObservability
+@AutoConfigureMetrics
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestRestTemplate
 class MetricsIT {
 
   @LocalManagementPort private int managementPort;

@@ -9,10 +9,6 @@ package org.sdase.commons.spring.boot.web.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,15 +18,19 @@ import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.web.jackson.test.JacksonTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @SetSystemProperty(key = "enable.json.logging", value = "true")
 @SpringBootTest(
@@ -39,6 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@AutoConfigureTestRestTemplate
 class HttpRequestLoggingJsonTest {
 
   @LocalServerPort private int port;
@@ -47,7 +48,7 @@ class HttpRequestLoggingJsonTest {
   static final TypeReference<Map<String, Object>> MAP_REF = new TypeReference<>() {};
 
   @Test
-  void shouldLogAsJsonWhenEnabled(CapturedOutput output) throws JsonProcessingException {
+  void shouldLogAsJsonWhenEnabled(CapturedOutput output) throws JacksonException {
     ResponseEntity<String> responseEntity = executeRequest("/api/fixedTime", port);
 
     // then
@@ -101,10 +102,6 @@ class HttpRequestLoggingJsonTest {
   }
 
   private Map<String, Object> toObject(String json) {
-    try {
-      return objectMapper.readValue(json, MAP_REF);
-    } catch (JsonProcessingException e) {
-      throw new UncheckedIOException(e);
-    }
+    return objectMapper.readValue(json, MAP_REF);
   }
 }

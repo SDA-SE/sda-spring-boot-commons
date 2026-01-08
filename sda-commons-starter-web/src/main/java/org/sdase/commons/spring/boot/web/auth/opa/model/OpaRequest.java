@@ -7,7 +7,7 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class OpaRequest {
 

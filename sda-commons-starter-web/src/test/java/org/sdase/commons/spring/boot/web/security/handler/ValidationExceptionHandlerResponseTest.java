@@ -10,7 +10,6 @@ package org.sdase.commons.spring.boot.web.security.handler;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
@@ -21,6 +20,7 @@ import org.hibernate.validator.constraints.ISBN;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.databind.util.NamingStrategyImpls;
 
 class ValidationExceptionHandlerResponseTest {
 
@@ -35,7 +35,7 @@ class ValidationExceptionHandlerResponseTest {
   @MethodSource("realTestData")
   void shouldConvertValidationClassesToSnakeCase(String given) {
     String actual = ValidationExceptionHandler.camelToUpperSnakeCase(given);
-    String expected = new PropertyNamingStrategies.UpperSnakeCaseStrategy().translate(given);
+    String expected = NamingStrategyImpls.UPPER_SNAKE_CASE.translate(given);
     // would fail on: EAN, ISBN, URL, CNPJ, CPF, NIP, PESEL, REGON, INN
     assumeThat(actual).isEqualTo(expected);
   }

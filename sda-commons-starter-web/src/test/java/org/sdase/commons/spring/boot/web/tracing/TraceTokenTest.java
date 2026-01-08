@@ -12,12 +12,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import java.io.UncheckedIOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,12 +25,12 @@ import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.sdase.commons.spring.boot.web.tracing.test.TracingTestApp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -42,6 +38,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @SetSystemProperty(key = "enable.json.logging", value = "true")
 @SpringBootTest(
@@ -50,10 +50,11 @@ import org.springframework.test.context.ContextConfiguration;
     properties = {
       "otherServiceClient.baseUrl=http://localhost:${wiremock.server.port}/api",
     })
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock({@ConfigureWireMock(port = 0)})
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@AutoConfigureTestRestTemplate
 class TraceTokenTest {
   @LocalServerPort private int port;
   @Autowired private TestRestTemplate client;
@@ -188,10 +189,6 @@ class TraceTokenTest {
   }
 
   private Map<String, Object> toObject(String json) {
-    try {
-      return objectMapper.readValue(json, MAP_REF);
-    } catch (JsonProcessingException e) {
-      throw new UncheckedIOException(e);
-    }
+    return objectMapper.readValue(json, MAP_REF);
   }
 }

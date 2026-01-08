@@ -9,9 +9,6 @@ package org.sdase.commons.spring.boot.web.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +24,9 @@ import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(OutputCaptureExtension.class)
 @ClearSystemProperty(key = "logging.config") // defined by app under test to enable json logging
@@ -47,7 +47,7 @@ class JsonLoggingTest {
 
   @Test
   @SetSystemProperty(key = "enable.json.logging", value = "true")
-  void shouldLogJson(CapturedOutput output) throws JsonProcessingException {
+  void shouldLogJson(CapturedOutput output) throws JacksonException {
     assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
     assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
     for (String json : jsonLines(output)) {
@@ -64,8 +64,7 @@ class JsonLoggingTest {
   @Test
   @SetSystemProperty(key = "enable.json.logging", value = "true")
   @SetSystemProperty(key = "log.json.timestamp.format", value = "HH:mm:ss.SSS - yyyy-MM-dd")
-  void shouldLogJsonUsingDifferentTimeStampFormat(CapturedOutput output)
-      throws JsonProcessingException {
+  void shouldLogJsonUsingDifferentTimeStampFormat(CapturedOutput output) throws JacksonException {
     assertThat(ContextUtils.createTestContext(LoggingTestApp.class)).hasNotFailed();
     assertThat(output).asString().contains("Started JsonLoggingTest.LoggingTestApp");
     for (String json : jsonLines(output)) {

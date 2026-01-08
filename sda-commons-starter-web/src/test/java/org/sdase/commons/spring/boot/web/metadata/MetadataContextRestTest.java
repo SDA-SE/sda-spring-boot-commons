@@ -26,15 +26,16 @@ import org.sdase.commons.spring.boot.metadata.context.MetadataContext;
 import org.sdase.commons.spring.boot.web.metadata.test.MetadataTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 /** Test that http client configuration is correct. */
 @SetSystemProperty(key = "METADATA_FIELDS", value = "tenant-id")
@@ -49,7 +50,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
       "metadata.platformService.baseUrl=http://localhost:${wiremock.server.port}/api"
     })
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock(@ConfigureWireMock)
 @AutoConfigureMockMvc
 class MetadataContextRestTest {
 

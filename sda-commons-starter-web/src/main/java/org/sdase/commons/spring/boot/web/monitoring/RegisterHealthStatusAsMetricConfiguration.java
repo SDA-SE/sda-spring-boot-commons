@@ -12,9 +12,9 @@ import io.micrometer.core.instrument.Tag;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.health.contributor.HealthIndicator;
+import org.springframework.boot.health.contributor.Status;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -49,6 +49,6 @@ public class RegisterHealthStatusAsMetricConfiguration {
         HEALTHCHECK_METRIC_NAME,
         List.of(Tag.of("name", tagName)),
         healthIndicator,
-        ind -> ind.health().getStatus() == Status.UP ? 1 : 0);
+        ind -> (ind.health() != null && ind.health().getStatus() == Status.UP) ? 1 : 0);
   }
 }

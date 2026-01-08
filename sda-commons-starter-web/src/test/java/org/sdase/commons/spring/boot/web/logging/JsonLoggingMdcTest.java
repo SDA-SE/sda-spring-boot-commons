@@ -9,10 +9,6 @@ package org.sdase.commons.spring.boot.web.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -25,13 +21,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @SetSystemProperty(key = "enable.json.logging", value = "true")
 @SpringBootTest(
@@ -41,6 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@AutoConfigureTestRestTemplate
 class JsonLoggingMdcTest {
 
   @LocalServerPort int port;
@@ -108,10 +108,6 @@ class JsonLoggingMdcTest {
   }
 
   private Map<String, Object> toObject(String json) {
-    try {
-      return objectMapper.readValue(json, MAP_REF);
-    } catch (JsonProcessingException e) {
-      throw new UncheckedIOException(e);
-    }
+    return objectMapper.readValue(json, MAP_REF);
   }
 }

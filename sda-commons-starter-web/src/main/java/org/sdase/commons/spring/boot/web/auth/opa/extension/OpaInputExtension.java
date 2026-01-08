@@ -7,9 +7,9 @@
  */
 package org.sdase.commons.spring.boot.web.auth.opa.extension;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaInput;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * An extension to provide additional data to the {@link OpaInput} before sending it to the Open
