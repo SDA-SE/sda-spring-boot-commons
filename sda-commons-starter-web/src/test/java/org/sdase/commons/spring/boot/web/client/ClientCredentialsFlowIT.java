@@ -20,7 +20,6 @@ import static jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.Json;
 import java.util.List;
@@ -32,14 +31,16 @@ import org.sdase.commons.spring.boot.web.client.oidc.ClientCredentialsTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.client.EnableSdaOidcClientMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(
     classes = ClientCredentialsTestApp.class,
@@ -49,7 +50,7 @@ import org.springframework.test.context.ContextConfiguration;
       "oidc.client.enabled=true"
     })
 @ContextConfiguration(initializers = EnableSdaOidcClientMockInitializer.class)
-@AutoConfigureWireMock
+@EnableWireMock(@ConfigureWireMock)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class ClientCredentialsFlowIT {
 

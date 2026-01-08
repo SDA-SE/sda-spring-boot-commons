@@ -26,8 +26,9 @@ import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +38,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(classes = AuthTestApp.class, webEnvironment = RANDOM_PORT)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
+@AutoConfigureTestRestTemplate
 class AuthenticationIT {
 
   @Value("${auth.issuers}")
@@ -187,7 +189,7 @@ class AuthenticationIT {
             .authentication()
             .authenticatedClient()
             .getForEntity("http://localhost:" + port + "/api/ping", Object.class);
-    assertThat(response.getHeaders())
+    assertThat(response.getHeaders().toSingleValueMap())
         .doesNotContainKeys(HttpHeaders.COOKIE, HttpHeaders.SET_COOKIE, HttpHeaders.SET_COOKIE2);
   }
 }

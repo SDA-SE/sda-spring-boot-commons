@@ -17,8 +17,9 @@ import org.sdase.commons.spring.boot.web.security.test.TestResource;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
     classes = SecurityTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
+@AutoConfigureTestRestTemplate
 class CustomAdminEndpointTest {
 
   @LocalServerPort private int port;

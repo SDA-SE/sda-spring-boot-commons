@@ -15,21 +15,24 @@ import org.sdase.commons.spring.boot.web.auth.opa.OpenPolicyAgentHealthIndicator
 import org.sdase.commons.spring.boot.web.monitoring.testing.HealthyHealthIndicator;
 import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 
 @SpringBootTest(
     classes = MonitoringTestApp.class,
     webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = {
+      "spring.web.error.whitelabel.enabled=false",
       "management.endpoint.health.group.readiness.include=readinessState, unhealthy, openPolicyAgent",
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "management.server.port=8087" // We need to set a fixed port here, hence the random port to
       // exclude the management requests are not set probably at
       // runtime
     })
+@AutoConfigureTestRestTemplate
 class HealthCheckGroupIT {
 
   @LocalManagementPort private int managementPort;

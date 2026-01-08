@@ -8,12 +8,14 @@
 package org.sdase.commons.spring.boot.web.auth.management;
 
 import java.util.function.Supplier;
+import org.jspecify.annotations.Nullable;
 import org.springframework.boot.actuate.autoconfigure.web.server.ConditionalOnManagementPort;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
-import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
+import org.springframework.boot.web.server.servlet.context.ServletWebServerInitializedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
@@ -22,7 +24,9 @@ public interface ManagementAuthorizationManager
     extends AuthorizationManager<RequestAuthorizationContext> {
 
   @Override
-  default void verify(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+  default void verify(
+      Supplier<? extends @Nullable Authentication> authentication,
+      RequestAuthorizationContext object) {
     AuthorizationManager.super.verify(authentication, object);
   }
 
@@ -45,8 +49,12 @@ public interface ManagementAuthorizationManager
     }
 
     @Override
-    public AuthorizationDecision check(
-        Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    public @Nullable AuthorizationResult authorize(
+        Supplier<? extends @Nullable Authentication> authentication,
+        RequestAuthorizationContext object) {
+      if (object == null) {
+        return new AuthorizationDecision(false);
+      }
       int requestLocalPort = object.getRequest().getLocalPort();
       return requestLocalPort == this.managementPort
           ? new AuthorizationDecision(true)
@@ -59,8 +67,9 @@ public interface ManagementAuthorizationManager
   class IgnoreSamePortManagementAccessDecisionVoter implements ManagementAuthorizationManager {
 
     @Override
-    public AuthorizationDecision check(
-        Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    public @Nullable AuthorizationResult authorize(
+        Supplier<? extends @Nullable Authentication> authentication,
+        RequestAuthorizationContext object) {
       return new AuthorizationDecision(false);
     }
   }
@@ -70,8 +79,9 @@ public interface ManagementAuthorizationManager
   class DisabledManagementAccessDecisionVoter implements ManagementAuthorizationManager {
 
     @Override
-    public AuthorizationDecision check(
-        Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+    public @Nullable AuthorizationResult authorize(
+        Supplier<? extends @Nullable Authentication> authentication,
+        RequestAuthorizationContext object) {
       return new AuthorizationDecision(false);
     }
   }

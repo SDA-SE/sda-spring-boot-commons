@@ -7,8 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.logging;
 
-import org.springframework.boot.BootstrapRegistry;
-import org.springframework.boot.BootstrapRegistryInitializer;
+import org.springframework.boot.bootstrap.BootstrapRegistry;
+import org.springframework.boot.bootstrap.BootstrapRegistryInitializer;
 
 /**
  * Configures Spring Boot to log as JSON based on the SDA standard setting {@code

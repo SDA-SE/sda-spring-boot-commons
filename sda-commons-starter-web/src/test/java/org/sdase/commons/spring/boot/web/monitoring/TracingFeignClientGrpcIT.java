@@ -32,15 +32,16 @@ import org.sdase.commons.spring.boot.web.monitoring.testing.MonitoringTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
+import org.springframework.boot.micrometer.tracing.test.autoconfigure.AutoConfigureTracing;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 @SpringBootTest(
     classes = MonitoringTestApp.class,
@@ -48,13 +49,13 @@ import org.springframework.web.client.RestTemplate;
     properties = {
       "test.tracing.client.base.url=http://localhost:${wiremock.server.port}/feign",
       "opa.disable=true",
-      "management.tracing.enabled=true",
-      "management.tracing.grpc.enabled=true",
-      "management.otlp.tracing.endpoint=http://localhost:${wiremock.server.port}"
+      "management.tracing.export.enabled=true",
+      "management.opentelemetry.tracing.export.otlp.transport=GRPC",
+      "management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:${wiremock.server.port}"
     })
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock(@ConfigureWireMock)
 @ContextConfiguration(initializers = EnableSdaAuthMockInitializer.class)
-@AutoConfigureObservability
+@AutoConfigureTracing
 class TracingFeignClientGrpcIT {
 
   @LocalServerPort private int port;

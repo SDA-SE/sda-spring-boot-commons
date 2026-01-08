@@ -11,9 +11,9 @@ import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.endpoint.OperationResponseBody;
-import org.springframework.boot.actuate.health.AbstractHealthIndicator;
-import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.health.contributor.AbstractHealthIndicator;
+import org.springframework.boot.health.contributor.Health;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,10 +39,10 @@ public class OpenPolicyAgentHealthIndicator extends AbstractHealthIndicator
    * it is allowed, it sets the health status to {@literal DOWN} If the response is denying, it sets
    * the health status to {@literal UP}
    *
-   * @param builder the {@link Builder} to report health status and details
+   * @param builder the {@link Health.Builder} to report health status and details
    */
   @Override
-  protected void doHealthCheck(Builder builder) {
+  protected void doHealthCheck(Health.Builder builder) {
     try {
       // send a get request to the policy path. The get will not provide any input.
       // Normally, the policy should respond with a denying decision.
@@ -70,7 +70,7 @@ public class OpenPolicyAgentHealthIndicator extends AbstractHealthIndicator
     }
   }
 
-  private static void unhealthy(Builder builder, String message) {
+  private static void unhealthy(Health.Builder builder, String message) {
     builder.down().withDetail("healthy", false).withDetail("message", message);
   }
 }

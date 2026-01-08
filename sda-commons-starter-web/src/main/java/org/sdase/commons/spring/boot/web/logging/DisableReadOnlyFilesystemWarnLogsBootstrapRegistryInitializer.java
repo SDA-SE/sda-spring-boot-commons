@@ -7,8 +7,8 @@
  */
 package org.sdase.commons.spring.boot.web.logging;
 
-import org.springframework.boot.BootstrapRegistry;
-import org.springframework.boot.BootstrapRegistryInitializer;
+import org.springframework.boot.bootstrap.BootstrapRegistry;
+import org.springframework.boot.bootstrap.BootstrapRegistryInitializer;
 
 /**
  * Disables warn logs that will raise if the filesystem is read only.

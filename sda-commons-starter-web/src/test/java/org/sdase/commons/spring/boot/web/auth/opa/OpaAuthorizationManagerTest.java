@@ -65,7 +65,7 @@ class OpaAuthorizationManagerTest {
     var requestAuthorizationContext = new RequestAuthorizationContext(requestMock);
     assertThat(
             disabledDecisionVoter
-                .check(() -> mock(Authentication.class), requestAuthorizationContext)
+                .authorize(() -> mock(Authentication.class), requestAuthorizationContext)
                 .isGranted())
         .isTrue();
   }
@@ -88,7 +88,7 @@ class OpaAuthorizationManagerTest {
     var requestAuthorizationContext = new RequestAuthorizationContext(requestMock);
     assertThat(
             disabledDecisionVoter
-                .check(() -> mock(Authentication.class), requestAuthorizationContext)
+                .authorize(() -> mock(Authentication.class), requestAuthorizationContext)
                 .isGranted())
         .isTrue();
   }
@@ -149,7 +149,7 @@ class OpaAuthorizationManagerTest {
     when(requestMock.getHeaderNames()).thenReturn(Collections.emptyEnumeration());
     var requestAuthorizationContext = new RequestAuthorizationContext(requestMock);
 
-    var vote = decisionVoter.check(null, requestAuthorizationContext);
+    var vote = decisionVoter.authorize(null, requestAuthorizationContext);
 
     assertThat(vote.isGranted()).isFalse();
   }
@@ -172,7 +172,7 @@ class OpaAuthorizationManagerTest {
 
     authMock.authorizeAnyRequest().deny();
 
-    var vote = decisionVoter.check(null, requestAuthorizationContext);
+    var vote = decisionVoter.authorize(null, requestAuthorizationContext);
 
     assertThat(vote.isGranted()).isFalse();
   }
@@ -195,7 +195,7 @@ class OpaAuthorizationManagerTest {
 
     authMock.authorizeAnyRequest().allow();
 
-    var vote = decisionVoter.check(null, requestAuthorizationContext);
+    var vote = decisionVoter.authorize(null, requestAuthorizationContext);
 
     assertThat(vote.isGranted()).isTrue();
   }

@@ -7,7 +7,6 @@
  */
 package org.sdase.commons.spring.boot.web.security.handler;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import java.util.List;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.error.ApiInvalidParam;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import tools.jackson.databind.util.NamingStrategyImpls;
 
 /**
  * This handler addresses risks identified in the security guide as:
@@ -46,8 +46,8 @@ public class ValidationExceptionHandler {
   public static final String ERROR_MESSAGE = "Validation error";
   private static final String MESSAGE_NOT_READABLE = "Request Body not readable";
 
-  private static final PropertyNamingStrategies.UpperSnakeCaseStrategy ERROR_CODE_TRANSLATOR =
-      new PropertyNamingStrategies.UpperSnakeCaseStrategy();
+  private static final NamingStrategyImpls ERROR_CODE_TRANSLATOR =
+      NamingStrategyImpls.UPPER_SNAKE_CASE;
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @Order(value = Ordered.HIGHEST_PRECEDENCE)
@@ -65,7 +65,7 @@ public class ValidationExceptionHandler {
                 .toList());
 
     LOG.error(ex.getMessage(), ex);
-    return ResponseEntity.unprocessableEntity().body(response);
+    return ResponseEntity.unprocessableContent().body(response);
   }
 
   @ExceptionHandler({HandlerMethodValidationException.class})
@@ -92,7 +92,7 @@ public class ValidationExceptionHandler {
     apiError.addInvalidParams(invalidParams);
 
     LOG.error(ex.getMessage(), ex);
-    return ResponseEntity.unprocessableEntity().body(apiError);
+    return ResponseEntity.unprocessableContent().body(apiError);
   }
 
   @ExceptionHandler({HttpMessageNotReadableException.class})
@@ -100,7 +100,7 @@ public class ValidationExceptionHandler {
       HttpMessageNotReadableException ex) {
 
     LOG.error(ex.getMessage(), ex);
-    return ResponseEntity.unprocessableEntity().body(new ApiError(MESSAGE_NOT_READABLE));
+    return ResponseEntity.unprocessableContent().body(new ApiError(MESSAGE_NOT_READABLE));
   }
 
   static String camelToUpperSnakeCase(String camelCase) {
