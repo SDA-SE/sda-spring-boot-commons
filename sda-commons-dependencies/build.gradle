@@ -36,7 +36,7 @@ dependencies {
   constraints {
     // overall conflicts
     api 'org.slf4j:slf4j-api:2.0.17'
-    api 'com.google.errorprone:error_prone_annotations:2.45.0', {
+    api 'com.google.errorprone:error_prone_annotations:2.46.0', {
       because 'conflicts between gson via jose-jwt and spring and caffeine via kafka-storage and spring'
     }
 
