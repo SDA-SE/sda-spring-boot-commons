@@ -13,7 +13,7 @@ ext {
   springBootVersion = '3.5.8'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
-  mongoDbDriverVersion = '5.6.1'
+  mongoDbDriverVersion = '5.6.2'
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.41'
   victoolsVersion = '4.38.0'
@@ -36,7 +36,7 @@ dependencies {
   constraints {
     // overall conflicts
     api 'org.slf4j:slf4j-api:2.0.17'
-    api 'com.google.errorprone:error_prone_annotations:2.45.0', {
+    api 'com.google.errorprone:error_prone_annotations:2.46.0', {
       because 'conflicts between gson via jose-jwt and spring and caffeine via kafka-storage and spring'
     }
 
@@ -45,7 +45,7 @@ dependencies {
 
     api 'org.junit-pioneer:junit-pioneer:2.3.0'
 
-    api 'org.junit:junit-bom:6.0.1', {
+    api 'org.junit:junit-bom:6.0.2', {
       because 'conflict junit-pioneer and spring-boot-starter-test'
     }
 
@@ -98,9 +98,9 @@ dependencies {
     }
 
     // sda-commons-web-testing
-    api 'com.nimbusds:nimbus-jose-jwt:10.6'
+    api 'com.nimbusds:nimbus-jose-jwt:10.7'
 
-    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.21.0'
+    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.22.0'
 
     // sda-commons-starter-mongodb
     api "org.mongodb:mongodb-driver-sync:${mongoDbDriverVersion}"
@@ -121,7 +121,7 @@ dependencies {
 
     // sda-commons-starter-s3
     api "io.awspring.cloud:spring-cloud-aws-s3:3.4.2"
-    api "io.github.robothy:local-s3-rest:2.0"
+    api "io.github.robothy:local-s3-rest:2.1"
 
   }
 }
