@@ -10,7 +10,7 @@ ext {
   bouncycastleVersion = '1.83'
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
-  springBootVersion = '3.5.9'
+  springBootVersion = '4.0.1'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.6.2'
