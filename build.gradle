@@ -150,6 +150,7 @@ subprojects {
 }
 
 configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
+  // apply plugin: 'jacoco' creates a new task jacocoTestReport
   apply plugin: 'jacoco'
   apply plugin: 'java-library'
 
@@ -173,8 +174,13 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
     toolVersion = "0.8.14"
   }
 
+  test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+  }
+
   // output XML reports for SonarCloud
   jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
     reports {
       xml.required = true
     }
@@ -183,7 +189,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   // Configure sonar to use the aggregated global report file
   sonarqube {
     properties {
-      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/report.xml'
+      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
     }
   }
 
