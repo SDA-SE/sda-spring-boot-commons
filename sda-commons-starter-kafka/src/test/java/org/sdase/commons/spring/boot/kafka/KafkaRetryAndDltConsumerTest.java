@@ -7,12 +7,11 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.sdase.commons.spring.boot.kafka.KafkaTestUtil.readValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +22,8 @@ import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.StdIo;
+import org.junitpioneer.jupiter.StdOut;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -100,6 +101,24 @@ class KafkaRetryAndDltConsumerTest {
                                     MethodArgumentNotValidException.class.getName()));
                       }));
     }
+  }
+
+  @Test
+  @StdIo
+  void shouldLogOnProduceToDLT(StdOut out) {
+    KafkaTestModel expectedMessage = new KafkaTestModel().setCheckString("CHECK").setCheckInt(null);
+    kafkaTemplate.send(topic, expectedMessage);
+    verify(listenerCheck, new Timeout(5000, never())).check("CHECK");
+
+    await()
+        .atMost(Duration.ofSeconds(10))
+        .pollDelay(Duration.ofMillis(1000))
+        .pollInterval(Duration.ofMillis(500))
+        .untilAsserted(
+            () -> {
+              assertThat(out.capturedLines())
+                  .anyMatch(s -> s.contains("MethodArgumentNotValidException"));
+            });
   }
 
   @Test
