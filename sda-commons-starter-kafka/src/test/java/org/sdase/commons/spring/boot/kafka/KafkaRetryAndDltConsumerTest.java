@@ -109,16 +109,36 @@ class KafkaRetryAndDltConsumerTest {
     KafkaTestModel expectedMessage = new KafkaTestModel().setCheckString("CHECK").setCheckInt(null);
     kafkaTemplate.send(topic, expectedMessage);
     verify(listenerCheck, new Timeout(5000, never())).check("CHECK");
-
+    try (KafkaConsumer<String, ?> testConsumer =
+        KafkaTestUtil.createTestConsumer(
+            topic + ".DLT", embeddedKafkaBroker, new StringDeserializer())) {
+      await()
+          .pollDelay(Duration.ofMillis(1000))
+          .pollInterval(Duration.ofMillis(100))
+          .untilAsserted(
+              () ->
+                  assertSoftly(
+                      s -> {
+                        ConsumerRecord<String, ?> nextRecord =
+                            KafkaTestUtil.getNextRecord(topic + ".DLT", testConsumer);
+                        var actual = readValue(nextRecord, objectMapper);
+                        s.assertThat(actual).usingRecursiveComparison().isEqualTo(expectedMessage);
+                        s.assertThat(nextRecord.headers())
+                            .extracting(Header::key, header -> new String(header.value()))
+                            .contains(
+                                tuple(
+                                    "kafka_dlt-exception-cause-fqcn",
+                                    MethodArgumentNotValidException.class.getName()));
+                      }));
+    }
     await()
         .atMost(Duration.ofSeconds(10))
         .pollDelay(Duration.ofMillis(1000))
         .pollInterval(Duration.ofMillis(500))
         .untilAsserted(
-            () -> {
-              assertThat(out.capturedLines())
-                  .anyMatch(s -> s.contains("MethodArgumentNotValidException"));
-            });
+            () ->
+                assertThat(out.capturedLines())
+                    .anyMatch(s -> s.contains("MethodArgumentNotValidException")));
   }
 
   @Test
