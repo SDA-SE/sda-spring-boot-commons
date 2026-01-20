@@ -174,11 +174,6 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
     toolVersion = "0.8.14"
   }
 
-  test {
-    finalizedBy jacocoTestReport // report is always generated after tests run
-  }
-
-  // output XML reports for SonarCloud
   jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
@@ -195,6 +190,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
 
   test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
   }
 
   configurations.configureEach {
