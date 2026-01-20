@@ -136,9 +136,11 @@ class KafkaRetryAndDltConsumerTest {
         .pollDelay(Duration.ofMillis(1000))
         .pollInterval(Duration.ofMillis(500))
         .untilAsserted(
-            () ->
-                assertThat(out.capturedLines())
-                    .anyMatch(s -> s.contains("MethodArgumentNotValidException")));
+            () -> {
+              assertThat(out.capturedLines())
+                  .anyMatch(s -> s.contains("MethodArgumentNotValidException"));
+              assertThat(out.capturedLines()).anyMatch(s -> s.contains("Recovery record " + topic));
+            });
   }
 
   @Test
