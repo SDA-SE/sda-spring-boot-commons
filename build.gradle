@@ -189,7 +189,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   // Configure sonar to use the aggregated global report file
   sonarqube {
     properties {
-      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
+      property "sonar.coverage.jacoco.xmlReportPaths", '${rootProject.projectDir}/**/build/reports/jacoco/test/jacocoTestReport.xml'
     }
   }
 
