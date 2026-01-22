@@ -144,6 +144,7 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     ExponentialBackOffWithMaxRetries backOff = createDefaultRetryBackOff();
     DeadLetterPublishingRecoverer recoverer =
         new DeadLetterPublishingRecoverer(dltTemplates, this::getDeadLetterTopicName);
+    recoverer.setLogRecoveryRecord(true);
     DefaultErrorHandler handler = new DefaultErrorHandler(recoverer, backOff);
     handler.addNotRetryableExceptions(NotRetryableKafkaException.class);
     return handler;
