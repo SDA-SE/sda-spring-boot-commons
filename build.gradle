@@ -183,7 +183,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   // Configure sonar to use the aggregated global report file
   //sonarqube {
   //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/report.xml'
+  //    property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
   //  }
   //}
 
@@ -277,6 +277,8 @@ sonarqube {
 
     property 'sonar.pullrequest.provider', 'GitHub'
     property 'sonar.pullrequest.github.repository', System.getenv('GITHUB_REPOSITORY')
+
+    property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
 
     if (System.getenv('GITHUB_PR') != null && System.getenv('GITHUB_PR') != "") {
       property 'sonar.pullrequest.key', System.getenv('GITHUB_PR')
