@@ -27,7 +27,9 @@ class DuplicateClassesTest {
           // Spring JCL duplicates classes of commons logging
           Pattern.compile("org/apache/commons/logging/.*"),
           // Tomcat embed duplicates the servlet classes
-          Pattern.compile("jakarta/servlet/.*"));
+          Pattern.compile("jakarta/servlet/.*"),
+          // Wiremock standalone embedded duplicate
+          Pattern.compile("org/jspecify/annotations/.*"));
 
   private static final Logger LOG = LoggerFactory.getLogger(DuplicateClassesTest.class);
 

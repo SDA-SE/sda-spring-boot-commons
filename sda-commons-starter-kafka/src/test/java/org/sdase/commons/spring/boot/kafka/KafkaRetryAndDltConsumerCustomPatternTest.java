@@ -13,7 +13,6 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.sdase.commons.spring.boot.kafka.KafkaTestUtil.readValue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +52,7 @@ import org.springframework.messaging.handler.annotation.support.MethodArgumentNo
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(
     classes = KafkaTestApp.class,
@@ -63,7 +63,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
     })
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -91,7 +91,7 @@ class KafkaRetryAndDltConsumerCustomPatternTest {
   void setUp() {
 
     Map<String, Object> configs =
-        new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
+        new HashMap<>(KafkaTestUtils.consumerProps(embeddedKafkaBroker, "consumer", false));
 
     DefaultKafkaConsumerFactory<String, String> consumerFactory =
         new DefaultKafkaConsumerFactory<>(

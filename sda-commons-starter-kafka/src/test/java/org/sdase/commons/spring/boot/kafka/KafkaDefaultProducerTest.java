@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,7 +38,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
     })
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class KafkaDefaultProducerTest {
@@ -65,7 +65,7 @@ class KafkaDefaultProducerTest {
                                 KafkaTestUtil.createTestConsumer(
                                     topic,
                                     embeddedKafkaBroker,
-                                    new JsonDeserializer<>().trustedPackages("*")))
+                                    new JacksonJsonDeserializer<>().trustedPackages("*")))
                             .value())
                     .usingRecursiveComparison()
                     .isEqualTo(expectedMessage));

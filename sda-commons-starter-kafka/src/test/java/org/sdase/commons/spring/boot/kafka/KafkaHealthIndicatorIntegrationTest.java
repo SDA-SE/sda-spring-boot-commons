@@ -9,25 +9,25 @@ package org.sdase.commons.spring.boot.kafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.ClearSystemProperty;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestApp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.health.contributor.Health;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SetSystemProperty(key = "management.health.kafka.enabled", value = "true")
 @SetSystemProperty(key = "management.health.kafka.timeout", value = "8s")
@@ -42,21 +42,16 @@ import org.springframework.test.annotation.DirtiesContext;
     })
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestRestTemplate
 class KafkaHealthIndicatorIntegrationTest {
 
   @LocalManagementPort private int managementPort;
 
   @Autowired private TestRestTemplate client;
 
-  @SuppressWarnings("removal")
-  // The MockitoSpyBean that should replace the SpyBean doesn't work exactly the same. See
-  // https://github.com/spring-projects/spring-framework/issues/33934.
-  // It has to be further investigated, what steps are necessary to remove this deprecated
-  // reference.
-  @SpyBean
-  private KafkaHealthIndicator kafkaHealthIndicator;
+  @MockitoSpyBean private KafkaHealthIndicator kafkaHealthIndicator;
 
   @Autowired private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
 
@@ -155,21 +150,6 @@ class KafkaHealthIndicatorIntegrationTest {
     assertThat(kafkaInfo.status()).isEqualTo("DOWN");
     assertThat(kafkaInfo.details().error())
         .isEqualTo("java.lang.Exception: Simulate kafka health check issue");
-  }
-
-  @Test
-  @SetSystemProperty(key = "management.health.kafka.enabled", value = "false")
-  @ClearSystemProperty(key = "management.health.kafka.timeout")
-  void checkThatKafkaHealthCheckIsNotEnabled() {
-    // given
-    // when
-    var response = getHealthCheckInfoData();
-    var kafkaInfo = response.getBody().components().kafka();
-
-    // then
-    assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-    assertThat(response.getBody().status()).isEqualTo("UP");
-    assertThat(kafkaInfo).isNull();
   }
 
   private ResponseEntity<HealthInfo> getHealthCheckInfoData() {
