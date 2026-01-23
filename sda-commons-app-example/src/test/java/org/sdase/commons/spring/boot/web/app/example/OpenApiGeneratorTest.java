@@ -9,9 +9,7 @@ package org.sdase.commons.spring.boot.web.app.example;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.util.ArrayList;
 import java.util.Map;
@@ -21,11 +19,14 @@ import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import tools.jackson.core.json.JsonFactory;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * A test that stores the most recent openapi.yaml in the repository and makes sure it is
@@ -36,6 +37,7 @@ import org.springframework.test.context.ContextConfiguration;
     properties = {"springdoc.packagesToScan=org.sdase.commons.spring.boot.web.app.example"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
+@AutoConfigureTestRestTemplate
 class OpenApiGeneratorTest {
 
   private static final Logger LOG = LoggerFactory.getLogger(OpenApiGeneratorTest.class);
@@ -48,15 +50,15 @@ class OpenApiGeneratorTest {
   private static String openapi;
 
   @Test
-  void shouldProvideOpenApiAsJson() throws JsonProcessingException {
-    var objectMapper = new ObjectMapper(new JsonFactory());
+  void shouldProvideOpenApiAsJson() {
+    var objectMapper = new JsonMapper(new JsonFactory());
     var expected =
         client.getForObject(String.format("http://localhost:%s/api/openapi", port), String.class);
 
     assertThat(expected).isNotNull();
 
     // verify JSON format
-    assertThat(objectMapper.readTree(expected).get("openapi").asText()).isEqualTo("3.0.1");
+    assertThat(objectMapper.readTree(expected).get("openapi").asString()).isEqualTo("3.0.1");
   }
 
   // integration testing of the OpenAPI customisation
