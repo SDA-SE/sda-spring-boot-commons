@@ -11,13 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.MissingNode;
-import com.fasterxml.jackson.databind.node.TextNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +19,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
-import javax.annotation.Nullable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -48,6 +41,13 @@ import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.Temporal.TemporalZonedDateTime;
 import org.sdase.commons.spring.boot.asyncapi.test.data.models.MinimalTestModels.UriProperties;
 import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.IntNode;
+import tools.jackson.databind.node.MissingNode;
+import tools.jackson.databind.node.StringNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 public abstract class AbstractJsonSchemaBuilderTest {
 
@@ -151,8 +151,8 @@ public abstract class AbstractJsonSchemaBuilderTest {
         );
   }
 
-  static TextNode text(String text) {
-    return new TextNode(text);
+  static StringNode text(String text) {
+    return new StringNode(text);
   }
 
   static IntNode number(int number) {
