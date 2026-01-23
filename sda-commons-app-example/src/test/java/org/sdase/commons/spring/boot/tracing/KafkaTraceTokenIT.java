@@ -30,10 +30,10 @@ import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -49,17 +49,20 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 @SpringBootTest(
     classes = KafkaTraceTestApp.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
-@AutoConfigureWireMock(port = 0)
+    brokerProperties = {"port=0"})
+@AutoConfigureTestRestTemplate
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class KafkaTraceTokenIT {
+@EnableWireMock(@ConfigureWireMock)
+class KafkaTraceTokenIT {
 
   @LocalServerPort private int port;
 
@@ -88,7 +91,7 @@ public class KafkaTraceTokenIT {
     mdcContextWhileMessageIsConsumed = new HashMap<>();
 
     Map<String, Object> configs =
-        new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
+        new HashMap<>(KafkaTestUtils.consumerProps(embeddedKafkaBroker, "consumer", false));
 
     DefaultKafkaConsumerFactory<String, String> consumerFactory =
         new DefaultKafkaConsumerFactory<>(
@@ -112,8 +115,7 @@ public class KafkaTraceTokenIT {
     var headers = new HttpHeaders();
     headers.set("Trace-Token", "pre-defined-trace-token");
     // when
-    ResponseEntity<String> responseEntity =
-        executeRequestWithHeader("/api/createEvent?user=user_1", port, headers);
+    executeRequestWithHeader("/api/createEvent?user=user_1", port, headers);
 
     ConsumerRecord<String, String> poll = consumerRecords.poll(10, TimeUnit.SECONDS);
 
