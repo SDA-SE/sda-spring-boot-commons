@@ -96,20 +96,6 @@ subprojects {
     }
   }
 
-  // Configure sonar to use the aggregated global report file
-  // we want property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
-  // we want property "sonar.coverage.jacoco.xmlReportPaths", getRootDir().toString() + '/build/reports/jacoco/test/jacocoTestReport.xml'
-  //sonar {
-  //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL103'
-  //  }
-  //}
-  //sonarqube {
-  //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL108'
-  //  }
-  //}
-
   if (!it.name.endsWith("-example") && !it.name.endsWith("-dependency-check")) {
 
     apply plugin: "com.vanniktech.maven.publish"
@@ -198,18 +184,6 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
     useJUnitPlatform()
   }
 
-  // Configure sonar to use the aggregated global report file
-  //sonar {
-  //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL203'
-  //  }
-  //}
-  //sonarqube {
-  //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL208'
-  //  }
-  //}
-
   configurations.configureEach {
     if (it.name.startsWith("spotless")) {
       // Workaround for https://github.com/diffplug/spotless/issues/1965.
@@ -287,25 +261,6 @@ tasks.register("codeCoverageReport", JacocoReport) {
   }
 }
 
-//tasks.named("sonar") {
-  // Configure sonar to use the aggregated global report file
-  //sonar {
-  //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL293'
-  //  }
-  //}
-  //sonarqube {
-  //  properties {
-  //    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL298'
-  //  }
-  //}
-//}
-
-//sonar {
-//  properties {
-//    property "sonar.coverage.jacoco.xmlReportPaths", 'LLL305'
-//  }
-//}
 sonarqube {
   properties {
     property 'sonar.projectKey', 'SDA-SE_sda-spring-boot-commons'
@@ -316,7 +271,7 @@ sonarqube {
     property 'sonar.pullrequest.provider', 'GitHub'
     property 'sonar.pullrequest.github.repository', System.getenv('GITHUB_REPOSITORY')
 
-    //property "sonar.coverage.jacoco.xmlReportPaths", "${rootProject.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    // Configure sonar to use the aggregated global report file
     property "sonar.coverage.jacoco.xmlReportPaths", getRootDir().toString() + '/build/reports/jacoco/test/jacocoTestReport.xml'
 
     if (System.getenv('GITHUB_PR') != null && System.getenv('GITHUB_PR') != "") {
