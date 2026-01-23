@@ -147,14 +147,6 @@ subprojects {
       }
     }
   }
-
-
-  // Configure sonar to use the aggregated global report file
-  sonarqube {
-    properties {
-      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
-    }
-  }
 }
 
 configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
@@ -266,6 +258,15 @@ tasks.register("codeCoverageReport", JacocoReport) {
     xml.required = true
     // place the jacoco XML report at a location that is default for the sonar plugin
     xml.outputLocation = project.layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
+  }
+}
+
+tasks.named("sonar") {
+  // Configure sonar to use the aggregated global report file
+  sonarqube {
+    properties {
+      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
+    }
   }
 }
 
