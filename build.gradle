@@ -96,6 +96,13 @@ subprojects {
     }
   }
 
+  // Configure sonar to use the aggregated global report file
+  sonar {
+    properties {
+      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
+    }
+  }
+
   if (!it.name.endsWith("-example") && !it.name.endsWith("-dependency-check")) {
 
     apply plugin: "com.vanniktech.maven.publish"
@@ -184,6 +191,13 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
     useJUnitPlatform()
   }
 
+  // Configure sonar to use the aggregated global report file
+  sonar {
+    properties {
+      property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
+    }
+  }
+
   configurations.configureEach {
     if (it.name.startsWith("spotless")) {
       // Workaround for https://github.com/diffplug/spotless/issues/1965.
@@ -263,7 +277,7 @@ tasks.register("codeCoverageReport", JacocoReport) {
 
 tasks.named("sonar") {
   // Configure sonar to use the aggregated global report file
-  sonarqube {
+  sonar {
     properties {
       property "sonar.coverage.jacoco.xmlReportPaths", '../build/reports/jacoco/test/jacocoTestReport.xml'
     }
