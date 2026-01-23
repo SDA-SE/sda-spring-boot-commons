@@ -23,7 +23,7 @@ class ExternalMongoAutoConfigurationWithoutFlapdoodleTest {
         new MockEnvironment()
             .withProperty("spring.autoconfigure.exclude", "com.example.ToBeExcluded");
     externalMongoAutoConfiguration.postProcessEnvironment(mockEnvironment, null);
-    assertThat(mockEnvironment.getProperty("spring.data.mongodb.uri")).isNull();
+    assertThat(mockEnvironment.getProperty("spring.mongodb.uri")).isNull();
     assertThat(mockEnvironment.getProperty("spring.autoconfigure.exclude"))
         .isEqualTo("com.example.ToBeExcluded");
   }
@@ -35,7 +35,7 @@ class ExternalMongoAutoConfigurationWithoutFlapdoodleTest {
             .withProperty("test.mongodb.connection.string", "mongodb://localhost")
             .withProperty("spring.autoconfigure.exclude", "com.example.ToBeExcluded");
     externalMongoAutoConfiguration.postProcessEnvironment(mockEnvironment, null);
-    assertThat(mockEnvironment.getProperty("spring.data.mongodb.uri")).isNull();
+    assertThat(mockEnvironment.getProperty("spring.mongodb.uri")).isNull();
     assertThat(mockEnvironment.getProperty("spring.autoconfigure.exclude"))
         .isEqualTo("com.example.ToBeExcluded");
   }
