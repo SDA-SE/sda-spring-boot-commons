@@ -11,7 +11,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.OffsetDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +29,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(
     classes = KafkaTestApp.class,
@@ -37,7 +37,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
     properties = {"spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"})
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -52,7 +52,7 @@ class KafkaLogConsumerTest {
   @Value("${app.kafka.consumer.log-on-failure.topic}")
   private String topic;
 
-  private final int DEFAULT_TIMEOUT = 10000;
+  private final int defaultTimeout = 10000;
 
   @Test
   void shouldReceiveAndDeserializeToJson() {
@@ -64,14 +64,14 @@ class KafkaLogConsumerTest {
             .setCheckString("CHECK")
             .setCheckInt(1)
             .setOffsetDateTime(offsetDateTime));
-    verify(listenerCheck, timeout(DEFAULT_TIMEOUT)).check("CHECK");
-    verify(listenerCheck, timeout(DEFAULT_TIMEOUT)).checkDate(offsetDateTime);
+    verify(listenerCheck, timeout(defaultTimeout)).check("CHECK");
+    verify(listenerCheck, timeout(defaultTimeout)).checkDate(offsetDateTime);
   }
 
   @Test
   void shouldNotReceiveInvalidModel() {
     kafkaTemplate.send(topic, new KafkaTestModel().setCheckString("CHECK").setCheckInt(null));
-    verify(listenerCheck, new Timeout(DEFAULT_TIMEOUT, never())).check("CHECK");
+    verify(listenerCheck, new Timeout(defaultTimeout, never())).check("CHECK");
   }
 
   @Test
@@ -82,7 +82,7 @@ class KafkaLogConsumerTest {
             .setCheckString("CHECK")
             .setCheckInt(1)
             .setThrowNotRetryableException(true));
-    verify(listenerCheck, timeout(DEFAULT_TIMEOUT).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(defaultTimeout).times(1)).check("CHECK");
   }
 
   @Test
@@ -90,6 +90,6 @@ class KafkaLogConsumerTest {
     kafkaTemplate.send(
         topic,
         new KafkaTestModel().setCheckString("CHECK").setCheckInt(1).setThrowRuntimeException(true));
-    verify(listenerCheck, timeout(DEFAULT_TIMEOUT).times(1)).check("CHECK");
+    verify(listenerCheck, timeout(defaultTimeout).times(1)).check("CHECK");
   }
 }
