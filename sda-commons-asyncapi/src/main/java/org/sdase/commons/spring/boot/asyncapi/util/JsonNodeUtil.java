@@ -7,10 +7,10 @@
  */
 package org.sdase.commons.spring.boot.asyncapi.util;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class JsonNodeUtil {
 
@@ -22,7 +22,10 @@ public class JsonNodeUtil {
     if (!node.isMissingNode() && node.isObject()) {
       ObjectNode objectNode = (ObjectNode) node;
       SortedMap<String, JsonNode> fields = new TreeMap<>();
-      objectNode.fields().forEachRemaining(e -> fields.put(e.getKey(), e.getValue()));
+      objectNode
+          .properties()
+          .iterator()
+          .forEachRemaining(e -> fields.put(e.getKey(), e.getValue()));
       objectNode.removeAll();
       fields.forEach(objectNode::set);
     }
