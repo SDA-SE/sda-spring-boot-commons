@@ -43,7 +43,7 @@ import org.springframework.test.annotation.DirtiesContext;
     properties = {"spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"})
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class KafkaMetadataContextProducerIntegrationTest {
 
@@ -74,7 +74,7 @@ class KafkaMetadataContextProducerIntegrationTest {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps(UUID.randomUUID().toString(), "true", embeddedKafkaBroker),
+            KafkaTestUtils.consumerProps(embeddedKafkaBroker, UUID.randomUUID().toString(), true),
             new StringDeserializer(),
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
@@ -97,7 +97,7 @@ class KafkaMetadataContextProducerIntegrationTest {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps(UUID.randomUUID().toString(), "true", embeddedKafkaBroker),
+            KafkaTestUtils.consumerProps(embeddedKafkaBroker, UUID.randomUUID().toString(), true),
             new StringDeserializer(),
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
@@ -122,7 +122,7 @@ class KafkaMetadataContextProducerIntegrationTest {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps(UUID.randomUUID().toString(), "true", embeddedKafkaBroker),
+            KafkaTestUtils.consumerProps(embeddedKafkaBroker, UUID.randomUUID().toString(), true),
             new StringDeserializer(),
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
@@ -143,7 +143,7 @@ class KafkaMetadataContextProducerIntegrationTest {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps(UUID.randomUUID().toString(), "true", embeddedKafkaBroker),
+            KafkaTestUtils.consumerProps(embeddedKafkaBroker, UUID.randomUUID().toString(), true),
             new StringDeserializer(),
             new StringDeserializer());
     consumer.subscribe(List.of(topic));
@@ -166,7 +166,7 @@ class KafkaMetadataContextProducerIntegrationTest {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps(UUID.randomUUID().toString(), "true", embeddedKafkaBroker),
+            KafkaTestUtils.consumerProps(embeddedKafkaBroker, UUID.randomUUID().toString(), true),
             new StringDeserializer(),
             new StringDeserializer());
     consumer.subscribe(List.of(topic));

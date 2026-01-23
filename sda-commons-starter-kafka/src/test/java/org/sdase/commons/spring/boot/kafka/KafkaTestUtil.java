@@ -7,8 +7,6 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -17,6 +15,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.sdase.commons.spring.boot.kafka.test.KafkaTestModel;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
+import tools.jackson.databind.ObjectMapper;
 
 public class KafkaTestUtil {
 
@@ -32,7 +31,7 @@ public class KafkaTestUtil {
 
     KafkaConsumer<String, ?> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps("test-group", "true", embeddedKafkaBroker),
+            KafkaTestUtils.consumerProps(embeddedKafkaBroker, "test-group", true),
             new StringDeserializer(),
             deserializer);
     consumer.subscribe(List.of(topic));
@@ -41,10 +40,6 @@ public class KafkaTestUtil {
 
   public static KafkaTestModel readValue(
       ConsumerRecord<String, ?> nextRecord, ObjectMapper objectMapper) {
-    try {
-      return objectMapper.readValue((String) nextRecord.value(), KafkaTestModel.class);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    return objectMapper.readValue((String) nextRecord.value(), KafkaTestModel.class);
   }
 }
