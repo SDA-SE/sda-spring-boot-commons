@@ -8,10 +8,5 @@ dependencies {
   testImplementation project(':sda-commons-starter-kafka')
   testImplementation project(':sda-commons-asyncapi')
   testImplementation project(':sda-commons-web-testing')
-  testImplementation ('org.springframework.kafka:spring-kafka-test') {
-    // version conflicts
-    exclude group: 'com.fasterxml.jackson.module'
-    exclude group: 'com.fasterxml.jackson.dataformat'
-    exclude group: 'com.fasterxml.jackson.datatype'
-  }
+  testImplementation ('org.springframework.kafka:spring-kafka-test')
 }

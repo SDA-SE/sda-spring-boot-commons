@@ -25,13 +25,13 @@ Additional documentation can be added at class level and for the data type.
     --8<-- "sda-commons-cloudevents/src/test/java/org/sdase/commons/spring/boot/cloudevents/app/partner/PartnerCreatedEvent.java"
     ```
 
-You can use a standard `org.springframework.kafka.support.serializer.JsonSerializer` to publish the
+You can use a standard `org.springframework.kafka.support.serializer.JacksonJsonSerializer` to publish the
 event.
 
 
 ## Consuming CloudEvents
 
-You can use `org.springframework.kafka.support.serializer.JsonDeserializer` to consume CloudEvents.
+You can use `org.springframework.kafka.support.serializer.JacksonJsonDeserializer` to consume CloudEvents.
 
 
 ## Polymorphism
