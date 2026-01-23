@@ -43,10 +43,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-          cache: 'gradle'
+          # FIXME: cache: 'gradle'
+          # Warning: Failed to restore: Cache service responded with 400
+          # gradle cache is not found
+
 
       - name: Sonarcloud
-        run: ./gradlew -i -x test sonar -Dsonar.verbose=true --stacktrace
+        run: ./gradlew --version && ./gradlew -i -x test sonar -Dsonar.verbose=true --stacktrace
         env:
           SONAR_LOGIN_TOKEN: ${{ secrets.SONAR_LOGIN_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
