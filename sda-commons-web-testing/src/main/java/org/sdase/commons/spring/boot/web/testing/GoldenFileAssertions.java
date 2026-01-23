@@ -15,7 +15,6 @@ import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 /**
@@ -160,10 +159,10 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
       Assertions.assertThat(actual).as(ASSERTION_TEXT, fileName, fileName, fileName).exists();
 
       // assert YAML / JSON
-      ObjectMapper objectMapper = new YAMLMapper();
-      Assertions.assertThat(objectMapper.readTree(actual.toFile()))
+      YAMLMapper yamlMapper = new YAMLMapper();
+      Assertions.assertThat(yamlMapper.readTree(actual.toFile()))
           .as(ASSERTION_TEXT, fileName, fileName, fileName)
-          .isEqualTo(objectMapper.readTree(expected));
+          .isEqualTo(yamlMapper.readTree(expected));
     } finally {
       // eventually update the file content
       if (ciUtil.isRunningInCiPipeline()) {

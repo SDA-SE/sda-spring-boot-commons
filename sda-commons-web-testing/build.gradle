@@ -8,7 +8,10 @@ dependencies {
   api 'org.apache.commons:commons-lang3'
   api 'org.springframework.boot:spring-boot-restclient'
   api 'org.springframework.boot:spring-boot-resttestclient'
-  api 'org.wiremock.integrations:wiremock-spring-boot'
+  api 'org.springframework.boot:spring-boot-micrometer-metrics-test'
+  api 'org.springframework.boot:spring-boot-micrometer-tracing-test'
+  api 'org.wiremock.integrations:wiremock-spring-boot-standalone'
+  api 'org.springframework.boot:spring-boot-webmvc-test'
 
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'
