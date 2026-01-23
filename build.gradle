@@ -317,6 +317,7 @@ sonarqube {
     property 'sonar.pullrequest.github.repository', System.getenv('GITHUB_REPOSITORY')
 
     //property "sonar.coverage.jacoco.xmlReportPaths", "${rootProject.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    property "sonar.coverage.jacoco.xmlReportPaths", getRootDir().toString() + '/build/reports/jacoco/test/jacocoTestReport.xml'
 
     if (System.getenv('GITHUB_PR') != null && System.getenv('GITHUB_PR') != "") {
       property 'sonar.pullrequest.key', System.getenv('GITHUB_PR')
