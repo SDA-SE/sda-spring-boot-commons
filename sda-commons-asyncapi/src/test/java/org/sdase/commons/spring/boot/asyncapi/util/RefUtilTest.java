@@ -9,14 +9,14 @@ package org.sdase.commons.spring.boot.asyncapi.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.sdase.commons.spring.boot.asyncapi.exception.JacksonYamlException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 class RefUtilTest {
 
@@ -53,7 +53,7 @@ class RefUtilTest {
   static final YAMLMapper YAML_MAPPER = new YAMLMapper();
 
   @Test
-  void shouldFindAllRefsRecursivelyInObject() throws JsonProcessingException {
+  void shouldFindAllRefsRecursivelyInObject() {
     JsonNode given = YAML_MAPPER.readTree("" /* avoids warning */ + YAML_OBJECT_WITH_REFS);
     List<String> actualFoundRefs = findAllRefs(given);
     assertThat(actualFoundRefs)
@@ -68,13 +68,14 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldReplaceAllRefsRecursivelyInObject() throws JsonProcessingException {
+  void shouldReplaceAllRefsRecursivelyInObject() {
     JsonNode given = YAML_MAPPER.readTree("" /* avoids warning */ + YAML_OBJECT_WITH_REFS);
     RefUtil.updateAllRefsRecursively(
         given,
         textNode ->
             "https://example.com/%s"
-                .formatted(textNode.asText().substring(textNode.asText().lastIndexOf("/") + 1)));
+                .formatted(
+                    textNode.asString().substring(textNode.asString().lastIndexOf("/") + 1)));
     List<String> actualRefs = findAllRefs(given);
     assertThat(actualRefs)
         .containsExactlyInAnyOrder(
@@ -88,7 +89,7 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldFindAllRefsRecursivelyInArray() throws JsonProcessingException {
+  void shouldFindAllRefsRecursivelyInArray() {
     JsonNode given = new YAMLMapper().readTree("" /* avoids warning */ + YAML_ARRAY_WITH_REFS);
     List<String> actualFoundRefs = findAllRefs(given);
     assertThat(actualFoundRefs)
@@ -101,13 +102,14 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldReplaceAllRefsRecursivelyInArray() throws JsonProcessingException {
+  void shouldReplaceAllRefsRecursivelyInArray() {
     JsonNode given = YAML_MAPPER.readTree("" /* avoids warning */ + YAML_ARRAY_WITH_REFS);
     RefUtil.updateAllRefsRecursively(
         given,
         textNode ->
             "https://example.com/%s"
-                .formatted(textNode.asText().substring(textNode.asText().lastIndexOf("/") + 1)));
+                .formatted(
+                    textNode.asString().substring(textNode.asString().lastIndexOf("/") + 1)));
     List<String> actualRefs = findAllRefs(given);
     assertThat(actualRefs)
         .containsExactlyInAnyOrder(
@@ -119,7 +121,7 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldExpandRef() throws JsonProcessingException {
+  void shouldExpandRef() {
     JsonNode given = YAML_MAPPER.readTree("$ref: '%s'".formatted("#/components/schemas/Foo"));
     RefUtil.mergeAllObjectsWithRefsRecursively(
         given,
@@ -130,10 +132,10 @@ class RefUtilTest {
                 original: '%s'
                 someOtherField: some value
                 """
-                    .formatted(textNode.asText()),
+                    .formatted(textNode.asString()),
                 ObjectNode.class);
-          } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+          } catch (JacksonException e) {
+            throw new JacksonYamlException(e);
           }
         });
     assertThat(given)
@@ -145,7 +147,7 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldExpandRefOverwritingExistingFields() throws JsonProcessingException {
+  void shouldExpandRefOverwritingExistingFields() {
     JsonNode given =
         YAML_MAPPER.readTree(
             """
@@ -162,10 +164,10 @@ class RefUtilTest {
                 original: '%s'
                 someOtherField: new value
                 """
-                    .formatted(textNode.asText()),
+                    .formatted(textNode.asString()),
                 ObjectNode.class);
-          } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+          } catch (JacksonException e) {
+            throw new JacksonYamlException(e);
           }
         });
     assertThat(given)
@@ -177,8 +179,7 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldExpandRefOverwritingExistingFieldsAndKeepingUnchanged()
-      throws JsonProcessingException {
+  void shouldExpandRefOverwritingExistingFieldsAndKeepingUnchanged() {
     JsonNode given =
         YAML_MAPPER.readTree(
             """
@@ -196,10 +197,10 @@ class RefUtilTest {
                 original: '%s'
                 someOtherField: new value
                 """
-                    .formatted(textNode.asText()),
+                    .formatted(textNode.asString()),
                 ObjectNode.class);
-          } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+          } catch (JacksonException e) {
+            throw new JacksonYamlException(e);
           }
         });
     assertThat(given)
@@ -212,7 +213,7 @@ class RefUtilTest {
   }
 
   @Test
-  void shouldExpandRefInArray() throws JsonProcessingException {
+  void shouldExpandRefInArray() {
     JsonNode given = YAML_MAPPER.readTree("- $ref: '%s'".formatted("#/components/schemas/Foo"));
     RefUtil.mergeAllObjectsWithRefsRecursively(
         given,
@@ -223,10 +224,10 @@ class RefUtilTest {
                 original: '%s'
                 someOtherField: some value
                 """
-                    .formatted(textNode.asText()),
+                    .formatted(textNode.asString()),
                 ObjectNode.class);
-          } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+          } catch (JacksonException e) {
+            throw new JacksonYamlException(e);
           }
         });
     assertThat(given)
@@ -245,7 +246,7 @@ class RefUtilTest {
     RefUtil.updateAllRefsRecursively(
         jsonNode,
         textNode -> {
-          String value = textNode.asText();
+          String value = textNode.asString();
           actualFoundRefs.add(value);
           return value;
         });

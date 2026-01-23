@@ -11,12 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.github.victools.jsonschema.generator.Option;
 import com.github.victools.jsonschema.generator.OptionPreset;
 import com.github.victools.jsonschema.generator.SchemaGenerator;
@@ -29,8 +25,11 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.sdase.commons.spring.boot.asyncapi.util.Jackson2To3Bridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 class SwaggerExampleModuleTest {
 
@@ -51,7 +50,9 @@ class SwaggerExampleModuleTest {
     if (actual.get("properties") instanceof ObjectNode properties
         && properties.get(fieldInTest) instanceof ObjectNode actualField
         && actualField.get("examples") instanceof ArrayNode examples) {
-      assertThat(examples).hasSize(1).containsExactly(expectedExample);
+      assertThat(new Jackson2To3Bridge().toJackson3(examples))
+          .hasSize(1)
+          .containsExactly(expectedExample);
     } else if (expectedExample != null) {
       fail("Could not find /properties/{}/examples in {}", fieldInTest, actual);
     }
@@ -60,11 +61,11 @@ class SwaggerExampleModuleTest {
   static Stream<Arguments> shouldProvideExample() {
     ObjectMapper objectMapper = new ObjectMapper();
     return Stream.of(
-        of("string", new TextNode("foo")),
-        of("stringId", new TextNode("51")),
-        of("integerId", new IntNode(51)),
+        of("string", objectMapper.stringNode("foo")),
+        of("stringId", objectMapper.stringNode("51")),
+        of("integerId", objectMapper.getNodeFactory().numberNode(51)),
         of("strings", objectMapper.createArrayNode().add("foo").add("bar")),
-        of("mapUsingFallback", new TextNode("{\"foo\":\"bar")),
+        of("mapUsingFallback", objectMapper.stringNode("{\"foo\":\"bar")),
         of("objectExample", objectMapper.createObjectNode().put("foo", "bar").put("foobar", "foo")),
         of("noSchemaNoFail", null),
         of("schemaWithoutExampleNoFail", null),
