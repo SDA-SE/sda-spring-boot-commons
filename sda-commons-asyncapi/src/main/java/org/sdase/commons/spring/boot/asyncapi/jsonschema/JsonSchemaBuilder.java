@@ -7,7 +7,6 @@
  */
 package org.sdase.commons.spring.boot.asyncapi.jsonschema;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.sdase.commons.spring.boot.asyncapi.util.RefUtil;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Creates Json Schema from (annotated) class files. Considered annotations depend on the
