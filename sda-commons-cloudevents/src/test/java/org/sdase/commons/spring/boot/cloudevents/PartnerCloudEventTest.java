@@ -27,7 +27,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
@@ -39,11 +39,11 @@ import org.springframework.test.annotation.DirtiesContext;
     properties = {
       "management.server.port=0",
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
-      "spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer"
+      "spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JacksonJsonSerializer"
     })
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
+    brokerProperties = {"port=9092"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class PartnerCloudEventTest {
 
@@ -61,10 +61,10 @@ class PartnerCloudEventTest {
   void setUp() {
 
     Map<String, Object> configs =
-        new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
+        new HashMap<>(KafkaTestUtils.consumerProps(embeddedKafkaBroker, "consumer", false));
 
-    JsonDeserializer<PartnerCreatedEvent> partnerCreatedEventJsonDeserializer =
-        new JsonDeserializer<>();
+    JacksonJsonDeserializer<PartnerCreatedEvent> partnerCreatedEventJsonDeserializer =
+        new JacksonJsonDeserializer<>();
     partnerCreatedEventJsonDeserializer.addTrustedPackages(
         "org.sdase.commons.spring.boot.cloudevents.app.partner");
 
