@@ -37,7 +37,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
     properties = {"spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"})
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 class KafkaMetadataContextConsumerIntegrationTest {
 
   @Autowired KafkaTemplate<String, KafkaTestModel> kafkaTemplate;

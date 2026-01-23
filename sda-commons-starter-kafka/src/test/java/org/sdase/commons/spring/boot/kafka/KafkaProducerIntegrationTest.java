@@ -68,8 +68,7 @@ class KafkaProducerIntegrationTest {
   KafkaConsumer<String, String> createTestConsumer(String topic) {
     KafkaConsumer<String, String> consumer =
         new KafkaConsumer<>(
-            KafkaTestUtils.consumerProps(
-                kafkaEmbedded.getBrokersAsString(), "test-consumer", "true"),
+            KafkaTestUtils.consumerProps(kafkaEmbedded.getBrokersAsString(), "test-consumer", true),
             new StringDeserializer(),
             new StringDeserializer());
     consumer.subscribe(Set.of(topic));

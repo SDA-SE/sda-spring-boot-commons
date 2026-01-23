@@ -35,9 +35,9 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
     })
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:0", "port=0"})
+    brokerProperties = {"port=0"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class ProducerConfigurationTest {
+class ProducerConfigurationTest {
 
   @Autowired KafkaTemplate<String, KafkaTestModel> sdaGenericTemplate;
 
