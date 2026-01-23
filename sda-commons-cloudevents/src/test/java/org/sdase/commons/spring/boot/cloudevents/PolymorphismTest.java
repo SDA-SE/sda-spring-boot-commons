@@ -9,9 +9,6 @@ package org.sdase.commons.spring.boot.cloudevents;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -19,13 +16,17 @@ import org.sdase.commons.spring.boot.cloudevents.app.polymorphism.CarLifecycleEv
 import org.sdase.commons.spring.boot.cloudevents.app.polymorphism.CarLifecycleEvents.CarManufactured;
 import org.sdase.commons.spring.boot.cloudevents.app.polymorphism.CarLifecycleEvents.CarScrapped;
 import org.sdase.commons.spring.boot.web.jackson.SdaObjectMapperConfiguration;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class PolymorphismTest {
 
-  static ObjectMapper OM = new SdaObjectMapperConfiguration().sdaObjectMapperBuilder().build();
+  static JsonMapper jsonMapper =
+      new SdaObjectMapperConfiguration().sdaObjectMapperBuilder().build();
 
   @Test
-  void shouldDeserializeToManufactured() throws JsonProcessingException {
+  void shouldDeserializeToManufactured() {
     var given =
         """
         {
@@ -42,7 +43,7 @@ class PolymorphismTest {
           }
         }
         """;
-    var actual = OM.readValue(given, CarLifecycleEvents.class);
+    var actual = jsonMapper.readValue(given, CarLifecycleEvents.class);
     assertThat(actual)
         .isInstanceOf(CarManufactured.class)
         .extracting(CloudEventV1::getType)
@@ -54,7 +55,7 @@ class PolymorphismTest {
   }
 
   @Test
-  void shouldSerializeManufactured() throws JsonProcessingException {
+  void shouldSerializeManufactured() {
     var givenId = UUID.randomUUID().toString();
     var given =
         new CarManufactured()
@@ -62,7 +63,7 @@ class PolymorphismTest {
             .setId(givenId)
             .setSource(URI.create("/SDA-SE/test"))
             .setSubject("car-123");
-    String actual = OM.writeValueAsString(given);
+    String actual = jsonMapper.writeValueAsString(given);
     String expected =
         """
         {
@@ -79,14 +80,14 @@ class PolymorphismTest {
           }
         }
         """
-            .formatted(givenId, OM.writeValueAsString(given.getTime()));
-    assertThat(OM.readValue(actual, JsonNode.class))
+            .formatted(givenId, jsonMapper.writeValueAsString(given.getTime()));
+    assertThat(jsonMapper.readValue(actual, JsonNode.class))
         .describedAs("%s%nis not equal to%n%s", actual, expected)
-        .isEqualTo(OM.readValue(expected, JsonNode.class));
+        .isEqualTo(jsonMapper.readValue(expected, JsonNode.class));
   }
 
   @Test
-  void shouldDeserializeToScrapped() throws JsonProcessingException {
+  void shouldDeserializeToScrapped() {
     var given =
         """
         {
@@ -100,7 +101,7 @@ class PolymorphismTest {
           "data": { "reason": "ACCIDENT" }
         }
         """;
-    var actual = OM.readValue(given, CarLifecycleEvents.class);
+    var actual = jsonMapper.readValue(given, CarLifecycleEvents.class);
     assertThat(actual)
         .isInstanceOf(CarScrapped.class)
         .extracting(CloudEventV1::getType)
@@ -111,7 +112,7 @@ class PolymorphismTest {
   }
 
   @Test
-  void shouldSerializeScrapped() throws JsonProcessingException {
+  void shouldSerializeScrapped() {
     var givenId = UUID.randomUUID().toString();
     var given =
         new CarScrapped()
@@ -121,7 +122,7 @@ class PolymorphismTest {
             .setId(givenId)
             .setSource(URI.create("/SDA-SE/test"))
             .setSubject("car-123");
-    String actual = OM.writeValueAsString(given);
+    String actual = jsonMapper.writeValueAsString(given);
     String expected =
         """
         {
@@ -135,9 +136,9 @@ class PolymorphismTest {
           "data": { "reason": "TECHNICAL_DAMAGE" }
         }
         """
-            .formatted(givenId, OM.writeValueAsString(given.getTime()));
-    assertThat(OM.readValue(actual, JsonNode.class))
+            .formatted(givenId, jsonMapper.writeValueAsString(given.getTime()));
+    assertThat(jsonMapper.readValue(actual, ObjectNode.class))
         .describedAs("%s%nis not equal to%n%s", actual, expected)
-        .isEqualTo(OM.readValue(expected, JsonNode.class));
+        .isEqualTo(jsonMapper.readValue(expected, ObjectNode.class));
   }
 }
