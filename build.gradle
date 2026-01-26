@@ -263,7 +263,6 @@ tasks.register("codeCoverageReport", JacocoReport) {
 
   reports {
     xml.required = true
-    // place the jacoco XML report at a location that is default for the sonar plugin
     xml.outputLocation = project.layout.buildDirectory.file("reports/jacoco/report.xml")
   }
 }
