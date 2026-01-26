@@ -38,15 +38,12 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: ubuntu-latest-17-test-results
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b
         with:
           distribution: 'temurin'
-          java-version: 21
-          # FIXME: cache: 'gradle'
-          # Warning: Failed to restore: Cache service responded with 400
-          # gradle cache is not found
-
+          java-version: 17
+          cache: 'gradle'
 
       - name: Sonarcloud
         run: ./gradlew -i -x test sonar -Dsonar.verbose=true --stacktrace
