@@ -23,6 +23,7 @@ nav:
     - Migrate to v3: migration-2-to-3.md
     - Migrate to v4: migration-3-to-4.md
     - Migrate to v5: migration-4-to-5.md
+    - Migrate to v7: migration-6-to-7.md
 
 # Always include the techdocs-core plugin, otherwise it's not possible to
 # display the documentation in Backstage. We don't support other plugins
