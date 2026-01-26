@@ -277,9 +277,6 @@ sonarqube {
     property 'sonar.pullrequest.provider', 'GitHub'
     property 'sonar.pullrequest.github.repository', System.getenv('GITHUB_REPOSITORY')
 
-    // Configure sonar to use the aggregated global report file
-    //property "sonar.coverage.jacoco.xmlReportPaths", getRootDir().toString() + '/build/reports/jacoco/report.xml'
-
     if (System.getenv('GITHUB_PR') != null && System.getenv('GITHUB_PR') != "") {
       property 'sonar.pullrequest.key', System.getenv('GITHUB_PR')
       if (System.getenv('GITHUB_BRANCH') != null) {
