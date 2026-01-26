@@ -129,3 +129,15 @@ ignore {
   input.PkgName == "org.antlr:antlr-runtime"
   input.Name == "BSD licence"
 }
+
+# bnd writes Apache-2.0 OR EPL-2.0, both are open source licenses https://github.com/bndtools/bnd/blob/master/LICENSE
+ignore {
+  input.PkgName == "biz.aQute.bnd:biz.aQute.bnd.annotation"
+  input.Name == "(Apache-2.0 OR EPL-2.0)"
+}
+
+# uses Go Lincense which is basically a BSD 3-Clause “New” or “Revised” License https://github.com/golang/go/blob/master/LICENSE & https://github.com/google/re2j/blob/master/LICENSE
+ignore {
+  input.PkgName == "com.google.re2j:re2j"
+  input.Name == "Go License"
+}
