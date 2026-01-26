@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
 import org.junitpioneer.jupiter.ClearSystemProperty;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
 class MetadataContextDefaultMethodsTest {
@@ -52,26 +49,6 @@ class MetadataContextDefaultMethodsTest {
   @Test
   @SetSystemProperty(key = "METADATA_KEY_DEFINED", value = "tenant-id")
   void shouldResolveConfiguredKeyFromProperties() {
-    testData.put("tenant-id", List.of("tenant-1"));
-    assertThat(metadataContext.valuesByKeyFromEnvironment("METADATA_KEY_DEFINED"))
-        .isEqualTo(List.of("tenant-1"));
-  }
-
-  @Test
-  @DisabledForJreRange(min = JRE.JAVA_16, disabledReason = "Environment is unmodifiable.")
-  @SetEnvironmentVariable(key = "METADATA_KEY_DEFINED", value = "tenant-id")
-  void shouldResolveConfiguredKeyFromEnvironment() {
-    testData.put("tenant-id", List.of("tenant-1"));
-    testData.put("tenant-company-id", List.of("tenant-1"));
-    assertThat(metadataContext.valuesByKeyFromEnvironment("METADATA_KEY_DEFINED"))
-        .isEqualTo(List.of("tenant-1"));
-  }
-
-  @Test
-  @DisabledForJreRange(min = JRE.JAVA_16, disabledReason = "Environment is unmodifiable.")
-  @SetSystemProperty(key = "METADATA_KEY_DEFINED", value = "tenant-id")
-  @SetEnvironmentVariable(key = "METADATA_KEY_DEFINED", value = "tenant-company-id")
-  void shouldResolveConfiguredKeyPreferablyFromSystemProperties() {
     testData.put("tenant-id", List.of("tenant-1"));
     assertThat(metadataContext.valuesByKeyFromEnvironment("METADATA_KEY_DEFINED"))
         .isEqualTo(List.of("tenant-1"));
