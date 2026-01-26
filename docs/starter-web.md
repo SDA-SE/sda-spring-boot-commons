@@ -485,12 +485,13 @@ be serialized with milliseconds, it must be annotated with
 . If a specific field should be serialized with nanoseconds, it must be annotated with
 `@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithNanos.class)`
 
+The standard SDA `tools.jackson.databind.ObjectMapper` is configured as `tools.jackson.databind.json.JsonMapper`.
+
 **Differences to the known [SDA Dropwizard Commons configuration](https://github.com/SDA-SE/sda-dropwizard-commons/tree/main/sda-commons-server-jackson)**
 - `java.time.ZonedDateTime` fields are serialized with seconds by default.
   There is no other global configuration for **java.time.ZonedDateTime** serialization available.
 - **Fewer modules are activated for foreign frameworks**. Compared to SDA Dropwizard Commons,
   **GuavaExtrasModule, JodaModule, and CaffeineModule** are not registered anymore.
-- No documented customization of the global **com.fasterxml.jackson.databind.ObjectMapper** is available right now.
 - Support for **HAL Links and embedding linked resources** is not implemented.
 - Support for **YAML** is not implemented.
 - There is **no support for field filters**.
@@ -596,7 +597,7 @@ Default features are:
 * The service name is derived from `spring.application.name`
 * Generate and report OTLP traces via HTTP or gRPC. By default, it sends them to a OTLP compatible
   collector (e.g. Jaeger) on localhost (http port 4317, gRPC port 4318). Configure the location of
-  the service using `management.otlp.tracing.endpoint`.
+  the service using `management.opentelemetry.tracing.export.otlp.endpoint`.
 * See [above](#configuration) for more common options.
 * You can check all the possible values on [OtlpTracingProperties](https://docs.spring.io/spring-boot/api/java/org/springframework/boot/actuate/autoconfigure/tracing/otlp/OtlpTracingProperties.html)
   and [TracingProperties](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html)
