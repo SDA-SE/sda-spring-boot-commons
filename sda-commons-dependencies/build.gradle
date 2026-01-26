@@ -81,7 +81,7 @@ dependencies {
     }
     api "ch.qos.logback.contrib:logback-json-classic:${logbackContribVersion}"
     api "ch.qos.logback.contrib:logback-jackson:${logbackContribVersion}"
-    api 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.14'
+    api 'org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.1'
 
     // should align with transitive dependency of org.springdoc:springdoc-openapi-webmvc-core:
     api "io.swagger.core.v3:swagger-core-jakarta:${swaggerCoreVersion}"
