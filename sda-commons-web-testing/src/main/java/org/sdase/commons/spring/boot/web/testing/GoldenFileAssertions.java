@@ -7,8 +7,6 @@
  */
 package org.sdase.commons.spring.boot.web.testing;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,6 +15,7 @@ import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 /**
  * Special assertions for {@link Path} objects to check if a file matches the expected contents and
@@ -160,10 +159,10 @@ public class GoldenFileAssertions extends AbstractAssert<GoldenFileAssertions, P
       Assertions.assertThat(actual).as(ASSERTION_TEXT, fileName, fileName, fileName).exists();
 
       // assert YAML / JSON
-      ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-      Assertions.assertThat(objectMapper.readTree(actual.toFile()))
+      YAMLMapper yamlMapper = new YAMLMapper();
+      Assertions.assertThat(yamlMapper.readTree(actual.toFile()))
           .as(ASSERTION_TEXT, fileName, fileName, fileName)
-          .isEqualTo(objectMapper.readTree(expected));
+          .isEqualTo(yamlMapper.readTree(expected));
     } finally {
       // eventually update the file content
       if (ciUtil.isRunningInCiPipeline()) {

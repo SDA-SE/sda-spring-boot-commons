@@ -22,11 +22,13 @@ import org.sdase.commons.spring.boot.web.client.test.ClientTestConstraints;
 import org.sdase.commons.spring.boot.web.testing.auth.AuthMock;
 import org.sdase.commons.spring.boot.web.testing.auth.EnableSdaAuthMockInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ContextConfiguration;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 @SpringBootTest(
     classes = ClientTestApp.class,
@@ -35,8 +37,9 @@ import org.springframework.test.context.ContextConfiguration;
       "other.baseUrl=http://localhost:${wiremock.server.port}/api",
       "otherAuthenticated.baseUrl=http://localhost:${wiremock.server.port}/api",
     })
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock(@ConfigureWireMock)
 @ContextConfiguration(initializers = {EnableSdaAuthMockInitializer.class})
+@AutoConfigureTestRestTemplate
 class FeignClientIT {
 
   @Autowired private AuthMock authMock;

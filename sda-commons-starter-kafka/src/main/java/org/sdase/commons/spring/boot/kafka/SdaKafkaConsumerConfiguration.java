@@ -7,7 +7,6 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -20,8 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
@@ -39,8 +38,9 @@ import org.springframework.kafka.listener.ContainerProperties.AckMode;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
-import org.springframework.kafka.support.converter.ByteArrayJsonMessageConverter;
+import org.springframework.kafka.support.converter.ByteArrayJacksonJsonMessageConverter;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import tools.jackson.databind.json.JsonMapper;
 
 @AutoConfiguration
 @PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/consumer.properties")
@@ -59,19 +59,19 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
   private final KafkaProperties kafkaProperties;
   private final KafkaTemplate<String, ?> recoverTemplate;
   private final LocalValidatorFactoryBean validator;
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
   private final KafkaConsumerConfig consumerConfig;
 
   public SdaKafkaConsumerConfiguration(
       KafkaProperties kafkaProperties,
       @Qualifier("kafkaByteArrayDltTemplate") KafkaTemplate<String, ?> recoverTemplate,
       LocalValidatorFactoryBean validator,
-      ObjectMapper objectMapper,
+      JsonMapper jsonMapper,
       KafkaConsumerConfig consumerConfig) {
     this.kafkaProperties = kafkaProperties;
     this.recoverTemplate = recoverTemplate;
     this.validator = validator;
-    this.objectMapper = objectMapper;
+    this.jsonMapper = jsonMapper;
     this.consumerConfig = consumerConfig;
   }
 
@@ -202,8 +202,8 @@ public class SdaKafkaConsumerConfiguration implements KafkaListenerConfigurer {
     ConcurrentKafkaListenerContainerFactory<String, ?> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(
-        new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(null)));
-    factory.setRecordMessageConverter(new ByteArrayJsonMessageConverter(objectMapper));
+        new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties()));
+    factory.setRecordMessageConverter(new ByteArrayJacksonJsonMessageConverter(jsonMapper));
     factory.getContainerProperties().setAckMode(AckMode.RECORD);
     // Please note that ConversionExceptions like mapping exception won't be retried and directly
     // logged to error. We may add some specific handling like DeadLetter topics etc.

@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties.Provider;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties.Registration;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientPropertiesMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
@@ -65,8 +63,9 @@ public class SdaOidcClientConfiguration {
 
   private InMemoryClientRegistrationRepository clientRegistrationRepository() {
     var oAuth2ClientProperties = new OAuth2ClientProperties();
-    Registration registration = buildOidcClientRegistration(clientId, clientSecret);
-    Provider provider = buildOidcProvider(oidcIssuer);
+    OAuth2ClientProperties.Registration registration =
+        buildOidcClientRegistration(clientId, clientSecret);
+    OAuth2ClientProperties.Provider provider = buildOidcProvider(oidcIssuer);
     oAuth2ClientProperties.getRegistration().put("oidc", registration);
     oAuth2ClientProperties.getProvider().put("oidc", provider);
     oAuth2ClientProperties.validate();
@@ -78,14 +77,15 @@ public class SdaOidcClientConfiguration {
     return new InMemoryClientRegistrationRepository(registrations);
   }
 
-  private Provider buildOidcProvider(String oidcIssuer) {
-    var provider = new Provider();
+  private OAuth2ClientProperties.Provider buildOidcProvider(String oidcIssuer) {
+    var provider = new OAuth2ClientProperties.Provider();
     provider.setIssuerUri(oidcIssuer);
     return provider;
   }
 
-  private Registration buildOidcClientRegistration(String clientId, String clientSecret) {
-    var registration = new Registration();
+  private OAuth2ClientProperties.Registration buildOidcClientRegistration(
+      String clientId, String clientSecret) {
+    var registration = new OAuth2ClientProperties.Registration();
     registration.setClientName("oidc");
     registration.setClientId(clientId);
     registration.setClientSecret(clientSecret);

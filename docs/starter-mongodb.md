@@ -15,7 +15,7 @@ For further documentation please have a look at the Spring Data MongoDB [referen
 --8<-- "doc-snippets/config-starter-mongodb.md"
 
 ## Configuration properties
-* `spring.data.mongodb.uri` _string_
+* `spring.mongodb.uri` _string_
   * Mongo database URI.
   * Example: `mongodb://exampleUser:examplePassword@mongoHost:27017`
   * Format: `mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]`

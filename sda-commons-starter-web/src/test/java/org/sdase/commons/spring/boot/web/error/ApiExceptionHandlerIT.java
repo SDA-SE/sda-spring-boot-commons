@@ -17,18 +17,21 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sdase.commons.spring.boot.error.ApiError;
 import org.sdase.commons.spring.boot.error.ApiInvalidParam;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(classes = ApiExceptionTestApp.class, webEnvironment = RANDOM_PORT)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
+@AutoConfigureTestRestTemplate
 class ApiExceptionHandlerIT {
 
   @Autowired TestRestTemplate client;
@@ -50,7 +53,8 @@ class ApiExceptionHandlerIT {
 
   static class CustomArgumentProvider implements ArgumentsProvider {
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+    public Stream<? extends Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(
               "422 with details",

@@ -7,7 +7,6 @@
  */
 package org.sdase.commons.spring.boot.kafka;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -20,7 +19,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import tools.jackson.databind.json.JsonMapper;
 
 @AutoConfiguration
 @PropertySource("classpath:/org/sdase/commons/spring/boot/kafka/producer.properties")
@@ -34,10 +34,10 @@ public class SdaKafkaProducerConfiguration {
               + ","
               + TraceTokenProducerInterceptor.class.getName());
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
 
-  public SdaKafkaProducerConfiguration(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public SdaKafkaProducerConfiguration(JsonMapper jsonMapper) {
+    this.jsonMapper = jsonMapper;
   }
 
   @Bean
@@ -58,9 +58,9 @@ public class SdaKafkaProducerConfiguration {
             .get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
 
     if (valueSerializerClass instanceof Class<?> clazz
-        && clazz.isAssignableFrom(JsonSerializer.class)) {
+        && (clazz.isAssignableFrom(JacksonJsonSerializer.class))) {
       ((DefaultKafkaProducerFactory<?, ?>) producerFactoryCustom)
-          .setValueSerializer(new JsonSerializer<>(objectMapper));
+          .setValueSerializer(new JacksonJsonSerializer<>(jsonMapper));
     }
     return new KafkaTemplate<>(producerFactoryCustom, props);
   }

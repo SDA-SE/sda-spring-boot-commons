@@ -65,7 +65,7 @@ class ValidationExceptionHandlerTest {
                 new ValidationExceptionBook("title", null),
                 ValidationExceptionBook.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
   }
 
   @Test
@@ -82,7 +82,7 @@ class ValidationExceptionHandlerTest {
                 new ValidationExceptionBook(null, null),
                 ApiError.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
     assertThat(response.getBody().getTitle()).isEqualTo(ValidationExceptionHandler.ERROR_MESSAGE);
     assertThat(response.getBody().getInvalidParams()).hasSize(2);
   }
@@ -98,7 +98,7 @@ class ValidationExceptionHandlerTest {
             .authenticatedClient()
             .postForEntity("http://localhost:" + port + "/api/bookJakarta", null, String.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
   }
 
   @Test
@@ -112,6 +112,6 @@ class ValidationExceptionHandlerTest {
             .authenticatedClient()
             .postForEntity("http://localhost:" + port + "/api/bookString", "ab", String.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
   }
 }

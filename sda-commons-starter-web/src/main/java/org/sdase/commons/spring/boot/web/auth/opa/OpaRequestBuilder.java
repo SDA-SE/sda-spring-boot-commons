@@ -9,8 +9,6 @@ package org.sdase.commons.spring.boot.web.auth.opa;
 
 import static org.sdase.commons.spring.boot.web.tracing.TraceTokenRequestInterceptor.TRACE_TOKEN_HEADER_NAME;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +18,8 @@ import org.sdase.commons.spring.boot.web.auth.opa.model.OpaInput;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaRequest;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @Component
 public class OpaRequestBuilder {

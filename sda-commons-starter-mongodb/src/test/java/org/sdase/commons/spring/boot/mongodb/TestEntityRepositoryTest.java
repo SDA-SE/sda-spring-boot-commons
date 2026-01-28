@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.mongodb.test.TestEntity;
 import org.sdase.commons.spring.boot.mongodb.test.TestEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mongo.MongoConnectionDetails;
+import org.springframework.boot.mongodb.autoconfigure.MongoConnectionDetails;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 

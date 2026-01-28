@@ -11,9 +11,9 @@ dependencies {
   api 'io.swagger.core.v3:swagger-annotations-jakarta'
   api 'io.swagger.core.v3:swagger-models-jakarta'
 
-  api 'com.fasterxml.jackson.core:jackson-core'
-  api 'com.fasterxml.jackson.core:jackson-databind'
-  api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+  api 'tools.jackson.core:jackson-core'
+  api 'tools.jackson.core:jackson-databind'
+  api 'tools.jackson.dataformat:jackson-dataformat-yaml'
 
   testImplementation project (':sda-commons-web-testing')
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

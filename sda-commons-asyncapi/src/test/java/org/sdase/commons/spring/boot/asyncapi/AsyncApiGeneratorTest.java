@@ -10,8 +10,6 @@ package org.sdase.commons.spring.boot.asyncapi;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -21,6 +19,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.asyncapi.AsyncApiGenerator.SchemaBuilder;
 import org.sdase.commons.spring.boot.web.testing.GoldenFileAssertions;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 class AsyncApiGeneratorTest {
 
@@ -46,8 +46,7 @@ class AsyncApiGeneratorTest {
             .withAsyncApiBase(getClass().getResource(GIVEN_ASYNC_API_TEMPLATE))
             .generate();
     JsonNode schemas = actual.at("/components/schemas");
-    List<String> keys = new ArrayList<>();
-    schemas.fieldNames().forEachRemaining(keys::add);
+    List<String> keys = new ArrayList<>(schemas.propertyNames());
     // usingRecursiveComparison() is unable to compare the order, so we have to do it manually.
     assertThat(keys).isSorted();
   }
@@ -61,7 +60,7 @@ class AsyncApiGeneratorTest {
             .withJsonSchemaBuilder(
                 c -> Map.of(((Class<?>) c).getSimpleName() + "Custom", om.createObjectNode()))
             .generate();
-    assertThat(actual.get("components").get("schemas").fieldNames())
+    assertThat(actual.get("components").get("schemas").propertyNames().iterator())
         .toIterable()
         .containsExactlyInAnyOrder("CarManufacturedCustom", "CarScrappedCustom");
   }

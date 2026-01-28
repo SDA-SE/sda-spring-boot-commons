@@ -15,10 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.sdase.commons.spring.boot.web.jackson.test.JacksonTestApp;
 import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
     properties = {"management.server.port=8081"})
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
 @ExtendWith(OutputCaptureExtension.class)
+@AutoConfigureTestRestTemplate
 class HttpRequestLoggingTest {
 
   @LocalServerPort private int port;

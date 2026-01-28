@@ -8,16 +8,15 @@
 package org.sdase.commons.spring.boot.web.jackson;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import tools.jackson.databind.jsonFormatVisitors.JsonValueFormat;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 /**
  * A serializer used to write {@link ZonedDateTime} in ISO 8601 datetime format contain date, hours,
@@ -38,7 +37,7 @@ import java.time.format.DateTimeFormatter;
  *   }
  * }</pre>
  *
- * <p>Note that there is a subclass to write including milli seconds: {@link WithMillis}
+ * <p>Note that there is a subclass to write including milliseconds: {@link WithMillis}
  */
 public class Iso8601Serializer extends StdSerializer<ZonedDateTime> {
 
@@ -64,14 +63,13 @@ public class Iso8601Serializer extends StdSerializer<ZonedDateTime> {
   }
 
   @Override
-  public void serialize(ZonedDateTime value, JsonGenerator gen, SerializerProvider arg2)
-      throws IOException {
+  public void serialize(ZonedDateTime value, JsonGenerator gen, SerializationContext provider)
+      throws JacksonException {
     gen.writeString(formatter.format(value));
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint)
-      throws JsonMappingException {
+  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) {
     visitStringFormat(visitor, typeHint, JsonValueFormat.DATE_TIME);
   }
 

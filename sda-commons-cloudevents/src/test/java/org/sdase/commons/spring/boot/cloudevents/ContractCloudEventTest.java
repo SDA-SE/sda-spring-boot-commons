@@ -28,7 +28,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
@@ -40,11 +40,11 @@ import org.springframework.test.annotation.DirtiesContext;
     properties = {
       "management.server.port=0",
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
-      "spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer"
+      "spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JacksonJsonSerializer"
     })
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
+    brokerProperties = {"port=9092"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class ContractCloudEventTest {
 
@@ -52,7 +52,7 @@ class ContractCloudEventTest {
 
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
 
-  private String TOPIC = "test-topic";
+  private String testTopic = "test-topic";
 
   private BlockingQueue<ConsumerRecord<String, ContractCreatedEvent>> consumerRecords;
 
@@ -62,15 +62,16 @@ class ContractCloudEventTest {
   void setUp() {
 
     Map<String, Object> configs =
-        new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
+        new HashMap<>(KafkaTestUtils.consumerProps(embeddedKafkaBroker, "consumer", false));
 
-    JsonDeserializer<ContractCreatedEvent> jsonDeserializer = new JsonDeserializer<>();
+    JacksonJsonDeserializer<ContractCreatedEvent> jsonDeserializer =
+        new JacksonJsonDeserializer<>();
     jsonDeserializer.addTrustedPackages("org.sdase.commons.spring.boot.cloudevents.app.contract");
 
     DefaultKafkaConsumerFactory<String, ContractCreatedEvent> consumerFactory =
         new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), jsonDeserializer);
 
-    ContainerProperties containerProperties = new ContainerProperties(TOPIC);
+    ContainerProperties containerProperties = new ContainerProperties(testTopic);
     container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
     consumerRecords = new LinkedBlockingQueue<>();
     container.setupMessageListener(
@@ -101,7 +102,7 @@ class ContractCloudEventTest {
                 .setType("com.sdase.contract.foo.contract.created")
                 .setData(new ContractCreatedEvent.ContractCreated(contractId, partnerId));
 
-    contractCreatedMessageProducer.send(TOPIC, cloudEvent);
+    contractCreatedMessageProducer.send(testTopic, cloudEvent);
 
     ConsumerRecord<String, ContractCreatedEvent> poll = consumerRecords.poll(10, TimeUnit.SECONDS);
     ContractCreatedEvent value = poll.value();

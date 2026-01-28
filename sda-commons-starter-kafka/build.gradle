@@ -1,7 +1,8 @@
 dependencies {
-  api 'com.fasterxml.jackson.core:jackson-databind'
+  api 'tools.jackson.core:jackson-databind'
   api 'org.springframework.boot:spring-boot-starter-actuator'
   api 'org.springframework.boot:spring-boot-starter-validation'
+  api 'org.springframework.boot:spring-boot-starter-kafka'
   api 'org.springframework.kafka:spring-kafka', {
     // not needed at runtime, duplicate classes with wiremock standalone
     exclude group: 'com.google.code.findbugs', module: 'jsr305'

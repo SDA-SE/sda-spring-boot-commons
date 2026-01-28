@@ -15,13 +15,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import org.sdase.commons.spring.boot.web.testing.auth.opa.model.OpaMockResponse;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class StubBuilder
     implements RequestMethodBuilder, RequestPathBuilder, RequestExtraBuilder, AllowBuilder {
@@ -76,7 +76,7 @@ public class StubBuilder
           .withStatus(200)
           .withHeader("Content-type", "application/json")
           .withBody(om.writeValueAsBytes(response));
-    } catch (JsonProcessingException exception) {
+    } catch (JacksonException exception) {
       throw new IllegalStateException("Mock initialization failed");
     }
   }
@@ -123,7 +123,7 @@ public class StubBuilder
           .withRequestBody(matchingJsonPath("$.input.httpMethod", equalTo(httpMethod)))
           .withRequestBody(
               matchingJsonPath("$.input.path", equalToJson(om.writeValueAsString(paths))));
-    } catch (JsonProcessingException e) {
+    } catch (JacksonException e) {
       throw new IllegalStateException("Mock initialization failed", e);
     }
   }

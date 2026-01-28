@@ -11,8 +11,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.EnvironmentPostProcessor;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
@@ -22,7 +22,7 @@ public class ExternalMongoAutoConfiguration implements EnvironmentPostProcessor 
   private static final String TEST_MONGODB_CONNECTION_STRING_PROPERTY_NAME =
       "test.mongodb.connection.string";
   private static final String AUTOCONFIGURE_EXCLUDES_PROPERTY_NAME = "spring.autoconfigure.exclude";
-  private static final String SPRING_DATA_MONGODB_URI_PROPERTY_NAME = "spring.data.mongodb.uri";
+  private static final String SPRING_DATA_MONGODB_URI_PROPERTY_NAME = "spring.mongodb.uri";
 
   private static final Logger LOG = LoggerFactory.getLogger(ExternalMongoAutoConfiguration.class);
 

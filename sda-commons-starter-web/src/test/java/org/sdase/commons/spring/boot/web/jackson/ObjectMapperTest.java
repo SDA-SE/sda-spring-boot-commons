@@ -11,10 +11,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.util.Iterator;
@@ -28,6 +24,9 @@ import org.sdase.commons.spring.boot.web.testing.auth.DisableSdaAuthInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(classes = JacksonTestApp.class)
 @ContextConfiguration(initializers = DisableSdaAuthInitializer.class)
@@ -104,7 +103,7 @@ class ObjectMapperTest {
     Person given = new Person();
     given.setPartner(given);
 
-    assertThatExceptionOfType(JsonMappingException.class)
+    assertThatExceptionOfType(JacksonException.class)
         .isThrownBy(() -> om.writeValueAsString(given))
         .withMessageContaining("cycle");
   }
@@ -170,7 +169,7 @@ class ObjectMapperTest {
     var output = new ByteArrayOutputStream();
 
     try (JsonGenerator generator = om.createGenerator(output)) {
-      generator.writeObject(Map.of("items", iterator));
+      generator.writePOJO(Map.of("items", iterator));
     } catch (Exception ignored) {
       // nothing to do
     }
@@ -183,7 +182,7 @@ class ObjectMapperTest {
     // verify expected content
     assertThat(actual).isEqualToIgnoringWhitespace("{\"items\":[" + expected);
     // verify not readable
-    assertThatExceptionOfType(JsonParseException.class)
+    assertThatExceptionOfType(JacksonException.class)
         .isThrownBy(() -> om.readValue(actual, Object.class));
   }
 

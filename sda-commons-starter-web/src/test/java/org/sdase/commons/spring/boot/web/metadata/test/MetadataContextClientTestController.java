@@ -7,13 +7,18 @@
  */
 package org.sdase.commons.spring.boot.web.metadata.test;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cloud.openfeign.support.FeignHttpMessageConverters;
+import org.springframework.cloud.openfeign.support.HttpMessageConverterCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.node.ObjectNode;
 
 @RestController
 public class MetadataContextClientTestController {
@@ -53,7 +58,7 @@ public class MetadataContextClientTestController {
     for (int i = 0; i < 100; i++) {
       responses.add(asyncClientAdapter.getSomethingAsync());
     }
-    return responses.stream().map(CompletableFuture::join).collect(Collectors.toList());
+    return responses.stream().map(CompletableFuture::join).toList();
   }
 
   @GetMapping("/metadataPlatformProxy")
@@ -67,6 +72,18 @@ public class MetadataContextClientTestController {
     for (int i = 0; i < 100; i++) {
       responses.add(asyncClientAdapter.getPlatformSomethingAsync());
     }
-    return responses.stream().map(CompletableFuture::join).collect(Collectors.toList());
+    return responses.stream().map(CompletableFuture::join).toList();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  // see https://github.com/spring-cloud/spring-cloud-openfeign/issues/1307
+  public FeignHttpMessageConverters feignHttpMessageConverters(
+      ObjectProvider<HttpMessageConverter<?>> messageConverters,
+      ObjectProvider<HttpMessageConverterCustomizer> customizers) {
+    var feignHttpMessageConverters = new FeignHttpMessageConverters(messageConverters, customizers);
+    // init converters
+    feignHttpMessageConverters.getConverters();
+    return feignHttpMessageConverters;
   }
 }

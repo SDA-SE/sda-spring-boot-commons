@@ -9,8 +9,6 @@ package org.sdase.commons.spring.boot.web.auth.opa;
 
 import static org.sdase.commons.spring.boot.web.auth.opa.OpaAuthorizationManager.CONSTRAINTS_ATTRIBUTE;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.sdase.commons.spring.boot.web.auth.opa.model.OpaResponse;
 import org.slf4j.Logger;
@@ -18,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * A helper that provides constraints received from the Open Policy Agent as a bean. This class
@@ -45,9 +45,12 @@ public abstract class AbstractConstraints {
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractConstraints.class);
 
-  // use unrecommended field injection to avoid influence on implementation classes so that they can
-  // have a no args constructor
-  @Autowired private ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
+
+  @Autowired
+  public void setObjectMapper(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
 
   @PostConstruct
   void process() {
@@ -62,7 +65,7 @@ public abstract class AbstractConstraints {
       }
     } catch (IllegalStateException e) {
       LOG.debug("Not in a request context.");
-    } catch (ClassCastException | NullPointerException | JsonMappingException e) {
+    } catch (ClassCastException | NullPointerException | JacksonException e) {
       LOG.warn("Failed to apply constraints of type {}", this.getClass(), e);
     }
   }

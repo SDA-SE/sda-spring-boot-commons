@@ -15,9 +15,11 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
@@ -47,13 +49,19 @@ public class OpaExcludesAuthorizationManager
   }
 
   @Override
-  public void verify(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+  public void verify(
+      Supplier<? extends @Nullable Authentication> authentication,
+      RequestAuthorizationContext object) {
     AuthorizationManager.super.verify(authentication, object);
   }
 
   @Override
-  public AuthorizationDecision check(
-      Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+  public @Nullable AuthorizationResult authorize(
+      Supplier<? extends @Nullable Authentication> authentication,
+      RequestAuthorizationContext object) {
+    if (object == null) {
+      return new AuthorizationDecision(false);
+    }
     var httpRequest = object.getRequest();
     var path = httpRequest.getServletPath();
     return excludedPathPatterns.stream().anyMatch(p -> p.matcher(path).matches())
