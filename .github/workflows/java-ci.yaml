@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - v6.x.x
   pull_request:
 jobs:
   # build library
@@ -79,6 +80,8 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
