@@ -7,8 +7,14 @@
  */
 package org.sdase.commons.spring.boot.asyncapi.jsonschema.victools;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Map;
 import java.util.Set;
+import org.junit.jupiter.api.Test;
 import org.sdase.commons.spring.boot.asyncapi.jsonschema.AbstractJsonSchemaBuilderTest;
+import org.sdase.commons.spring.boot.asyncapi.test.data.models.Plane;
 
 class VictoolsJsonSchemaBuilderTest extends AbstractJsonSchemaBuilderTest {
 
@@ -19,5 +25,11 @@ class VictoolsJsonSchemaBuilderTest extends AbstractJsonSchemaBuilderTest {
   @Override
   protected Set<DisabledSpec> disableSpecificFieldTests() {
     return Set.of();
+  }
+
+  @Test
+  void shouldNotPrintGenericTypeInName() {
+    Map<String, JsonNode> jsonSchema = jsonSchemaBuilder.toJsonSchema(Plane.class);
+    assertThat(jsonSchema).containsKey("Plane").doesNotContainKey("Plane(Object)");
   }
 }
