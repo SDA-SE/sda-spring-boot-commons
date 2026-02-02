@@ -84,7 +84,7 @@ dependencies {
     api "org.scala-lang:scala-library:${scalaVersion}"
 
     // sda-commons-starter-s3
-    api "io.awspring.cloud:spring-cloud-aws-s3:3.4.2"
+    api "io.awspring.cloud:spring-cloud-aws-s3:4.0.0"
     api "io.github.robothy:local-s3-rest:2.2"
 
     api "org.ow2.asm:asm:9.8", {
