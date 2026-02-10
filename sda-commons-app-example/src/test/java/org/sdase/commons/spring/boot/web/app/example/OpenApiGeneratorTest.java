@@ -9,8 +9,6 @@ package org.sdase.commons.spring.boot.web.app.example;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.util.ArrayList;
 import java.util.Map;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -27,6 +25,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import tools.jackson.core.json.JsonFactory;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 /**
  * A test that stores the most recent openapi.yaml in the repository and makes sure it is
@@ -64,7 +63,7 @@ class OpenApiGeneratorTest {
   // integration testing of the OpenAPI customisation
 
   @Test
-  void shouldNotContainServers() throws JsonProcessingException {
+  void shouldNotContainServers() {
     var actualOpenApiYaml = loadRawOpenApiAsYaml();
     var actual = YAMLMapper.builder().build().readValue(actualOpenApiYaml, Object.class);
     assertThat(actual)
@@ -74,7 +73,7 @@ class OpenApiGeneratorTest {
   }
 
   @Test
-  void shouldSortResponsesByCode() throws JsonProcessingException {
+  void shouldSortResponsesByCode() {
     var actualOpenApiYaml = loadRawOpenApiAsYaml();
     var actual = YAMLMapper.builder().build().readValue(actualOpenApiYaml, Object.class);
 

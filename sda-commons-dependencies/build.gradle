@@ -14,13 +14,12 @@ ext {
   mongoDbDriverVersion = '5.6.2'
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.42'
-  victoolsVersion = '4.38.0'
+  victoolsVersion = '5.0.0'
 }
 
 dependencies {
 
   api enforcedPlatform("tools.jackson:jackson-bom:3.0.3")
-  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.19.2") //please check regularly whether it can be removed
 
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
