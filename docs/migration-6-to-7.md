@@ -26,12 +26,6 @@ and [official migration guide of Jackson](https://github.com/FasterXML/jackson/b
     `com.fasterxml.jackson…` → `tools.jackson…` (exception Jackson annotations).
   * Code that directly references Jackson types (e.g. `ObjectMapper`, `JsonNode`, custom serializers/deserializers) must be updated accordingly.
 
-* **`our-spring-commons-asyncapi` Jackson interoperability**
-
-  * In `our-spring-commons-asyncapi`, **Victools jsonschema-generator still operates with Jackson 2**.
-  * The AsyncAPI automatically **maps `JsonNode`s to Jackson 3** at the API boundary.
-  * A **Jackson2To3Bridge** is provided for cases where manual conversion is required (e.g. custom integrations or extensions).
-
 * **Configuration property renames (Spring Boot 4) Examples**
 
 Please refer to the guide for more information.
