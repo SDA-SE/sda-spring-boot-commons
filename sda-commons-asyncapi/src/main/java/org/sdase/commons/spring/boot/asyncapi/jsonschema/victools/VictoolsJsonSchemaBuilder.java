@@ -18,22 +18,21 @@ import static com.github.victools.jsonschema.module.jackson.JacksonOption.RESPEC
 import static com.github.victools.jsonschema.module.jakarta.validation.JakartaValidationOption.INCLUDE_PATTERN_EXPRESSIONS;
 import static com.github.victools.jsonschema.module.jakarta.validation.JakartaValidationOption.NOT_NULLABLE_FIELD_IS_REQUIRED;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.victools.jsonschema.generator.OptionPreset;
 import com.github.victools.jsonschema.generator.SchemaGenerator;
 import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
 import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
 import com.github.victools.jsonschema.generator.SchemaVersion;
-import com.github.victools.jsonschema.module.jackson.JacksonModule;
+import com.github.victools.jsonschema.module.jackson.JacksonSchemaModule;
 import com.github.victools.jsonschema.module.jakarta.validation.JakartaValidationModule;
 import com.github.victools.jsonschema.module.swagger2.Swagger2Module;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.sdase.commons.spring.boot.asyncapi.jsonschema.JsonSchemaBuilder;
-import org.sdase.commons.spring.boot.asyncapi.util.Jackson2To3Bridge;
 import org.sdase.commons.spring.boot.asyncapi.util.RefUtil;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.StringNode;
 
 /**
@@ -44,14 +43,13 @@ import tools.jackson.databind.node.StringNode;
 public class VictoolsJsonSchemaBuilder implements JsonSchemaBuilder {
 
   private final SchemaGenerator schemaGenerator;
-  private final Jackson2To3Bridge jackson2To3Bridge;
 
   /**
    * @return a {@link JsonSchemaBuilder} generating schemas suitable for AsyncAPI.
    */
   public static VictoolsJsonSchemaBuilder fromDefaultConfig() {
     var jacksonModule =
-        new JacksonModule(
+        new JacksonSchemaModule(
             RESPECT_JSONPROPERTY_ORDER,
             RESPECT_JSONPROPERTY_REQUIRED,
             INLINE_TRANSFORMED_SUBTYPES,
@@ -87,7 +85,6 @@ public class VictoolsJsonSchemaBuilder implements JsonSchemaBuilder {
    */
   public VictoolsJsonSchemaBuilder(SchemaGeneratorConfig schemaGeneratorConfig) {
     this.schemaGenerator = new SchemaGenerator(schemaGeneratorConfig);
-    this.jackson2To3Bridge = new Jackson2To3Bridge();
   }
 
   @Override
@@ -112,15 +109,11 @@ public class VictoolsJsonSchemaBuilder implements JsonSchemaBuilder {
   }
 
   private Map<String, JsonNode> toSchemaMap(ObjectNode jsonNodesFromVictools) {
-    com.fasterxml.jackson.databind.JsonNode generatedDefinitions =
-        jsonNodesFromVictools.get("definitions");
+    JsonNode generatedDefinitions = jsonNodesFromVictools.get("definitions");
     Map<String, JsonNode> definitions = new LinkedHashMap<>();
     generatedDefinitions
-        .fieldNames()
-        .forEachRemaining(
-            name ->
-                definitions.put(
-                    name, jackson2To3Bridge.toJackson3(generatedDefinitions.get(name))));
+        .propertyNames()
+        .forEach(name -> definitions.put(name, generatedDefinitions.get(name)));
     return definitions;
   }
 }
