@@ -33,13 +33,11 @@ dependencies {
   api 'org.glassfish.jersey.core:jersey-common'
   api 'tools.jackson.core:jackson-core'
   api 'tools.jackson.core:jackson-databind'
+  api 'tools.jackson.dataformat:jackson-dataformat-yaml'
   api 'org.springframework.boot:spring-boot-resttestclient'
 
   api project(':sda-commons-metadata-context')
   api project(':sda-commons-error')
-
-  implementation 'tools.jackson.core:jackson-core'
-  implementation 'tools.jackson.core:jackson-databind'
 
   testImplementation project(':sda-commons-web-testing')
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
