@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.http.converter.autoconfigure.ClientHttpMessageConvertersCustomizer;
 import org.springframework.cloud.openfeign.support.FeignHttpMessageConverters;
 import org.springframework.cloud.openfeign.support.HttpMessageConverterCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.node.ObjectNode;
@@ -79,7 +79,7 @@ public class MetadataContextClientTestController {
   @ConditionalOnMissingBean
   // see https://github.com/spring-cloud/spring-cloud-openfeign/issues/1307
   public FeignHttpMessageConverters feignHttpMessageConverters(
-      ObjectProvider<HttpMessageConverter<?>> messageConverters,
+      ObjectProvider<ClientHttpMessageConvertersCustomizer> messageConverters,
       ObjectProvider<HttpMessageConverterCustomizer> customizers) {
     var feignHttpMessageConverters = new FeignHttpMessageConverters(messageConverters, customizers);
     // init converters

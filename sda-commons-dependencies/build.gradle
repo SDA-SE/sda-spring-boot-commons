@@ -10,7 +10,7 @@ ext {
   bouncycastleVersion = '1.83' //check to be aligned with spring cloud
   logbackContribVersion = '0.1.5'
   springBootVersion = '4.0.2'
-  springCloudVersion = '2025.1.0'
+  springCloudVersion = '2025.1.1'
   mongoDbDriverVersion = '5.6.2'
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.42'
