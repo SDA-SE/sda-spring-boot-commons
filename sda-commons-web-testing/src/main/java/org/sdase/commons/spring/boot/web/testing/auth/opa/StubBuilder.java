@@ -70,15 +70,11 @@ public class StubBuilder
     return constraint;
   }
 
-  private ResponseDefinitionBuilder getResponse(OpaMockResponse response) {
-    try {
-      return aResponse()
-          .withStatus(200)
-          .withHeader("Content-type", "application/json")
-          .withBody(om.writeValueAsBytes(response));
-    } catch (JacksonException exception) {
-      throw new IllegalStateException("Mock initialization failed");
-    }
+  private ResponseDefinitionBuilder getResponse(OpaMockResponse response) throws JacksonException {
+    return aResponse()
+        .withStatus(200)
+        .withHeader("Content-type", "application/json")
+        .withBody(om.writeValueAsBytes(response));
   }
 
   public RequestPathBuilder withHttpMethod(String httpMethod) {
@@ -117,15 +113,11 @@ public class StubBuilder
     return post(urlMatching("/v1/data/.*"));
   }
 
-  MappingBuilder matchInput(String httpMethod, String[] paths) {
-    try {
-      return matchAnyPostUrl()
-          .withRequestBody(matchingJsonPath("$.input.httpMethod", equalTo(httpMethod)))
-          .withRequestBody(
-              matchingJsonPath("$.input.path", equalToJson(om.writeValueAsString(paths))));
-    } catch (JacksonException e) {
-      throw new IllegalStateException("Mock initialization failed", e);
-    }
+  MappingBuilder matchInput(String httpMethod, String[] paths) throws JacksonException {
+    return matchAnyPostUrl()
+        .withRequestBody(matchingJsonPath("$.input.httpMethod", equalTo(httpMethod)))
+        .withRequestBody(
+            matchingJsonPath("$.input.path", equalToJson(om.writeValueAsString(paths))));
   }
 
   static String[] splitPath(String path) {
