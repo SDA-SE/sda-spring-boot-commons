@@ -138,6 +138,83 @@ database framework, asserting with a bare `MongoClient` removes influence of map
     --8<-- "sda-commons-starter-mongodb/src/test/java/org/sdase/commons/spring/boot/mongodb/TestEntityRepositoryTest.java:12"
     ```
 
+Since version 7, the embedded MongoDB instance used for testing has been observed to exhibit
+increased memory consumption, which may lead to slower test execution, higher resource usage, or
+even out-of-memory errors in environments with limited resources.
+
+This is typically due to each test case starting its own isolated MongoDB instance, which increases
+memory overhead and degrades performance.
+
+To mitigate this issue, it is possible to use a shared embedded MongoDB instance that runs once for
+all integration tests in your suite. This approach significantly reduces memory overhead and
+improves test execution speed.
+
+```java
+import de.flapdoodle.embed.mongo.config.Net;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.mongo.transitions.Mongod;
+import de.flapdoodle.embed.mongo.transitions.RunningMongodProcess;
+import de.flapdoodle.reverse.TransitionWalker;
+import de.flapdoodle.reverse.transitions.Start;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class SharedMongoExtension implements BeforeAllCallback {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SharedMongoExtension.class);
+  private static TransitionWalker.ReachedState<RunningMongodProcess> running;
+  private static final AtomicBoolean started = new AtomicBoolean(false);
+  private static final Object mutex = new Object();
+
+  public static void stop() {
+    if (running != null) {
+      running.close();
+    }
+  }
+
+  @Override
+  public void beforeAll(ExtensionContext context) {
+    synchronized (mutex) {
+      try {
+        if (started.compareAndSet(false, true)) {
+          int port = de.flapdoodle.net.Net.freeServerPort();
+          Mongod mongod =
+              Mongod.builder()
+                  .net(Start.to(Net.class).initializedWith(Net.of("127.0.0.1", port, false)))
+                  .build();
+          running = mongod.start(Version.Main.V8_0);
+          LOGGER.info("Started embedded MongodDB on Port {}", port);
+          System.setProperty("spring.mongodb.uri", "mongodb://127.0.0.1:" + port + "/testdb");
+        }
+      } catch (Exception e) {
+        throw new RuntimeException("Could not start embedded MongoDB", e);
+      }
+    }
+  }
+}
+```
+
+To use this extension it is necessary to register it in the test class with:
+
+```java
+
+@ExtendWith(SharedMongoExtension.class)
+public class MyIntegrationTest {
+  // Your tests will now share the same MongoDB instance
+}
+```
+
+To prevent Spring from starting its own embedded MongoDB instance, add the following to the
+application.properties or as a JVM argument:
+
+```properties
+spring.autoconfigure.exclude=de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration
+```
 
 ## Kafka
 
@@ -155,6 +232,31 @@ The version is managed by the library as described [above](#dependencies).
     --8<-- "sda-commons-starter-kafka/src/test/java/org/sdase/commons/spring/boot/kafka/KafkaProducerIntegrationTest.java:12"
     ```
 
+Since version 7, performance issues with the embedded Kafka for testing have been observed. This is typically due to each test case starting its own isolated Kafka instance, which increases memory overhead and degrades performance.
+
+To mitigate this issue, it is possible to configure a shared embedded Kafka broker that runs once for the entire test suite. This approach significantly reduces memory overhead and improves test execution speed.
+
+To achieve this:
+
+1. Remove the @EmbeddedKafka annotation from the test classes if necessary, as it will now be replaced by Gradle configuration.
+2. Configure the embedded Kafka broker via build.gradle, using system properties to control its behavior.
+
+Update the test block in the build.gradle with the following system properties to enable a shared embedded Kafka broker:
+
+```groovy
+test {
+    systemProperty("spring.kafka.global.embedded.enabled", "true")
+    systemProperty("spring.kafka.embedded.ports", "0") // Use a single random port
+    systemProperty("spring.kafka.embedded.partitions", "1")
+}
+```
+While this setup improves performance, direct access to the EmbeddedKafkaBroker class is lost, which provides useful features like:
+
+- Direct control over broker behavior
+- Debugging capabilities (e.g., inspecting logs, topics)
+- The ability to reset partitions or clear data between tests
+
+This means that advanced configuration and debugging must be managed outside the EmbeddedKafkaBroker class, which can pose a limitation for complex test scenarios.
 
 ## S3
 
