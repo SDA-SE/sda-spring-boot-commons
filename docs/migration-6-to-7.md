@@ -51,7 +51,7 @@ This property changes can make changes in consuming services, like deployments n
     * `@AutoConfigureObservability` was split into `@AutoConfigureMetrics` and `@AutoConfigureTracing`
   * **Kafka**
     * If many tests utilize the `@EmbeddedKafka` annotation, memory consumption may degrade after
-      the update To mitigate this, consider using a single global embedded Kafka instance (as
+      the update. To mitigate this, consider using a single global embedded Kafka instance (as
       outlined in
       the [Spring Kafka documentation](https://docs.spring.io/spring-kafka/reference/testing.html#same-broker-multiple-tests)).
       This approach reduces resource overhead by sharing a single broker across tests. However, it
@@ -59,3 +59,7 @@ This property changes can make changes in consuming services, like deployments n
       limit advanced configuration or debugging capabilities.
     * `listeners=PLAINTEXT://localhost:0` configuration in `@EmbeddedKafka` is not necessary any
       longer.
+  * **MongoDB**
+    * If many tests utilize the database, memory consumption may degrade after
+      the update. To mitigate this, consider using a single global embedded MongoDB (as outlined
+      in [web-testing](web-testing.md/#mongodb))
