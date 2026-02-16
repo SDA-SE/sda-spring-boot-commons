@@ -1,12 +1,12 @@
 # This workflow tests the feature of using an external MongoDB for tests
-name: Java Test MongoDB
+name: Java Test MongoDB release/6.x.x branch
 
 on:
   push:
     branches:
-      - main
+      - release/6.x.x
   pull_request:
-    branches-ignore:
+    branches:
       - release/6.x.x
 
 jobs:
@@ -19,11 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
         with:
           distribution: 'temurin'
-          java-version: 21
+          java-version: 17
           cache: 'gradle'
 
       - name: Start MongoDB
