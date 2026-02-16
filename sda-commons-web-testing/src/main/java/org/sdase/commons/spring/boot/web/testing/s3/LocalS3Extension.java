@@ -130,14 +130,16 @@ public class LocalS3Extension
     String expectedClass = parameterContext.getParameter().getType().getName();
     return switch (expectedClass) {
       case S3_CLIENT_CLASS_NAME -> createClient();
-      case LOCAL_CONFIGURATION_CLASS_NAME -> new LocalS3Configuration(
-          System.getProperty(s3Test.configurationProperties().accessKeyProperty()),
-          System.getProperty(s3Test.configurationProperties().secretKeyProperty()),
-          System.getProperty(s3Test.configurationProperties().endpointProperty()),
-          System.getProperty(s3Test.configurationProperties().regionProperty()),
-          System.getProperty(s3Test.configurationProperties().bucketNameProperty()));
-      default -> throw new IllegalArgumentException(
-          "Can't resolve parameter of type %s".formatted(expectedClass));
+      case LOCAL_CONFIGURATION_CLASS_NAME ->
+          new LocalS3Configuration(
+              System.getProperty(s3Test.configurationProperties().accessKeyProperty()),
+              System.getProperty(s3Test.configurationProperties().secretKeyProperty()),
+              System.getProperty(s3Test.configurationProperties().endpointProperty()),
+              System.getProperty(s3Test.configurationProperties().regionProperty()),
+              System.getProperty(s3Test.configurationProperties().bucketNameProperty()));
+      default ->
+          throw new IllegalArgumentException(
+              "Can't resolve parameter of type %s".formatted(expectedClass));
     };
   }
 
