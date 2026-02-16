@@ -19,7 +19,7 @@ jobs:
       # always run all tests to avoid having different amounts of tests.
       fail-fast: false
       matrix:
-        java_version: [ '17' ]
+        java_version: [ '21', '25' ]
         os: [ 'windows-2022' ]
 
     timeout-minutes: 60
