@@ -162,7 +162,7 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
   }
   tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'

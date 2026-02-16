@@ -65,7 +65,7 @@ so jib will use the root folder to create the sub folders, e.g:
 
 ```gradle
 jib {
-  from.image = 'gcr.io/distroless/java17-debian12:nonroot'
+  from.image = 'gcr.io/distroless/java21-debian12:nonroot'
   container.workingDirectory='/'
 }
 ```
