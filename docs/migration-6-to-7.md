@@ -7,6 +7,7 @@ SDA Spring Boot Commons 6 updates
 - Jackson 2.x.x to 3.x.x
 
 This upgrade contains breaking changes originating from Spring, SDA Spring Boot Commons, and the transition to Jackson 3.
+It also drops the support of Java 17 and adds the support of Java 25.
 
 In addition to this migration guide, the [official migration guide of Spring Boot](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
 and [official migration guide of Jackson](https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md) should be consulted.
@@ -63,3 +64,7 @@ This property changes can make changes in consuming services, like deployments n
     * If many tests utilize the database, memory consumption may degrade after
       the update. To mitigate this, consider using a single global embedded MongoDB (as outlined
       in [web-testing](web-testing.md/#mongodb))
+
+* Java 17 support removed.
+* Java 25 support added. 
+  * The distroless image for this java version is `gcr.io/distroless/java25-debian13`.
