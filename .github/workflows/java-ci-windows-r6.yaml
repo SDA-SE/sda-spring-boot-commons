@@ -1,14 +1,14 @@
 # This workflow builds and tests on Windows.
 # The Windows check is extracted from the Matrix in Java CI because it is a lot slower and blocks
 # subsequent checks.
-name: Java CI Windows
+name: Java CI Windows release/6.x.x branch
 
 on:
   push:
     branches:
-      - main
+      - release/6.x.x
   pull_request:
-    branches-ignore:
+    branches:
       - release/6.x.x
 jobs:
   # build library
@@ -20,7 +20,7 @@ jobs:
       # always run all tests to avoid having different amounts of tests.
       fail-fast: false
       matrix:
-        java_version: [ '21', '25' ]
+        java_version: [ '17' ]
         os: [ 'windows-2022' ]
 
     timeout-minutes: 60
