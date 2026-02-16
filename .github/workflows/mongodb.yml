@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - release/6.x.x
   pull_request:
 
 jobs:
