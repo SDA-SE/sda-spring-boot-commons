@@ -84,7 +84,7 @@ subprojects {
   spotless {
     if (!javaPlatformModules.contains(project.name)) {
       java {
-        googleJavaFormat('1.17.0')
+        googleJavaFormat('1.34.1')
         enforceCheck = false
         licenseHeaderFile '../licenseHeaderFile'
       }
