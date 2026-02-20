@@ -639,6 +639,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration-6-to-7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to v7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -815,10 +843,10 @@ Additional documentation can be added at class level and for the data type.</p>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
-<p>You can use a standard <code>org.springframework.kafka.support.serializer.JsonSerializer</code> to publish the
+<p>You can use a standard <code>org.springframework.kafka.support.serializer.JacksonJsonSerializer</code> to publish the
 event.</p>
 <h2 id="consuming-cloudevents">Consuming CloudEvents<a class="headerlink" href="#consuming-cloudevents" title="Permanent link">&para;</a></h2>
-<p>You can use <code>org.springframework.kafka.support.serializer.JsonDeserializer</code> to consume CloudEvents.</p>
+<p>You can use <code>org.springframework.kafka.support.serializer.JacksonJsonDeserializer</code> to consume CloudEvents.</p>
 <h2 id="polymorphism">Polymorphism<a class="headerlink" href="#polymorphism" title="Permanent link">&para;</a></h2>
 <p>Usually, an eventing API consists of multiple events related to one aggregate.
 You can use Jacksons subtype features to define multiple events in one model.</p>
