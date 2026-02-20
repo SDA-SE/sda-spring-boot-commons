@@ -3,11 +3,10 @@
 A set of libraries to bootstrap Spring Boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
-!!! info "Spring Boot 3"
-    🥳 Upgrade to Spring Boot 3 is released with
-    [version 3.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/3.0.0). 🥳
+!!! info "Spring Boot 4"
+    🥳 Upgrade to Spring Boot 4 is released with [version 7.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/7.0.0). 🥳
     
-    Please follow [the migration guide](migration-2-to-3.md) to upgrade.
+    Please follow [the migration guide](./migration-6-to-7.md) to upgrade.
 
 
 ## Features
@@ -36,7 +35,7 @@ management to align transitive dependencies with the provided Spring versions.
 
 ```groovy
 project.ext {
-  sdaSpringCommonsVersions = '0.11.0'
+  sdaSpringCommonsVersions = '7.0.0'
 }
 dependencies {
   implementation enforcedPlatform("org.sdase.commons.spring.boot:sda-commons-dependencies:$sdaSpringCommonsVersions")
@@ -53,7 +52,7 @@ With gradle 9 it will be mandatory to define a launcher to run your tests with g
 testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 ```
 
-Artifacts of SDA Spring Boot Commons are available [at Maven Central](https://search.maven.org/search?q=g:org.sdase.commons.spring.boot)
+Artifacts of SDA Spring Boot Commons are available [at Maven Central](https://central.sonatype.com/namespace/org.sdase.commons.spring.boot)
 since release [0.11.2](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/0.11.2).
 
 ### Static directories

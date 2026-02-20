@@ -1,6 +1,6 @@
 # sda-spring-boot-commons
 [![Latest Release](https://img.shields.io/github/v/release/sda-se/sda-spring-boot-commons?label=latest)](https://github.com/SDA-SE/sda-spring-boot-commons/releases/latest)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.sdase.commons.spring.boot/sda-commons-starter-web/badge.svg)](https://search.maven.org/search?q=org.sdase.commons.spring.boot)
+[![Maven Central Version](https://img.shields.io/maven-central/v/org.sdase.commons.spring.boot/sda-commons-starter-web)](https://central.sonatype.com/namespace/org.sdase.commons.spring.boot)
 [![Java CI](https://github.com/SDA-SE/sda-spring-boot-commons/actions/workflows/java-ci.yaml/badge.svg)](https://github.com/SDA-SE/sda-spring-boot-commons/actions/workflows/java-ci.yaml)
 
 ![spring](https://user-images.githubusercontent.com/61695677/155694976-dc7f9376-32ef-4be0-a919-3cc41a1f0341.png)
@@ -8,9 +8,7 @@
 A set of libraries to bootstrap spring boot services easily that follow the patterns and
 specifications promoted by the SDA SE.
 
-> :partying_face: Upgrade to Spring Boot 4 is released
-> with [version 7.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/7.0.0). :
-> partying_face:
+> 🥳 Upgrade to Spring Boot 4 is released with [version 7.0.0](https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/7.0.0). 🥳
 >
 > Please follow [the migration guide](./docs/migration-6-to-7.md) to upgrade.
 > 
