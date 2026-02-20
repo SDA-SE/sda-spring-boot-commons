@@ -1676,6 +1676,8 @@ memory overhead and degrades performance.</p>
 <p>To mitigate this issue, it is possible to use a shared embedded MongoDB instance that runs once for
 all integration tests in your suite. This approach significantly reduces memory overhead and
 improves test execution speed.</p>
+<details class="example">
+<summary>Shared Embedded MongoDB for Integration Tests</summary>
 <div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1770,6 +1772,7 @@ improves test execution speed.</p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+</details>
 <p>To use this extension it is necessary to register it in the test class with:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>

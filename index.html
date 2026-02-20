@@ -753,10 +753,9 @@
 <p>A set of libraries to bootstrap Spring Boot services easily that follow the patterns and
 specifications promoted by the SDA SE.</p>
 <div class="admonition info">
-<p class="admonition-title">Spring Boot 3</p>
-<p>🥳 Upgrade to Spring Boot 3 is released with
-<a href="https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/3.0.0">version 3.0.0</a>. 🥳</p>
-<p>Please follow <a href="migration-2-to-3/">the migration guide</a> to upgrade.</p>
+<p class="admonition-title">Spring Boot 4</p>
+<p>🥳 Upgrade to Spring Boot 4 is released with <a href="https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/7.0.0">version 7.0.0</a>. 🥳</p>
+<p>Please follow <a href="migration-6-to-7/">the migration guide</a> to upgrade.</p>
 </div>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <table>
@@ -810,7 +809,7 @@ management to align transitive dependencies with the provided Spring versions.</
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">project</span><span class="o">.</span><span class="na">ext</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="n">sdaSpringCommonsVersions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;0.11.0&#39;</span>
+<span class="w">  </span><span class="n">sdaSpringCommonsVersions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;7.0.0&#39;</span>
 <span class="o">}</span>
 <span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">implementation</span><span class="w"> </span><span class="n">enforcedPlatform</span><span class="o">(</span><span class="s2">&quot;org.sdase.commons.spring.boot:sda-commons-dependencies:$sdaSpringCommonsVersions&quot;</span><span class="o">)</span>
@@ -824,7 +823,7 @@ management to align transitive dependencies with the provided Spring versions.</
 <p>With gradle 9 it will be mandatory to define a launcher to run your tests with gradle. SDA Spring Boot Commons uses junit. That's why it is recommended adding the following dependency to your defined dependencies:
 <div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>testRuntimeOnly &#39;org.junit.platform:junit-platform-launcher&#39;
 </code></pre></div></td></tr></table></div></p>
-<p>Artifacts of SDA Spring Boot Commons are available <a href="https://search.maven.org/search?q=g:org.sdase.commons.spring.boot">at Maven Central</a>
+<p>Artifacts of SDA Spring Boot Commons are available <a href="https://central.sonatype.com/namespace/org.sdase.commons.spring.boot">at Maven Central</a>
 since release <a href="https://github.com/SDA-SE/sda-spring-boot-commons/releases/tag/0.11.2">0.11.2</a>.</p>
 <h3 id="static-directories">Static directories<a class="headerlink" href="#static-directories" title="Permanent link">&para;</a></h3>
 <p>Since Spring Boot runs in an embedded Tomcat server, it needs some tmp directories to support the container run in a readonly file system.
