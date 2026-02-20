@@ -1,6 +1,6 @@
 # Migration Guide for Upgrading from 6.x.x to 7.x.x
 
-SDA Spring Boot Commons 6 updates 
+SDA Spring Boot Commons 7 updates 
 
 - Spring Boot from 3.5.x to 4.0.x and
 - Spring Cloud from 2025.0.x to 2025.1.x.

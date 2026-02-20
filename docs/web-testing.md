@@ -149,55 +149,56 @@ To mitigate this issue, it is possible to use a shared embedded MongoDB instance
 all integration tests in your suite. This approach significantly reduces memory overhead and
 improves test execution speed.
 
-```java
-import de.flapdoodle.embed.mongo.config.Net;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.mongo.transitions.Mongod;
-import de.flapdoodle.embed.mongo.transitions.RunningMongodProcess;
-import de.flapdoodle.reverse.TransitionWalker;
-import de.flapdoodle.reverse.transitions.Start;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class SharedMongoExtension implements BeforeAllCallback {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(SharedMongoExtension.class);
-  private static TransitionWalker.ReachedState<RunningMongodProcess> running;
-  private static final AtomicBoolean started = new AtomicBoolean(false);
-  private static final Object mutex = new Object();
-
-  public static void stop() {
-    if (running != null) {
-      running.close();
-    }
-  }
-
-  @Override
-  public void beforeAll(ExtensionContext context) {
-    synchronized (mutex) {
-      try {
-        if (started.compareAndSet(false, true)) {
-          int port = de.flapdoodle.net.Net.freeServerPort();
-          Mongod mongod =
-              Mongod.builder()
-                  .net(Start.to(Net.class).initializedWith(Net.of("127.0.0.1", port, false)))
-                  .build();
-          running = mongod.start(Version.Main.V8_0);
-          LOGGER.info("Started embedded MongodDB on Port {}", port);
-          System.setProperty("spring.mongodb.uri", "mongodb://127.0.0.1:" + port + "/testdb");
+??? example "Shared Embedded MongoDB for Integration Tests"
+    ```java
+    import de.flapdoodle.embed.mongo.config.Net;
+    import de.flapdoodle.embed.mongo.distribution.Version;
+    import de.flapdoodle.embed.mongo.transitions.Mongod;
+    import de.flapdoodle.embed.mongo.transitions.RunningMongodProcess;
+    import de.flapdoodle.reverse.TransitionWalker;
+    import de.flapdoodle.reverse.transitions.Start;
+    
+    import java.util.concurrent.atomic.AtomicBoolean;
+    
+    import org.junit.jupiter.api.extension.BeforeAllCallback;
+    import org.junit.jupiter.api.extension.ExtensionContext;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    
+    public class SharedMongoExtension implements BeforeAllCallback {
+    
+      private static final Logger LOGGER = LoggerFactory.getLogger(SharedMongoExtension.class);
+      private static TransitionWalker.ReachedState<RunningMongodProcess> running;
+      private static final AtomicBoolean started = new AtomicBoolean(false);
+      private static final Object mutex = new Object();
+    
+      public static void stop() {
+        if (running != null) {
+          running.close();
         }
-      } catch (Exception e) {
-        throw new RuntimeException("Could not start embedded MongoDB", e);
+      }
+    
+      @Override
+      public void beforeAll(ExtensionContext context) {
+        synchronized (mutex) {
+          try {
+            if (started.compareAndSet(false, true)) {
+              int port = de.flapdoodle.net.Net.freeServerPort();
+              Mongod mongod =
+                  Mongod.builder()
+                      .net(Start.to(Net.class).initializedWith(Net.of("127.0.0.1", port, false)))
+                      .build();
+              running = mongod.start(Version.Main.V8_0);
+              LOGGER.info("Started embedded MongodDB on Port {}", port);
+              System.setProperty("spring.mongodb.uri", "mongodb://127.0.0.1:" + port + "/testdb");
+            }
+          } catch (Exception e) {
+            throw new RuntimeException("Could not start embedded MongoDB", e);
+          }
+        }
       }
     }
-  }
-}
-```
+    ```
 
 To use this extension it is necessary to register it in the test class with:
 
