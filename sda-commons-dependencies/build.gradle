@@ -34,7 +34,7 @@ dependencies {
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
   api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.0")
-  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.0")
+  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.6")
 
   constraints {
     // overall conflicts
