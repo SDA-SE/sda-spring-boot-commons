@@ -19,7 +19,7 @@ ext {
 
 dependencies {
 
-  api enforcedPlatform("tools.jackson:jackson-bom:3.0.4")
+  api enforcedPlatform("tools.jackson:jackson-bom:3.1.0")
 
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
