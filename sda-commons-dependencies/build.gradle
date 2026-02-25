@@ -36,6 +36,8 @@ dependencies {
   api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.6")
   api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.6")
 
+  api enforcedPlatform("org.testcontainers:testcontainers-bom:2.0.3")
+
   constraints {
     // overall conflicts
     api 'org.slf4j:slf4j-api:2.0.17'
