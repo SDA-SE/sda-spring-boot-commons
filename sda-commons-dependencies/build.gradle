@@ -52,6 +52,10 @@ dependencies {
       because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
     }
 
+    api 'commons-io:commons-io:2.21.0', {
+      because 'conflict robothy, spring cloud, zookeeper'
+    }
+
     // sda-commons-starter-web
     api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}"
     api "org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}"
