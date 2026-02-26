@@ -68,3 +68,39 @@ This property changes can make changes in consuming services, like deployments n
 * Java 17 support removed.
 * Java 25 support added. 
   * The distroless image for this java version is `gcr.io/distroless/java25-debian13`.
+    Here’s a polished and more concise version of your migration guide section, written in a **step-by-step, imperative style** suitable for a migration guide:
+
+## MongoDB UUID and BigDecimal Representation
+
+> Spring Data MongoDB no longer provides defaults for UUID and BigInteger/BigDecimal representations.
+> This follows the driver recommendation to avoid favoring a specific representation, preventing unexpected changes when upgrading Spring Data versions.
+
+### UUID Representation
+
+When using UUIDs in your entities, you must now explicitly set:
+
+```properties
+spring.mongodb.representation.uuid=STANDARD
+```
+
+* The most likely previous value in existing data is `JAVA_LEGACY`.
+* To migrate existing UUID fields to the standard representation, enable:
+
+```properties
+spring.mongo.uuid.migrate=true
+```
+
+This triggers automatic migration of all UUID fields in MongoDB on application startup.
+
+### BigDecimal Representation
+
+When using `BigDecimal` in your entities, you must now explicitly set:
+
+```properties
+spring.mongodb.representation.big-decimal=DECIMAL128
+```
+
+* The most likely previous value in existing data is `STRING`.
+* This ensures consistent storage and avoids conversion issues during deserialization.
+
+**Note:** Always back up your database before performing migrations, and consider testing migration in a staging environment.
