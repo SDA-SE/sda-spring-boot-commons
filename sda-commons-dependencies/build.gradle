@@ -53,7 +53,7 @@ dependencies {
     }
 
     api 'commons-io:commons-io:2.21.0', {
-      because 'conflict robothy, spring cloud, zookeeper'
+      because 'conflict de.flapdoodle.embed.mongo.spring4x'
     }
 
     // sda-commons-starter-web
