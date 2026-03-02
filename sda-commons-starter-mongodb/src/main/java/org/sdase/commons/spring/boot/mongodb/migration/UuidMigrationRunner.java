@@ -94,13 +94,13 @@ public class UuidMigrationRunner implements ApplicationRunner {
         Document document = cursor.next();
         scanned++;
 
-        boolean changed =
+        Document migratedDocument =
             MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(document);
 
-        if (changed) {
-          Object id = document.get("_id");
+        if (migratedDocument != document) {
+          Object id = migratedDocument.get("_id");
           if (id != null) {
-            bulkOperations.add(new ReplaceOneModel<>(Filters.eq("_id", id), document));
+            bulkOperations.add(new ReplaceOneModel<>(Filters.eq("_id", id), migratedDocument));
             updated++;
           }
         }

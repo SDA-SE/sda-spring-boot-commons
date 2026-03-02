@@ -12,6 +12,7 @@ import static org.bson.BsonBinarySubType.UUID_LEGACY;
 import static org.bson.BsonBinarySubType.UUID_STANDARD;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.bson.BsonBinary;
 import org.bson.Document;
@@ -32,12 +33,12 @@ class MongoDBUuidRepresentationMigratorTest {
 
     Document root = new Document("id", legacyBinary);
 
-    boolean changed =
+    Document migratedDocument =
         MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
 
-    assertThat(changed).isTrue();
+    assertThat(migratedDocument).isNotSameAs(root);
 
-    Object migratedValue = root.get("id");
+    Object migratedValue = migratedDocument.get("id");
     assertThat(migratedValue).isInstanceOf(BsonBinary.class);
 
     BsonBinary standardBinary = (BsonBinary) migratedValue;
@@ -57,12 +58,12 @@ class MongoDBUuidRepresentationMigratorTest {
     Document nested = new Document("nestedId", legacyBinary);
     Document root = new Document("child", nested);
 
-    boolean changed =
+    Document migratedDocument =
         MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
 
-    assertThat(changed).isTrue();
+    assertThat(migratedDocument).isNotSameAs(root);
 
-    BsonBinary migrated = (BsonBinary) nested.get("nestedId");
+    BsonBinary migrated = (BsonBinary) ((Document) migratedDocument.get("child")).get("nestedId");
     assertThat(migrated.getType()).isEqualTo(UUID_STANDARD.getValue());
 
     UUID decoded = migrated.asUuid(UuidRepresentation.STANDARD);
@@ -78,11 +79,10 @@ class MongoDBUuidRepresentationMigratorTest {
 
     Document root = new Document("id", standardBinary);
 
-    boolean changed =
+    Document migratedDocument =
         MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
 
-    assertThat(changed).isFalse();
-    assertThat(root).containsEntry("id", standardBinary);
+    assertThat(migratedDocument).isSameAs(root).containsEntry("id", standardBinary);
   }
 
   @Test
@@ -92,10 +92,10 @@ class MongoDBUuidRepresentationMigratorTest {
             .append("count", 42)
             .append("child", new Document("value", "nested"));
 
-    boolean changed =
+    Document migratedDocument =
         MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
 
-    assertThat(changed).isFalse();
+    assertThat(migratedDocument).isSameAs(root);
   }
 
   @Test
@@ -110,13 +110,13 @@ class MongoDBUuidRepresentationMigratorTest {
         new Document("id1", new Binary(UUID_LEGACY.getValue(), legacyBytes1))
             .append("child", new Document("id2", new Binary(UUID_LEGACY.getValue(), legacyBytes2)));
 
-    boolean changed =
+    Document migratedDocument =
         MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
 
-    assertThat(changed).isTrue();
+    assertThat(migratedDocument).isNotSameAs(root);
 
-    BsonBinary migrated1 = (BsonBinary) root.get("id1");
-    BsonBinary migrated2 = (BsonBinary) ((Document) root.get("child")).get("id2");
+    BsonBinary migrated1 = (BsonBinary) migratedDocument.get("id1");
+    BsonBinary migrated2 = (BsonBinary) ((Document) migratedDocument.get("child")).get("id2");
 
     assertThat(migrated1.getType()).isEqualTo(UUID_STANDARD.getValue());
     assertThat(migrated2.getType()).isEqualTo(UUID_STANDARD.getValue());
@@ -156,18 +156,18 @@ class MongoDBUuidRepresentationMigratorTest {
         new Document("_id", new Binary(UUID_LEGACY.getValue(), legacyBytes5))
             .append("pets", List.of(dogs, cats));
 
-    boolean changed =
+    Document migratedDocument =
         MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
 
-    assertThat(changed).isTrue();
+    assertThat(migratedDocument).isNotSameAs(root);
 
     // Root _id check
-    BsonBinary rootId = (BsonBinary) root.get("_id");
+    BsonBinary rootId = (BsonBinary) migratedDocument.get("_id");
     assertThat(rootId.getType()).isEqualTo(UUID_STANDARD.getValue());
     assertThat(rootId.asUuid(UuidRepresentation.STANDARD)).isEqualTo(uuid5);
 
     // Pets list: dogs and cats
-    List<Document> pets = (List<Document>) root.get("pets");
+    List<Document> pets = (List<Document>) migratedDocument.get("pets");
 
     // First element: dogs
     Document dogsDoc = pets.getFirst();
@@ -184,6 +184,71 @@ class MongoDBUuidRepresentationMigratorTest {
     // Second element: cats
     Document catsDoc = pets.get(1);
     List<Document> catList = (List<Document>) catsDoc.get("cats");
+
+    BsonBinary cat1Id = (BsonBinary) catList.getFirst().get("_id");
+    assertThat(cat1Id.getType()).isEqualTo(UUID_STANDARD.getValue());
+    assertThat(cat1Id.asUuid(UuidRepresentation.STANDARD)).isEqualTo(uuid3);
+
+    BsonBinary cat2Id = (BsonBinary) catList.get(1).get("_id");
+    assertThat(cat2Id.getType()).isEqualTo(UUID_STANDARD.getValue());
+    assertThat(cat2Id.asUuid(UuidRepresentation.STANDARD)).isEqualTo(uuid4);
+  }
+
+  @Test
+  void shouldMigrateNestedMap() {
+    UUID uuid1 = UUID.randomUUID();
+    UUID uuid2 = UUID.randomUUID();
+    UUID uuid3 = UUID.randomUUID();
+    UUID uuid4 = UUID.randomUUID();
+    UUID uuid5 = UUID.randomUUID();
+    byte[] legacyBytes1 = UuidHelper.encodeUuidToBinary(uuid1, UuidRepresentation.JAVA_LEGACY);
+    byte[] legacyBytes2 = UuidHelper.encodeUuidToBinary(uuid2, UuidRepresentation.JAVA_LEGACY);
+    byte[] legacyBytes3 = UuidHelper.encodeUuidToBinary(uuid3, UuidRepresentation.JAVA_LEGACY);
+    byte[] legacyBytes4 = UuidHelper.encodeUuidToBinary(uuid4, UuidRepresentation.JAVA_LEGACY);
+    byte[] legacyBytes5 = UuidHelper.encodeUuidToBinary(uuid5, UuidRepresentation.JAVA_LEGACY);
+
+    Document dog1 =
+        new Document("_id", new Binary(UUID_LEGACY.getValue(), legacyBytes1))
+            .append("name", "Rufus");
+    Document dog2 =
+        new Document("_id", new Binary(UUID_LEGACY.getValue(), legacyBytes2))
+            .append("name", "Buddy");
+    Document cat1 =
+        new Document("_id", new Binary(UUID_LEGACY.getValue(), legacyBytes3))
+            .append("name", "Whiskers");
+    Document cat2 =
+        new Document("_id", new Binary(UUID_LEGACY.getValue(), legacyBytes4))
+            .append("name", "Fluffy");
+    Document root =
+        new Document("_id", new Binary(UUID_LEGACY.getValue(), legacyBytes5))
+            .append("pets", Map.of("dogs", List.of(dog1, dog2), "cats", List.of(cat1, cat2)));
+
+    Document migratedDocument =
+        MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(root);
+
+    assertThat(migratedDocument).isNotSameAs(root);
+
+    // Root _id check
+    BsonBinary rootId = (BsonBinary) migratedDocument.get("_id");
+    assertThat(rootId.getType()).isEqualTo(UUID_STANDARD.getValue());
+    assertThat(rootId.asUuid(UuidRepresentation.STANDARD)).isEqualTo(uuid5);
+
+    // Pets map: dogs and cats
+    Map<String, Object> petsMap = (Map<String, Object>) migratedDocument.get("pets");
+
+    // Check dogs entry
+    List<Document> dogList = (List<Document>) petsMap.get("dogs");
+
+    BsonBinary dog1Id = (BsonBinary) dogList.getFirst().get("_id");
+    assertThat(dog1Id.getType()).isEqualTo(UUID_STANDARD.getValue());
+    assertThat(dog1Id.asUuid(UuidRepresentation.STANDARD)).isEqualTo(uuid1);
+
+    BsonBinary dog2Id = (BsonBinary) dogList.get(1).get("_id");
+    assertThat(dog2Id.getType()).isEqualTo(UUID_STANDARD.getValue());
+    assertThat(dog2Id.asUuid(UuidRepresentation.STANDARD)).isEqualTo(uuid2);
+
+    // Check cats entry
+    List<Document> catList = (List<Document>) petsMap.get("cats");
 
     BsonBinary cat1Id = (BsonBinary) catList.getFirst().get("_id");
     assertThat(cat1Id.getType()).isEqualTo(UUID_STANDARD.getValue());
