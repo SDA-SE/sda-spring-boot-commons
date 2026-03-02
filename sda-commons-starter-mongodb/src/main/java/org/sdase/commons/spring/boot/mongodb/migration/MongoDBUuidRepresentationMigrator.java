@@ -29,17 +29,23 @@ import org.bson.types.Binary;
  * standard {@link org.bson.UuidRepresentation#STANDARD} representation. Failing to perform this
  * migration can lead to deserialization errors or inconsistent UUID values.
  *
- * <p>This class recursively scans a {@link Document} and all embedded documents for fields of type
- * {@link org.bson.types.Binary} with the legacy UUID subtype and converts them to the standard
- * subtype.
+ * <p>This class recursively scans a {@link Document} and all embedded documents, lists, sets and
+ * maps for values of type {@link org.bson.types.Binary} with the legacy UUID subtype and converts
+ * them to the standard subtype.
+ *
+ * <p>The original {@link Document} instance is not modified. Instead, a new {@link Document}
+ * instance is returned if any UUID values are converted. If no changes are required, the original
+ * instance is returned unchanged.
  *
  * <p>Example usage:
  *
  * <pre>{@code
  * Document doc = mongoTemplate.findOne(query, Document.class, "myCollection");
- * boolean changed = MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(doc);
- * if (changed) {
- *     mongoTemplate.save(doc, "myCollection");
+ * Document migrated =
+ *     MongoDBUuidRepresentationMigrator.convertUuidValuesFromLegacyToStandardFor(doc);
+ *
+ * if (migrated != doc) {
+ *     mongoTemplate.save(migrated, "myCollection");
  * }
  * }</pre>
  */
@@ -48,44 +54,117 @@ public class MongoDBUuidRepresentationMigrator {
   private MongoDBUuidRepresentationMigrator() {}
 
   /**
-   * Converts all UUID fields in the given {@link Document} (including nested documents) from the
-   * legacy UUID representation to the standard representation.
+   * Recursively converts all UUID values in the given {@link Document} from the legacy
+   * representation to the standard representation.
+   *
+   * <p>The provided document is not mutated. If at least one UUID value is converted, a new {@link
+   * Document} instance reflecting the changes is returned. Otherwise, the original document
+   * instance is returned.
    *
    * @param rootDocument the root document to process
-   * @return {@code true} if at least one UUID field was converted, {@code false} otherwise
+   * @return either the original document (if no changes were necessary) or a new document
+   *     containing the converted UUID values
    */
-  public static boolean convertUuidValuesFromLegacyToStandardFor(Document rootDocument) {
-    boolean docWasChanged = false;
-    Queue<Document> queue = new LinkedList<>();
-    queue.offer(rootDocument);
-
-    while (!queue.isEmpty()) {
-      Document document = queue.remove();
-      for (Map.Entry<String, Object> kv : document.entrySet()) {
-        String fieldName = kv.getKey();
-        Object fieldValue = kv.getValue();
-        if (fieldValue instanceof Binary binaryField
-            && binaryField.getType() == UUID_LEGACY.getValue()) {
-          migrateUuidRepresentationFromLegacyToStandard(document, fieldName);
-          docWasChanged = true;
-        } else if (fieldValue instanceof Document fieldDoc) {
-          queue.add(fieldDoc);
-        } else if (fieldValue instanceof Collection<?> collectionDocs) {
-          collectionDocs.forEach(
-              c -> {
-                if (c instanceof Document doc) {
-                  queue.add(doc);
-                }
-              });
-        }
-      }
-    }
-    return docWasChanged;
+  public static Document convertUuidValuesFromLegacyToStandardFor(Document rootDocument) {
+    return (Document) processValue(rootDocument);
   }
 
-  private static void migrateUuidRepresentationFromLegacyToStandard(Document document, String key) {
-    Binary legacyBinary = (Binary) document.get(key);
-    UUID uuid = new BsonBinary(legacyBinary.getType(), legacyBinary.getData()).asUuid(JAVA_LEGACY);
-    document.put(key, new BsonBinary(UUID_STANDARD, UuidHelper.encodeUuidToBinary(uuid, STANDARD)));
+  private static Object processValue(Object value) {
+
+    if (value instanceof Binary binaryField && binaryField.getType() == UUID_LEGACY.getValue()) {
+      return migrateUuidRepresentationFromLegacyToStandard(binaryField);
+    }
+
+    if (value instanceof Document document) {
+      return processDocument(document);
+    }
+
+    if (value instanceof List<?> list) {
+      return processList(list);
+    }
+
+    if (value instanceof Set<?> set) {
+      return processSet(set);
+    }
+
+    if (value instanceof Map<?, ?> map) {
+      return processMap(map);
+    }
+
+    return value;
+  }
+
+  private static Document processDocument(Document document) {
+    boolean changed = false;
+    Document rebuilt = new Document();
+
+    for (Map.Entry<String, Object> entry : document.entrySet()) {
+      Object original = entry.getValue();
+      Object processed = processValue(original);
+
+      rebuilt.put(entry.getKey(), processed);
+
+      if (processed != original) {
+        changed = true;
+      }
+    }
+
+    return changed ? rebuilt : document;
+  }
+
+  private static Object processMap(Map<?, ?> map) {
+    boolean changed = false;
+    Map<Object, Object> rebuilt = new LinkedHashMap<>();
+
+    for (Map.Entry<?, ?> entry : map.entrySet()) {
+      Object original = entry.getValue();
+      Object processed = processValue(original);
+
+      rebuilt.put(entry.getKey(), processed);
+
+      if (processed != original) {
+        changed = true;
+      }
+    }
+
+    return changed ? Map.copyOf(rebuilt) : map;
+  }
+
+  private static Object processList(List<?> list) {
+    boolean changed = false;
+    List<Object> rebuilt = new ArrayList<>(list.size());
+
+    for (Object element : list) {
+      Object processed = processValue(element);
+      rebuilt.add(processed);
+
+      if (processed != element) {
+        changed = true;
+      }
+    }
+
+    return changed ? List.copyOf(rebuilt) : list;
+  }
+
+  private static Object processSet(Set<?> set) {
+    boolean changed = false;
+    Set<Object> rebuilt = HashSet.newHashSet(set.size());
+
+    for (Object element : set) {
+      Object processed = processValue(element);
+      rebuilt.add(processed);
+
+      if (processed != element) {
+        changed = true;
+      }
+    }
+
+    return changed ? Set.copyOf(rebuilt) : set;
+  }
+
+  private static BsonBinary migrateUuidRepresentationFromLegacyToStandard(Binary binaryField) {
+    UUID uuid = new BsonBinary(binaryField.getType(), binaryField.getData()).asUuid(JAVA_LEGACY);
+
+    return new BsonBinary(UUID_STANDARD, UuidHelper.encodeUuidToBinary(uuid, STANDARD));
   }
 }
