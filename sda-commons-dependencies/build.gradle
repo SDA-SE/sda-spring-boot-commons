@@ -95,7 +95,7 @@ dependencies {
       because "conflict between starter-test (minidev) and spring-cloud (eclipse sisu)"
     }
 
-    api "org.wiremock.integrations:wiremock-spring-boot-standalone:4.1.0"
+    api "org.wiremock.integrations:wiremock-spring-boot-standalone:4.2.0"
 
     //Check on org.springframework.cloud:spring-cloud-openfeign-core update if still needed
     api "commons-fileupload:commons-fileupload:1.6.0", {
