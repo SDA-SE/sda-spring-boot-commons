@@ -12,10 +12,7 @@ import static org.bson.BsonBinarySubType.UUID_STANDARD;
 import static org.bson.UuidRepresentation.JAVA_LEGACY;
 import static org.bson.UuidRepresentation.STANDARD;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.UUID;
+import java.util.*;
 import org.bson.BsonBinary;
 import org.bson.Document;
 import org.bson.internal.UuidHelper;
@@ -73,6 +70,13 @@ public class MongoDBUuidRepresentationMigrator {
           docWasChanged = true;
         } else if (fieldValue instanceof Document fieldDoc) {
           queue.add(fieldDoc);
+        } else if (fieldValue instanceof Collection<?> collectionDocs) {
+          collectionDocs.forEach(
+              c -> {
+                if (c instanceof Document doc) {
+                  queue.add(doc);
+                }
+              });
         }
       }
     }
