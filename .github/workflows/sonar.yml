@@ -5,6 +5,7 @@ on:
   workflow_run:
     workflows:
       - Java CI
+      - Java CI release/6.x.x branch
     types:
       - completed
 
