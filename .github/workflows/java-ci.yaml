@@ -1,10 +1,10 @@
 # This workflow builds, tests, and releases the modules.
-name: Java CI
+name: Java CI Release 6.x.x Branch
 
 on:
   push:
     branches:
-      - main
+      - release/6.x.x
   pull_request:
 jobs:
   # build library

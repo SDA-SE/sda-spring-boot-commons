@@ -1,9 +1,9 @@
-name: Publish mkdocs
+name: Publish mkdocs Release 6.x.x Branch
 on:
   pull_request:
   push:
     branches:
-      - main
+      - release/6.x.x
 jobs:
   deploy:
     runs-on: ubuntu-latest

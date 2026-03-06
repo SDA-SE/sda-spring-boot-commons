@@ -1,10 +1,10 @@
 # This workflow tests the feature of using an external MongoDB for tests
-name: Java Test MongoDB
+name: Java Test MongoDB Release 6.x.x Branch
 
 on:
   push:
     branches:
-      - main
+      - 6.x.x
   pull_request:
 
 jobs:

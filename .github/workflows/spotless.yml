@@ -1,10 +1,10 @@
 # This workflow checks the code style
-name: Spotless
+name: Spotless Release 6.x.x Branch
 
 on:
   push:
     branches:
-      - main
+      - release/6.x.x
   pull_request:
 
 jobs:

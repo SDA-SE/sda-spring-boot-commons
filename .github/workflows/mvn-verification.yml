@@ -1,4 +1,4 @@
-name: Maven Dependency Resolution
+name: Maven Dependency Resolution Release 6.x.x Branch
 
 on: [pull_request]
 
