@@ -1,5 +1,5 @@
 # This workflow uploads snapshots of Pull Requests
-name: Pull Request Snapshots Maven Central
+name: Pull Request Snapshots Maven Central Release 6.x.x Branch
 
 on: [pull_request]
 

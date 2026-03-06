@@ -1,4 +1,4 @@
-name: Release Preview
+name: Release Preview Release 6.x.x Branch
 on:
   pull_request:
 

@@ -1,4 +1,4 @@
-name: License Check
+name: License Check Release 6.x.x Branch
 
 # This check can be executed locally as follows:
 #
@@ -13,9 +13,6 @@ name: License Check
 
 on:
   pull_request: {}
-  release:
-    types:
-      - created
 
 jobs:
   trivy-license-check:

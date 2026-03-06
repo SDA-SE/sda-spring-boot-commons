@@ -12,12 +12,12 @@
 # - only 3 retries
 # - no release (step 'semantic-release')
 # - no publication of the test results (step 'publish-test-results')
-name: Java CI Latest
+name: Java CI Latest Release 6.x.x Branch
 
 on:
   push:
     branches:
-      - main
+      - releases/6.x.x
 
 jobs:
   # build library

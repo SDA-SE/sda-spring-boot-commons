@@ -1,12 +1,12 @@
 # This workflow builds and tests on Windows.
 # The Windows check is extracted from the Matrix in Java CI because it is a lot slower and blocks
 # subsequent checks.
-name: Java CI Windows
+name: Java CI Windows Release 6.x.x Branch
 
 on:
   push:
     branches:
-      - main
+      - release/6.x.x
   pull_request:
 jobs:
   # build library

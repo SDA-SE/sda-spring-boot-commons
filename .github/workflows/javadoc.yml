@@ -1,10 +1,10 @@
 # This workflow builds the Javadoc
-name: Javadoc
+name: Javadoc Release 6.x.x Branch
 
 on:
   push:
     branches:
-      - main
+      - release/6.x.x
   pull_request:
 
 jobs:
