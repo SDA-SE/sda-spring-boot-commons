@@ -17,7 +17,7 @@ name: Java CI Latest Release 6.x.x Branch
 on:
   push:
     branches:
-      - releases/6.x.x
+      - release/6.x.x
 
 jobs:
   # build library
