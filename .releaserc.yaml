@@ -8,3 +8,4 @@ plugins:
 branches:
   - name: 'main'
   - name: 'release/6.x.x'
+    range: '6.x'
