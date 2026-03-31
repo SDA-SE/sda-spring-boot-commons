@@ -72,19 +72,6 @@ dependencies {
           org.springframework.cloud:spring-cloud-dependencies.
           '''
     }
-    api 'org.springframework.security:spring-security-web:6.5.9', {
-      because 'fix CVE-2026-22732'
-    }
-    api 'org.springframework:spring-webmvc:6.2.17', {
-      because 'fix CVE-2026-22737'
-    }
-    api 'io.netty:netty-codec-http:4.1.132.Final', {
-      because 'fix CVE-2026-33870'
-    }
-    api 'io.netty:netty-codec-http2:4.1.132.Final', {
-      because 'fix CVE-2026-33871'
-    }
-
     // sda-commons-starter-web
     api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}", {
       because 'fix CVE-2023-33201'
