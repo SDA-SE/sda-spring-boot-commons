@@ -147,7 +147,12 @@ abstract class AbstractSecurityHeadersTest {
             Stream.concat(
                     Stream.of(
                         "Content-Type",
-                        "Transfer-Encoding",
+                        // Spring Boot 4.0.5 (Tomcat 11.0.20) responds with Content-Length
+                        // instead of Transfer-Encoding for this response.
+                        // Tomcat 11.0.19 contained Fix: 69967: Fix inconsistencies related to
+                        // Content-Length and Content-Type headers when accessed using the getHeader
+                        // method and similar.
+                        "Content-Length",
                         "Date",
                         "Keep-Alive",
                         "Connection",
