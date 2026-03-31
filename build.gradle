@@ -188,6 +188,9 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
 
   test {
     useJUnitPlatform()
+    // Reduce noisy Kafka client logs in tests, e.g.:
+    // "[AdminClient clientId=adminclient-3] Rebootstrapping with Cluster(id = null, nodes = [localhost:59645 ...])"
+    systemProperty "logging.level.org.apache.kafka.clients.admin.internals.AdminMetadataManager", "WARN"
   }
 
   configurations.configureEach {
