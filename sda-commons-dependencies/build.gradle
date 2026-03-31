@@ -10,7 +10,7 @@ ext {
   bouncycastleVersion = '1.83'
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
-  springBootVersion = '3.5.11'
+  springBootVersion = '3.5.12' // CVE-2026-22731, CVE-2026-22733
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.6.3'
@@ -71,6 +71,18 @@ dependencies {
           Check for removal on upgrade of io.github.openfeign:feign-form-spring > 13.6 via
           org.springframework.cloud:spring-cloud-dependencies.
           '''
+    }
+    api 'org.springframework.security:spring-security-web:6.5.9', {
+      because 'fix CVE-2026-22732'
+    }
+    api 'org.springframework:spring-webmvc:6.2.17', {
+      because 'fix CVE-2026-22737'
+    }
+    api 'io.netty:netty-codec-http:4.1.132.Final', {
+      because 'fix CVE-2026-33870'
+    }
+    api 'io.netty:netty-codec-http2:4.1.132.Final', {
+      because 'fix CVE-2026-33871'
     }
 
     // sda-commons-starter-web
