@@ -10,7 +10,7 @@ ext {
   bouncycastleVersion = '1.83'
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
-  springBootVersion = '3.5.11'
+  springBootVersion = '3.5.13' // CVE-2026-22731, CVE-2026-22733
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.6.3'
@@ -72,7 +72,6 @@ dependencies {
           org.springframework.cloud:spring-cloud-dependencies.
           '''
     }
-
     // sda-commons-starter-web
     api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}", {
       because 'fix CVE-2023-33201'
