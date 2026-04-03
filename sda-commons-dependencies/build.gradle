@@ -73,7 +73,7 @@ dependencies {
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
 
     // sda-commons-web-testing
-    api 'com.nimbusds:nimbus-jose-jwt:10.8'
+    api 'com.nimbusds:nimbus-jose-jwt:10.9'
 
     api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring4x:4.24.0'
 
