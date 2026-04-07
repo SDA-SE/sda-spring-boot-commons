@@ -34,8 +34,8 @@ dependencies {
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
-  api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.7")
-  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.7")
+  api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.8")
+  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.8")
 
   constraints {
     // overall conflicts
