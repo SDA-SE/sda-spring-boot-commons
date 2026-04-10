@@ -92,7 +92,7 @@ dependencies {
 
     // sda-commons-starter-s3
     api "io.awspring.cloud:spring-cloud-aws-s3:4.0.0"
-    api "io.github.robothy:local-s3-rest:2.3.1"
+    api "io.github.robothy:local-s3-rest:2.4"
 
     api "org.ow2.asm:asm:9.9.1", {
       because "conflict between starter-test (minidev) and spring-cloud (eclipse sisu)"
