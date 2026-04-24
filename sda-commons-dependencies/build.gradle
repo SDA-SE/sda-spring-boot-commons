@@ -57,7 +57,7 @@ dependencies {
       because 'conflict spring cloud (4.5.4 via maven resolver) and spring-cloud-aws-s3 (4.5.13 via awssdk)'
     }
 
-    api 'commons-io:commons-io:2.21.0', {
+    api 'commons-io:commons-io:2.22.0', {
       because 'conflict de.flapdoodle.embed.mongo.spring4x'
     }
 
