@@ -90,7 +90,7 @@ dependencies {
     // sda-commons-starter-kafka
     // spring-kafka-test 4.0.4 may request kafka-group-coordinator 4.1.1 while Boot 4.0.5 resolves 4.1.2.
     // Pinning here keeps testRuntimeClasspath consistent with failOnVersionConflict() enabled.
-    api "org.apache.kafka:kafka-group-coordinator:4.1.2"
+    api "org.apache.kafka:kafka-group-coordinator:4.2.0"
     api "org.scala-lang:scala-reflect:${scalaVersion}"
     api "org.scala-lang:scala-library:${scalaVersion}"
 
