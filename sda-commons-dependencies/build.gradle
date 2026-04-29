@@ -48,7 +48,7 @@ dependencies {
     api 'org.awaitility:awaitility:4.3.0'
     api 'org.junit-pioneer:junit-pioneer:2.3.0'
 
-    api 'com.fasterxml.jackson.core:jackson-databind:2.21.2', {
+    api 'com.fasterxml.jackson.core:jackson-databind:2.21.3', {
       because 'conflict spring-cloud-aws-s3 (2.20.1) and swagger-core-jakarta (2.19.2), keep aligned with jackson-bom and Boot'
     }
 
