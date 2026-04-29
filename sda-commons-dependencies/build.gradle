@@ -15,12 +15,13 @@ ext {
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.49'
   victoolsVersion = '5.0.0'
+  jackson2Version = '2.21.3'
 }
 
 dependencies {
 
   api enforcedPlatform("tools.jackson:jackson-bom:3.1.2")
-  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.21.2") //because CVE GHSA-72hv-8253-57qq
+  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:${jackson2Version}") //because CVE GHSA-72hv-8253-57qq
 
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
@@ -48,7 +49,7 @@ dependencies {
     api 'org.awaitility:awaitility:4.3.0'
     api 'org.junit-pioneer:junit-pioneer:2.3.0'
 
-    api 'com.fasterxml.jackson.core:jackson-databind:2.21.2', {
+    api "com.fasterxml.jackson.core:jackson-databind:${jackson2Version}", {
       because 'conflict spring-cloud-aws-s3 (2.20.1) and swagger-core-jakarta (2.19.2), keep aligned with jackson-bom and Boot'
     }
 
