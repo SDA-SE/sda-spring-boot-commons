@@ -1,0 +1,2 @@
+mkdocs-techdocs-core==1.6.2
+mkdocs-build-plantuml-plugin==2.1.0
