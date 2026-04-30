@@ -19,8 +19,7 @@ jobs:
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: 3.12
-      - run: pip install mkdocs-techdocs-core # Includes material theme
-      - run: pip install mkdocs-build-plantuml-plugin
+      - run: 'pip install --only-binary :all: -r .github/workflows/requirements-docs.txt'
       - run: git fetch origin gh-pages # Get latest history
       - run: > # required for mkdocs, not for techdocs
           yq -i '.plugins |= . +
