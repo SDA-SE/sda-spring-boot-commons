@@ -50,19 +50,40 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PRIVATE_KEY_SECRET }}
 
-      - uses: 8398a7/action-slack@v3
-        with:
-          status: custom
-          fields: workflow,job,commit,repo,ref,author,took
-          custom_payload: |
-            {
-              username: 'Maven Central Upload',
-              icon_emoji: ':coffin-dance:',
-              attachments: [{
-                color: 'danger',
-                text: `Maven Central Upload of sda-spring-boot-commons:${{ github.event.release.tag_name }} failed!\n\nWorkflow ${process.env.AS_WORKFLOW}`,
-              }]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Notify Maven Central upload failure in Slack
         if: failure()
+        uses: slackapi/slack-github-action@03ea5433c137af7c0495bc0cad1af10403fc800c # v3.0.2
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: 'C05NYA7KG56' # sda-spring-boot-commons-security
+          payload: |
+            {
+              "text": "${{ github.event.repository.name }}: Maven Central upload of ${{ github.event.release.tag_name }} failed.",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Maven Central Upload",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Maven Central upload of *${{ github.event.repository.name }}:${{ github.event.release.tag_name }}* failed."
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Open workflow run>"
+                    }
+                  ]
+                }
+              ]
+            }
