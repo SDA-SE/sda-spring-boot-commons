@@ -53,37 +53,23 @@ jobs:
       - name: Notify Maven Central upload failure in Slack
         if: failure()
         uses: slackapi/slack-github-action@03ea5433c137af7c0495bc0cad1af10403fc800c # v3.0.2
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          channel-id: 'C05NYA7KG56' # sda-spring-boot-commons-security
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
-            {
-              "text": "${{ github.event.repository.name }}: Maven Central upload of ${{ github.event.release.tag_name }} failed.",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Maven Central Upload",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ":red_circle: Maven Central upload of *${{ github.event.repository.name }}:${{ github.event.release.tag_name }}* failed."
-                  }
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Open workflow run>"
-                    }
-                  ]
-                }
-              ]
-            }
+            channel: C05NYA7KG56
+            text: "${{ github.event.repository.name }}: Maven Central upload of ${{ github.event.release.tag_name }} failed."
+            blocks:
+              - type: header
+                text:
+                  type: plain_text
+                  text: Maven Central Upload
+                  emoji: true
+              - type: section
+                text:
+                  type: mrkdwn
+                  text: ":red_circle: Maven Central upload of *${{ github.event.repository.name }}:${{ github.event.release.tag_name }}* failed."
+              - type: context
+                elements:
+                  - type: mrkdwn
+                    text: "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Open workflow run>"
