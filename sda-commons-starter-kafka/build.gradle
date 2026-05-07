@@ -7,6 +7,9 @@ dependencies {
     // not needed at runtime, duplicate classes with wiremock standalone
     exclude group: 'com.google.code.findbugs', module: 'jsr305'
   }
+  api 'org.bitbucket.b_c:jose4j', {
+    because "https://issues.apache.org/jira/browse/KAFKA-20184"
+  }
   api project(":sda-commons-metadata-context")
 
   testImplementation project(":sda-commons-starter-web")
