@@ -14,7 +14,9 @@ dependencies {
 
   testImplementation project(":sda-commons-starter-web")
   testImplementation project(":sda-commons-web-testing")
-  testImplementation 'org.springframework.kafka:spring-kafka-test'
+  testImplementation 'org.springframework.kafka:spring-kafka-test', {
+    exclude group: 'org.bitbucket.b_c', module: 'jose4j' //spring-kafka-test comes with jose4j but spring-kafka doesn't right now, I exclude it, to simulate KAFKA-20184
+  }
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'
   }
