@@ -20,7 +20,7 @@ ext {
 
 dependencies {
 
-  api enforcedPlatform("tools.jackson:jackson-bom:3.1.2")
+  api enforcedPlatform("tools.jackson:jackson-bom:3.1.3")
   api enforcedPlatform("com.fasterxml.jackson:jackson-bom:${jackson2Version}") //because CVE GHSA-72hv-8253-57qq
 
   // Spring Boot after MongoDB so that MongoDB overrules
