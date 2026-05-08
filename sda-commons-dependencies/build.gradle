@@ -110,12 +110,6 @@ dependencies {
       because "CVE-2025-48976"
     }
 
-    // to address CVEs: CVE-2026-34483, CVE-2026-34486, CVE-2026-34487, CVE-2026-34500
-    // FIXME: remove again when spring boot comes with an updated tomcat-embed-core
-    api 'org.apache.tomcat.embed:tomcat-embed-core:11.0.21'
-    api 'org.apache.tomcat.embed:tomcat-embed-el:11.0.21'
-    api 'org.apache.tomcat.embed:tomcat-embed-websocket:11.0.21'
-
     api 'org.bitbucket.b_c:jose4j:0.9.6', {
       because "https://issues.apache.org/jira/browse/KAFKA-20184"
     }
