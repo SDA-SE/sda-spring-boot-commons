@@ -10,7 +10,9 @@ ext {
   bouncycastleVersion = '1.84'
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
-  springBootVersion = '3.5.13' // CVE-2026-22731, CVE-2026-22733
+  springBootVersion = '3.5.14' // CVE-2026-22731, CVE-2026-22733
+  nettyVersion = '4.1.133.Final'
+  opentelemetryVersion = '1.62.0'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
   mongoDbDriverVersion = '5.6.3'
@@ -26,9 +28,11 @@ dependencies {
     exclude group: 'org.mongodb'
     exclude group: 'org.apache.commons', module: 'commons-lang3'
   }
+  api enforcedPlatform("io.netty:netty-bom:${nettyVersion}") // because CVE-2026-42583
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
   }
+  api enforcedPlatform("io.opentelemetry:opentelemetry-bom:${opentelemetryVersion}") // because CVE-2026-45292
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
 
   // asyncapi generation
@@ -87,6 +91,11 @@ dependencies {
     api "io.swagger.core.v3:swagger-core-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
+
+    // must align with other OpenTelemetry modules to avoid NoSuchMethodError at runtime
+    api "io.opentelemetry:opentelemetry-exporter-otlp:${opentelemetryVersion}", {
+      because 'mixed versions with spring-boot managed 1.49.0 and opentelemetry-bom 1.62.0'
+    }
 
     api 'io.github.classgraph:classgraph:4.8.184'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
