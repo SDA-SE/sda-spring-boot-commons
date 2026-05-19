@@ -92,6 +92,11 @@ dependencies {
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
+    // must align with other OpenTelemetry modules to avoid NoSuchMethodError at runtime
+    api "io.opentelemetry:opentelemetry-exporter-otlp:${opentelemetryVersion}", {
+      because 'mixed versions with spring-boot managed 1.49.0 and opentelemetry-bom 1.62.0'
+    }
+
     api 'io.github.classgraph:classgraph:4.8.184'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     api 'org.xerial.snappy:snappy-java:1.1.10.8', {
