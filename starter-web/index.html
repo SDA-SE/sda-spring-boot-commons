@@ -956,6 +956,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration-6-to-7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to v7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1488,18 +1516,18 @@ core concepts.</p>
 <td><code>ENABLE_JSON_LOGGING</code></td>
 </tr>
 <tr>
-<td><code>management.otlp.tracing.endpoint</code> <em>string</em></td>
+<td><code>management.opentelemetry.tracing.export.otlp.endpoint</code> <em>string</em></td>
 <td>Base url to OTLP Collector instance. It applies for http or gRPC, if enabled</td>
 <td><code>http://grafana-agent-traces.monitoring:4317</code></td>
 <td><code>"http://localhost:4318"</code></td>
-<td><code>MANAGEMENT_OTLP_TRACING_ENDPOINT</code></td>
+<td><code>MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT</code></td>
 </tr>
 <tr>
-<td><code>management.tracing.enabled</code> <em>boolean</em></td>
-<td>If tracing should be unit-tested, it is important to have the annotation <code>@AutoConfigureObservability</code> on your test class to enable tracing.</td>
+<td><code>management.tracing.export.enabled</code> <em>boolean</em></td>
+<td>If tracing should be unit-tested, it is important to have the annotation <code>@AutoConfigureTracing</code>  on your test class to enable tracing.</td>
 <td><code>true</code> (<code>false</code> in test contexts)</td>
 <td><code>false</code></td>
-<td><code>MANAGEMENT_TRACING_ENABLED</code></td>
+<td><code>MANAGEMENT_TRACING_EXPORT_ENABLED</code></td>
 </tr>
 <tr>
 <td><code>management.tracing.sampling.probability</code> <em>number</em></td>
@@ -1523,18 +1551,18 @@ core concepts.</p>
 <td><code>MANAGEMENT_TRACING_GRPC_ENABLED</code></td>
 </tr>
 <tr>
-<td><code>management.otlp.tracing.compression</code> <em>string</em></td>
+<td><code>management.opentelemetry.tracing.export.otlp.compression</code> <em>string</em></td>
 <td>Method used to compress the payload. Options: "gzip", "none"</td>
 <td><code>"none"</code></td>
 <td><code>"gzip"</code></td>
-<td><code>MANAGEMENT_OTLP_TRACING_COMPRESSION</code></td>
+<td><code>MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_COMPRESSION</code></td>
 </tr>
 <tr>
-<td><code>management.otlp.tracing.timeout</code> <em>string</em></td>
+<td><code>management.opentelemetry.tracing.export.otlp.timeout</code> <em>string</em></td>
 <td>Call timeout for the OTel Collector to process an exported batch of data. This timeout spans the entire call.</td>
 <td><code>"10s"</code></td>
 <td><code>"20s"</code></td>
-<td><code>MANAGEMENT_OTLP_TRACING_TIMEOUT</code></td>
+<td><code>MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_TIMEOUT</code></td>
 </tr>
 <tr>
 <td><code>spring.application.name</code> <em>string</em></td>
@@ -1605,11 +1633,10 @@ core concepts.</p>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">server.servlet.context-path</span><span class="o">=</span><span class="s">/api</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="na">server.servlet.context-path</span><span class="o">=</span><span class="s">/api</span>
 <span class="na">server.port</span><span class="o">=</span><span class="s">8080</span>
 <span class="na">server.max-http-request-header-size</span><span class="o">=</span><span class="s">8192</span>
-<span class="na">server.error.whitelabel.enabled</span><span class="o">=</span><span class="s">false</span>
+<span class="na">spring.web.error.whitelabel.enabled</span><span class="o">=</span><span class="s">false</span>
 
 <span class="na">server.tomcat.basedir</span><span class="o">=</span><span class="s">${java.io.tmpdir}/tomcat</span>
 
@@ -1635,18 +1662,17 @@ core concepts.</p>
 <span class="na">management.endpoint.health.show-components</span><span class="o">=</span><span class="s">always</span>
 <span class="c1"># Metrics</span>
 <span class="na">management.endpoints.web.path-mapping.prometheus</span><span class="o">=</span><span class="s">metrics/prometheus</span>
-<span class="na">management.metrics.web.server.request.autotime.enabled</span><span class="o">=</span><span class="s">true</span>
 <span class="na">management.endpoint.prometheus.access</span><span class="o">=</span><span class="s">read-only</span>
 <span class="na">management.endpoint.metrics.access</span><span class="o">=</span><span class="s">read-only</span>
 <span class="na">management.endpoint.availableEndpoints.access</span><span class="o">=</span><span class="s">read-only</span>
 
 
-<span class="na">management.tracing.enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="na">management.tracing.export.enabled</span><span class="o">=</span><span class="s">true</span>
 <span class="na">management.tracing.propagation.type</span><span class="o">=</span><span class="s">b3,w3c</span>
 <span class="na">management.tracing.sampling.probability</span><span class="o">=</span><span class="s">1.0</span>
-<span class="na">management.otlp.tracing.endpoint</span><span class="o">=</span><span class="s">http://grafana-agent-traces.monitoring:4317</span>
-<span class="na">management.otlp.tracing.compression</span><span class="o">=</span><span class="s">none</span>
-<span class="na">management.otlp.tracing.timeout</span><span class="o">=</span><span class="s">10s</span>
+<span class="na">management.opentelemetry.tracing.export.otlp.endpoint</span><span class="o">=</span><span class="s">http://grafana-agent-traces.monitoring:4317</span>
+<span class="na">management.opentelemetry.tracing.export.otlp.compression</span><span class="o">=</span><span class="s">none</span>
+<span class="na">management.opentelemetry.tracing.export.otlp.timeout</span><span class="o">=</span><span class="s">10s</span>
 <span class="na">management.tracing.grpc.enabled</span><span class="o">=</span><span class="s">true</span>
 
 
@@ -2226,12 +2252,12 @@ be serialized with milliseconds, it must be annotated with
 <code>@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithMillis.class)</code>
 . If a specific field should be serialized with nanoseconds, it must be annotated with
 <code>@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = Iso8601Serializer.WithNanos.class)</code></p>
+<p>The standard SDA <code>tools.jackson.databind.ObjectMapper</code> is configured as <code>tools.jackson.databind.json.JsonMapper</code>.</p>
 <p><strong>Differences to the known <a href="https://github.com/SDA-SE/sda-dropwizard-commons/tree/main/sda-commons-server-jackson">SDA Dropwizard Commons configuration</a></strong>
 - <code>java.time.ZonedDateTime</code> fields are serialized with seconds by default.
   There is no other global configuration for <strong>java.time.ZonedDateTime</strong> serialization available.
 - <strong>Fewer modules are activated for foreign frameworks</strong>. Compared to SDA Dropwizard Commons,
   <strong>GuavaExtrasModule, JodaModule, and CaffeineModule</strong> are not registered anymore.
-- No documented customization of the global <strong>com.fasterxml.jackson.databind.ObjectMapper</strong> is available right now.
 - Support for <strong>HAL Links and embedding linked resources</strong> is not implemented.
 - Support for <strong>YAML</strong> is not implemented.
 - There is <strong>no support for field filters</strong>.
@@ -2546,7 +2572,7 @@ OpenTelemetry for tools to collect and send telemetry data to the reporter/colle
 <li>The service name is derived from <code>spring.application.name</code></li>
 <li>Generate and report OTLP traces via HTTP or gRPC. By default, it sends them to a OTLP compatible
   collector (e.g. Jaeger) on localhost (http port 4317, gRPC port 4318). Configure the location of
-  the service using <code>management.otlp.tracing.endpoint</code>.</li>
+  the service using <code>management.opentelemetry.tracing.export.otlp.endpoint</code>.</li>
 <li>See <a href="#configuration">above</a> for more common options.</li>
 <li>You can check all the possible values on <a href="https://docs.spring.io/spring-boot/api/java/org/springframework/boot/actuate/autoconfigure/tracing/otlp/OtlpTracingProperties.html">OtlpTracingProperties</a>
   and <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/autoconfigure/tracing/TracingProperties.html">TracingProperties</a></li>
