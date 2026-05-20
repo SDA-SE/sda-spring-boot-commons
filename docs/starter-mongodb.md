@@ -41,3 +41,28 @@ Note that this directory is also configurable through the property `sda.caCertif
 ## Testing
 
 Testing services with MongoDB is [covered in the testing documentation](./web-testing.md#mongodb).
+
+## Migrating UUID representation
+
+Version 7 updated Spring Boot Commons to version 4. As a result:
+> Spring Data MongoDB no longer provide defaults for UUID and BigInteger/BigDecimal representations.
+> This aligns with the driver recommendation to not favor a particular representation for UUID or
+> BigInteger/BigDecimal to avoid representation changes caused by upgrades to a newer Spring Data
+> version.
+
+Applications now need to explicitly choose the representation they want to use. If no property was
+previously set, the existing UUID representation is most likely `java_legacy`.
+
+To help migrate existing UUID fields to the `standard` representation, you can set the environment
+variable or property:
+
+```
+SPRING_MONGO_UUID_MIGRATE=true
+```
+
+Once enabled, Spring will automatically scan all MongoDB collections on application startup and
+convert UUID fields from `java_legacy` to `standard` representation. This ensures consistency with
+the newer driver behavior and avoids serialization or compatibility issues.
+
+**Note:** It is recommended to back up your database before enabling migration, and test the
+migration in a staging environment to verify data integrity.
