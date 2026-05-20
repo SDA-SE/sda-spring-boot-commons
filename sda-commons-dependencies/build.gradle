@@ -116,5 +116,9 @@ dependencies {
     api 'org.bitbucket.b_c:jose4j:0.9.6', {
       because "https://issues.apache.org/jira/browse/KAFKA-20184"
     }
+
+    api 'org.apache.tomcat.embed:tomcat-embed-core:11.0.22', {
+      because 'CVE-2026-41293'
+    }
   }
 }
