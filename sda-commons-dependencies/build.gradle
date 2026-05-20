@@ -108,6 +108,16 @@ dependencies {
 
     api "org.wiremock.integrations:wiremock-spring-boot-standalone:4.2.1"
 
+    api "org.apache.tomcat.embed:tomcat-embed-core:11.0.22", {
+      because "CVE-2026-43512"
+    }
+    api "org.apache.tomcat.embed:tomcat-embed-el:11.0.22", {
+      because "CVE-2026-43512"
+    }
+    api "org.apache.tomcat.embed:tomcat-embed-websocket:11.0.22", {
+      because "CVE-2026-43512"
+    }
+
     //Check on org.springframework.cloud:spring-cloud-openfeign-core update if still needed
     api "commons-fileupload:commons-fileupload:1.6.0", {
       because "CVE-2025-48976"
