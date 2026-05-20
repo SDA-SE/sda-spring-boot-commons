@@ -22,11 +22,13 @@ ext {
 }
 
 dependencies {
-  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.21.1") //because CVE GHSA-72hv-8253-57qq
+  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.21.2") //because CVE GHSA-72hv-8253-57qq
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'org.mongodb'
     exclude group: 'org.apache.commons', module: 'commons-lang3'
+    exclude group: 'io.opentelemetry'
+    exclude group: 'org.apache.tomcat.embed'
   }
   api enforcedPlatform("io.netty:netty-bom:${nettyVersion}") // because CVE-2026-42583
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
@@ -129,10 +131,14 @@ dependencies {
     api "io.awspring.cloud:spring-cloud-aws-s3:3.4.2"
     api "io.github.robothy:local-s3-rest:2.2"
 
-    // to address CVEs: CVE-2026-34483, CVE-2026-34486, CVE-2026-34487, CVE-2026-34500
-    // FIXME: remove again when spring boot comes with an updated tomcat-embed-core
-    api 'org.apache.tomcat.embed:tomcat-embed-core:11.0.21'
-    api 'org.apache.tomcat.embed:tomcat-embed-el:11.0.21'
-    api 'org.apache.tomcat.embed:tomcat-embed-websocket:11.0.21'
+    api "org.apache.tomcat.embed:tomcat-embed-core:11.0.22", {
+      because "CVE-2026-43512"
+    }
+    api "org.apache.tomcat.embed:tomcat-embed-el:11.0.22", {
+      because "CVE-2026-43512"
+    }
+    api "org.apache.tomcat.embed:tomcat-embed-websocket:11.0.22", {
+      because "CVE-2026-43512"
+    }
   }
 }
