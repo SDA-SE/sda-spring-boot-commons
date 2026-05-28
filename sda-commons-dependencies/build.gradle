@@ -16,6 +16,7 @@ ext {
   swaggerCoreVersion = '2.2.49'
   victoolsVersion = '5.0.0'
   jackson2Version = '2.21.3'
+  openTelemetryVersion = '1.62.0'
 }
 
 dependencies {
@@ -29,11 +30,13 @@ dependencies {
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'org.mongodb'
     exclude group: 'io.netty'
+    exclude group: 'io.opentelemetry'
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
   }
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
+  api enforcedPlatform("io.opentelemetry:opentelemetry-bom:${openTelemetryVersion}")
 
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
