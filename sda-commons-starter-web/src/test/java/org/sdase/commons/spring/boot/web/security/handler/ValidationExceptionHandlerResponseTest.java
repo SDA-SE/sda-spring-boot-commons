@@ -54,7 +54,11 @@ class ValidationExceptionHandlerResponseTest {
   static Stream<Arguments> realTestData() {
     String javaxConstraintsPackageName = NotNull.class.getPackage().getName();
     String hibernateConstraintsPackageName = ISBN.class.getPackage().getName();
-    try (ScanResult scanResult = new ClassGraph().enableClassInfo().scan()) {
+    try (ScanResult scanResult =
+        new ClassGraph()
+            .enableClassInfo()
+            .acceptPackages(javaxConstraintsPackageName, hibernateConstraintsPackageName)
+            .scan()) {
       return scanResult
           .getAllClasses()
           .filter(
