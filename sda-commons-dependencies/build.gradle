@@ -15,7 +15,7 @@ ext {
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.49'
   victoolsVersion = '5.0.0'
-  jackson2Version = '2.21.3'
+  jackson2Version = '2.21.4'
 }
 
 dependencies {
