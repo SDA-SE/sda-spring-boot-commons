@@ -87,7 +87,7 @@ dependencies {
     // sda-commons-web-testing
     api 'com.nimbusds:nimbus-jose-jwt:10.9'
 
-    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring4x:4.24.0'
+    api 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring4x:4.33.0'
 
     // sda-commons-starter-mongodb
     api "org.mongodb:mongodb-driver-sync:${mongoDbDriverVersion}"
