@@ -121,7 +121,7 @@ dependencies {
       because "https://issues.apache.org/jira/browse/KAFKA-20184"
     }
 
-    api 'org.apache.tomcat.embed:tomcat-embed-core:11.0.22', {
+    api 'org.apache.tomcat.embed:tomcat-embed-core:11.0.23', {
       because 'CVE-2026-41293'
     }
   }
