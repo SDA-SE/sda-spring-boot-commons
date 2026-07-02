@@ -2,10 +2,15 @@ dependencies {
   api 'tools.jackson.core:jackson-databind'
   api 'org.springframework.boot:spring-boot-starter-actuator'
   api 'org.springframework.boot:spring-boot-starter-validation'
-  api 'org.springframework.boot:spring-boot-starter-kafka'
+  api 'org.springframework.boot:spring-boot-starter-kafka', {
+    // see https://github.com/spring-projects/spring-kafka/discussions/4508 can be removed in future updates again
+    exclude group: 'com.github.spotbugs', module: 'spotbugs-annotations'
+  }
   api 'org.springframework.kafka:spring-kafka', {
     // not needed at runtime, duplicate classes with wiremock standalone
     exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    // see https://github.com/spring-projects/spring-kafka/discussions/4508 can be removed in future updates again
+    exclude group: 'com.github.spotbugs', module: 'spotbugs-annotations'
   }
   api 'org.bitbucket.b_c:jose4j', {
     because "https://issues.apache.org/jira/browse/KAFKA-20184"
@@ -16,6 +21,8 @@ dependencies {
   testImplementation project(":sda-commons-web-testing")
   testImplementation 'org.springframework.kafka:spring-kafka-test', {
     exclude group: 'org.bitbucket.b_c', module: 'jose4j' //spring-kafka-test comes with jose4j but spring-kafka doesn't right now, I exclude it, to simulate KAFKA-20184
+    // see https://github.com/spring-projects/spring-kafka/discussions/4508 can be removed in future updates again
+    exclude group: 'com.github.spotbugs', module: 'spotbugs-annotations'
   }
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'

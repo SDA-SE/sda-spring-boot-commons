@@ -8,5 +8,8 @@ dependencies {
   testImplementation project(':sda-commons-starter-kafka')
   testImplementation project(':sda-commons-asyncapi')
   testImplementation project(':sda-commons-web-testing')
-  testImplementation ('org.springframework.kafka:spring-kafka-test')
+  testImplementation 'org.springframework.kafka:spring-kafka-test' , {
+    // see https://github.com/spring-projects/spring-kafka/discussions/4508 can be removed in future updates again
+    exclude group: 'com.github.spotbugs', module: 'spotbugs-annotations'
+  }
 }
