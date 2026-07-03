@@ -27,11 +27,14 @@ dependencies {
 
   api enforcedPlatform('io.netty:netty-bom:4.2.15.Final') //because of different CVEs, remove if possible by spring update
 
+  api enforcedPlatform("org.junit:junit-bom:6.1.0") // Temporary override for a downstream dependency conflict. Do not change this version. Remove this together with L37 once Spring updates to 6.1.0 or higher.
+
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'org.mongodb'
     exclude group: 'io.netty'
     exclude group: 'io.opentelemetry'
+    exclude group: 'org.junit'
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
@@ -119,6 +122,13 @@ dependencies {
 
     api 'org.apache.tomcat.embed:tomcat-embed-core:11.0.23', {
       because 'CVE-2026-41293'
+    }
+
+    api 'com.github.spotbugs:spotbugs-annotations:4.10.1', {
+      because 'Following https://github.com/spring-projects/spring-kafka/discussions/4508, this library is now on our classpath. ' +
+          'The version currently pulled in by Spring (4.9.8) exposes junit-bom 5.14.0, which causes issues in downstream services. ' +
+          'Version 4.10.1 no longer exposes junit-bom directly and, together with the JUnit version bump, resolves those issues. ' +
+          'Do not change this version until Spring updates its dependency. Remove this constraint with the next Spring update.'
     }
   }
 }
