@@ -27,7 +27,7 @@ dependencies {
 
   api enforcedPlatform('io.netty:netty-bom:4.2.15.Final') //because of different CVEs, remove if possible by spring update
 
-  api enforcedPlatform("org.junit:junit-bom:6.1.0") // Temporary override for a downstream dependency conflict. Do not change this version. Remove this together with L37 once Spring updates to 6.1.0 or higher.
+  api enforcedPlatform("org.junit:junit-bom:6.1.1") // Temporary override for a downstream dependency conflict. Do not change this version. Remove this together with L37 once Spring updates to 6.1.1 or higher.
 
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
