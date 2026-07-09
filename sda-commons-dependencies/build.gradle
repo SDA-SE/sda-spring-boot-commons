@@ -35,6 +35,8 @@ dependencies {
     exclude group: 'io.netty'
     exclude group: 'io.opentelemetry'
     exclude group: 'org.junit'
+    exclude group: 'com.fasterxml.jackson'
+    exclude group: 'com.fasterxml.jackson.core'
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
@@ -58,10 +60,6 @@ dependencies {
     // overall testing dependencies
     api 'org.awaitility:awaitility:4.3.0'
     api 'org.junit-pioneer:junit-pioneer:2.3.0'
-
-    api "com.fasterxml.jackson.core:jackson-databind:${jackson2Version}", {
-      because 'conflict spring-cloud-aws-s3 (2.20.1) and swagger-core-jakarta (2.19.2), keep aligned with jackson-bom and Boot'
-    }
 
     // spring cloud
     api 'org.apache.httpcomponents:httpclient:4.5.14', {
