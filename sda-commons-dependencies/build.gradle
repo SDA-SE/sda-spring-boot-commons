@@ -22,7 +22,7 @@ ext {
 }
 
 dependencies {
-  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.21.4") //because CVE GHSA-72hv-8253-57qq
+  api enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.22.1")
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
     exclude group: 'org.mongodb'
