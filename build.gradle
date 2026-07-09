@@ -37,7 +37,7 @@ allprojects {
       assert gradle.startParameter.writeDependencyLocks
     }
     doLast {
-      configurations.findAll {
+      configurations.matching {
         it.canBeResolved
       }.each { it.resolve() }
     }
