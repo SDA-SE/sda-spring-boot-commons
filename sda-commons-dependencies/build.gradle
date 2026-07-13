@@ -22,7 +22,7 @@ ext {
 
 dependencies {
 
-  api enforcedPlatform("tools.jackson:jackson-bom:3.2.0")
+  api enforcedPlatform("tools.jackson:jackson-bom:3.2.1")
   api enforcedPlatform("com.fasterxml.jackson:jackson-bom:${jackson2Version}") //because CVE GHSA-72hv-8253-57qq
 
   api enforcedPlatform('io.netty:netty-bom:4.2.15.Final') //because of different CVEs, remove if possible by spring update
