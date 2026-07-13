@@ -7,7 +7,7 @@ javaPlatform {
 }
 
 ext {
-  bouncycastleVersion = '1.84' //check to be aligned with spring cloud
+  bouncycastleVersion = '1.85' //check to be aligned with spring cloud
   logbackContribVersion = '0.1.5'
   springBootVersion = '4.1.0'
   springCloudVersion = '2025.1.2'
