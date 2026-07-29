@@ -140,5 +140,9 @@ dependencies {
     api "org.apache.tomcat.embed:tomcat-embed-websocket:11.0.22", {
       because "CVE-2026-43512"
     }
+
+    api "at.yawk.lz4:lz4-java:1.11.1", {
+      because "CVE-2026-59949"
+    }
   }
 }
