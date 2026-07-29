@@ -11,7 +11,7 @@ ext {
   logbackContribVersion = '0.1.5'
   // Check on upgrade, if org.apache.commons:commons-lang3 enforcement below (L25 + L58) is still needed!
   springBootVersion = '3.5.15' // CVE-2026-41731, CVE-2026-41726
-  nettyVersion = '4.1.135.Final'
+  nettyVersion = '4.1.136.Final'
   opentelemetryVersion = '1.62.0'
   // Check on upgrade, if commons-fileupload:commons-fileupload enforcement below (L67) is still needed!
   springCloudVersion = '2025.0.0'
