@@ -15,6 +15,6 @@ dependencies {
   api 'tools.jackson.core:jackson-databind'
   api 'tools.jackson.dataformat:jackson-dataformat-yaml'
 
-  testImplementation project (':sda-commons-web-testing')
+  testImplementation project(':sda-commons-web-testing')
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
