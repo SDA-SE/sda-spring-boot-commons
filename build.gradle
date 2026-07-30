@@ -155,7 +155,9 @@ configure(subprojects.findAll { !javaPlatformModules.contains(it.name) }) {
   // activate dependency locking for most configurations
   var ignoredConfigurationPatternsForDependencyLocking = Set.of("test.*")
   configurations.matching { configuration ->
-    !ignoredConfigurationPatternsForDependencyLocking.any { configuration.name.matches(it) }
+    !ignoredConfigurationPatternsForDependencyLocking.any {
+      configuration.name.matches(it)
+    }
   }.each {configuration ->
     // println "Activating dependency locking for '${it.name}:${configuration.name}'"
     configuration.resolutionStrategy.activateDependencyLocking()
@@ -243,7 +245,9 @@ tasks.register("testReport", TestReport) {
   destinationDirectory = project.layout.buildDirectory.dir("reports/allTests")
   // Include the results from the `test` task in all subprojects
   testResults.from(
-      subprojects.findAll { !javaPlatformModules.contains(it.name) }*.test.binaryResultsDirectory
+      subprojects.findAll {
+        !javaPlatformModules.contains(it.name)
+      }*.test.binaryResultsDirectory
       )
 }
 
