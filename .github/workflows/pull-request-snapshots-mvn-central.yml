@@ -3,8 +3,6 @@ name: Pull Request Snapshots Maven Central
 
 on:
   pull_request:
-    branches-ignore:
-      - release/6.x.x
 
 env:
   SEMANTIC_VERSION: PR-${{ github.event.number }}-${{ github.sha }}-SNAPSHOT

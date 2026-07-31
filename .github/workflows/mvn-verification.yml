@@ -2,8 +2,6 @@ name: Maven Dependency Resolution
 
 on:
   pull_request:
-    branches-ignore:
-      - release/6.x.x
 
 env:
   SEMANTIC_VERSION: local-SNAPSHOT
