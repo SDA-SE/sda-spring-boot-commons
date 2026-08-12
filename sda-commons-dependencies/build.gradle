@@ -129,7 +129,7 @@ dependencies {
           'Do not change this version until Spring updates its dependency. Remove this constraint with the next Spring update.'
     }
 
-    api 'at.yawk.lz4:lz4-java:1.11.1', {
+    api 'at.yawk.lz4:lz4-java:1.11.2', {
       because 'CVE-2026-59949'
     }
   }
