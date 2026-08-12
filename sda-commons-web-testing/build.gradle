@@ -12,6 +12,7 @@ dependencies {
   api 'org.springframework.boot:spring-boot-micrometer-tracing-test'
   api 'org.wiremock.integrations:wiremock-spring-boot-standalone'
   api 'org.springframework.boot:spring-boot-webmvc-test'
+  api 'org.testcontainers:testcontainers'
 
   testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0', {
     exclude group: 'org.junit'
@@ -21,6 +22,9 @@ dependencies {
   implementation 'tools.jackson.core:jackson-core'
   implementation 'tools.jackson.dataformat:jackson-dataformat-yaml'
   implementation 'com.nimbusds:nimbus-jose-jwt'
+  implementation 'org.testcontainers:testcontainers-mongodb'
+  implementation 'org.testcontainers:testcontainers-kafka'
+  implementation 'org.mongodb:mongodb-driver-sync'
 
   // Do not add the compileOnly dependencies as test dependencies to avoid passing tests that will
   // not work for consumers!
