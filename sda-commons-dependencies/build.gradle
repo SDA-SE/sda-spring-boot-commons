@@ -13,11 +13,11 @@ ext {
   springCloudVersion = '2025.1.2'
   mongoDbDriverVersion = '5.9.1'
   scalaVersion = '2.13.18'
-  swaggerCoreVersion = '2.2.52'
+  swaggerCoreVersion = '2.2.53'
   victoolsVersion = '5.0.0'
   jackson2Version = '2.22.1'
   // TODO: Remove, when CVE-2026-45292 is handled by org.springframework.boot:spring-boot-starter-opentelemetry
-  openTelemetryVersion = '1.63.0'
+  openTelemetryVersion = '1.65.0'
 }
 
 dependencies {
@@ -27,7 +27,7 @@ dependencies {
 
   api enforcedPlatform('io.netty:netty-bom:4.2.16.Final') //because of different CVEs, remove if possible by spring update
 
-  api enforcedPlatform("org.junit:junit-bom:6.1.0") // Temporary override for a downstream dependency conflict. Do not change this version. Remove this together with L37 once Spring updates to 6.1.0 or higher.
+  api enforcedPlatform("org.junit:junit-bom:6.1.3") // Temporary override for a downstream dependency conflict. Do not change this version. Remove this together with L37 once Spring updates to 6.1.3 or higher.
 
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
@@ -47,8 +47,8 @@ dependencies {
   // asyncapi generation
   api enforcedPlatform("com.github.victools:jsonschema-generator-bom:${victoolsVersion}")
 
-  api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.11")
-  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.11")
+  api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.12")
+  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.12")
 
   constraints {
     // overall conflicts
@@ -82,7 +82,7 @@ dependencies {
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
-    api 'io.github.classgraph:classgraph:4.8.186'
+    api 'io.github.classgraph:classgraph:4.8.189'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
 
     // sda-commons-web-testing
@@ -129,7 +129,7 @@ dependencies {
           'Do not change this version until Spring updates its dependency. Remove this constraint with the next Spring update.'
     }
 
-    api 'at.yawk.lz4:lz4-java:1.11.1', {
+    api 'at.yawk.lz4:lz4-java:1.11.2', {
       because 'CVE-2026-59949'
     }
   }
