@@ -37,7 +37,8 @@ either in `@SpringBootTest(properties = "…")` or in `src/test/resources/applic
 without adding them to the dependency tree, including:
 
 - `org.springframework.boot:spring-boot-starter-test`
-- `org.springframework.cloud:spring-cloud-contract-wiremock`
+- `org.wiremock:wiremock-standalone`
+- `org.wiremock.integrations:wiremock-spring-boot-standalone`
 - `org.junit.jupiter:junit-jupiter`
 - `org.assertj:assertj-core`
 - `com.jayway.jsonpath:json-path`

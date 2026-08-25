@@ -59,7 +59,12 @@ public class EnableSdaAuthMockInitializer
 
   @Override
   public void initialize(ConfigurableApplicationContext applicationContext) {
-    WireMockServer wireMockServer = new WireMockServer(new WireMockConfiguration().dynamicPort());
+    WireMockServer wireMockServer =
+        new WireMockServer(
+            new WireMockConfiguration()
+                .dynamicPort()
+                .http2PlainDisabled(true)
+                .http2TlsDisabled(true));
     wireMockServer.start();
 
     applicationContext

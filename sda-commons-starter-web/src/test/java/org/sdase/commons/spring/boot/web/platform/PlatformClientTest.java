@@ -10,9 +10,8 @@ package org.sdase.commons.spring.boot.web.platform;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -35,6 +34,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -194,7 +194,7 @@ class PlatformClientTest {
                                         "%s%s", authMock.wireMockServer().baseUrl(), TOKEN_PATH),
                                     "subject_types_supported",
                                     List.of("public", "pairwise"))))
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
+                        .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .build());
   }
 }

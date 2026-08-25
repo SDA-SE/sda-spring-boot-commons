@@ -8,9 +8,8 @@
 package org.sdase.commons.spring.boot.web.testing.auth;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.BasicCredentials;
@@ -23,6 +22,7 @@ import org.sdase.commons.spring.boot.web.testing.auth.opa.RequestMethodBuilder;
 import org.sdase.commons.spring.boot.web.testing.auth.opa.StubBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import tools.jackson.databind.ObjectMapper;
 
 public class AuthMock {
@@ -112,7 +112,7 @@ public class AuthMock {
                                 String.format("%s%s", server.baseUrl(), TOKEN_PATH),
                                 "subject_types_supported",
                                 List.of("public", "pairwise"))))
-                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
+                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
             .build());
   }
 
@@ -123,7 +123,7 @@ public class AuthMock {
                 WireMock.aResponse()
                     .withStatus(200)
                     .withBody(Json.write(Map.of("keys", List.of(keyPair.getPublicKeyForJwks()))))
-                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
+                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
             .build());
   }
 
@@ -138,7 +138,7 @@ public class AuthMock {
             .willReturn(
                 WireMock.aResponse()
                     .withStatus(200)
-                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody(
                         Json.write(
                             Map.of(
@@ -148,7 +148,7 @@ public class AuthMock {
                                 "Bearer",
                                 "expires_in",
                                 3600)))
-                    .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
+                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
             .build());
   }
 

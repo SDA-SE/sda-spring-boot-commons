@@ -32,7 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
  *        properties={"feign.test.api.base.url=http://localhost:${wiremock.server.port}"}
  *    )
  *   {@literal @}ContextConfiguration(initializers = EnableSdaOidcClientMockInitializer.class)
- *   {@literal @}AutoConfigureWireMock(port = 0)
+ *   {@literal @}EnableWireMock({@literal @}ConfigureWireMock(port = 0))
  *    class MyTest {
  *      {@literal @}Autowired private AuthMock authMock;
  *      {@literal @}LocalServerPort private int port;

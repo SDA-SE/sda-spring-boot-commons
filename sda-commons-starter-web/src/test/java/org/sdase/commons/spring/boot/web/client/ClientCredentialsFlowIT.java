@@ -17,8 +17,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import static jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.Json;
@@ -35,6 +34,7 @@ import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -145,7 +145,7 @@ class ClientCredentialsFlowIT {
                                         "%s%s", authMock.wireMockServer().baseUrl(), TOKEN_PATH),
                                     "subject_types_supported",
                                     List.of("public", "pairwise"))))
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType()))
+                        .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .build());
 
     authMock
