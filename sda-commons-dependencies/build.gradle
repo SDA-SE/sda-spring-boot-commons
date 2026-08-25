@@ -7,10 +7,18 @@ javaPlatform {
 }
 
 ext {
-  bouncycastleVersion = '1.85' //check to be aligned with spring cloud
+  // Pinned to the last fully published set: BouncyCastle 1.85.2 only ships bcprov-jdk18on, while
+  // bcpkix/bcutil remain at 1.85, so aligning the virtual platform above 1.85 is not possible.
+  // spring-cloud-dependencies forces bcprov to 1.85.2, so org.bouncycastle is excluded from that
+  // enforcedPlatform below to let this constraint win. Revisit once BouncyCastle publishes a
+  // complete 1.85.2 (or later) set.
+  bouncycastleVersion = '1.85'
   logbackContribVersion = '0.1.5'
   springBootVersion = '4.1.0'
   springCloudVersion = '2025.1.3'
+  // Spring Cloud Contract was removed from the spring-cloud-dependencies BOM in 2025.1.3 and is
+  // now released independently, so its BOM must be imported explicitly.
+  springCloudContractVersion = '5.0.3'
   mongoDbDriverVersion = '5.9.1'
   scalaVersion = '2.13.18'
   swaggerCoreVersion = '2.2.53'
@@ -40,7 +48,9 @@ dependencies {
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
+    exclude group: 'org.bouncycastle'
   }
+  api enforcedPlatform("org.springframework.cloud:spring-cloud-contract-dependencies:${springCloudContractVersion}")
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
   api enforcedPlatform("io.opentelemetry:opentelemetry-bom:${openTelemetryVersion}")
 
