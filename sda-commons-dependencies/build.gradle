@@ -40,6 +40,7 @@ dependencies {
   }
   api enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"), {
     exclude group: 'org.mongodb'
+    exclude group: 'org.bouncycastle'
   }
   api enforcedPlatform("org.mongodb:mongodb-driver-bom:${mongoDbDriverVersion}")
   api enforcedPlatform("io.opentelemetry:opentelemetry-bom:${openTelemetryVersion}")

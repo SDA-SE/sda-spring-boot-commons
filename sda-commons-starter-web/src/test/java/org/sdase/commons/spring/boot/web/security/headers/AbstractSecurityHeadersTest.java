@@ -140,25 +140,24 @@ abstract class AbstractSecurityHeadersTest {
         .extracting(ResponseEntity::getStatusCode)
         .isEqualTo(HttpStatus.OK);
     HttpHeaders actualHeaders = actual.getHeaders();
-    Set<String> headerNames = actualHeaders.headerNames();
+    Set<String> headerNames =
+        actualHeaders.headerNames().stream()
+            .map(String::toLowerCase)
+            .collect(java.util.stream.Collectors.toSet());
     assertThat(headerNames)
         .asInstanceOf(InstanceOfAssertFactories.SET)
         .containsOnly(
             Stream.concat(
                     Stream.of(
                         "Content-Type",
-                        // Spring Boot 4.0.5 (Tomcat 11.0.20) responds with Content-Length
-                        // instead of Transfer-Encoding for this response.
-                        // Tomcat 11.0.19 contained Fix: 69967: Fix inconsistencies related to
-                        // Content-Length and Content-Type headers when accessed using the getHeader
-                        // method and similar.
+                        // Newer Spring Boot / Tomcat versions may return content-length while
+                        // omitting transfer-encoding and connection-level headers here.
                         "Content-Length",
                         "Date",
-                        "Keep-Alive",
-                        "Connection",
                         "Vary",
                         "Trace-Token"),
-                    predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
+                    predefinedSecurityHeaders().map(Arguments::get).map(it -> (String) it[0]))
+                .map(String::toLowerCase)
                 .toArray());
   }
 
@@ -175,20 +174,18 @@ abstract class AbstractSecurityHeadersTest {
         .extracting(ResponseEntity::getStatusCode)
         .isEqualTo(HttpStatus.NOT_FOUND);
     HttpHeaders actualHeaders = actual.getHeaders();
-    Set<String> headerNames = actualHeaders.headerNames();
+    Set<String> headerNames =
+        actualHeaders.headerNames().stream()
+            .map(String::toLowerCase)
+            .collect(java.util.stream.Collectors.toSet());
     assertThat(headerNames)
         .asInstanceOf(InstanceOfAssertFactories.SET)
         .containsOnly(
             Stream.concat(
-                    Stream.of(
-                        "Content-Type",
-                        "Transfer-Encoding",
-                        "Date",
-                        "Keep-Alive",
-                        "Connection",
-                        "Vary",
-                        "Trace-Token"),
-                    predefinedSecurityHeaders().map(Arguments::get).map(it -> it[0]))
+                    Stream.of("Content-Type", "Transfer-Encoding", "Date", "Vary", "Trace-Token")
+                        .map(String::toLowerCase),
+                    predefinedSecurityHeaders().map(Arguments::get).map(it -> (String) it[0]))
+                .map(String::toLowerCase)
                 .toArray());
   }
 

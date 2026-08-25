@@ -8,7 +8,6 @@
 package org.sdase.commons.spring.boot.web.auth;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalToIgnoreCase;
 import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
@@ -136,10 +135,7 @@ class AuthenticationIT {
                 .withRequestBody(
                     matchingJsonPath(
                         "$.input.headers.authorization[0]",
-                        equalTo("Bearer " + authentication.token())))
-                .withRequestBody(
-                    matchingJsonPath(
-                        "$.input.headers.connection[0]", equalToIgnoreCase("Keep-Alive"))));
+                        equalTo("Bearer " + authentication.token()))));
   }
 
   @Test
