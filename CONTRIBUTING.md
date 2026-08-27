@@ -40,24 +40,38 @@ Some examples for semantic commits:
 Our [changelog](https://github.com/SDA-SE/sda-spring-boot-commons/releases/) is maintained in the
 GitHub releases.
 
-
 ### PR Snapshots
 
-> **PR Snapshots are unavailable for Pull Requests from forks!**
+Pull Request snapshot releases are Maven -SNAPSHOT versions for testing unpublished changes and are
+cleaned up regularly. Do not use snapshots in stable releases.
 
-Each PR creates a snapshot that can _temporarily_ be included in other projects for testing.
-The generated version uses the format: `PR-<pr_number>-<commit-sha>-SNAPSHOT`.
-Snapshots are cleaned up regularly from the repository so never use snapshots in stable releases.
-The snapshots are available in the [Maven Central snapshot repository](https://central.sonatype.com/service/rest/repository/browse/maven-snapshots/org/sdase/commons/spring/boot/sda-commons-starter-web/).
+Snapshots are published when an internal Pull Request is opened, synchronized, or reopened. Fork and
+Dependabot Pull Requests do not publish snapshots.
 
-Import snapshots by adding the snapshot repository to the `build.gradle`:
+Each published module uses this version:
+
+```
+PR-<pr-number>-<workflow-sha>-SNAPSHOT
+```
+
+After publication, copy the exact version from the Pull Request comment headed `SnapshotVersion`.
+
+To consume a snapshot, add the snapshot repository and set the SDA Spring Commons version:
 
 ```gradle
-    repositories {
-      ...
-      maven {
-        url "https://central.sonatype.com/repository/maven-snapshots/"
-      }
-      ...
-    }
+repositories {
+  ...
+  maven {
+    url "https://central.sonatype.com/repository/maven-snapshots/"
+  }
+  ...
+}
+
+project.ext {
+  sdaSpringCommonsVersion = 'PR-<pr-number>-<workflow-sha>-SNAPSHOT'
+}
 ```
+
+Remove the snapshot repository and replace the snapshot version with a released version after the
+Pull Request is merged.
+
