@@ -21,7 +21,7 @@ ext {
   springCloudContractVersion = '5.0.3'
   mongoDbDriverVersion = '5.10.0'
   scalaVersion = '2.13.18'
-  swaggerCoreVersion = '2.2.54'
+  swaggerCoreVersion = '2.2.55'
   victoolsVersion = '5.0.0'
   jackson2Version = '2.22.2'
   // TODO: Remove, when CVE-2026-45292 is handled by org.springframework.boot:spring-boot-starter-opentelemetry
