@@ -89,7 +89,7 @@ dependencies {
     api "io.swagger.core.v3:swagger-models-jakarta:${swaggerCoreVersion}"
     api "io.swagger.core.v3:swagger-annotations-jakarta:${swaggerCoreVersion}"
 
-    api 'io.github.classgraph:classgraph:4.8.193'
+    api 'io.github.classgraph:classgraph:4.8.194'
     api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
 
     // sda-commons-web-testing
