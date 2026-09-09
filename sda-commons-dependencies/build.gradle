@@ -33,7 +33,7 @@ dependencies {
   api enforcedPlatform("tools.jackson:jackson-bom:3.2.2")
   api enforcedPlatform("com.fasterxml.jackson:jackson-bom:${jackson2Version}") //because CVE GHSA-72hv-8253-57qq
 
-  api enforcedPlatform('io.netty:netty-bom:4.2.16.Final') //because of different CVEs, remove if possible by spring update
+  api enforcedPlatform('io.netty:netty-bom:4.2.17.Final') //because of different CVEs, remove if possible by spring update
 
   // Spring Boot after MongoDB so that MongoDB overrules
   api enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"), {
