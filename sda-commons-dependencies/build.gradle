@@ -121,7 +121,7 @@ dependencies {
       because "CVE-2025-48976"
     }
 
-    api 'org.bitbucket.b_c:jose4j:0.9.6', {
+    api 'org.bitbucket.b_c:jose4j:0.9.7', {
       because "https://issues.apache.org/jira/browse/KAFKA-20184"
     }
 
