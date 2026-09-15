@@ -25,7 +25,7 @@ ext {
   victoolsVersion = '5.0.0'
   jackson2Version = '2.22.2'
   // TODO: Remove, when CVE-2026-45292 is handled by org.springframework.boot:spring-boot-starter-opentelemetry
-  openTelemetryVersion = '1.65.0'
+  openTelemetryVersion = '1.66.0'
 }
 
 dependencies {
