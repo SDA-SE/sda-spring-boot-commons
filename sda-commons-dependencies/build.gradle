@@ -129,7 +129,7 @@ dependencies {
       because 'CVE-2026-41293'
     }
 
-    api 'at.yawk.lz4:lz4-java:1.11.2', {
+    api 'at.yawk.lz4:lz4-java:1.11.3', {
       because 'CVE-2026-59949'
     }
   }
