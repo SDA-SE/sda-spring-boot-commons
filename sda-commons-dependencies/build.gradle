@@ -24,7 +24,6 @@ ext {
   swaggerCoreVersion = '2.2.55'
   victoolsVersion = '5.0.0'
   jackson2Version = '2.22.3'
-  // TODO: Remove, when CVE-2026-45292 is handled by org.springframework.boot:spring-boot-starter-opentelemetry
   openTelemetryVersion = '1.67.0'
 }
 
