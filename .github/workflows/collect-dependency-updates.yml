@@ -1,0 +1,29 @@
+name: Combine approved dependency PRs
+
+on:
+  workflow_dispatch: # allows you to manually trigger the workflow
+
+jobs:
+  combine-prs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: sda-spring-boot-commons-app token
+        id: app-token
+        uses: getsentry/action-github-app-token@5c1e90706fe007857338ac1bfbd7a4177db2f789 # tag=v3.1.0
+        with:
+          app_id: ${{ secrets.GH_PUBLISH_APP_ID }}
+          private_key: ${{ secrets.GH_PUBLISH_APP_PRIVATE_KEY }}
+      - name: combine-prs
+        id: combine-prs
+        uses: github/combine-prs@2909f404763c3177a456e052bdb7f2e85d3a7cb3 # v5.2.0
+        with:
+          # Regular action token won't trigger workflow for new PR
+          github_token: ${{ steps.app-token.outputs.token }}
+          select_label: 'dependencies'
+          ci_required: 'true'
+          review_required: 'true'
+          labels: 'update_collection'
+          pr_title: 'Combined Dependency Updates'
+          combine_branch_name: 'dependencies/update-collection'
+          create_from_scratch: 'true'
