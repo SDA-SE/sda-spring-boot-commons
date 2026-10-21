@@ -31,7 +31,7 @@ ext {
   //
   victoolsVersion = '5.0.0'
   //
-  jackson2Version = '2.22.3'
+  jackson2Version = '2.22.4'
   //
   openTelemetryVersion = '1.67.0'
 }
