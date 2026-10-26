@@ -70,7 +70,7 @@ dependencies {
     // overall conflicts
     api 'org.slf4j:slf4j-api:2.0.20'
     //
-    api 'com.google.errorprone:error_prone_annotations:2.50.0', {
+    api 'com.google.errorprone:error_prone_annotations:2.51.0', {
       because 'conflicts between gson via jose-jwt and spring and caffeine via kafka-storage and spring'
     }
 
