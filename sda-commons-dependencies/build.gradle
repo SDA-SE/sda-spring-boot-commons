@@ -145,5 +145,9 @@ dependencies {
     api 'at.yawk.lz4:lz4-java:1.12.1', {
       because 'CVE-2026-59949'
     }
+
+    api 'org.xerial.snappy:snappy-java:1.1.10.12', {
+      because 'CVE-2026-108106, CVE-2026-93451 and CVE-2026-116590'
+    }
   }
 }
