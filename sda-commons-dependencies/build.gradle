@@ -129,11 +129,6 @@ dependencies {
 
     api "org.wiremock.integrations:wiremock-spring-boot-standalone:4.4.3"
 
-    //Check on org.springframework.cloud:spring-cloud-openfeign-core update if still needed
-    api "commons-fileupload:commons-fileupload:1.6.0", {
-      because "CVE-2025-48976"
-    }
-
     api 'org.bitbucket.b_c:jose4j:0.9.7', {
       because "https://issues.apache.org/jira/browse/KAFKA-20184"
     }
