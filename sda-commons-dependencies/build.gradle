@@ -23,7 +23,7 @@ ext {
   // now released independently, so its BOM must be imported explicitly.
   springCloudContractVersion = '5.0.3'
   //
-  mongoDbDriverVersion = '5.13.0'
+  mongoDbDriverVersion = '5.14.0'
   //
   scalaVersion = '2.13.18'
   //
