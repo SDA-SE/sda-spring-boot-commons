@@ -38,7 +38,7 @@ ext {
 
 dependencies {
 
-  api enforcedPlatform("tools.jackson:jackson-bom:3.2.4")
+  api enforcedPlatform("tools.jackson:jackson-bom:3.3.0")
   api enforcedPlatform("com.fasterxml.jackson:jackson-bom:${jackson2Version}"), {
     because 'version conflicts'
   }
