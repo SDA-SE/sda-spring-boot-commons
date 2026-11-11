@@ -137,7 +137,7 @@ dependencies {
       because "https://issues.apache.org/jira/browse/KAFKA-20184"
     }
 
-    api 'at.yawk.lz4:lz4-java:1.13.0', {
+    api 'at.yawk.lz4:lz4-java:1.14.0', {
       because 'CVE-2026-59949'
     }
 
