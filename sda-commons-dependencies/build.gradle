@@ -68,7 +68,7 @@ dependencies {
 
   api enforcedPlatform("org.eclipse.jetty:jetty-bom:12.1.14")
   //
-  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.14")
+  api enforcedPlatform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.15")
 
   constraints {
     // overall conflicts
