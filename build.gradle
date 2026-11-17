@@ -18,7 +18,7 @@ plugins {
   //
   id 'project-report'
   //
-  id 'org.cyclonedx.bom' version '3.6.0'
+  id 'org.cyclonedx.bom' version '3.6.1'
 }
 
 tasks.cyclonedxBom {
