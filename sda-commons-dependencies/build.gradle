@@ -27,7 +27,7 @@ ext {
   //
   scalaVersion = '2.13.18'
   //
-  swaggerCoreVersion = '2.2.55'
+  swaggerCoreVersion = '2.2.56'
   //
   victoolsVersion = '5.0.0'
   //
