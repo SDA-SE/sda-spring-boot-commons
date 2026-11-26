@@ -27,6 +27,23 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 See our [changelog](https://github.com/SDA-SE/sda-spring-boot-commons/releases/) for more information about the latest features.
 
 
+### Releasing
+
+After the build passes for a push to `main`, Semantic Release checks the commits since the last
+release. If they call for a new version, it prepares a GitHub draft with the proposed version and
+release notes.
+
+1. Open the draft targeting `main` and check its version and notes against the commits you intend
+   to ship. An earlier patch draft can still be visible after a feature commit produces a minor
+   draft. After publishing a minor release, check for remaining patch drafts and remove them manually.
+   [GitHub Releases](https://github.com/SDA-SE/sda-spring-boot-commons/releases)
+2. While the draft is open, a new run can replace it and overwrite manual edits. Make your final
+   edits, then choose **Publish release**.
+3. Check the Maven Central workflow run for that tag. The `build-and-test` job reruns Java CI on
+   the tagged commit. Once it passes, `upload-maven-central` signs and uploads the artifacts.
+   [Publish Release to Maven Central](https://github.com/SDA-SE/sda-spring-boot-commons/actions/workflows/publish-release-maven-central.yml)
+
+
 ## Contributing
 
 We are looking forward to contributions.
